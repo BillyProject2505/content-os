@@ -4,7 +4,7 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCUMENT_DIRS = [ROOT / "root", ROOT / "cross-cutting", ROOT / "system"]
+DOCUMENT_DIRS = [ROOT / "root", ROOT / "cross-cutting", ROOT / "system", ROOT / "projects"]
 
 REQUIRED_FIELDS = (
     "document_name",
