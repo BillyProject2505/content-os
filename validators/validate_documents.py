@@ -75,7 +75,8 @@ for path in files:
     else:
         errors.append(f"{rel}: ID-01 malformed or missing universal_identifier")
 
-    for target in LINK_RE.findall(text):
+    link_text = re.sub(r"```[\\s\\S]*?```", "", text)
+    for target in LINK_RE.findall(link_text):
         resolved = (path.parent / target).resolve()
         try:
             resolved.relative_to(ROOT)
