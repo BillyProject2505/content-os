@@ -35,11 +35,11 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | System-Level Registration Record Document |
 | Version | 1.34 |
 | Status | **CANONICAL** — v1.34 synchronizes the current System Governance dependency to v1.17 after the staged GitHub migration model was incorporated. Allocation acts and historical allocation evidence are unchanged. Previously v1.33. |
-| Related Issue | [BUS-17](Content-OS-Universal-Identifier-Registration-Record.md) — Universal Identifier Registration Record |
+| Related Issue | [BUS-17](https://linear.app/bussiness-content-os/issue/BUS-17/universal-identifier-registration-record) — Universal Identifier Registration Record |
 | Owner | **\[OPERATIONAL DEFAULT\]** (Root Documentation Structure §5.1) Not yet formally assigned. Defaults to the document's creator (Billy Fernando Mende), per System Governance §4. |
 | Structural Classification | Tiered — Document Tier: System Level (Tier 1) |
 | Universal Identifier (UNIS/DIC) | Not applicable — this document is the evidence record, not a registered entry. |
-| Depends On | Content OS — Root Documentation Structure (v2.5, CANONICAL — [BUS-12](../root/DIUA-DIC-000003_Content-OS-Root-Documentation-Structure.md) §5 — Document Identity conventions this document follows; §3 — Representation Portability), and System Governance (v1.17, CANONICAL — [BUS-15](DIUA-DIC-000006_Content-OS-System-Governance.md) §6 — this document's change-control cycle). **Not a dependency (contextual reference only, no version pin):** Universal Identifier Registry ([BUS-16](Content-OS-Universal-Identifier-Registry.md) §4) is the current authoritative state this document's allocation acts evidence — the dependency runs the other way ([BUS-16](Content-OS-Universal-Identifier-Registry.md) §5 depends on this document), so this document does not version-pin it. **External Governing Standard:** UNIR-CORE-001 v1.2 (external, reference material) — allocation-act pattern only, per Root Level Architecture §8 point 5. |
+| Depends On | Content OS — Root Documentation Structure (v2.5, CANONICAL — [BUS-12](../root/DIUA-DIC-000003_Content-OS-Root-Documentation-Structure.md) §5 — Document Identity conventions this document follows; §3 — Representation Portability), and System Governance (v1.17, CANONICAL — [BUS-15](DIUA-DIC-000006_Content-OS-System-Governance.md) §6 — this document's change-control cycle). **Not a dependency (contextual reference only, no version pin):** Universal Identifier Registry ([BUS-16](https://linear.app/bussiness-content-os/issue/BUS-16/universal-identifier-registry) §4) is the current authoritative state this document's allocation acts evidence — the dependency runs the other way ([BUS-16](https://linear.app/bussiness-content-os/issue/BUS-16/universal-identifier-registry) §5 depends on this document), so this document does not version-pin it. **External Governing Standard:** UNIR-CORE-001 v1.2 (external, reference material) — allocation-act pattern only, per Root Level Architecture §8 point 5. |
 
 ---
 
@@ -47,7 +47,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 
 This document records the allocation-act-level evidence for each `DIUA-DIC` identifier issued to a Content OS document — why it was allocated, to what, and when — mirroring the Allocation Act pattern demonstrated in the reference UNIR material, simplified for Content OS's current scale (single Owner, no multi-party authorization gate).
 
-This document is evidence and traceability. The current authoritative state is the Registry ([BUS-16](Content-OS-Universal-Identifier-Registry.md) §4), not this document — per UNIR-CORE-001's own Allocation Boundary distinction (Concrete Identifier ≠ Allocation Act ≠ Registration Record ≠ Registry Object ≠ Current Registry State).
+This document is evidence and traceability. The current authoritative state is the Registry ([BUS-16](https://linear.app/bussiness-content-os/issue/BUS-16/universal-identifier-registry) §4), not this document — per UNIR-CORE-001's own Allocation Boundary distinction (Concrete Identifier ≠ Allocation Act ≠ Registration Record ≠ Registry Object ≠ Current Registry State).
 
 ---
 
@@ -60,7 +60,7 @@ This document is evidence and traceability. The current authoritative state is t
 
 ### 2.2 Out of Scope
 
-* Current authoritative registry state — owned by the Registry ([BUS-16](Content-OS-Universal-Identifier-Registry.md) §4).
+* Current authoritative registry state — owned by the Registry ([BUS-16](https://linear.app/bussiness-content-os/issue/BUS-16/universal-identifier-registry) §4).
 * Identifier grammar semantics — owned by UNIS-CORE-001 (external).
 * Any allocation made by a party other than this workspace — not represented here (this document only evidences Content OS's own allocations).
 
@@ -241,7 +241,7 @@ Registry cross-check:    Matches Universal Identifier Registry (BUS-16) §4, v1.
 ## 6. Open Questions / Unresolved Decisions
 
 1. **Format for future allocation-act IDs** (`CONTENT-OS-ALLOC-NNN` here) — informal, invented for this document; not itself governed by UNIS/UNIR. Left open whether a more formal scheme is needed once volume increases.
-2. Same namespace-exclusivity caveat as Registry ([BUS-16](Content-OS-Universal-Identifier-Registry.md) §7, Open Question 2) applies here identically.
+2. Same namespace-exclusivity caveat as Registry ([BUS-16](https://linear.app/bussiness-content-os/issue/BUS-16/universal-identifier-registry) §7, Open Question 2) applies here identically.
 
 ---
 
@@ -540,7 +540,7 @@ Allocation establishes identity only. Registration remains governed by FSS-001 �
 
 ### CONTENT-OS-ALLOC-041 — DIUA-DIC-000041
 
-**Target:** Content OS — Storage Authority Profile ([BUS-109](DIUA-DIC-000041_Content-OS-Storage-Authority-Profile.md))
+**Target:** Content OS — Storage Authority Profile ([BUS-109](https://linear.app/bussiness-content-os/issue/BUS-109/content-os-storage-authority-profile))
 
 **Target Document ID:** `160f1938-31b6-419c-93bf-31b26eda643e`
 
@@ -564,7 +564,7 @@ Allocation establishes identity only. Registration remains governed by FSS-001 �
 
 ### CONTENT-OS-ALLOC-042 — DIUA-DIC-000042
 
-**Target:** Content OS — Production Connector Lifecycle Profile ([BUS-118](DIUA-DIC-000042_Content-OS-Production-Connector-Lifecycle-Profile.md))
+**Target:** Content OS — Production Connector Lifecycle Profile ([BUS-118](https://linear.app/bussiness-content-os/issue/BUS-118/content-os-production-connector-lifecycle-profile))
 
 **Target Document ID:** `a2969fdf-fb15-41f0-accd-f7921774a271`
 
