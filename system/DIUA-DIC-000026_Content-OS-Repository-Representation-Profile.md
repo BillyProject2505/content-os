@@ -6,7 +6,7 @@ system: "Content OS"
 owner: "[FORMAL] Billy Fernando Mende — Content OS Owner"
 related_issue: "BUS-56"
 universal_identifier: "DIUA-DIC-000026"
-version: "1.3"
+version: "1.4"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000003"
@@ -28,7 +28,7 @@ depends_on:
 source_representation:
   platform: "Linear"
   locator: "https://linear.app/bussiness-content-os/document/content-os-repository-representation-profile-v13-canonical-8ed80ab5e4b2"
-representation_profile: "DIUA-DIC-000026@1.3"
+representation_profile: "DIUA-DIC-000026@1.4"
 ---
 # Content OS — Repository Representation Profile
 
@@ -38,8 +38,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | -- | -- |
 | Document Name | Content OS — Repository Representation Profile |
 | Document Class | System-Level Implementation Specification |
-| Version | 1.3 |
-| Status | **CANONICAL** — v1.3 amended 2026-09-28: synchronized dependencies to System Architecture v1.16 and System Governance v1.17; added deterministic repository serialization for current governed artifacts whose canonical metadata explicitly declares the Universal Identifier not applicable; updated migration authority semantics to the Owner-approved staged GitHub cutover model; and set `BillyProject2505/content-os` as the active migration repository context. Previously v1.2. |
+| Version | 1.4 |
+| Status | **CANONICAL** — v1.4 amended 2026-09-28: following workspace migration closure (`WORKSPACE MIGRATION — PASS`, 42 governed repository documents / 39 registered identifiers, zero residual canonical text outside GitHub), extended §12's cutover-gate mechanics to the post-closure steady state — added §12.1 (Post-Cutover Steady-State Lifecycle: GitHub `main` is the source for editing an already-canonical document, not the Linear reference copy; a new document's candidate text originates repository-native rather than as a full canonical-looking Linear document migrated later; identifier allocation alone does not canonicalize) and §12.2 (Draft Representation: governed draft text for a post-closure scope preferably lives on a repository branch/PR rather than as a canonical-looking Linear document, without retroactively affecting existing Linear-native drafts or overriding higher-tier governance). Architectural change under this profile's own §14 (alters authority behavior) — processed under System Governance §6. No front-matter schema, filename rule, link rule, binary rule, or validator blocking class changed; no Root-tier, Root/System Governance approval mechanism, or change-classification rule altered. Previously v1.3. |
 | Structural Classification | Tiered — Document Tier: System Level (Tier 1) |
 | System | Content OS |
 | Owner | **\[FORMAL\]** Billy Fernando Mende — Content OS Owner |
@@ -367,6 +367,32 @@ The cutover gate requires repository path creation, representation validation, i
 
 Google Drive remains outside governed-text authority and is reserved for binary/image/assets/visual-reference evidence.
 
+### 12.1 Post-Cutover Steady-State Lifecycle
+
+Once a governed document's cutover gate (above) has completed, or once a Content OS scope has reached documented migration closure for its governed corpus, the same gate mechanics govern every subsequent canonical change to that scope's governed text — not only the original migration event.
+
+For an **existing GitHub-canonical document**:
+
+* the repository representation on `main` is the starting canonical source for any further edit;
+* the corresponding Linear reference/provenance copy (title pattern `MIGRATED — GitHub canonical`) is not treated as an editable source for that change;
+* a candidate revision is authored on a dedicated branch, validated, and canonicalized only through a merged PR/commit recorded as migration/change evidence, exactly as this section already requires for the original cutover;
+* an edit made to the Linear reference copy, however it occurs, does not transfer canonical authority, does not require the GitHub representation to be reconciled to match it, and is corrected back to reference-only content when noticed. GitHub authority is unaffected by it.
+
+For a **new governed document** in a scope where this profile is the active authority surface (i.e., the scope has an established repository placement per §5):
+
+* the candidate text originates directly as a repository representation on a dedicated branch under §5 placement and §3–§4 metadata/filename rules;
+* it is not first authored as a complete, canonical-looking Linear document and migrated afterward — that pattern is the one this profile's staged-migration mechanics exist to retire, not to perpetuate;
+* Linear may hold the work item, requirements, rationale, and decision discussion that initiates the document (per Root Governance/System Governance §6 Propose/Classify steps), and may carry a `NON-CANONICAL WORKING DRAFT` label for any interim drafting surface, but the governed candidate text itself is repository-native;
+* identifier allocation (Root Documentation Structure §4.1, §10.1) establishes stable identity only; it does not, by itself, establish canonical status. Canonical status under this profile requires the same gate described above: repository path, validation, blocking-check PASS, and merged PR/commit, recorded as evidence.
+
+This subsection extends the cutover gate's existing mechanics and the Authority invariant (§2, item 3) to steady-state operation. It introduces no new approval body, canonicalization criterion, or change-classification rule beyond what Root Governance §6 and System Governance §6 already require for any architectural change to a governed document.
+
+### 12.2 Draft Representation
+
+For a governed document whose active authority surface is the repository representation (a post-closure scope), the primary representation of its DRAFT-state text — where that text already carries DIUA-DIC identity, version, lifecycle state, or dependency metadata, or is intended to become canonical under this profile — is preferably repository-native (an unmerged branch/PR), consistent with §12.1, rather than a full canonical-looking Linear document.
+
+This preference does not apply retroactively to a Linear-native DRAFT document already in existence before this subsection's adoption, and does not override any higher-tier governance requirement. If a conflict with Root Governance, System Governance, or Root Documentation Structure is identified, that conflict is reported rather than silently resolved by this profile.
+
 ## 13. Active Repository Migration Finding
 
 The active migration target is `BillyProject2505/content-os`. Phase 1 successfully migrated and cut over `DIUA-DIC-000001` through `DIUA-DIC-000004`, and repository CI now enforces the minimum metadata/identifier/link integrity floor. This operational evidence validates the profile's core mapping while preserving the rule that path/location alone does not establish authority.
@@ -433,3 +459,22 @@ Changes:
 * replaced prior KnowledgeOS compatibility context with the active `BillyProject2505/content-os` migration finding.
 
 No Root tier, document class, DIUA allocation rule, or identity namespace was changed.
+
+---
+
+## 18. Change Record — v1.4 — 2026-09-28
+
+**Change type:** System-level authority-behavior amendment (architectural, per §14) — post-migration-closure operating-model hardening.
+
+**Basis:** Workspace migration closure audit (`WORKSPACE MIGRATION — PASS`, 2026-09-28) found that §12's cutover-gate mechanics fully define the one-time Linear→GitHub migration event, but no canonical document explicitly extended those same invariants to (a) editing an already-GitHub-canonical document going forward, or (b) authoring a brand-new governed document after a scope's migration has closed. Read literally, the existing §8 Export Procedure and §12 cutover-gate language presume a pre-existing Linear-authoritative source to migrate from, which could be misread as endorsing `Linear document → later migration → GitHub` as the ongoing pattern rather than a closed, one-time transition.
+
+**Changes:**
+
+* added §12.1 (Post-Cutover Steady-State Lifecycle) — GitHub `main` is the source for editing an already-canonical document, not the Linear reference copy; a new document's candidate text originates repository-native; an edit to a Linear reference copy has no canonical effect; identifier allocation is not canonicalization.
+* added §12.2 (Draft Representation) — governed draft text for a post-closure scope preferably lives on a repository branch/PR rather than as a canonical-looking Linear document; explicitly non-retroactive and subordinate to higher-tier governance.
+
+**Not changed:** front-matter schema (§3), filename rules (§4), link/reference mapping (§6), binary-asset rule (§7), validator blocking classes (§9), equivalence model (§10), or any Root/System Governance approval, ownership, escalation, or change-classification mechanism. This amendment operationalizes existing invariants (§2 Authority invariant; Root Governance §4.1's "allocation is not canonicalization" principle, already implicit in Root Documentation Structure §4.1/§10.1) at steady state; it does not introduce a new governance layer.
+
+**Classification:** architectural under this profile's own §14 (alters authority behavior) — processed under System Governance §6 (Propose → Classify → Review → Approve → Record → Version), consistent with the change-control pattern already applied throughout this document's revision history.
+
+**Version:** 1.3 → 1.4.
