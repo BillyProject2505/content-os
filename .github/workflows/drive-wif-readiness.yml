@@ -1,0 +1,78 @@
+name: Drive WIF readiness
+
+on:
+  workflow_dispatch:
+    inputs:
+      drive_file_id:
+        description: "Approved Google Drive file ID for read-only readiness test"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  drive-readiness:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Validate required repository variables
+        shell: bash
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+        run: |
+          set -euo pipefail
+          test -n "$GCP_PROJECT_ID"
+          test -n "$GCP_WORKLOAD_IDENTITY_PROVIDER"
+          test -n "$GCP_SERVICE_ACCOUNT"
+
+      - id: auth
+        name: Authenticate to Google Cloud with WIF
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+
+      - name: Read approved Drive file
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          DRIVE_FILE_ID: ${{ inputs.drive_file_id }}
+        run: |
+          set -euo pipefail
+
+          output="$RUNNER_TEMP/drive-readiness.bin"
+
+          http_status="$(
+            curl --silent --show-error --location               --output "$output"               --write-out "%{http_code}"               --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN"               "https://www.googleapis.com/drive/v3/files/$DRIVE_FILE_ID?alt=media"
+          )"
+
+          if [ "$http_status" != "200" ]; then
+            echo "::error::Drive read failed with HTTP $http_status"
+            rm -f "$output"
+            exit 1
+          fi
+
+          if [ ! -s "$output" ]; then
+            echo "::error::Drive returned an empty file"
+            rm -f "$output"
+            exit 1
+          fi
+
+          byte_count="$(wc -c < "$output" | tr -d ' ')"
+          sha256="$(sha256sum "$output" | cut -d' ' -f1)"
+
+          echo "Drive read-only readiness PASS"
+          echo "bytes=$byte_count"
+          echo "sha256=$sha256"
+
+          rm -f "$output"
