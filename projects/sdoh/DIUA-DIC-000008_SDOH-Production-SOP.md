@@ -37,7 +37,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | Satu Dosis Obat Hati — Production SOP |
 | Document Class | Domain/Project-Level Operational Document |
 | System | Content OS → Satu Dosis Obat Hati (SDOH) |
-| Version | 1.39 |
+| Version | 1.40 |
 | Active Sage Carousel Invocation | `Produksi Sage Carousel` — **OWNER-LOCKED**; supersedes `Produksi Sage Carousel baru.` without changing workflow semantics |
 | Active Burgundy Carousel Invocation | `Produksi Burgundy Carousel` — **OWNER-LOCKED**; supersedes `Produksi Burgundy Carousel baru.` without changing workflow semantics |
 | Active Sage Reels Invocation | `Produksi Sage Reels` — **OWNER-LOCKED** |
