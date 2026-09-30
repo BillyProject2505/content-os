@@ -1,0 +1,130 @@
+name: SDOH live authority preflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: "SDOH carousel Content ID to verify against the live Linear authority"
+        required: true
+        default: "SDOH-BURGUNDY-CAR-0006"
+        type: string
+      expected_decision:
+        description: "Expected live authority decision"
+        required: true
+        default: "REJECT_ALREADY_PUBLISHED"
+        type: choice
+        options:
+          - REJECT_ALREADY_PUBLISHED
+          - REJECT_NOT_SCHEDULED
+          - ALLOW_SNAPSHOT
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Self-test live authority parser
+        run: node projects/sdoh/runtime/instagram-publication-executor/scripts/live-authority-preflight.mjs --self-test
+
+      - name: Resolve live Linear authority
+        id: live
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          GOVERNANCE_REF: ${{ github.sha }}
+          LINEAR_REGISTER_DOCUMENT_ID: 346b4c0c-9aec-4454-a2b5-06210b2c88c6
+          AUTHORITY_RESULT_OUTPUT: ${{ runner.temp }}/authority-result.json
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+          EXPECTED_DECISION: ${{ inputs.expected_decision }}
+        run: |
+          set -euo pipefail
+
+          test -n "$LINEAR_API_KEY"
+          test -n "$CONTENT_ID"
+          test -n "$GOVERNANCE_REF"
+
+          set +e
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/live-authority-preflight.mjs
+          preflight_status=$?
+          set -e
+
+          if [ ! -s "$AUTHORITY_RESULT_OUTPUT" ]; then
+            echo "::error::Authority preflight did not produce a sanitized result file"
+            exit 1
+          fi
+
+          decision="$(jq -r '.decision // "UNKNOWN"' "$AUTHORITY_RESULT_OUTPUT")"
+          allow_prepare="$(jq -r 'if has("allow_prepare") then .allow_prepare else "UNKNOWN" end' "$AUTHORITY_RESULT_OUTPUT")"
+          reason="$(jq -r '.reason // "NONE"' "$AUTHORITY_RESULT_OUTPUT")"
+
+          if [ "$decision" != "$EXPECTED_DECISION" ]; then
+            echo "::error::Expected decision $EXPECTED_DECISION, got $decision ($reason)"
+            rm -f "$AUTHORITY_RESULT_OUTPUT" "$AUTHORITY_SNAPSHOT_OUTPUT"
+            exit 1
+          fi
+
+          case "$EXPECTED_DECISION" in
+            ALLOW_SNAPSHOT)
+              if [ "$preflight_status" -ne 0 ] || [ "$allow_prepare" != "true" ]; then
+                echo "::error::ALLOW_SNAPSHOT contract failed"
+                exit 1
+              fi
+              if [ ! -s "$AUTHORITY_SNAPSHOT_OUTPUT" ]; then
+                echo "::error::Allowed preflight did not produce an authority snapshot"
+                exit 1
+              fi
+
+              jq -e '
+                .authority_snapshot.publication_state == "SCHEDULED" and
+                .authority_snapshot.material_state == "APPROVED" and
+                .authority_snapshot.qa_state == "PASS" and
+                .authority_snapshot.destination_account == "@satudosisobathati" and
+                (.authority_snapshot.caption_sha256 | test("^[0-9a-f]{64}$")) and
+                (.execution_input.media | length == 5)
+              ' "$AUTHORITY_SNAPSHOT_OUTPUT" >/dev/null
+
+              echo "Live Linear authority preflight PASS"
+              echo "decision=ALLOW_SNAPSHOT"
+              echo "content_id=$(jq -r '.content_id' "$AUTHORITY_RESULT_OUTPUT")"
+              echo "scheduled_at=$(jq -r '.scheduled_at' "$AUTHORITY_RESULT_OUTPUT")"
+              echo "caption_revision=$(jq -r '.caption_revision' "$AUTHORITY_RESULT_OUTPUT")"
+              echo "caption_sha256=$(jq -r '.caption_sha256' "$AUTHORITY_RESULT_OUTPUT")"
+              echo "media_count=$(jq -r '.media_count' "$AUTHORITY_RESULT_OUTPUT")"
+              echo "Snapshot remains runner-temporary; no D1/Worker/Meta write occurred."
+              ;;
+            REJECT_ALREADY_PUBLISHED)
+              if [ "$preflight_status" -ne 20 ] || [ "$allow_prepare" != "false" ]; then
+                echo "::error::Published rejection contract failed"
+                exit 1
+              fi
+              echo "Live Linear authority rejection PASS"
+              echo "decision=REJECT_ALREADY_PUBLISHED"
+              echo "No snapshot was handed to Worker."
+              echo "No D1/Drive/Meta write occurred."
+              ;;
+            REJECT_NOT_SCHEDULED)
+              if [ "$preflight_status" -ne 22 ] || [ "$allow_prepare" != "false" ]; then
+                echo "::error::Not-scheduled rejection contract failed"
+                exit 1
+              fi
+              echo "Live Linear authority rejection PASS"
+              echo "decision=REJECT_NOT_SCHEDULED"
+              echo "No snapshot was handed to Worker."
+              echo "No D1/Drive/Meta write occurred."
+              ;;
+            *)
+              echo "::error::Unsupported expected decision"
+              exit 1
+              ;;
+          esac
+
+          rm -f "$AUTHORITY_RESULT_OUTPUT" "$AUTHORITY_SNAPSHOT_OUTPUT"
