@@ -56,6 +56,14 @@ export async function validateAuthoritySnapshotPayload({
     return { ok: false, error: "AUTHORITY_GOVERNANCE_REF_MISMATCH" };
   }
 
+  const scheduledAtMs = Date.parse(snapshot.scheduled_at);
+  if (!Number.isFinite(scheduledAtMs)) {
+    return { ok: false, error: "AUTHORITY_SCHEDULE_INVALID" };
+  }
+  if (scheduledAtMs > nowMs) {
+    return { ok: false, error: "AUTHORITY_SCHEDULE_NOT_DUE" };
+  }
+
   if (snapshot.publication_state !== "SCHEDULED") {
     return { ok: false, error: "AUTHORITY_PUBLICATION_NOT_SCHEDULED" };
   }
@@ -222,6 +230,16 @@ export async function loadAndValidateStoredAuthority({
     snapshot.governance_ref !== job.governance_ref
   ) {
     throw authorityError("AUTHORITY_GOVERNANCE_REF_MISMATCH", 409);
+  }
+
+  if (requireFresh) {
+    const scheduledAtMs = Date.parse(snapshot.scheduled_at);
+    if (!Number.isFinite(scheduledAtMs)) {
+      throw authorityError("AUTHORITY_SCHEDULE_INVALID", 409);
+    }
+    if (scheduledAtMs > nowMs) {
+      throw authorityError("AUTHORITY_SCHEDULE_NOT_DUE", 409);
+    }
   }
 
   if (
