@@ -165,9 +165,6 @@ export async function executeCarouselPublication({
   if (job.platform !== "instagram" || job.account !== EXPECTED_ACCOUNT || job.format !== "carousel") {
     throw executorError("JOB_DESTINATION_REJECTED", 409);
   }
-  if (!["CLAIMED", "PUBLISHING", "FAILED"].includes(job.state)) {
-    throw executorError("JOB_STATE_REJECTED", 409);
-  }
   if (job.state === "PUBLISHED") {
     return result("ALREADY_PUBLISHED", {
       ok: true,
@@ -176,6 +173,9 @@ export async function executeCarouselPublication({
       remote_media_id: job.remote_media_id,
       remote_permalink: job.remote_permalink,
     });
+  }
+  if (!["CLAIMED", "PUBLISHING", "FAILED"].includes(job.state)) {
+    throw executorError("JOB_STATE_REJECTED", 409);
   }
 
   const mediaRows = await loadMediaRows(env.DB, jobId);
@@ -270,6 +270,7 @@ export async function executeCarouselPublication({
       childId = await client.createCarouselChild({ imageUrl });
     } catch (error) {
       await failJob(env.DB, jobId, "CHILD_CONTAINER_CREATE_FAILED");
+      await deleteCredential(env.DB, jobId);
       throw error;
     }
 
@@ -311,6 +312,7 @@ export async function executeCarouselPublication({
     if (TERMINAL_CONTAINER_STATES.has(status.status_code)) {
       await setArtifactState(env.DB, jobId, "CHILD", slot, status.status_code, new Date(now()).toISOString());
       await failJob(env.DB, jobId, `CHILD_CONTAINER_${status.status_code}`);
+      await deleteCredential(env.DB, jobId);
       return result("FAILED", {
         ok: false,
         publish_attempted: false,
@@ -341,6 +343,7 @@ export async function executeCarouselPublication({
       parentId = await client.createCarouselParent({ childIds, caption });
     } catch (error) {
       await failJob(env.DB, jobId, "PARENT_CONTAINER_CREATE_FAILED");
+      await deleteCredential(env.DB, jobId);
       throw error;
     }
 
@@ -381,6 +384,7 @@ export async function executeCarouselPublication({
       new Date(now()).toISOString()
     );
     await failJob(env.DB, jobId, `PARENT_CONTAINER_${parentStatus.status_code}`);
+    await deleteCredential(env.DB, jobId);
     return result("FAILED", {
       ok: false,
       publish_attempted: parentStatus.status_code === "PUBLISHED",
