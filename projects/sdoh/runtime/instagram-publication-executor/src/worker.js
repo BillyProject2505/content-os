@@ -36,6 +36,11 @@ async function handleExistingHealth(request, env) {
     const accountMatch =
       data.username === "satudosisobathati";
 
+    const publishingEnabled =
+      userIdMatch &&
+      accountMatch &&
+      env.PUBLISHING_ENABLED === "true";
+
     return Response.json({
       ok: userIdMatch && accountMatch,
       instagram: {
@@ -43,7 +48,7 @@ async function handleExistingHealth(request, env) {
         user_id_match: userIdMatch,
         account_type: data.account_type,
       },
-      publishing_enabled: false,
+      publishing_enabled: publishingEnabled,
     });
   } catch {
     return Response.json(
