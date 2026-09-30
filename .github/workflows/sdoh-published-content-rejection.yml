@@ -40,7 +40,7 @@ jobs:
           set -e
 
           decision="$(jq -r '.decision // "UNKNOWN"' "$result_file" 2>/dev/null || true)"
-          allow_job_creation="$(jq -r '.allow_job_creation // "UNKNOWN"' "$result_file" 2>/dev/null || true)"
+          allow_job_creation="$(jq -r 'if has("allow_job_creation") then .allow_job_creation else "UNKNOWN" end' "$result_file" 2>/dev/null || true)"
           states="$(jq -c '.publication_states // []' "$result_file" 2>/dev/null || true)"
 
           if [ "$gate_status" -ne 20 ] ||              [ "$decision" != "REJECT_ALREADY_PUBLISHED" ] ||              [ "$allow_job_creation" != "false" ]; then
