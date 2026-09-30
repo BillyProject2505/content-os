@@ -1,4 +1,8 @@
 import { createSignedMediaUrl } from "./media-gateway.js";
+import {
+  verifyImmutableExecutionPayload,
+  verifyLivePublicationAuthority,
+} from "./live-authority-preflight.js";
 
 const META_BASE_DEFAULT = "https://graph.instagram.com";
 const EXPECTED_ACCOUNT = "@satudosisobathati";
@@ -137,16 +141,13 @@ export function createInstagramClient({ accessToken, igUserId, apiBase = META_BA
 export async function executeCarouselPublication({
   env,
   jobId,
-  caption,
-  governanceRef,
   origin,
   fetchImpl = fetch,
+  authorityFetchImpl = fetch,
   now = () => Date.now(),
 }) {
   requireRuntime(env);
   validateJobId(jobId);
-  validateCaption(caption);
-  validateGovernanceRef(governanceRef);
 
   if (env.PUBLISHING_ENABLED !== "true") {
     return result("PUBLISHING_DISABLED", {
@@ -159,9 +160,8 @@ export async function executeCarouselPublication({
   const job = await loadJob(env.DB, jobId);
   if (!job) throw executorError("JOB_NOT_FOUND", 404);
 
-  if (job.governance_ref !== governanceRef) {
-    throw executorError("GOVERNANCE_REF_MISMATCH", 409);
-  }
+  validateGovernanceRef(job.governance_ref);
+
   if (job.platform !== "instagram" || job.account !== EXPECTED_ACCOUNT || job.format !== "carousel") {
     throw executorError("JOB_DESTINATION_REJECTED", 409);
   }
@@ -178,23 +178,18 @@ export async function executeCarouselPublication({
     throw executorError("JOB_STATE_REJECTED", 409);
   }
 
-  const mediaRows = await loadMediaRows(env.DB, jobId);
-  assertFiveMediaRows(mediaRows);
-
-  const credential = await loadCredential(env.DB, jobId);
-  const nowMs = now();
-  if (!credential) throw executorError("DRIVE_CREDENTIAL_MISSING", 409);
-  const credentialExpiryMs = Date.parse(credential.drive_token_expires_at);
-  if (!Number.isFinite(credentialExpiryMs) || credentialExpiryMs <= nowMs + 60_000) {
-    throw executorError("DRIVE_CREDENTIAL_EXPIRED", 409);
-  }
+  const immutablePayload = await verifyImmutableExecutionPayload({
+    job,
+    payload: await loadExecutionPayload(env.DB, jobId),
+  });
+  const caption = immutablePayload.caption;
 
   const artifacts = await loadArtifacts(env.DB, jobId);
   const parent = artifacts.find((row) => row.kind === "PARENT" && row.slot === 0);
   const published = artifacts.find((row) => row.kind === "PUBLISHED_MEDIA" && row.slot === 0);
 
   if (published || job.remote_media_id) {
-    return reconcileCarouselPublication({ env, jobId, caption, fetchImpl });
+    return reconcileCarouselPublication({ env, jobId, fetchImpl });
   }
 
   if (parent?.state === "PUBLISH_ATTEMPTED") {
@@ -214,6 +209,36 @@ export async function executeCarouselPublication({
       retry_safe: false,
       parent_container_id: parent?.remote_id || null,
     });
+  }
+
+  if (!env.LINEAR_API_KEY) {
+    throw executorError("LINEAR_API_KEY_MISSING", 503);
+  }
+
+  const authority = await verifyLivePublicationAuthority({
+    apiKey: env.LINEAR_API_KEY,
+    documentId: immutablePayload.register_document_id,
+    contentId: job.content_id,
+    captionRevision: job.caption_revision,
+    scheduledAt: job.scheduled_at,
+    expectedAccount: EXPECTED_ACCOUNT,
+    nowMs: now(),
+    fetchImpl: authorityFetchImpl,
+  });
+
+  if (!authority.allow_execute) {
+    throw executorError(`AUTHORITY_${authority.reason}`, 409);
+  }
+
+  const mediaRows = await loadMediaRows(env.DB, jobId);
+  assertFiveMediaRows(mediaRows);
+
+  const credential = await loadCredential(env.DB, jobId);
+  const nowMs = now();
+  if (!credential) throw executorError("DRIVE_CREDENTIAL_MISSING", 409);
+  const credentialExpiryMs = Date.parse(credential.drive_token_expires_at);
+  if (!Number.isFinite(credentialExpiryMs) || credentialExpiryMs <= nowMs + 60_000) {
+    throw executorError("DRIVE_CREDENTIAL_EXPIRED", 409);
   }
 
   if (job.state === "CLAIMED") {
@@ -436,16 +461,20 @@ export async function executeCarouselPublication({
 export async function reconcileCarouselPublication({
   env,
   jobId,
-  caption,
   fetchImpl = fetch,
   now = () => Date.now(),
 }) {
   requireRuntime(env);
   validateJobId(jobId);
-  validateCaption(caption);
 
   const job = await loadJob(env.DB, jobId);
   if (!job) throw executorError("JOB_NOT_FOUND", 404);
+
+  const immutablePayload = await verifyImmutableExecutionPayload({
+    job,
+    payload: await loadExecutionPayload(env.DB, jobId),
+  });
+  const caption = immutablePayload.caption;
 
   const client = createInstagramClient({
     accessToken: env.META_ACCESS_TOKEN,
@@ -596,9 +625,20 @@ async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, 
 async function loadJob(db, jobId) {
   return db.prepare(
     `SELECT id, content_id, platform, account, format, state,
-            governance_ref, remote_media_id, remote_permalink
+            scheduled_at, caption_revision, governance_ref,
+            remote_media_id, remote_permalink
        FROM publication_jobs
       WHERE id = ?1
+      LIMIT 1`
+  ).bind(jobId).first();
+}
+
+async function loadExecutionPayload(db, jobId) {
+  return db.prepare(
+    `SELECT caption_text, caption_revision, caption_sha256,
+            register_document_id, created_at
+       FROM publication_job_payloads
+      WHERE job_id = ?1
       LIMIT 1`
   ).bind(jobId).first();
 }
