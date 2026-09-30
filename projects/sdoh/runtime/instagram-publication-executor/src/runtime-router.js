@@ -1,9 +1,13 @@
 import { handlePrepare } from "./prepare-bridge.js";
 import { handleMediaRequest } from "./media-gateway.js";
+import {
+  handleInternalExecute,
+  handleInternalReconcile,
+} from "./internal-execution.js";
 
 /**
- * Route the new publication-executor runtime endpoints without changing
- * the existing health/readiness behavior.
+ * Route publication-executor runtime endpoints without changing the
+ * existing health/readiness behavior.
  *
  * Pass the currently deployed health/readiness handler as fallbackHandler.
  */
@@ -16,6 +20,14 @@ export async function routeRuntimeRequest(
 
   if (url.pathname === "/internal/prepare") {
     return handlePrepare(request, env);
+  }
+
+  if (url.pathname === "/internal/execute") {
+    return handleInternalExecute(request, env);
+  }
+
+  if (url.pathname === "/internal/reconcile") {
+    return handleInternalReconcile(request, env);
   }
 
   if (url.pathname.startsWith("/media/")) {
