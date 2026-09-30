@@ -1,4 +1,5 @@
 import { createSignedMediaUrl } from "./media-gateway.js";
+import { loadAndValidateStoredAuthority } from "./execution-authority.js";
 
 const META_BASE_DEFAULT = "https://graph.instagram.com";
 const EXPECTED_ACCOUNT = "@satudosisobathati";
@@ -137,7 +138,6 @@ export function createInstagramClient({ accessToken, igUserId, apiBase = META_BA
 export async function executeCarouselPublication({
   env,
   jobId,
-  caption,
   governanceRef,
   origin,
   fetchImpl = fetch,
@@ -145,7 +145,6 @@ export async function executeCarouselPublication({
 }) {
   requireRuntime(env);
   validateJobId(jobId);
-  validateCaption(caption);
   validateGovernanceRef(governanceRef);
 
   if (env.PUBLISHING_ENABLED !== "true") {
@@ -178,23 +177,21 @@ export async function executeCarouselPublication({
     throw executorError("JOB_STATE_REJECTED", 409);
   }
 
-  const mediaRows = await loadMediaRows(env.DB, jobId);
-  assertFiveMediaRows(mediaRows);
-
-  const credential = await loadCredential(env.DB, jobId);
   const nowMs = now();
-  if (!credential) throw executorError("DRIVE_CREDENTIAL_MISSING", 409);
-  const credentialExpiryMs = Date.parse(credential.drive_token_expires_at);
-  if (!Number.isFinite(credentialExpiryMs) || credentialExpiryMs <= nowMs + 60_000) {
-    throw executorError("DRIVE_CREDENTIAL_EXPIRED", 409);
-  }
+  const authoritySnapshot = await loadAndValidateStoredAuthority({
+    db: env.DB,
+    job,
+    governanceRef,
+    nowMs,
+    requireFresh: false,
+  });
 
   const artifacts = await loadArtifacts(env.DB, jobId);
   const parent = artifacts.find((row) => row.kind === "PARENT" && row.slot === 0);
   const published = artifacts.find((row) => row.kind === "PUBLISHED_MEDIA" && row.slot === 0);
 
   if (published || job.remote_media_id) {
-    return reconcileCarouselPublication({ env, jobId, caption, fetchImpl });
+    return reconcileCarouselPublication({ env, jobId, fetchImpl, now });
   }
 
   if (parent?.state === "PUBLISH_ATTEMPTED") {
@@ -214,6 +211,26 @@ export async function executeCarouselPublication({
       retry_safe: false,
       parent_container_id: parent?.remote_id || null,
     });
+  }
+
+  await loadAndValidateStoredAuthority({
+    db: env.DB,
+    job,
+    governanceRef,
+    nowMs,
+    requireFresh: true,
+  });
+
+  const caption = authoritySnapshot.approved_caption;
+
+  const mediaRows = await loadMediaRows(env.DB, jobId);
+  assertFiveMediaRows(mediaRows);
+
+  const credential = await loadCredential(env.DB, jobId);
+  if (!credential) throw executorError("DRIVE_CREDENTIAL_MISSING", 409);
+  const credentialExpiryMs = Date.parse(credential.drive_token_expires_at);
+  if (!Number.isFinite(credentialExpiryMs) || credentialExpiryMs <= nowMs + 60_000) {
+    throw executorError("DRIVE_CREDENTIAL_EXPIRED", 409);
   }
 
   if (job.state === "CLAIMED") {
@@ -436,16 +453,23 @@ export async function executeCarouselPublication({
 export async function reconcileCarouselPublication({
   env,
   jobId,
-  caption,
   fetchImpl = fetch,
   now = () => Date.now(),
 }) {
   requireRuntime(env);
   validateJobId(jobId);
-  validateCaption(caption);
 
   const job = await loadJob(env.DB, jobId);
   if (!job) throw executorError("JOB_NOT_FOUND", 404);
+
+  const authoritySnapshot = await loadAndValidateStoredAuthority({
+    db: env.DB,
+    job,
+    governanceRef: job.governance_ref,
+    nowMs: now(),
+    requireFresh: false,
+  });
+  const caption = authoritySnapshot.approved_caption;
 
   const client = createInstagramClient({
     accessToken: env.META_ACCESS_TOKEN,
@@ -595,8 +619,9 @@ async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, 
 
 async function loadJob(db, jobId) {
   return db.prepare(
-    `SELECT id, content_id, platform, account, format, state,
-            governance_ref, remote_media_id, remote_permalink
+    `SELECT id, content_id, platform, account, format, scheduled_at,
+            caption_revision, state, governance_ref,
+            remote_media_id, remote_permalink
        FROM publication_jobs
       WHERE id = ?1
       LIMIT 1`
