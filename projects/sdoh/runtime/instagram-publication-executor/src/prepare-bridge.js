@@ -1,8 +1,14 @@
+import {
+  deleteAuthoritySnapshot,
+  storeAuthoritySnapshot,
+  validateAuthoritySnapshotPayload,
+} from "./execution-authority.js";
+
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 const PREPARE_ALLOWED_STATES = new Set(["SCHEDULED", "CLAIMED"]);
-const MAX_BODY_BYTES = 16 * 1024;
+const MAX_BODY_BYTES = 32 * 1024;
 const MIN_TOKEN_REMAINING_MS = 60 * 1000;
 const MAX_TOKEN_REMAINING_MS = 3700 * 1000;
 
@@ -56,6 +62,7 @@ export async function handlePrepare(request, env) {
     drive_access_token: driveAccessToken,
     drive_token_expires_at: expiresAt,
     governance_ref: governanceRef,
+    authority_snapshot: authoritySnapshot,
   } = payload;
 
   const now = Date.now();
@@ -69,10 +76,17 @@ export async function handlePrepare(request, env) {
   }
 
   const job = await env.DB.prepare(
-    `SELECT id, state, governance_ref
-       FROM publication_jobs
-      WHERE id = ?1
-      LIMIT 1`
+    `SELECT
+       id,
+       content_id,
+       account,
+       scheduled_at,
+       caption_revision,
+       state,
+       governance_ref
+     FROM publication_jobs
+     WHERE id = ?1
+     LIMIT 1`
   )
     .bind(jobId)
     .first();
@@ -87,6 +101,22 @@ export async function handlePrepare(request, env) {
 
   if (!job.governance_ref || job.governance_ref !== governanceRef) {
     return json({ ok: false, error: "GOVERNANCE_REF_MISMATCH" }, 409);
+  }
+
+  if (authoritySnapshot !== undefined) {
+    const authorityValidation = await validateAuthoritySnapshotPayload({
+      snapshot: authoritySnapshot,
+      job,
+      governanceRef,
+      nowMs: now,
+    });
+
+    if (!authorityValidation.ok) {
+      return json(
+        { ok: false, error: authorityValidation.error },
+        409
+      );
+    }
   }
 
   let encryptedEnvelope;
@@ -118,12 +148,37 @@ export async function handlePrepare(request, env) {
     return json({ ok: false, error: "CREDENTIAL_ALREADY_PREPARED" }, 409);
   }
 
+  let authorityStored = false;
+  if (authoritySnapshot !== undefined) {
+    try {
+      authorityStored = await storeAuthoritySnapshot({
+        db: env.DB,
+        jobId,
+        snapshot: authoritySnapshot,
+        createdAt,
+      });
+    } catch {
+      await deleteCredential(env.DB, jobId);
+      await deleteAuthoritySnapshot(env.DB, jobId);
+      return json({ ok: false, error: "AUTHORITY_SNAPSHOT_STORE_FAILED" }, 500);
+    }
+
+    if (!authorityStored) {
+      await deleteCredential(env.DB, jobId);
+      return json(
+        { ok: false, error: "AUTHORITY_SNAPSHOT_ALREADY_PREPARED" },
+        409
+      );
+    }
+  }
+
   return json(
     {
       ok: true,
       job_id: jobId,
       drive_token_expires_at: expiresAt,
       credential_stored: true,
+      authority_snapshot_stored: authorityStored,
     },
     201
   );
@@ -249,6 +304,17 @@ function validatePreparePayload(payload) {
     return { ok: false, error: "INVALID_GOVERNANCE_REF" };
   }
 
+  if (
+    payload.authority_snapshot !== undefined &&
+    (
+      !payload.authority_snapshot ||
+      typeof payload.authority_snapshot !== "object" ||
+      Array.isArray(payload.authority_snapshot)
+    )
+  ) {
+    return { ok: false, error: "AUTHORITY_SNAPSHOT_INVALID" };
+  }
+
   return { ok: true };
 }
 
@@ -278,6 +344,12 @@ function fromBase64Url(value) {
     bytes[i] = binary.charCodeAt(i);
   }
   return bytes;
+}
+
+async function deleteCredential(db, jobId) {
+  await db.prepare(
+    `DELETE FROM execution_credentials WHERE job_id = ?1`
+  ).bind(jobId).run();
 }
 
 function json(body, status = 200, extraHeaders = {}) {
