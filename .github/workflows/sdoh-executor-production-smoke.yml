@@ -59,7 +59,7 @@ jobs:
               --write-out "%{http_code}" \
               --request POST \
               --header "Content-Type: application/json" \
-              --data '{"job_id":"SMOKE-UNAUTH-001","caption":"smoke","governance_ref":"dcf82a1c8003627aaae1fffd3b96224362c5080a"}' \
+              --data '{"job_id":"SMOKE-UNAUTH-001","governance_ref":"dcf82a1c8003627aaae1fffd3b96224362c5080a"}' \
               "${WORKER_BASE_URL%/}/internal/execute"
           )"
 
@@ -85,7 +85,7 @@ jobs:
               --write-out "%{http_code}" \
               --request POST \
               --header "Content-Type: application/json" \
-              --data '{"job_id":"SMOKE-UNAUTH-001","caption":"smoke"}' \
+              --data '{"job_id":"SMOKE-UNAUTH-001"}' \
               "${WORKER_BASE_URL%/}/internal/reconcile"
           )"
 
@@ -114,7 +114,7 @@ jobs:
               --request POST \
               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET" \
               --header "Content-Type: application/json" \
-              --data '{"job_id":"SMOKE-DISABLED-001","caption":"SMOKE TEST - NOT PUBLISHABLE","governance_ref":"dcf82a1c8003627aaae1fffd3b96224362c5080a"}' \
+              --data '{"job_id":"SMOKE-DISABLED-001","governance_ref":"dcf82a1c8003627aaae1fffd3b96224362c5080a"}' \
               "${WORKER_BASE_URL%/}/internal/execute"
           )"
 
@@ -143,7 +143,7 @@ jobs:
               --request POST \
               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET" \
               --header "Content-Type: application/json" \
-              --data '{"job_id":"SMOKE-MISSING-001","caption":"SMOKE TEST - NOT PUBLISHABLE"}' \
+              --data '{"job_id":"SMOKE-MISSING-001"}' \
               "${WORKER_BASE_URL%/}/internal/reconcile"
           )"
 
