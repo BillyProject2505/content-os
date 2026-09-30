@@ -11,16 +11,9 @@ export async function handleInternalExecute(request, env) {
   if (auth.response) return auth.response;
 
   const payload = auth.payload;
-
-  if (Object.prototype.hasOwnProperty.call(payload, "caption")) {
-    return json({ ok: false, error: "CALLER_CAPTION_FORBIDDEN" }, 400);
-  }
-
-  if (
-    typeof payload.job_id !== "string" ||
-    typeof payload.governance_ref !== "string"
-  ) {
-    return json({ ok: false, error: "INVALID_PAYLOAD" }, 400);
+  const validation = validateExecutePayload(payload);
+  if (!validation.ok) {
+    return json({ ok: false, error: validation.error }, 400);
   }
 
   try {
@@ -53,13 +46,9 @@ export async function handleInternalReconcile(request, env) {
   if (auth.response) return auth.response;
 
   const payload = auth.payload;
-
-  if (Object.prototype.hasOwnProperty.call(payload, "caption")) {
-    return json({ ok: false, error: "CALLER_CAPTION_FORBIDDEN" }, 400);
-  }
-
-  if (typeof payload.job_id !== "string") {
-    return json({ ok: false, error: "INVALID_PAYLOAD" }, 400);
+  const validation = validateReconcilePayload(payload);
+  if (!validation.ok) {
+    return json({ ok: false, error: validation.error }, 400);
   }
 
   try {
@@ -77,6 +66,35 @@ export async function handleInternalReconcile(request, env) {
       Number(error?.httpStatus) || 502
     );
   }
+}
+
+export function validateExecutePayload(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { ok: false, error: "INVALID_PAYLOAD" };
+  }
+  if (Object.prototype.hasOwnProperty.call(payload, "caption")) {
+    return { ok: false, error: "CALLER_CAPTION_FORBIDDEN" };
+  }
+  if (
+    typeof payload.job_id !== "string" ||
+    typeof payload.governance_ref !== "string"
+  ) {
+    return { ok: false, error: "INVALID_PAYLOAD" };
+  }
+  return { ok: true };
+}
+
+export function validateReconcilePayload(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { ok: false, error: "INVALID_PAYLOAD" };
+  }
+  if (Object.prototype.hasOwnProperty.call(payload, "caption")) {
+    return { ok: false, error: "CALLER_CAPTION_FORBIDDEN" };
+  }
+  if (typeof payload.job_id !== "string") {
+    return { ok: false, error: "INVALID_PAYLOAD" };
+  }
+  return { ok: true };
 }
 
 async function authorizeJsonRequest(request, env) {
