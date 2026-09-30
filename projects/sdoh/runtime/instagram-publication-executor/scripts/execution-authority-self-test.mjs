@@ -83,6 +83,26 @@ function makeSnapshot() {
 }
 
 {
+  const staleJob = {
+    ...job,
+    scheduled_at: "2026-09-30T13:20:00+08:00",
+  };
+  const stale = {
+    ...makeSnapshot(),
+    scheduled_at: staleJob.scheduled_at,
+  };
+  const result = await validateAuthoritySnapshotPayload({
+    snapshot: stale,
+    job: staleJob,
+    governanceRef: GOVERNANCE_REF,
+    nowMs: NOW_MS,
+  });
+  if (result.ok || result.error !== "AUTHORITY_SCHEDULE_STALE") {
+    throw new Error("stale schedule window did not fail closed");
+  }
+}
+
+{
   const expired = makeSnapshot();
   expired.authority_expires_at = "2026-09-30T05:59:59Z";
   const result = await validateAuthoritySnapshotPayload({
@@ -189,4 +209,5 @@ console.log("immutable execution authority self-test PASS");
 console.log("caption source: stored authority snapshot only");
 console.log("caller caption override: rejected");
 console.log("fresh SCHEDULED + APPROVED + PASS snapshot: required for new publish writes");
+console.log("schedule older than 30 minutes: rejected for new writes");
 console.log("expired snapshot: allowed only for reconciliation verification");

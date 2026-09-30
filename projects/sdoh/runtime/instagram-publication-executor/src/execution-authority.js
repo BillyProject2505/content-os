@@ -3,6 +3,7 @@ const encoder = new TextEncoder();
 const AUTHORITY_MAX_AGE_MS = 5 * 60 * 1000;
 const AUTHORITY_MAX_REMAINING_MS = 15 * 60 * 1000;
 const AUTHORITY_MIN_REMAINING_MS = 60 * 1000;
+const AUTHORITY_MAX_SCHEDULE_LATENESS_MS = 30 * 60 * 1000;
 
 export async function validateAuthoritySnapshotPayload({
   snapshot,
@@ -62,6 +63,9 @@ export async function validateAuthoritySnapshotPayload({
   }
   if (scheduledAtMs > nowMs) {
     return { ok: false, error: "AUTHORITY_SCHEDULE_NOT_DUE" };
+  }
+  if (scheduledAtMs < nowMs - AUTHORITY_MAX_SCHEDULE_LATENESS_MS) {
+    return { ok: false, error: "AUTHORITY_SCHEDULE_STALE" };
   }
 
   if (snapshot.publication_state !== "SCHEDULED") {
@@ -239,6 +243,9 @@ export async function loadAndValidateStoredAuthority({
     }
     if (scheduledAtMs > nowMs) {
       throw authorityError("AUTHORITY_SCHEDULE_NOT_DUE", 409);
+    }
+    if (scheduledAtMs < nowMs - AUTHORITY_MAX_SCHEDULE_LATENESS_MS) {
+      throw authorityError("AUTHORITY_SCHEDULE_STALE", 409);
     }
   }
 

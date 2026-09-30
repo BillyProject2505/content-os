@@ -1,0 +1,259 @@
+name: SDOH controlled runtime prepare
+
+on:
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: "Owner-approved SDOH carousel Content ID"
+        required: true
+        type: string
+      worker_base_url:
+        description: "Production Worker HTTPS base URL"
+        required: true
+        default: https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate configuration
+        shell: bash
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+        run: |
+          set -euo pipefail
+          test -n "$GCP_PROJECT_ID"
+          test -n "$GCP_WORKLOAD_IDENTITY_PROVIDER"
+          test -n "$GCP_SERVICE_ACCOUNT"
+          test -n "$LINEAR_API_KEY"
+          test -n "$EXECUTOR_INGEST_SECRET"
+
+          if ! [[ "$CONTENT_ID" =~ ^SDOH-[A-Z0-9-]+$ ]]; then
+            echo "::error::Invalid content_id"
+            exit 1
+          fi
+
+          case "$WORKER_BASE_URL" in
+            https://*) ;;
+            *)
+              echo "::error::worker_base_url must use HTTPS"
+              exit 1
+              ;;
+          esac
+
+      - id: auth
+        name: Authenticate to Google Cloud with WIF
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+          create_credentials_file: false
+
+      - name: Resolve fresh live Linear authority
+        id: authority
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          GOVERNANCE_REF: ${{ github.sha }}
+          LINEAR_REGISTER_DOCUMENT_ID: 346b4c0c-9aec-4454-a2b5-06210b2c88c6
+          AUTHORITY_RESULT_OUTPUT: ${{ runner.temp }}/authority-result.json
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/live-authority-preflight.mjs
+
+          if [ ! -s "$AUTHORITY_RESULT_OUTPUT" ] || [ ! -s "$AUTHORITY_SNAPSHOT_OUTPUT" ]; then
+            echo "::error::Fresh authority preflight did not produce required temporary files"
+            exit 1
+          fi
+
+          if [ "$(jq -r '.decision' "$AUTHORITY_RESULT_OUTPUT")" != "ALLOW_SNAPSHOT" ] || \
+             [ "$(jq -r '.allow_prepare' "$AUTHORITY_RESULT_OUTPUT")" != "true" ]; then
+            reason="$(jq -r '.reason // "UNKNOWN"' "$AUTHORITY_RESULT_OUTPUT")"
+            echo "::error::Authority did not allow runtime preparation ($reason)"
+            exit 1
+          fi
+
+          jq -e '
+            .authority_snapshot.publication_state == "SCHEDULED" and
+            .authority_snapshot.material_state == "APPROVED" and
+            .authority_snapshot.qa_state == "PASS" and
+            .authority_snapshot.destination_account == "@satudosisobathati" and
+            (.authority_snapshot.caption_sha256 | test("^[0-9a-f]{64}$")) and
+            (.execution_input.media | length == 5)
+          ' "$AUTHORITY_SNAPSHOT_OUTPUT" >/dev/null
+
+          echo "Fresh authority PASS"
+          echo "content_id=$(jq -r '.content_id' "$AUTHORITY_RESULT_OUTPUT")"
+          echo "scheduled_at=$(jq -r '.scheduled_at' "$AUTHORITY_RESULT_OUTPUT")"
+          echo "caption_revision=$(jq -r '.caption_revision' "$AUTHORITY_RESULT_OUTPUT")"
+          echo "caption_sha256=$(jq -r '.caption_sha256' "$AUTHORITY_RESULT_OUTPUT")"
+          echo "media_count=$(jq -r '.media_count' "$AUTHORITY_RESULT_OUTPUT")"
+
+      - name: Stage immutable D1 job and media rows
+        id: stage
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+
+          response_file="$RUNNER_TEMP/stage-response.json"
+          endpoint="${WORKER_BASE_URL%/}/internal/stage"
+
+          http_status="$(
+            curl --silent --show-error \
+              --output "$response_file" \
+              --write-out "%{http_code}" \
+              --request POST \
+              --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET" \
+              --header "Content-Type: application/json" \
+              --data-binary @"$AUTHORITY_SNAPSHOT_OUTPUT" \
+              "$endpoint"
+          )"
+
+          if [ "$http_status" != "201" ] && [ "$http_status" != "200" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN_ERROR"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Staging failed with HTTP $http_status ($error_code)"
+            rm -f "$response_file"
+            exit 1
+          fi
+
+          if [ "$(jq -r '.ok' "$response_file")" != "true" ] || \
+             [ "$(jq -r '.media_count' "$response_file")" != "5" ]; then
+            echo "::error::Staging response did not satisfy contract"
+            rm -f "$response_file"
+            exit 1
+          fi
+
+          job_id="$(jq -r '.job_id' "$response_file")"
+          job_state="$(jq -r '.state' "$response_file")"
+          stage_status="$(jq -r '.status' "$response_file")"
+
+          if [ -z "$job_id" ] || [ "$job_id" = "null" ]; then
+            echo "::error::Staging response missing job_id"
+            exit 1
+          fi
+
+          if [ "$job_state" = "CLAIMED" ]; then
+            echo "::error::Job is already CLAIMED; refusing to overwrite prepared runtime state"
+            exit 1
+          fi
+
+          if [ "$job_state" != "SCHEDULED" ]; then
+            echo "::error::Expected staged state SCHEDULED, got $job_state"
+            exit 1
+          fi
+
+          echo "job_id=$job_id" >> "$GITHUB_OUTPUT"
+          echo "Staging PASS"
+          echo "status=$stage_status"
+          echo "job_id=$job_id"
+          echo "state=SCHEDULED"
+          echo "publishing remains disabled"
+
+          rm -f "$response_file"
+
+      - name: Persist short-lived Drive credential and authority snapshot
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          JOB_ID: ${{ steps.stage.outputs.job_id }}
+          GOVERNANCE_REF: ${{ github.sha }}
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+          echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
+
+          expires_at="$(date -u -d '+55 minutes' '+%Y-%m-%dT%H:%M:%SZ')"
+          endpoint="${WORKER_BASE_URL%/}/internal/prepare"
+          request_file="$RUNNER_TEMP/prepare-request.json"
+          response_file="$RUNNER_TEMP/prepare-response.json"
+
+          jq -n \
+            --arg job_id "$JOB_ID" \
+            --arg drive_access_token "$GOOGLE_ACCESS_TOKEN" \
+            --arg drive_token_expires_at "$expires_at" \
+            --arg governance_ref "$GOVERNANCE_REF" \
+            --slurpfile bundle "$AUTHORITY_SNAPSHOT_OUTPUT" \
+            '{
+              job_id: $job_id,
+              drive_access_token: $drive_access_token,
+              drive_token_expires_at: $drive_token_expires_at,
+              governance_ref: $governance_ref,
+              authority_snapshot: $bundle[0].authority_snapshot
+            }' > "$request_file"
+
+          http_status="$(
+            curl --silent --show-error \
+              --output "$response_file" \
+              --write-out "%{http_code}" \
+              --request POST \
+              --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET" \
+              --header "Content-Type: application/json" \
+              --data-binary @"$request_file" \
+              "$endpoint"
+          )"
+
+          rm -f "$request_file"
+
+          if [ "$http_status" != "201" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN_ERROR"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Prepare failed with HTTP $http_status ($error_code)"
+            rm -f "$response_file"
+            exit 1
+          fi
+
+          if [ "$(jq -r '.ok' "$response_file")" != "true" ] || \
+             [ "$(jq -r '.credential_stored' "$response_file")" != "true" ] || \
+             [ "$(jq -r '.authority_snapshot_stored' "$response_file")" != "true" ] || \
+             [ "$(jq -r '.job_state' "$response_file")" != "CLAIMED" ] || \
+             [ "$(jq -r '.job_id' "$response_file")" != "$JOB_ID" ]; then
+            echo "::error::Prepare response did not satisfy controlled runtime contract"
+            rm -f "$response_file"
+            exit 1
+          fi
+
+          if jq -e 'has("drive_access_token") or has("drive_token_ciphertext") or has("approved_caption")' "$response_file" >/dev/null; then
+            echo "::error::Prepare response exposed sensitive/immutable input material"
+            rm -f "$response_file"
+            exit 1
+          fi
+
+          echo "Controlled runtime preparation PASS"
+          echo "job_id=$JOB_ID"
+          echo "job_state=CLAIMED"
+          echo "credential_stored=true"
+          echo "authority_snapshot_stored=true"
+          echo "No execute route was called."
+          echo "No Meta or Instagram write occurred."
+
+          rm -f "$response_file"
+          rm -f "$AUTHORITY_SNAPSHOT_OUTPUT" "$RUNNER_TEMP/authority-result.json"

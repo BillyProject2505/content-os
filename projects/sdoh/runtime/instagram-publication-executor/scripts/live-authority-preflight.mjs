@@ -6,6 +6,7 @@ const LINEAR_API_URL = "https://api.linear.app/graphql";
 const DEFAULT_REGISTER_DOCUMENT_ID = "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
 const EXPECTED_ACCOUNT = "@satudosisobathati";
 const MANIFEST_SCHEMA = "sdoh-execution-authority-v1";
+const MAX_SCHEDULE_LATENESS_MS = 30 * 60 * 1000;
 
 const EXIT = Object.freeze({
   ALLOW_SNAPSHOT: 0,
@@ -405,6 +406,9 @@ export function buildExecutionAuthority({
     if (scheduledAtMs > nowMs) {
       throw authorityError("SCHEDULE_NOT_DUE");
     }
+    if (scheduledAtMs < nowMs - MAX_SCHEDULE_LATENESS_MS) {
+      throw authorityError("SCHEDULE_STALE");
+    }
 
     const checkedAt = new Date(nowMs).toISOString();
     const expiresAt = new Date(nowMs + 5 * 60 * 1000).toISOString();
@@ -594,6 +598,19 @@ async function runSelfTest() {
     throw new Error("self-test failed: early publication was not rejected");
   }
 
+  const stale = buildExecutionAuthority({
+    markdown: selfTestFixture(),
+    contentId: "SDOH-BURGUNDY-CAR-0099",
+    registerDocumentId: "test-register",
+    registerUpdatedAt: "2026-09-30T05:59:00Z",
+    governanceRef: "a".repeat(40),
+    now: new Date("2026-09-30T06:31:00Z"),
+  });
+
+  if (stale.decision !== "AUTHORITY_ERROR" || stale.reason !== "SCHEDULE_STALE") {
+    throw new Error("self-test failed: stale schedule window was not rejected");
+  }
+
   const noManifest = buildExecutionAuthority({
     markdown: selfTestFixture({ includeManifest: false }),
     contentId: "SDOH-BURGUNDY-CAR-0099",
@@ -614,6 +631,7 @@ async function runSelfTest() {
   console.log("positive snapshot construction PASS");
   console.log("published content rejection-before-manifest PASS");
   console.log("scheduled_at due gate PASS");
+  console.log("stale schedule window rejection PASS");
   console.log("missing machine-readable manifest fails closed PASS");
 }
 

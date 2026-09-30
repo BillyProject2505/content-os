@@ -1,4 +1,5 @@
 import { handlePrepare } from "./prepare-bridge.js";
+import { handleStage } from "./staging-bridge.js";
 import { handleMediaRequest } from "./media-gateway.js";
 import {
   handleInternalExecute,
@@ -17,6 +18,10 @@ export async function routeRuntimeRequest(
   fallbackHandler
 ) {
   const url = new URL(request.url);
+
+  if (url.pathname === "/internal/stage") {
+    return handleStage(request, env);
+  }
 
   if (url.pathname === "/internal/prepare") {
     return handlePrepare(request, env);

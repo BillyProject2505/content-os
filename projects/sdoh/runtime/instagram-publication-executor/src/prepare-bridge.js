@@ -172,10 +172,31 @@ export async function handlePrepare(request, env) {
     }
   }
 
+  let finalState = job.state;
+  if (job.state === "SCHEDULED" && authorityStored) {
+    const transition = await env.DB.prepare(
+      `UPDATE publication_jobs
+          SET state = 'CLAIMED',
+              claimed_at = COALESCE(claimed_at, ?2),
+              updated_at = ?2,
+              last_error = NULL
+        WHERE id = ?1
+          AND state = 'SCHEDULED'`
+    ).bind(jobId, createdAt).run();
+
+    if ((transition.meta?.changes || 0) !== 1) {
+      await deleteCredential(env.DB, jobId);
+      await deleteAuthoritySnapshot(env.DB, jobId);
+      return json({ ok: false, error: "JOB_CLAIM_TRANSITION_FAILED" }, 409);
+    }
+    finalState = "CLAIMED";
+  }
+
   return json(
     {
       ok: true,
       job_id: jobId,
+      job_state: finalState,
       drive_token_expires_at: expiresAt,
       credential_stored: true,
       authority_snapshot_stored: authorityStored,
