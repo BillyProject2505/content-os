@@ -1,0 +1,92 @@
+name: SDOH live pilot media readiness
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  verify-media:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Validate required repository variables
+        shell: bash
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+        run: |
+          set -euo pipefail
+          test -n "$GCP_PROJECT_ID"
+          test -n "$GCP_WORKLOAD_IDENTITY_PROVIDER"
+          test -n "$GCP_SERVICE_ACCOUNT"
+
+      - id: auth
+        name: Authenticate to Google Cloud with WIF
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+
+      - name: Verify SDOH-BURGUNDY-CAR-0002 S01-S05
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: |
+          set -euo pipefail
+
+          verify_file() {
+            slot="$1"
+            file_id="$2"
+            expected_sha="$3"
+
+            output="$RUNNER_TEMP/$slot.jpg"
+
+            http_status="$(
+              curl --silent --show-error --location                 --output "$output"                 --write-out "%{http_code}"                 --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN"                 "https://www.googleapis.com/drive/v3/files/$file_id?alt=media"
+            )"
+
+            if [ "$http_status" != "200" ]; then
+              echo "::error::$slot Drive read failed with HTTP $http_status"
+              rm -f "$output"
+              exit 1
+            fi
+
+            if [ ! -s "$output" ]; then
+              echo "::error::$slot returned an empty file"
+              rm -f "$output"
+              exit 1
+            fi
+
+            actual_sha="$(sha256sum "$output" | cut -d' ' -f1)"
+            if [ "$actual_sha" != "$expected_sha" ]; then
+              echo "::error::$slot SHA-256 mismatch"
+              echo "expected=$expected_sha"
+              echo "actual=$actual_sha"
+              rm -f "$output"
+              exit 1
+            fi
+
+            bytes="$(wc -c < "$output" | tr -d ' ')"
+            echo "$slot PASS bytes=$bytes sha256=$actual_sha"
+            rm -f "$output"
+          }
+
+          verify_file S01 17OBQ3x1VtmqH3sJmtzvjFRH21kUoDSuE 8b9688d65a6db76fa8419b4b2869102898c407b8162350109e3584c9c8256980
+          verify_file S02 1Vu0x2gWqhX_F1Aclacupvz_Q2s1_z1q8 14f2ea1e09b8026732a9ba023d20bb52e1528a20dabee570e87bb0022200ef86
+          verify_file S03 1Q7WH578AzdNKCSJQ2DxvTuODgg-Ludzc 28bf9253b276dee02584272d47057761e89b07e1e61babaf1a2f6db27bbb947d
+          verify_file S04 1dxgpElkdc8HXerZYHQcBNorGR6GgMXrz 276c75cc6b46cd466667652495b0620bb46155ce5e6df3b64eedc8717360fa27
+          verify_file S05 1ibJ_RKWKE_fSLj_VRCnNl-Kma7cfXz7q 66f7b85478c12c55c57bf66c220834ceb4402282137dac47f7964af17fd5642a
+
+          echo "SDOH-BURGUNDY-CAR-0002 media readiness PASS"
+          echo "verified_slots=5"
+          echo "No Worker, D1, Meta, or Instagram write occurred."
