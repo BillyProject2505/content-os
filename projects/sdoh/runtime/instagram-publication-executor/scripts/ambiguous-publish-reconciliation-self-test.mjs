@@ -2,24 +2,47 @@ import {
   executeCarouselPublication,
   reconcileCarouselPublication,
 } from "../src/instagram-carousel-executor.js";
+import { sha256Hex } from "../src/execution-authority.js";
 
 const GOVERNANCE_REF = "f3b036f8064a309cc32ed0f50950f3cf6950b405";
 const JOB_ID = "TEST-AMBIGUOUS-PUBLISH-001";
 const NOW_MS = Date.parse("2026-09-30T05:00:00Z");
+const SCHEDULED_AT = "2026-09-30T12:55:00+08:00";
+const CAPTION = "locked caption";
+const CAPTION_HASH = await sha256Hex(CAPTION);
 
 function makeState() {
   return {
     job: {
       id: JOB_ID,
-      content_id: "TEST-CONTENT",
+      content_id: "SDOH-BURGUNDY-CAR-TEST",
       platform: "instagram",
       account: "@satudosisobathati",
       format: "carousel",
+      scheduled_at: SCHEDULED_AT,
+      caption_revision: "v0.1",
       state: "FAILED",
       governance_ref: GOVERNANCE_REF,
       remote_media_id: null,
       remote_permalink: null,
       last_error: "RECONCILIATION_REQUIRED_AFTER_PUBLISH_ATTEMPT",
+    },
+    authority: {
+      content_id: "SDOH-BURGUNDY-CAR-TEST",
+      register_document_id: "test-register",
+      register_updated_at: "2026-09-30T04:58:00Z",
+      publication_state: "SCHEDULED",
+      material_state: "APPROVED",
+      qa_state: "PASS",
+      destination_account: "@satudosisobathati",
+      scheduled_at: SCHEDULED_AT,
+      caption_revision: "v0.1",
+      approved_caption: CAPTION,
+      caption_sha256: CAPTION_HASH,
+      governance_ref: GOVERNANCE_REF,
+      authority_checked_at: "2026-09-30T04:59:00Z",
+      authority_expires_at: "2026-09-30T05:10:00Z",
+      created_at: "2026-09-30T04:59:00Z",
     },
     credential: {
       drive_token_expires_at: "2026-09-30T05:30:00Z",
@@ -72,6 +95,11 @@ function createFakeDb(state) {
           if (normalized.includes("FROM publication_jobs")) {
             return state.job?.id === bound[0] ? { ...state.job } : null;
           }
+          if (normalized.includes("FROM execution_authority_snapshots")) {
+            return state.job?.id === bound[0] && state.authority
+              ? { ...state.authority }
+              : null;
+          }
           if (normalized.includes("FROM execution_credentials")) {
             return state.job?.id === bound[0] && state.credential
               ? { ...state.credential }
@@ -115,9 +143,7 @@ function createFakeDb(state) {
             return { meta: { changes: 1 } };
           }
 
-          if (
-            normalized.startsWith("DELETE FROM execution_credentials")
-          ) {
+          if (normalized.startsWith("DELETE FROM execution_credentials")) {
             if (state.job?.id === bound[0] && state.credential) {
               state.credential = null;
               state.updates.push({ type: "credential_deleted" });
@@ -156,7 +182,6 @@ function createEnv(state) {
   const result = await executeCarouselPublication({
     env: createEnv(state),
     jobId: JOB_ID,
-    caption: "locked caption",
     governanceRef: GOVERNANCE_REF,
     origin: "https://worker.example",
     fetchImpl,
@@ -216,7 +241,6 @@ function createEnv(state) {
   const result = await reconcileCarouselPublication({
     env: createEnv(state),
     jobId: JOB_ID,
-    caption: "locked caption",
     fetchImpl,
     now: () => NOW_MS,
   });
@@ -242,6 +266,7 @@ function createEnv(state) {
 }
 
 console.log("ambiguous publish reconciliation self-test PASS");
+console.log("immutable authority caption used by execute/reconcile");
 console.log("second execute: 0 Meta calls after PUBLISH_ATTEMPTED");
 console.log("reconcile: read-only parent status check only");
 console.log("duplicate media_publish attempts: 0");

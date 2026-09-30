@@ -4,26 +4,22 @@ import {
 } from "./instagram-carousel-executor.js";
 
 const encoder = new TextEncoder();
-const MAX_BODY_BYTES = 12 * 1024;
+const MAX_BODY_BYTES = 8 * 1024;
 
 export async function handleInternalExecute(request, env) {
   const auth = await authorizeJsonRequest(request, env);
   if (auth.response) return auth.response;
 
   const payload = auth.payload;
-  if (
-    typeof payload.job_id !== "string" ||
-    typeof payload.caption !== "string" ||
-    typeof payload.governance_ref !== "string"
-  ) {
-    return json({ ok: false, error: "INVALID_PAYLOAD" }, 400);
+  const validation = validateExecutePayload(payload);
+  if (!validation.ok) {
+    return json({ ok: false, error: validation.error }, 400);
   }
 
   try {
     const result = await executeCarouselPublication({
       env,
       jobId: payload.job_id,
-      caption: payload.caption,
       governanceRef: payload.governance_ref,
       origin: new URL(request.url).origin,
     });
@@ -50,18 +46,15 @@ export async function handleInternalReconcile(request, env) {
   if (auth.response) return auth.response;
 
   const payload = auth.payload;
-  if (
-    typeof payload.job_id !== "string" ||
-    typeof payload.caption !== "string"
-  ) {
-    return json({ ok: false, error: "INVALID_PAYLOAD" }, 400);
+  const validation = validateReconcilePayload(payload);
+  if (!validation.ok) {
+    return json({ ok: false, error: validation.error }, 400);
   }
 
   try {
     const result = await reconcileCarouselPublication({
       env,
       jobId: payload.job_id,
-      caption: payload.caption,
     });
     return json({ ok: true, result }, 200);
   } catch (error) {
@@ -73,6 +66,35 @@ export async function handleInternalReconcile(request, env) {
       Number(error?.httpStatus) || 502
     );
   }
+}
+
+export function validateExecutePayload(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { ok: false, error: "INVALID_PAYLOAD" };
+  }
+  if (Object.prototype.hasOwnProperty.call(payload, "caption")) {
+    return { ok: false, error: "CALLER_CAPTION_FORBIDDEN" };
+  }
+  if (
+    typeof payload.job_id !== "string" ||
+    typeof payload.governance_ref !== "string"
+  ) {
+    return { ok: false, error: "INVALID_PAYLOAD" };
+  }
+  return { ok: true };
+}
+
+export function validateReconcilePayload(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { ok: false, error: "INVALID_PAYLOAD" };
+  }
+  if (Object.prototype.hasOwnProperty.call(payload, "caption")) {
+    return { ok: false, error: "CALLER_CAPTION_FORBIDDEN" };
+  }
+  if (typeof payload.job_id !== "string") {
+    return { ok: false, error: "INVALID_PAYLOAD" };
+  }
+  return { ok: true };
 }
 
 async function authorizeJsonRequest(request, env) {
