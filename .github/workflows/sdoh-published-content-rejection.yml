@@ -1,0 +1,62 @@
+name: SDOH published-content rejection gate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reject-published-fixture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Self-test publication authority parser
+        run: node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-authority-gate.mjs --self-test
+
+      - name: Verify authoritative rejection of published 0006
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          CONTENT_ID: SDOH-BURGUNDY-CAR-0006
+          LINEAR_REGISTER_DOCUMENT_ID: 346b4c0c-9aec-4454-a2b5-06210b2c88c6
+        run: |
+          set -euo pipefail
+
+          if [ -z "$LINEAR_API_KEY" ]; then
+            echo "::error::LINEAR_API_KEY repository secret is missing"
+            exit 1
+          fi
+
+          result_file="$RUNNER_TEMP/publication-authority-result.json"
+
+          set +e
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-authority-gate.mjs >"$result_file" 2>&1
+          gate_status=$?
+          set -e
+
+          decision="$(jq -r '.decision // "UNKNOWN"' "$result_file" 2>/dev/null || true)"
+          allow_job_creation="$(jq -r '.allow_job_creation // "UNKNOWN"' "$result_file" 2>/dev/null || true)"
+          states="$(jq -c '.publication_states // []' "$result_file" 2>/dev/null || true)"
+
+          if [ "$gate_status" -ne 20 ] ||              [ "$decision" != "REJECT_ALREADY_PUBLISHED" ] ||              [ "$allow_job_creation" != "false" ]; then
+            echo "::error::Published-content rejection contract failed (exit=$gate_status decision=$decision allow_job_creation=$allow_job_creation states=$states)"
+            rm -f "$result_file"
+            exit 1
+          fi
+
+          echo "Published-content rejection gate PASS"
+          echo "content_id=$CONTENT_ID"
+          echo "decision=$decision"
+          echo "publication_states=$states"
+          echo "allow_job_creation=$allow_job_creation"
+          echo "No D1 job was created."
+          echo "No credential preparation was requested."
+          echo "No media gateway request was made."
+          echo "No Meta/Instagram request was made."
+
+          rm -f "$result_file"
