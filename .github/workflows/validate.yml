@@ -26,3 +26,5 @@ jobs:
         run: node --experimental-default-type=module projects/sdoh/runtime/instagram-publication-executor/scripts/ambiguous-publish-reconciliation-self-test.mjs
       - name: Self-test immutable execution authority
         run: node --experimental-default-type=module projects/sdoh/runtime/instagram-publication-executor/scripts/execution-authority-self-test.mjs
+      - name: Self-test live Linear authority preflight
+        run: node projects/sdoh/runtime/instagram-publication-executor/scripts/live-authority-preflight.mjs --self-test
