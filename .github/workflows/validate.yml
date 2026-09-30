@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -20,3 +20,5 @@ jobs:
         run: python validators/validate_documents.py
       - name: Self-test SDOH publication authority gate
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-authority-gate.mjs --self-test
+      - name: Self-test SDOH Instagram carousel executor
+        run: node --experimental-default-type=module projects/sdoh/runtime/instagram-publication-executor/scripts/instagram-carousel-self-test.mjs
