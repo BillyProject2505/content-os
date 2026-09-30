@@ -1,0 +1,157 @@
+name: SDOH executor production smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      worker_base_url:
+        description: Production Worker HTTPS base URL
+        required: true
+        default: https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Verify health remains fail-closed
+        shell: bash
+        env:
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/health.json"
+          http_status="$(curl --silent --show-error --output "$response_file" --write-out "%{http_code}" "${WORKER_BASE_URL%/}/health")"
+
+          if [ "$http_status" != "200" ]; then
+            echo "::error::Health returned HTTP $http_status"
+            exit 1
+          fi
+
+          if [ "$(jq -r '.ok' "$response_file")" != "true" ]; then
+            echo "::error::Health ok is not true"
+            exit 1
+          fi
+
+          if [ "$(jq -r '.publishing_enabled' "$response_file")" != "false" ]; then
+            echo "::error::Publishing is not fail-closed"
+            exit 1
+          fi
+
+          echo "Health PASS"
+          echo "publishing_enabled=false"
+
+      - name: Verify execute rejects unauthenticated requests
+        shell: bash
+        env:
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/execute-unauth.json"
+
+          http_status="$(
+            curl --silent --show-error \
+              --output "$response_file" \
+              --write-out "%{http_code}" \
+              --request POST \
+              --header "Content-Type: application/json" \
+              --data '{"job_id":"SMOKE-UNAUTH-001","caption":"smoke","governance_ref":"dcf82a1c8003627aaae1fffd3b96224362c5080a"}' \
+              "${WORKER_BASE_URL%/}/internal/execute"
+          )"
+
+          error_code="$(jq -r '.error // "UNKNOWN"' "$response_file")"
+          if [ "$http_status" != "401" ] || [ "$error_code" != "UNAUTHORIZED" ]; then
+            echo "::error::Expected 401 UNAUTHORIZED, got HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          echo "Unauthenticated execute rejection PASS"
+
+      - name: Verify reconcile rejects unauthenticated requests
+        shell: bash
+        env:
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/reconcile-unauth.json"
+
+          http_status="$(
+            curl --silent --show-error \
+              --output "$response_file" \
+              --write-out "%{http_code}" \
+              --request POST \
+              --header "Content-Type: application/json" \
+              --data '{"job_id":"SMOKE-UNAUTH-001","caption":"smoke"}' \
+              "${WORKER_BASE_URL%/}/internal/reconcile"
+          )"
+
+          error_code="$(jq -r '.error // "UNKNOWN"' "$response_file")"
+          if [ "$http_status" != "401" ] || [ "$error_code" != "UNAUTHORIZED" ]; then
+            echo "::error::Expected 401 UNAUTHORIZED, got HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          echo "Unauthenticated reconcile rejection PASS"
+
+      - name: Verify authenticated execute is blocked while publishing disabled
+        shell: bash
+        env:
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$EXECUTOR_INGEST_SECRET"
+          response_file="$RUNNER_TEMP/execute-disabled.json"
+
+          http_status="$(
+            curl --silent --show-error \
+              --output "$response_file" \
+              --write-out "%{http_code}" \
+              --request POST \
+              --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET" \
+              --header "Content-Type: application/json" \
+              --data '{"job_id":"SMOKE-DISABLED-001","caption":"SMOKE TEST - NOT PUBLISHABLE","governance_ref":"dcf82a1c8003627aaae1fffd3b96224362c5080a"}' \
+              "${WORKER_BASE_URL%/}/internal/execute"
+          )"
+
+          error_code="$(jq -r '.error // "UNKNOWN"' "$response_file")"
+          if [ "$http_status" != "409" ] || [ "$error_code" != "PUBLISHING_DISABLED" ]; then
+            echo "::error::Expected 409 PUBLISHING_DISABLED, got HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          echo "Authenticated execute fail-closed PASS"
+          echo "No publication job lookup or Meta publish write should occur after this gate."
+
+      - name: Verify authenticated reconcile handles missing job safely
+        shell: bash
+        env:
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/reconcile-missing.json"
+
+          http_status="$(
+            curl --silent --show-error \
+              --output "$response_file" \
+              --write-out "%{http_code}" \
+              --request POST \
+              --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET" \
+              --header "Content-Type: application/json" \
+              --data '{"job_id":"SMOKE-MISSING-001","caption":"SMOKE TEST - NOT PUBLISHABLE"}' \
+              "${WORKER_BASE_URL%/}/internal/reconcile"
+          )"
+
+          error_code="$(jq -r '.error // "UNKNOWN"' "$response_file")"
+          if [ "$http_status" != "404" ] || [ "$error_code" != "JOB_NOT_FOUND" ]; then
+            echo "::error::Expected 404 JOB_NOT_FOUND, got HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          echo "Authenticated reconcile missing-job safety PASS"
+          echo "No Meta publish request was made."
