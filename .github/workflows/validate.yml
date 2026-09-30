@@ -22,3 +22,5 @@ jobs:
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-authority-gate.mjs --self-test
       - name: Self-test SDOH Instagram carousel executor
         run: node --experimental-default-type=module projects/sdoh/runtime/instagram-publication-executor/scripts/instagram-carousel-self-test.mjs
+      - name: Self-test ambiguous publish reconciliation
+        run: node --experimental-default-type=module projects/sdoh/runtime/instagram-publication-executor/scripts/ambiguous-publish-reconciliation-self-test.mjs
