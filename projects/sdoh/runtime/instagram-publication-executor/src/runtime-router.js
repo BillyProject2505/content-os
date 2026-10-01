@@ -1,5 +1,7 @@
 import { handlePrepare } from "./prepare-bridge.js";
 import { handleStage } from "./staging-bridge.js";
+import { handleRefresh } from "./refresh-bridge.js";
+import { handleStatus } from "./runtime-status.js";
 import { handleMediaRequest } from "./media-gateway.js";
 import {
   handleInternalExecute,
@@ -19,8 +21,16 @@ export async function routeRuntimeRequest(
 ) {
   const url = new URL(request.url);
 
+  if (url.pathname === "/internal/status") {
+    return handleStatus(request, env);
+  }
+
   if (url.pathname === "/internal/stage") {
     return handleStage(request, env);
+  }
+
+  if (url.pathname === "/internal/refresh") {
+    return handleRefresh(request, env);
   }
 
   if (url.pathname === "/internal/prepare") {

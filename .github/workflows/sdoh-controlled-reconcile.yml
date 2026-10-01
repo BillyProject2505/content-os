@@ -1,0 +1,132 @@
+name: SDOH controlled reconcile
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: "D1 publication job ID requiring reconciliation"
+        required: true
+        type: string
+      worker_base_url:
+        description: "Production Worker HTTPS base URL"
+        required: true
+        default: "https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  reconcile:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Validate configuration
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          JOB_ID: ${{ inputs.job_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+        run: |
+          set -euo pipefail
+          test -n "$EXECUTOR_INGEST_SECRET"
+
+          if ! [[ "$JOB_ID" =~ ^[A-Za-z0-9._:-]{1,128}$ ]]; then
+            echo "::error::Invalid job_id"
+            exit 1
+          fi
+
+          case "$WORKER_BASE_URL" in
+            https://*) ;;
+            *)
+              echo "::error::worker_base_url must use HTTPS"
+              exit 1
+              ;;
+          esac
+
+      - name: Resolve runtime state
+        id: status
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          JOB_ID: ${{ inputs.job_id }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/runtime-status.json"
+
+          http_status="$(
+            jq -n --arg job_id "$JOB_ID" '{job_id:$job_id}' |
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @-               "${WORKER_BASE_URL%/}/internal/status"
+          )"
+
+          if [ "$http_status" != "200" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN_ERROR"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Runtime status failed with HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          state="$(jq -r '.job.state' "$response_file")"
+          if [ "$state" = "PUBLISHED" ]; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "Runtime job already PUBLISHED; reconciliation is idempotently complete."
+            exit 0
+          fi
+
+          if [ "$state" != "FAILED" ] && [ "$state" != "PUBLISHING" ]; then
+            echo "::error::Runtime job state $state is not eligible for controlled reconciliation"
+            exit 1
+          fi
+
+          echo "already_published=false" >> "$GITHUB_OUTPUT"
+          echo "Runtime reconciliation state PASS"
+          echo "job_state=$state"
+
+      - name: Reconcile remote publication state
+        if: steps.status.outputs.already_published != 'true'
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          JOB_ID: ${{ inputs.job_id }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/reconcile-response.json"
+
+          http_status="$(
+            jq -n --arg job_id "$JOB_ID" '{job_id:$job_id}' |
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @-               "${WORKER_BASE_URL%/}/internal/reconcile"
+          )"
+
+          if [ "$http_status" != "200" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN_ERROR"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Reconcile failed with HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          status="$(jq -r '.result.status // "UNKNOWN"' "$response_file")"
+          echo "reconcile_status=$status"
+
+          case "$status" in
+            PUBLISHED|ALREADY_PUBLISHED)
+              echo "Controlled reconciliation reached $status"
+              ;;
+            WAITING_FOR_RECONCILIATION)
+              echo "::error::Remote state is still non-terminal. Re-run controlled reconcile later; do not call live execute."
+              exit 1
+              ;;
+            PUBLISH_ATTEMPT_AMBIGUOUS|PUBLISHED_REMOTE_ID_RECOVERY_REQUIRED|RECONCILIATION_REQUIRED|REMOTE_CAPTION_MISMATCH|NO_REMOTE_PUBLISH_ARTIFACT|FAILED)
+              echo "::error::Reconciliation requires manual review ($status). Do not create a second publish attempt."
+              exit 1
+              ;;
+            *)
+              echo "::error::Unexpected reconcile status: $status"
+              exit 1
+              ;;
+          esac
+
+      - name: Cleanup temporary files
+        if: always()
+        run: rm -f "$RUNNER_TEMP/runtime-status.json" "$RUNNER_TEMP/reconcile-response.json"
