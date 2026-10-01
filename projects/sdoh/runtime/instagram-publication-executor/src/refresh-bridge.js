@@ -18,14 +18,14 @@ export async function handleRefresh(request, env) {
     return json({ ok: false, error: "REFRESH_NOT_CONFIGURED" }, 503);
   }
 
-  if (env.PUBLISHING_ENABLED !== "true") {
-    return json({ ok: false, error: "PUBLISHING_WINDOW_NOT_OPEN" }, 409);
-  }
-
   const authorization = request.headers.get("Authorization") || "";
   const expectedAuthorization = `Bearer ${env.EXECUTOR_INGEST_SECRET}`;
   if (!(await timingSafeStringEqual(authorization, expectedAuthorization))) {
     return json({ ok: false, error: "UNAUTHORIZED" }, 401);
+  }
+
+  if (env.PUBLISHING_ENABLED !== "true") {
+    return json({ ok: false, error: "PUBLISHING_WINDOW_NOT_OPEN" }, 409);
   }
 
   const contentType = request.headers.get("Content-Type") || "";
