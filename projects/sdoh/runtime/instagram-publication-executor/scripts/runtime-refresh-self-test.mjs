@@ -1,3 +1,4 @@
+import "../src/runtime-status.js";
 import { validateRefreshPayload } from "../src/refresh-bridge.js";
 
 const valid = {
