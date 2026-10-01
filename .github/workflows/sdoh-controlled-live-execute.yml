@@ -1,0 +1,338 @@
+name: SDOH controlled live execute
+
+on:
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: "Owner-approved SDOH carousel Content ID"
+        required: true
+        default: "SDOH-BURGUNDY-CAR-0002"
+        type: string
+      job_id:
+        description: "Prepared D1 publication job ID"
+        required: true
+        type: string
+      worker_base_url:
+        description: "Production Worker HTTPS base URL"
+        required: true
+        default: "https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev"
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  execute:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Validate configuration
+        shell: bash
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          JOB_ID: ${{ inputs.job_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+        run: |
+          set -euo pipefail
+          test -n "$GCP_PROJECT_ID"
+          test -n "$GCP_WORKLOAD_IDENTITY_PROVIDER"
+          test -n "$GCP_SERVICE_ACCOUNT"
+          test -n "$LINEAR_API_KEY"
+          test -n "$EXECUTOR_INGEST_SECRET"
+
+          if ! [[ "$CONTENT_ID" =~ ^SDOH-[A-Z0-9-]+$ ]]; then
+            echo "::error::Invalid content_id"
+            exit 1
+          fi
+
+          if ! [[ "$JOB_ID" =~ ^[A-Za-z0-9._:-]{1,128}$ ]]; then
+            echo "::error::Invalid job_id"
+            exit 1
+          fi
+
+          case "$WORKER_BASE_URL" in
+            https://*) ;;
+            *)
+              echo "::error::worker_base_url must use HTTPS"
+              exit 1
+              ;;
+          esac
+
+      - name: Resolve prepared runtime job
+        id: status
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          JOB_ID: ${{ inputs.job_id }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/runtime-status.json"
+
+          http_status="$(
+            jq -n --arg job_id "$JOB_ID" '{job_id:$job_id}' |
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @-               "${WORKER_BASE_URL%/}/internal/status"
+          )"
+
+          if [ "$http_status" != "200" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN_ERROR"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Runtime status failed with HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          jq -e             --arg content_id "$CONTENT_ID"             '.ok == true and
+             .job.content_id == $content_id and
+             .job.platform == "instagram" and
+             .job.account == "@satudosisobathati" and
+             .job.format == "carousel" and
+             .media_count == 5'             "$response_file" >/dev/null
+
+          state="$(jq -r '.job.state' "$response_file")"
+          governance_ref="$(jq -r '.job.governance_ref' "$response_file")"
+          scheduled_at="$(jq -r '.job.scheduled_at' "$response_file")"
+          caption_revision="$(jq -r '.job.caption_revision' "$response_file")"
+
+          if ! [[ "$governance_ref" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "::error::Stored governance_ref is invalid"
+            exit 1
+          fi
+
+          publish_attempted="$(jq -r '
+            any(.artifacts[];
+              (.kind == "PUBLISHED_MEDIA") or
+              (.kind == "PARENT" and .state == "PUBLISH_ATTEMPTED")
+            )
+          ' "$response_file")"
+
+          if [ "$state" = "PUBLISHED" ]; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "state=PUBLISHED" >> "$GITHUB_OUTPUT"
+            echo "governance_ref=$governance_ref" >> "$GITHUB_OUTPUT"
+            echo "scheduled_at=$scheduled_at" >> "$GITHUB_OUTPUT"
+            echo "caption_revision=$caption_revision" >> "$GITHUB_OUTPUT"
+            echo "Runtime job is already PUBLISHED; no execution call is needed."
+            exit 0
+          fi
+
+          if [ "$publish_attempted" = "true" ]; then
+            echo "::error::Publish-attempt evidence exists; use controlled reconcile, not live execute"
+            exit 1
+          fi
+
+          if [ "$state" != "CLAIMED" ] && [ "$state" != "PUBLISHING" ]; then
+            echo "::error::Runtime job state $state is not eligible for controlled live execution"
+            exit 1
+          fi
+
+          echo "already_published=false" >> "$GITHUB_OUTPUT"
+          echo "state=$state" >> "$GITHUB_OUTPUT"
+          echo "governance_ref=$governance_ref" >> "$GITHUB_OUTPUT"
+          echo "scheduled_at=$scheduled_at" >> "$GITHUB_OUTPUT"
+          echo "caption_revision=$caption_revision" >> "$GITHUB_OUTPUT"
+
+          echo "Runtime status PASS"
+          echo "job_state=$state"
+          echo "scheduled_at=$scheduled_at"
+          echo "governance_ref=$governance_ref"
+
+      - name: Verify stored governance is an ancestor of main
+        if: steps.status.outputs.already_published != 'true'
+        shell: bash
+        env:
+          GOVERNANCE_REF: ${{ steps.status.outputs.governance_ref }}
+        run: |
+          set -euo pipefail
+          git cat-file -e "$GOVERNANCE_REF^{commit}"
+          git merge-base --is-ancestor "$GOVERNANCE_REF" "$GITHUB_SHA"
+          echo "Governance ancestry PASS"
+
+      - name: Verify explicit publishing window is open
+        if: steps.status.outputs.already_published != 'true'
+        shell: bash
+        env:
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/health.json"
+          http_status="$(curl --silent --show-error --output "$response_file" --write-out "%{http_code}" "${WORKER_BASE_URL%/}/health")"
+
+          if [ "$http_status" != "200" ] ||              [ "$(jq -r '.ok' "$response_file")" != "true" ] ||              [ "$(jq -r '.publishing_enabled' "$response_file")" != "true" ]; then
+            echo "::error::Publishing window is not explicitly open"
+            exit 1
+          fi
+
+          echo "Publishing window OPEN"
+
+      - id: auth
+        name: Authenticate to Google Cloud with WIF
+        if: steps.status.outputs.already_published != 'true'
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+          create_credentials_file: false
+
+      - name: Resolve fresh live Linear authority
+        if: steps.status.outputs.already_published != 'true'
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          GOVERNANCE_REF: ${{ steps.status.outputs.governance_ref }}
+          EXPECTED_SCHEDULED_AT: ${{ steps.status.outputs.scheduled_at }}
+          EXPECTED_CAPTION_REVISION: ${{ steps.status.outputs.caption_revision }}
+          LINEAR_REGISTER_DOCUMENT_ID: 346b4c0c-9aec-4454-a2b5-06210b2c88c6
+          AUTHORITY_RESULT_OUTPUT: ${{ runner.temp }}/authority-result.json
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/live-authority-preflight.mjs
+
+          if [ ! -s "$AUTHORITY_RESULT_OUTPUT" ] || [ ! -s "$AUTHORITY_SNAPSHOT_OUTPUT" ]; then
+            echo "::error::Fresh authority preflight did not produce required temporary files"
+            exit 1
+          fi
+
+          jq -e             --arg scheduled_at "$EXPECTED_SCHEDULED_AT"             --arg caption_revision "$EXPECTED_CAPTION_REVISION"             '.decision == "ALLOW_SNAPSHOT" and
+             .allow_prepare == true and
+             .scheduled_at == $scheduled_at and
+             .caption_revision == $caption_revision and
+             .media_count == 5'             "$AUTHORITY_RESULT_OUTPUT" >/dev/null
+
+          echo "Fresh live authority PASS"
+          echo "authority_expires_at=$(jq -r '.authority_expires_at' "$AUTHORITY_RESULT_OUTPUT")"
+
+      - name: Refresh runtime credential and immutable authority
+        if: steps.status.outputs.already_published != 'true'
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          JOB_ID: ${{ inputs.job_id }}
+          GOVERNANCE_REF: ${{ steps.status.outputs.governance_ref }}
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+          echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
+
+          expires_at="$(date -u -d '+55 minutes' '+%Y-%m-%dT%H:%M:%SZ')"
+          request_file="$RUNNER_TEMP/refresh-request.json"
+          response_file="$RUNNER_TEMP/refresh-response.json"
+
+          jq -n             --arg job_id "$JOB_ID"             --arg drive_access_token "$GOOGLE_ACCESS_TOKEN"             --arg drive_token_expires_at "$expires_at"             --arg governance_ref "$GOVERNANCE_REF"             --slurpfile bundle "$AUTHORITY_SNAPSHOT_OUTPUT"             '{
+              job_id: $job_id,
+              drive_access_token: $drive_access_token,
+              drive_token_expires_at: $drive_token_expires_at,
+              governance_ref: $governance_ref,
+              authority_snapshot: $bundle[0].authority_snapshot
+            }' > "$request_file"
+
+          http_status="$(
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @"$request_file"               "${WORKER_BASE_URL%/}/internal/refresh"
+          )"
+
+          rm -f "$request_file"
+
+          if [ "$http_status" != "200" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN_ERROR"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Runtime refresh failed with HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          jq -e             --arg job_id "$JOB_ID"             '.ok == true and
+             .job_id == $job_id and
+             .credential_refreshed == true and
+             .authority_snapshot_refreshed == true and
+             (.job_state == "CLAIMED" or .job_state == "PUBLISHING")'             "$response_file" >/dev/null
+
+          echo "Runtime refresh PASS"
+          rm -f "$response_file"
+
+      - name: Execute bounded pre-publish progression
+        if: steps.status.outputs.already_published != 'true'
+        id: execute
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          JOB_ID: ${{ inputs.job_id }}
+          GOVERNANCE_REF: ${{ steps.status.outputs.governance_ref }}
+        run: |
+          set -euo pipefail
+
+          response_file="$RUNNER_TEMP/execute-response.json"
+          max_attempts=12
+
+          for attempt in $(seq 1 "$max_attempts"); do
+            http_status="$(
+              jq -n                 --arg job_id "$JOB_ID"                 --arg governance_ref "$GOVERNANCE_REF"                 '{job_id:$job_id, governance_ref:$governance_ref}' |
+              curl --silent --show-error                 --output "$response_file"                 --write-out "%{http_code}"                 --request POST                 --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"                 --header "Content-Type: application/json"                 --data-binary @-                 "${WORKER_BASE_URL%/}/internal/execute"
+            )"
+
+            if [ "$http_status" != "200" ] && [ "$http_status" != "202" ]; then
+              error_code="$(jq -r '.error // "UNKNOWN_ERROR"' "$response_file" 2>/dev/null || true)"
+              echo "::error::Execute failed with HTTP $http_status ($error_code). Do not blind-retry if publish may have been attempted."
+              exit 1
+            fi
+
+            status="$(jq -r '.result.status // "UNKNOWN"' "$response_file")"
+            echo "execute_attempt=$attempt status=$status"
+
+            case "$status" in
+              PUBLISHED|ALREADY_PUBLISHED)
+                echo "final_status=$status" >> "$GITHUB_OUTPUT"
+                echo "remote_media_id=$(jq -r '.result.remote_media_id // ""' "$response_file")" >> "$GITHUB_OUTPUT"
+                echo "remote_permalink=$(jq -r '.result.remote_permalink // ""' "$response_file")" >> "$GITHUB_OUTPUT"
+                echo "published_at=$(jq -r '.result.published_at // ""' "$response_file")" >> "$GITHUB_OUTPUT"
+                echo "Controlled live execution reached $status"
+                exit 0
+                ;;
+              WAITING_FOR_CHILDREN|WAITING_FOR_PARENT)
+                if [ "$attempt" -eq "$max_attempts" ]; then
+                  echo "::error::Pre-publish container readiness timed out. No blind publish retry was attempted."
+                  exit 1
+                fi
+                sleep 5
+                ;;
+              RECONCILIATION_REQUIRED|PUBLISH_ATTEMPT_AMBIGUOUS|PUBLISHED_REMOTE_ID_RECOVERY_REQUIRED|REMOTE_CAPTION_MISMATCH)
+                echo "::error::Execution requires controlled reconciliation ($status). Do not re-run live execute."
+                exit 1
+                ;;
+              *)
+                echo "::error::Unexpected execute status: $status"
+                exit 1
+                ;;
+            esac
+          done
+
+      - name: Report already-published idempotent state
+        if: steps.status.outputs.already_published == 'true'
+        run: |
+          echo "Job is already PUBLISHED. No execute call was made."
+          echo "Use the authoritative runtime status and Linear publication log for evidence reconciliation."
+
+      - name: Cleanup runner-temporary authority files
+        if: always()
+        shell: bash
+        run: |
+          rm -f "$RUNNER_TEMP/authority-result.json"                 "$RUNNER_TEMP/authority-snapshot.json"                 "$RUNNER_TEMP/runtime-status.json"                 "$RUNNER_TEMP/health.json"                 "$RUNNER_TEMP/execute-response.json"
