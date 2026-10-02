@@ -77,7 +77,6 @@ jobs:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
           CONTENT_ID: ${{ inputs.content_id }}
           GOVERNANCE_REF: ${{ github.sha }}
-          LINEAR_REGISTER_DOCUMENT_ID: 346b4c0c-9aec-4454-a2b5-06210b2c88c6
           AUTHORITY_RESULT_OUTPUT: ${{ runner.temp }}/authority-result.json
           AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
         run: |
