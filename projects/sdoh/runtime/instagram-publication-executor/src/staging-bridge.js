@@ -62,15 +62,12 @@ export async function handleStage(request, env) {
   const executionInput = payload.execution_input;
   const nowMs = Date.now();
 
-  let registerRoute;
-  try {
-    registerRoute = requireCarouselRegister(snapshot.content_id);
-  } catch {
-    return json({ ok: false, error: "UNSUPPORTED_CAROUSEL_CONTENT_ID" }, 400);
-  }
-
-  if (snapshot.register_document_id !== registerRoute.register_document_id) {
-    return json({ ok: false, error: "REGISTER_DOCUMENT_ROUTE_MISMATCH" }, 409);
+  const registerValidation = validateSnapshotRegisterRoute(snapshot);
+  if (!registerValidation.ok) {
+    return json(
+      { ok: false, error: registerValidation.error },
+      registerValidation.status
+    );
   }
   if (snapshot.destination_account !== EXPECTED_ACCOUNT) {
     return json({ ok: false, error: "DESTINATION_ACCOUNT_MISMATCH" }, 409);
@@ -227,6 +224,34 @@ export async function handleStage(request, env) {
     },
     201
   );
+}
+
+export function validateSnapshotRegisterRoute(snapshot) {
+  let route;
+  try {
+    route = requireCarouselRegister(snapshot?.content_id);
+  } catch {
+    return {
+      ok: false,
+      status: 400,
+      error: "UNSUPPORTED_CAROUSEL_CONTENT_ID",
+    };
+  }
+
+  if (snapshot?.register_document_id !== route.register_document_id) {
+    return {
+      ok: false,
+      status: 409,
+      error: "REGISTER_DOCUMENT_ROUTE_MISMATCH",
+    };
+  }
+
+  return {
+    ok: true,
+    status: 200,
+    error: null,
+    route,
+  };
 }
 
 export function validateStagePayload(payload) {
