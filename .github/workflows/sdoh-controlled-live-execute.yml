@@ -349,12 +349,12 @@ jobs:
           {
             echo "## SDOH Instagram publication evidence"
             echo
-            echo "- Content ID: `$CONTENT_ID`"
-            echo "- Job ID: `$JOB_ID`"
-            echo "- Final status: `$FINAL_STATUS`"
-            echo "- Remote media ID: `${REMOTE_MEDIA_ID:-UNAVAILABLE}`"
-            echo "- Remote permalink: ${REMOTE_PERMALINK:-UNAVAILABLE}"
-            echo "- Published at: `${PUBLISHED_AT:-UNAVAILABLE}`"
+            printf -- '- Content ID: `%s`\n' "$CONTENT_ID"
+            printf -- '- Job ID: `%s`\n' "$JOB_ID"
+            printf -- '- Final status: `%s`\n' "$FINAL_STATUS"
+            printf -- '- Remote media ID: `%s`\n' "${REMOTE_MEDIA_ID:-UNAVAILABLE}"
+            printf -- '- Remote permalink: %s\n' "${REMOTE_PERMALINK:-UNAVAILABLE}"
+            printf -- '- Published at: `%s`\n' "${PUBLISHED_AT:-UNAVAILABLE}"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Report already-published idempotent state
