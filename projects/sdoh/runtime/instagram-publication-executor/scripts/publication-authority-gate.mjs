@@ -1,5 +1,6 @@
+import { requireCarouselRegister } from "../src/content-register-routing.mjs";
+
 const LINEAR_API_URL = "https://api.linear.app/graphql";
-const DEFAULT_REGISTER_DOCUMENT_ID = "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
 
 const EXIT = Object.freeze({
   ALLOW_SCHEDULED: 0,
@@ -8,6 +9,19 @@ const EXIT = Object.freeze({
   REJECT_NOT_SCHEDULED: 22,
   AUTHORITY_ERROR: 30,
 });
+
+export function resolveAuthorityRegisterDocumentId(contentId, configuredDocumentId = "") {
+  const route = requireCarouselRegister(contentId);
+  const configured = String(configuredDocumentId ?? "").trim();
+
+  if (configured && configured !== route.register_document_id) {
+    const error = new Error("REGISTER_DOCUMENT_ROUTE_MISMATCH");
+    error.code = "REGISTER_DOCUMENT_ROUTE_MISMATCH";
+    throw error;
+  }
+
+  return route.register_document_id;
+}
 
 function normalizeCell(value) {
   return String(value ?? "")
@@ -233,6 +247,33 @@ function runSelfTest() {
     "SDOH-BURGUNDY-CAR-0100"
   );
 
+  const burgundyRegister = resolveAuthorityRegisterDocumentId(
+    "SDOH-BURGUNDY-CAR-0099"
+  );
+  const sageRegister = resolveAuthorityRegisterDocumentId(
+    "SDOH-SAGE-CAR-0005"
+  );
+
+  if (
+    burgundyRegister !== "346b4c0c-9aec-4454-a2b5-06210b2c88c6" ||
+    sageRegister !== "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba"
+  ) {
+    throw new Error("self-test failed: carousel register routing");
+  }
+
+  let mismatchRejected = false;
+  try {
+    resolveAuthorityRegisterDocumentId(
+      "SDOH-SAGE-CAR-0005",
+      "346b4c0c-9aec-4454-a2b5-06210b2c88c6"
+    );
+  } catch (error) {
+    mismatchRejected = error?.code === "REGISTER_DOCUMENT_ROUTE_MISMATCH";
+  }
+  if (!mismatchRejected) {
+    throw new Error("self-test failed: cross-theme register mismatch was not rejected");
+  }
+
   if (
     published.decision !== "REJECT_ALREADY_PUBLISHED" ||
     published.allow_job_creation !== false ||
@@ -267,8 +308,24 @@ async function main() {
 
   const apiKey = process.env.LINEAR_API_KEY;
   const contentId = process.env.CONTENT_ID;
-  const documentId =
-    process.env.LINEAR_REGISTER_DOCUMENT_ID || DEFAULT_REGISTER_DOCUMENT_ID;
+  let documentId;
+  try {
+    documentId = resolveAuthorityRegisterDocumentId(
+      contentId,
+      process.env.LINEAR_REGISTER_DOCUMENT_ID
+    );
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        ok: false,
+        content_id: String(contentId ?? "").trim(),
+        decision: "AUTHORITY_ERROR",
+        reason: error?.code || error?.message || "REGISTER_ROUTING_FAILED",
+        allow_job_creation: false,
+      })
+    );
+    process.exit(EXIT.AUTHORITY_ERROR);
+  }
 
   if (!apiKey) {
     console.error(
