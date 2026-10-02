@@ -288,6 +288,11 @@ export async function executeCarouselPublication({
     } catch (error) {
       await failJob(env.DB, jobId, "CHILD_CONTAINER_CREATE_FAILED");
       await deleteCredential(env.DB, jobId);
+      error.meta = {
+        ...(error?.meta || {}),
+        stage: "CREATE_CAROUSEL_CHILD",
+        slot: media.slot,
+      };
       throw error;
     }
 
@@ -361,6 +366,11 @@ export async function executeCarouselPublication({
     } catch (error) {
       await failJob(env.DB, jobId, "PARENT_CONTAINER_CREATE_FAILED");
       await deleteCredential(env.DB, jobId);
+      error.meta = {
+        ...(error?.meta || {}),
+        stage: "CREATE_CAROUSEL_PARENT",
+        slot: 0,
+      };
       throw error;
     }
 
