@@ -2,11 +2,13 @@ import { createHash } from "node:crypto";
 import {
   buildPlanFingerprint,
   planWriteback,
+  resolveWritebackRegisterDocumentId,
   validateRuntimeStatus,
 } from "./publication-evidence-writeback.mjs";
 
 const LINEAR_API_URL = "https://api.linear.app/graphql";
-const DEFAULT_REGISTER_DOCUMENT_ID = "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
+const TEST_BURGUNDY_REGISTER_DOCUMENT_ID =
+  "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
 
 const EXIT = Object.freeze({
   OK: 0,
@@ -197,7 +199,7 @@ function runSelfTest() {
   };
 
   const document = {
-    id: DEFAULT_REGISTER_DOCUMENT_ID,
+    id: TEST_BURGUNDY_REGISTER_DOCUMENT_ID,
     updatedAt: "2026-10-02T04:00:00.000Z",
     content: `
 ## Log publikasi
@@ -260,9 +262,24 @@ async function main() {
     process.env.EXPECTED_PLAN_SHA256 ?? ""
   ).trim();
   const confirmation = String(process.env.WRITE_CONFIRMATION ?? "").trim();
-  const documentId =
-    String(process.env.LINEAR_REGISTER_DOCUMENT_ID ?? "").trim() ||
-    DEFAULT_REGISTER_DOCUMENT_ID;
+  let documentId;
+  try {
+    documentId = resolveWritebackRegisterDocumentId(
+      contentId,
+      process.env.LINEAR_REGISTER_DOCUMENT_ID
+    );
+  } catch (error) {
+    console.error(JSON.stringify({
+      ok: false,
+      decision: "WRITEBACK_REJECTED_BEFORE_CONFIRMED_MUTATION",
+      reason: error instanceof Error ? error.message : "REGISTER_ROUTING_FAILED",
+      content_id: contentId,
+      job_id: jobId,
+      linear_mutation_may_have_occurred: false,
+      instagram_publication_result_unchanged: true,
+    }));
+    process.exit(EXIT.ERROR);
+  }
 
   let mutationApplied = false;
 
