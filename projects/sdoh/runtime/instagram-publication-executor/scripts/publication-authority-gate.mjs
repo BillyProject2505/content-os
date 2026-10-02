@@ -274,6 +274,17 @@ function runSelfTest() {
     throw new Error("self-test failed: cross-theme register mismatch was not rejected");
   }
 
+  let unsupportedRejected = false;
+  try {
+    resolveAuthorityRegisterDocumentId("SDOH-SAGE-REEL-0001");
+  } catch (error) {
+    unsupportedRejected =
+      error?.code === "UNSUPPORTED_CAROUSEL_CONTENT_ID";
+  }
+  if (!unsupportedRejected) {
+    throw new Error("self-test failed: unsupported format did not fail closed");
+  }
+
   if (
     published.decision !== "REJECT_ALREADY_PUBLISHED" ||
     published.allow_job_creation !== false ||
