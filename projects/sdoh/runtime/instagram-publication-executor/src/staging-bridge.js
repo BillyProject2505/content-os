@@ -1,11 +1,14 @@
 import { validateAuthoritySnapshotPayload } from "./execution-authority.js";
-import { requireCarouselRegister } from "./content-register-routing.mjs";
 
 const encoder = new TextEncoder();
 
 const EXPECTED_ACCOUNT = "@satudosisobathati";
 const MAX_BODY_BYTES = 64 * 1024;
 const CAROUSEL_SLOTS = [1, 2, 3, 4, 5];
+const CAROUSEL_REGISTER_DOCUMENT_IDS = Object.freeze({
+  BURGUNDY: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+  SAGE: "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+});
 
 export async function handleStage(request, env) {
   if (request.method !== "POST") {
@@ -226,11 +229,34 @@ export async function handleStage(request, env) {
   );
 }
 
+function resolveCarouselRegisterForStage(contentId) {
+  const normalized = String(contentId ?? "").trim();
+
+  if (/^SDOH-BURGUNDY-CAR-\d{4}$/.test(normalized)) {
+    return {
+      theme: "BURGUNDY",
+      format: "carousel",
+      content_id: normalized,
+      register_document_id: CAROUSEL_REGISTER_DOCUMENT_IDS.BURGUNDY,
+    };
+  }
+
+  if (/^SDOH-SAGE-CAR-\d{4}$/.test(normalized)) {
+    return {
+      theme: "SAGE",
+      format: "carousel",
+      content_id: normalized,
+      register_document_id: CAROUSEL_REGISTER_DOCUMENT_IDS.SAGE,
+    };
+  }
+
+  return null;
+}
+
 export function validateSnapshotRegisterRoute(snapshot) {
-  let route;
-  try {
-    route = requireCarouselRegister(snapshot?.content_id);
-  } catch {
+  const route = resolveCarouselRegisterForStage(snapshot?.content_id);
+
+  if (!route) {
     return {
       ok: false,
       status: 400,
