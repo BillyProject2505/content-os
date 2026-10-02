@@ -1,9 +1,12 @@
 import { createHash } from "node:crypto";
 import { writeFile } from "node:fs/promises";
 import { evaluatePublicationAuthority } from "./publication-authority-gate.mjs";
+import {
+  assertRegisterMatchesContentId,
+  requireCarouselRegister,
+} from "../src/content-register-routing.mjs";
 
 const LINEAR_API_URL = "https://api.linear.app/graphql";
-const DEFAULT_REGISTER_DOCUMENT_ID = "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
 const EXPECTED_ACCOUNT = "@satudosisobathati";
 const MANIFEST_SCHEMA = "sdoh-execution-authority-v1";
 const MAX_SCHEDULE_LATENESS_MS = 30 * 60 * 1000;
@@ -332,6 +335,15 @@ export function buildExecutionAuthority({
   if (!/^SDOH-[A-Z0-9-]+$/.test(normalizedContentId)) {
     return reject("AUTHORITY_ERROR", "INVALID_CONTENT_ID", EXIT.AUTHORITY_ERROR);
   }
+  try {
+    assertRegisterMatchesContentId(normalizedContentId, registerDocumentId);
+  } catch (error) {
+    return reject(
+      "AUTHORITY_ERROR",
+      error?.code || "REGISTER_ROUTING_FAILED",
+      EXIT.AUTHORITY_ERROR
+    );
+  }
   if (!/^[0-9a-f]{40}$/i.test(String(governanceRef ?? ""))) {
     return reject(
       "AUTHORITY_ERROR",
@@ -554,7 +566,7 @@ async function runSelfTest() {
   const allowed = buildExecutionAuthority({
     markdown: selfTestFixture(),
     contentId: "SDOH-BURGUNDY-CAR-0099",
-    registerDocumentId: "test-register",
+    registerDocumentId: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
     registerUpdatedAt: "2026-09-30T05:59:00Z",
     governanceRef: "a".repeat(40),
     now: new Date("2026-09-30T06:00:00Z"),
@@ -572,7 +584,7 @@ async function runSelfTest() {
   const published = buildExecutionAuthority({
     markdown: selfTestFixture({ state: "PUBLISHED", includeManifest: false }),
     contentId: "SDOH-BURGUNDY-CAR-0099",
-    registerDocumentId: "test-register",
+    registerDocumentId: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
     registerUpdatedAt: "2026-09-30T05:59:00Z",
     governanceRef: "a".repeat(40),
     now: new Date("2026-09-30T06:00:00Z"),
@@ -588,7 +600,7 @@ async function runSelfTest() {
   const early = buildExecutionAuthority({
     markdown: selfTestFixture(),
     contentId: "SDOH-BURGUNDY-CAR-0099",
-    registerDocumentId: "test-register",
+    registerDocumentId: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
     registerUpdatedAt: "2026-09-30T05:59:00Z",
     governanceRef: "a".repeat(40),
     now: new Date("2026-09-30T05:59:00Z"),
@@ -601,7 +613,7 @@ async function runSelfTest() {
   const stale = buildExecutionAuthority({
     markdown: selfTestFixture(),
     contentId: "SDOH-BURGUNDY-CAR-0099",
-    registerDocumentId: "test-register",
+    registerDocumentId: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
     registerUpdatedAt: "2026-09-30T05:59:00Z",
     governanceRef: "a".repeat(40),
     now: new Date("2026-09-30T06:31:00Z"),
@@ -614,7 +626,7 @@ async function runSelfTest() {
   const noManifest = buildExecutionAuthority({
     markdown: selfTestFixture({ includeManifest: false }),
     contentId: "SDOH-BURGUNDY-CAR-0099",
-    registerDocumentId: "test-register",
+    registerDocumentId: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
     registerUpdatedAt: "2026-09-30T05:59:00Z",
     governanceRef: "a".repeat(40),
     now: new Date("2026-09-30T06:00:00Z"),
@@ -632,7 +644,31 @@ async function runSelfTest() {
   console.log("published content rejection-before-manifest PASS");
   console.log("scheduled_at due gate PASS");
   console.log("stale schedule window rejection PASS");
+  const sageRoute = requireCarouselRegister("SDOH-SAGE-CAR-0005");
+  if (
+    sageRoute.register_document_id !==
+    "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba"
+  ) {
+    throw new Error("self-test failed: Sage register routing");
+  }
+
+  const mismatch = buildExecutionAuthority({
+    markdown: selfTestFixture(),
+    contentId: "SDOH-BURGUNDY-CAR-0099",
+    registerDocumentId: "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+    registerUpdatedAt: "2026-09-30T05:59:00Z",
+    governanceRef: "a".repeat(40),
+    now: new Date("2026-09-30T06:00:00Z"),
+  });
+  if (
+    mismatch.decision !== "AUTHORITY_ERROR" ||
+    mismatch.reason !== "REGISTER_DOCUMENT_ROUTE_MISMATCH"
+  ) {
+    throw new Error("self-test failed: cross-theme authority mismatch");
+  }
+
   console.log("missing machine-readable manifest fails closed PASS");
+  console.log("theme-aware register routing PASS");
 }
 
 async function main() {
@@ -644,8 +680,28 @@ async function main() {
   const apiKey = process.env.LINEAR_API_KEY;
   const contentId = process.env.CONTENT_ID;
   const governanceRef = process.env.GOVERNANCE_REF;
-  const documentId =
-    process.env.LINEAR_REGISTER_DOCUMENT_ID || DEFAULT_REGISTER_DOCUMENT_ID;
+  let documentId;
+  try {
+    const route = requireCarouselRegister(contentId);
+    const configured = String(
+      process.env.LINEAR_REGISTER_DOCUMENT_ID ?? ""
+    ).trim();
+
+    if (configured && configured !== route.register_document_id) {
+      throw authorityError("REGISTER_DOCUMENT_ROUTE_MISMATCH");
+    }
+
+    documentId = route.register_document_id;
+  } catch (error) {
+    const result = reject(
+      "AUTHORITY_ERROR",
+      error?.code || "REGISTER_ROUTING_FAILED",
+      EXIT.AUTHORITY_ERROR
+    );
+    await writeOutputs(result);
+    console.error(JSON.stringify(result));
+    process.exit(result.exit_code);
+  }
 
   if (!apiKey || !contentId || !governanceRef) {
     const result = reject(
