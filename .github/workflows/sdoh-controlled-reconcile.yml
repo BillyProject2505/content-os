@@ -69,6 +69,26 @@ jobs:
           fi
 
           state="$(jq -r '.job.state' "$response_file")"
+
+          echo "Runtime diagnostic"
+          echo "job_state=$state"
+          echo "last_error=$(jq -r '.job.last_error // "NONE"' "$response_file")"
+          echo "media_count=$(jq -r '.media_count // 0' "$response_file")"
+          echo "artifact_count=$(jq -r '.artifacts | length' "$response_file")"
+          jq -r '.artifacts[]? | "artifact kind=\(.kind) slot=\(.slot) state=\(.state) remote_id=\(.remote_id // "NONE")"' "$response_file"
+
+          {
+            echo "## SDOH runtime reconciliation diagnostic"
+            echo
+            echo "- Job state: `$state`"
+            echo "- Last error: `$(jq -r '.job.last_error // "NONE"' "$response_file")`"
+            echo "- Media count: `$(jq -r '.media_count // 0' "$response_file")`"
+            echo "- Artifact count: `$(jq -r '.artifacts | length' "$response_file")`"
+            echo
+            echo "### Remote artifacts"
+            jq -r '.artifacts[]? | "- \(.kind) slot \(.slot): state=\(.state), remote_id=\(.remote_id // "NONE")"' "$response_file"
+          } >> "$GITHUB_STEP_SUMMARY"
+
           if [ "$state" = "PUBLISHED" ]; then
             echo "already_published=true" >> "$GITHUB_OUTPUT"
             echo "Runtime job already PUBLISHED; reconciliation is idempotently complete."
