@@ -1,4 +1,4 @@
-name: SDOH publication evidence writeback dry run
+name: SDOH publication evidence writeback controlled
 
 on:
   workflow_dispatch:
@@ -6,10 +6,17 @@ on:
       content_id:
         description: "Published SDOH carousel Content ID"
         required: true
-        default: "SDOH-BURGUNDY-CAR-0001"
         type: string
       job_id:
         description: "Terminal published D1 publication job ID"
+        required: true
+        type: string
+      expected_plan_sha256:
+        description: "Exact plan SHA-256 from the immediately preceding dry-run"
+        required: true
+        type: string
+      confirmation:
+        description: "Type APPLY_LINEAR_WRITEBACK exactly"
         required: true
         type: string
       worker_base_url:
@@ -22,7 +29,7 @@ permissions:
   contents: read
 
 jobs:
-  plan:
+  writeback:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -31,13 +38,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Validate configuration
+      - name: Validate explicit write authorization
         shell: bash
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
           EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
           CONTENT_ID: ${{ inputs.content_id }}
           JOB_ID: ${{ inputs.job_id }}
+          EXPECTED_PLAN_SHA256: ${{ inputs.expected_plan_sha256 }}
+          WRITE_CONFIRMATION: ${{ inputs.confirmation }}
           WORKER_BASE_URL: ${{ inputs.worker_base_url }}
         run: |
           set -euo pipefail
@@ -54,6 +63,16 @@ jobs:
             exit 1
           fi
 
+          if ! [[ "$EXPECTED_PLAN_SHA256" =~ ^[a-f0-9]{64}$ ]]; then
+            echo "::error::expected_plan_sha256 must be the exact 64-character lowercase SHA-256 from dry-run"
+            exit 1
+          fi
+
+          if [ "$WRITE_CONFIRMATION" != "APPLY_LINEAR_WRITEBACK" ]; then
+            echo "::error::Explicit confirmation APPLY_LINEAR_WRITEBACK is required"
+            exit 1
+          fi
+
           case "$WORKER_BASE_URL" in
             https://*) ;;
             *)
@@ -62,61 +81,63 @@ jobs:
               ;;
           esac
 
-      - name: Build idempotent Linear writeback plan
-        id: plan
+      - name: Apply idempotent Linear publication evidence writeback
+        id: writeback
         shell: bash
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
           EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
           CONTENT_ID: ${{ inputs.content_id }}
           JOB_ID: ${{ inputs.job_id }}
+          EXPECTED_PLAN_SHA256: ${{ inputs.expected_plan_sha256 }}
+          WRITE_CONFIRMATION: ${{ inputs.confirmation }}
           WORKER_BASE_URL: ${{ inputs.worker_base_url }}
           LINEAR_REGISTER_DOCUMENT_ID: 346b4c0c-9aec-4454-a2b5-06210b2c88c6
         run: |
           set -euo pipefail
-          result_file="$RUNNER_TEMP/writeback-plan.json"
+          result_file="$RUNNER_TEMP/writeback-result.json"
 
-          node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback.mjs \
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback-controlled.mjs \
             | tee "$result_file"
 
-          jq -e '.ok == true and .dry_run == true and
-            (.decision == "ALREADY_SYNCED" or .decision == "DRY_RUN_UPDATE_READY")' \
+          jq -e '.ok == true and
+            (.decision == "ALREADY_SYNCED_NO_WRITE" or .decision == "WRITEBACK_APPLIED")' \
             "$result_file" >/dev/null
 
           echo "decision=$(jq -r '.decision' "$result_file")" >> "$GITHUB_OUTPUT"
-          echo "plan_sha256=$(jq -r '.plan_sha256' "$result_file")" >> "$GITHUB_OUTPUT"
-          echo "remote_media_id=$(jq -r '.evidence.remote_media_id' "$result_file")" >> "$GITHUB_OUTPUT"
-          echo "remote_permalink=$(jq -r '.evidence.remote_permalink' "$result_file")" >> "$GITHUB_OUTPUT"
-          echo "published_wita=$(jq -r '.evidence.published_wita' "$result_file")" >> "$GITHUB_OUTPUT"
 
           {
-            echo "## SDOH publication evidence writeback — DRY RUN"
+            echo "## SDOH publication evidence writeback — CONTROLLED"
             echo
             printf -- '- Content ID: `%s`\n' "$CONTENT_ID"
             printf -- '- Job ID: `%s`\n' "$JOB_ID"
+            printf -- '- Approved plan SHA-256: `%s`\n' "$EXPECTED_PLAN_SHA256"
             printf -- '- Decision: `%s`\n' "$(jq -r '.decision' "$result_file")"
-            printf -- '- Plan SHA-256: `%s`\n' "$(jq -r '.plan_sha256' "$result_file")"
-            printf -- '- Remote media ID: `%s`\n' "$(jq -r '.evidence.remote_media_id' "$result_file")"
-            printf -- '- Remote permalink: %s\n' "$(jq -r '.evidence.remote_permalink' "$result_file")"
-            printf -- '- Published WITA: `%s`\n' "$(jq -r '.evidence.published_wita' "$result_file")"
+            printf -- '- Linear mutation performed: `%s`\n' "$(jq -r '.linear_mutation_performed // false' "$result_file")"
+            if [ "$(jq -r '.decision' "$result_file")" = "WRITEBACK_APPLIED" ]; then
+              printf -- '- Remote media ID: `%s`\n' "$(jq -r '.remote_media_id' "$result_file")"
+              printf -- '- Remote permalink: %s\n' "$(jq -r '.remote_permalink' "$result_file")"
+              printf -- '- Published WITA: `%s`\n' "$(jq -r '.published_wita' "$result_file")"
+              printf -- '- Post-write verification: `%s`\n' "$(jq -r '.post_write_verification' "$result_file")"
+            fi
             echo
-            echo "No Linear mutation, Worker mutation, Meta call, or Instagram write occurred."
+            echo "This workflow does not call Meta or Instagram and does not alter the publication result."
           } >> "$GITHUB_STEP_SUMMARY"
 
           rm -f "$result_file"
 
-      - name: Confirm no-write contract
+      - name: Confirm terminal writeback contract
         shell: bash
         env:
-          DECISION: ${{ steps.plan.outputs.decision }}
+          DECISION: ${{ steps.writeback.outputs.decision }}
         run: |
           set -euo pipefail
           case "$DECISION" in
-            ALREADY_SYNCED|DRY_RUN_UPDATE_READY)
-              echo "Dry-run contract PASS: $DECISION"
+            ALREADY_SYNCED_NO_WRITE|WRITEBACK_APPLIED)
+              echo "Controlled writeback contract PASS: $DECISION"
               ;;
             *)
-              echo "::error::Unexpected dry-run decision: $DECISION"
+              echo "::error::Unexpected controlled writeback decision: $DECISION"
               exit 1
               ;;
           esac

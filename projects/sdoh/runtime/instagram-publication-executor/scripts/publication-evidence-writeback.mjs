@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 const LINEAR_API_URL = "https://api.linear.app/graphql";
 const DEFAULT_REGISTER_DOCUMENT_ID = "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
 const EXPECTED_ACCOUNT = "@satudosisobathati";
@@ -248,6 +250,30 @@ export function planWriteback(markdown, evidence) {
   };
 }
 
+
+export function buildPlanFingerprint({ plan, evidence, document }) {
+  const payload = {
+    version: 1,
+    decision: plan.decision,
+    content_id: evidence.content_id,
+    job_id: evidence.job_id,
+    register_document_id: document.id,
+    register_updated_at: document.updatedAt,
+    current_row: plan.current_row ?? null,
+    proposed_row: plan.proposed_row ?? null,
+    evidence: {
+      remote_media_id: evidence.remote_media_id,
+      remote_permalink: evidence.remote_permalink,
+      published_at: evidence.published_at,
+      published_wita: evidence.published_wita,
+    },
+  };
+
+  return createHash("sha256")
+    .update(JSON.stringify(payload))
+    .digest("hex");
+}
+
 async function fetchJson(url, options) {
   const response = await fetch(url, options);
   const text = await response.text();
@@ -333,7 +359,26 @@ function selfTest() {
 `;
 
   const ready = planWriteback(scheduled, evidence);
+  const readyFingerprint = buildPlanFingerprint({
+    plan: ready,
+    evidence,
+    document: {
+      id: DEFAULT_REGISTER_DOCUMENT_ID,
+      updatedAt: "2026-10-02T04:00:00.000Z",
+    },
+  });
+  const readyFingerprintAgain = buildPlanFingerprint({
+    plan: ready,
+    evidence,
+    document: {
+      id: DEFAULT_REGISTER_DOCUMENT_ID,
+      updatedAt: "2026-10-02T04:00:00.000Z",
+    },
+  });
+
   if (
+    !/^[a-f0-9]{64}$/.test(readyFingerprint) ||
+    readyFingerprint !== readyFingerprintAgain ||
     ready.decision !== "DRY_RUN_UPDATE_READY" ||
     !ready.proposed_row.includes("**PUBLISHED**") ||
     !ready.proposed_row.includes(evidence.remote_permalink) ||
@@ -463,9 +508,15 @@ async function main() {
     );
 
     const plan = planWriteback(document.content, evidence);
+    const planSha256 = buildPlanFingerprint({
+      plan,
+      evidence,
+      document,
+    });
 
     console.log(JSON.stringify({
       ...plan,
+      plan_sha256: planSha256,
       dry_run: true,
       source: "RUNTIME_STATUS_PLUS_LINEAR_REGISTER",
       content_id: contentId,
