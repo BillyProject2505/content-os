@@ -113,6 +113,75 @@ jobs:
           echo "caption_sha256=$(jq -r '.caption_sha256' "$AUTHORITY_RESULT_OUTPUT")"
           echo "media_count=$(jq -r '.media_count' "$AUTHORITY_RESULT_OUTPUT")"
 
+      - name: Verify exact approved media via Drive WIF
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+          echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
+
+          media_count="$(jq -r '.execution_input.media | length' "$AUTHORITY_SNAPSHOT_OUTPUT")"
+          if [ "$media_count" != "5" ]; then
+            echo "::error::Expected exactly five approved media rows, got $media_count"
+            exit 1
+          fi
+
+          jq -c '.execution_input.media[]' "$AUTHORITY_SNAPSHOT_OUTPUT" | while IFS= read -r media; do
+            slot="$(jq -r '.slot' <<<"$media")"
+            file_id="$(jq -r '.drive_file_id' <<<"$media")"
+            expected_sha="$(jq -r '.sha256' <<<"$media")"
+            mime_type="$(jq -r '.mime_type // "image/jpeg"' <<<"$media")"
+
+            if ! [[ "$slot" =~ ^[1-5]$ ]] ||                [ -z "$file_id" ] || [ "$file_id" = "null" ] ||                ! [[ "$expected_sha" =~ ^[0-9a-fA-F]{64}$ ]] ||                [ "$mime_type" != "image/jpeg" ]; then
+              echo "::error::Invalid approved media authority row for slot $slot"
+              exit 1
+            fi
+
+            output="$RUNNER_TEMP/media-slot-$slot.jpg"
+            headers="$RUNNER_TEMP/media-slot-$slot.headers"
+
+            http_status="$(
+              curl --silent --show-error --location                 --dump-header "$headers"                 --output "$output"                 --write-out "%{http_code}"                 --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN"                 "https://www.googleapis.com/drive/v3/files/$file_id?alt=media"
+            )"
+
+            if [ "$http_status" != "200" ]; then
+              echo "::error::Drive media readiness failed for slot $slot with HTTP $http_status. Verify service-account reader access."
+              rm -f "$output" "$headers"
+              exit 1
+            fi
+
+            if [ ! -s "$output" ]; then
+              echo "::error::Drive media readiness returned an empty file for slot $slot"
+              rm -f "$output" "$headers"
+              exit 1
+            fi
+
+            actual_sha="$(sha256sum "$output" | cut -d' ' -f1)"
+            if [ "$actual_sha" != "$expected_sha" ]; then
+              echo "::error::Drive media SHA-256 mismatch for slot $slot"
+              echo "expected=$expected_sha"
+              echo "actual=$actual_sha"
+              rm -f "$output" "$headers"
+              exit 1
+            fi
+
+            content_type="$(awk 'BEGIN{IGNORECASE=1} /^content-type:/ {gsub("\r",""); print $2}' "$headers" | tail -n1)"
+            if [ -n "$content_type" ] && [ "$content_type" != "image/jpeg" ]; then
+              echo "::error::Drive media type mismatch for slot $slot: $content_type"
+              rm -f "$output" "$headers"
+              exit 1
+            fi
+
+            bytes="$(wc -c < "$output" | tr -d ' ')"
+            echo "media_slot=$slot readiness=PASS bytes=$bytes sha256=$actual_sha"
+            rm -f "$output" "$headers"
+          done
+
+          echo "Exact approved media readiness PASS"
+          echo "No Worker, D1, Meta, or Instagram write occurred."
+
       - name: Stage immutable D1 job and media rows
         id: stage
         shell: bash
