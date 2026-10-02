@@ -1,0 +1,120 @@
+name: SDOH publication evidence writeback dry run
+
+on:
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: "Published SDOH carousel Content ID"
+        required: true
+        default: "SDOH-BURGUNDY-CAR-0001"
+        type: string
+      job_id:
+        description: "Terminal published D1 publication job ID"
+        required: true
+        type: string
+      worker_base_url:
+        description: "Production Worker HTTPS base URL"
+        required: true
+        default: "https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate configuration
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          JOB_ID: ${{ inputs.job_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+        run: |
+          set -euo pipefail
+          test -n "$LINEAR_API_KEY"
+          test -n "$EXECUTOR_INGEST_SECRET"
+
+          if ! [[ "$CONTENT_ID" =~ ^SDOH-[A-Z0-9-]+$ ]]; then
+            echo "::error::Invalid content_id"
+            exit 1
+          fi
+
+          if ! [[ "$JOB_ID" =~ ^[A-Za-z0-9._:-]{1,128}$ ]]; then
+            echo "::error::Invalid job_id"
+            exit 1
+          fi
+
+          case "$WORKER_BASE_URL" in
+            https://*) ;;
+            *)
+              echo "::error::worker_base_url must use HTTPS"
+              exit 1
+              ;;
+          esac
+
+      - name: Build idempotent Linear writeback plan
+        id: plan
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          JOB_ID: ${{ inputs.job_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          LINEAR_REGISTER_DOCUMENT_ID: 346b4c0c-9aec-4454-a2b5-06210b2c88c6
+        run: |
+          set -euo pipefail
+          result_file="$RUNNER_TEMP/writeback-plan.json"
+
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback.mjs \
+            | tee "$result_file"
+
+          jq -e '.ok == true and .dry_run == true and
+            (.decision == "ALREADY_SYNCED" or .decision == "DRY_RUN_UPDATE_READY")' \
+            "$result_file" >/dev/null
+
+          echo "decision=$(jq -r '.decision' "$result_file")" >> "$GITHUB_OUTPUT"
+          echo "remote_media_id=$(jq -r '.evidence.remote_media_id' "$result_file")" >> "$GITHUB_OUTPUT"
+          echo "remote_permalink=$(jq -r '.evidence.remote_permalink' "$result_file")" >> "$GITHUB_OUTPUT"
+          echo "published_wita=$(jq -r '.evidence.published_wita' "$result_file")" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## SDOH publication evidence writeback — DRY RUN"
+            echo
+            printf -- '- Content ID: `%s`\n' "$CONTENT_ID"
+            printf -- '- Job ID: `%s`\n' "$JOB_ID"
+            printf -- '- Decision: `%s`\n' "$(jq -r '.decision' "$result_file")"
+            printf -- '- Remote media ID: `%s`\n' "$(jq -r '.evidence.remote_media_id' "$result_file")"
+            printf -- '- Remote permalink: %s\n' "$(jq -r '.evidence.remote_permalink' "$result_file")"
+            printf -- '- Published WITA: `%s`\n' "$(jq -r '.evidence.published_wita' "$result_file")"
+            echo
+            echo "No Linear mutation, Worker mutation, Meta call, or Instagram write occurred."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          rm -f "$result_file"
+
+      - name: Confirm no-write contract
+        shell: bash
+        env:
+          DECISION: ${{ steps.plan.outputs.decision }}
+        run: |
+          set -euo pipefail
+          case "$DECISION" in
+            ALREADY_SYNCED|DRY_RUN_UPDATE_READY)
+              echo "Dry-run contract PASS: $DECISION"
+              ;;
+            *)
+              echo "::error::Unexpected dry-run decision: $DECISION"
+              exit 1
+              ;;
+          esac
