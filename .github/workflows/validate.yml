@@ -38,3 +38,5 @@ jobs:
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback-controlled.mjs --self-test
       - name: Self-test scheduled execution fail-closed gates
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/scheduled-execution-self-test.mjs
+      - name: Self-test scheduled publication discovery
+        run: node projects/sdoh/runtime/instagram-publication-executor/scripts/scheduled-publication-discovery.mjs --self-test

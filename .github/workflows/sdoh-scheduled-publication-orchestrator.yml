@@ -1,0 +1,579 @@
+name: SDOH unattended scheduled publication
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: "Optional due SDOH carousel Content ID; blank discovers one due record"
+        required: false
+        default: ""
+        type: string
+      confirmation:
+        description: "For manual dispatch, type RUN_DUE_SCHEDULED_PUBLICATION"
+        required: true
+        default: ""
+        type: string
+      worker_base_url:
+        description: "Production Worker HTTPS base URL"
+        required: true
+        default: "https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev"
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: sdoh-unattended-scheduled-publication
+  cancel-in-progress: false
+
+jobs:
+  orchestrate:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.SDOH_SCHEDULED_AUTOMATION_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Validate scheduler configuration
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MANUAL_CONFIRMATION: ${{ inputs.confirmation }}
+          REQUESTED_CONTENT_ID: ${{ inputs.content_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$GCP_PROJECT_ID"
+          test -n "$GCP_WORKLOAD_IDENTITY_PROVIDER"
+          test -n "$GCP_SERVICE_ACCOUNT"
+          test -n "$LINEAR_API_KEY"
+          test -n "$EXECUTOR_INGEST_SECRET"
+
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$MANUAL_CONFIRMATION" != "RUN_DUE_SCHEDULED_PUBLICATION" ]; then
+            echo "::error::Manual dispatch requires RUN_DUE_SCHEDULED_PUBLICATION"
+            exit 1
+          fi
+
+          if [ -n "$REQUESTED_CONTENT_ID" ] && ! [[ "$REQUESTED_CONTENT_ID" =~ ^SDOH-(BURGUNDY|SAGE)-CAR-[0-9]{4}$ ]]; then
+            echo "::error::Requested content_id is invalid"
+            exit 1
+          fi
+
+          case "$WORKER_BASE_URL" in
+            https://*) ;;
+            *)
+              echo "::error::worker_base_url must use HTTPS"
+              exit 1
+              ;;
+          esac
+
+      - name: Discover one due scheduled publication
+        id: discover
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          REQUESTED_CONTENT_ID: ${{ inputs.content_id }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+
+          result="$(node projects/sdoh/runtime/instagram-publication-executor/scripts/scheduled-publication-discovery.mjs)"
+          echo "$result"
+
+          decision="$(jq -r '.decision' <<<"$result")"
+          if [ "$decision" = "NO_DUE_CONTENT" ]; then
+            if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$REQUESTED_CONTENT_ID" ]; then
+              echo "::error::Requested content is not due inside the allowed window"
+              exit 1
+            fi
+            echo "due=false" >> "$GITHUB_OUTPUT"
+            echo "No due scheduled content. Safe no-op."
+            exit 0
+          fi
+
+          if [ "$decision" != "DUE_CONTENT_READY" ]; then
+            echo "::error::Unexpected discovery decision: $decision"
+            exit 1
+          fi
+
+          content_id="$(jq -r '.content_id' <<<"$result")"
+          scheduled_at="$(jq -r '.scheduled_at' <<<"$result")"
+
+          echo "due=true" >> "$GITHUB_OUTPUT"
+          echo "content_id=$content_id" >> "$GITHUB_OUTPUT"
+          echo "scheduled_at=$scheduled_at" >> "$GITHUB_OUTPUT"
+
+      - name: Report safe no-op
+        if: steps.discover.outputs.due != 'true'
+        run: |
+          echo "No due scheduled SDOH carousel was found."
+          echo "No D1, Drive, Meta, Instagram, or Linear mutation occurred."
+
+      - name: Derive deterministic runtime job ID
+        if: steps.discover.outputs.due == 'true'
+        id: identity
+        shell: bash
+        env:
+          CONTENT_ID: ${{ steps.discover.outputs.content_id }}
+          SCHEDULED_AT: ${{ steps.discover.outputs.scheduled_at }}
+        run: |
+          set -euo pipefail
+          compact="$(node -e 'const d=new Date(process.env.SCHEDULED_AT); if(Number.isNaN(d.getTime())) process.exit(2); process.stdout.write(d.toISOString().replace(/[-:]/g,"").replace(".000",""));')"
+          job_id="IG-${CONTENT_ID}-${compact}"
+          echo "job_id=$job_id" >> "$GITHUB_OUTPUT"
+          echo "job_id=$job_id"
+
+      - name: Resolve existing runtime state
+        if: steps.discover.outputs.due == 'true'
+        id: runtime
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+          CONTENT_ID: ${{ steps.discover.outputs.content_id }}
+          JOB_ID: ${{ steps.identity.outputs.job_id }}
+          CURRENT_GOVERNANCE_REF: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/runtime-status-initial.json"
+
+          http_status="$(
+            jq -n --arg job_id "$JOB_ID" '{job_id:$job_id}' |
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @-               "${WORKER_BASE_URL%/}/internal/status"
+          )"
+
+          if [ "$http_status" = "404" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN"' "$response_file" 2>/dev/null || true)"
+            if [ "$error_code" != "JOB_NOT_FOUND" ]; then
+              echo "::error::Unexpected runtime 404 ($error_code)"
+              exit 1
+            fi
+            echo "state=MISSING" >> "$GITHUB_OUTPUT"
+            echo "runtime_published=false" >> "$GITHUB_OUTPUT"
+            echo "governance_ref=$CURRENT_GOVERNANCE_REF" >> "$GITHUB_OUTPUT"
+            echo "publish_attempted=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$http_status" != "200" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Runtime status failed with HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          jq -e --arg content_id "$CONTENT_ID" --arg job_id "$JOB_ID" '
+            .ok == true and
+            .job.id == $job_id and
+            .job.content_id == $content_id and
+            .job.platform == "instagram" and
+            .job.account == "@satudosisobathati" and
+            .job.format == "carousel" and
+            .media_count == 5
+          ' "$response_file" >/dev/null
+
+          state="$(jq -r '.job.state' "$response_file")"
+          governance_ref="$(jq -r '.job.governance_ref' "$response_file")"
+          publish_attempted="$(jq -r '
+            any(.artifacts[];
+              (.kind == "PUBLISHED_MEDIA") or
+              (.kind == "PARENT" and .state == "PUBLISH_ATTEMPTED")
+            )
+          ' "$response_file")"
+
+          if ! [[ "$governance_ref" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "::error::Stored governance_ref is invalid"
+            exit 1
+          fi
+
+          case "$state" in
+            PUBLISHED)
+              echo "runtime_published=true" >> "$GITHUB_OUTPUT"
+              ;;
+            SCHEDULED|CLAIMED|PUBLISHING)
+              if [ "$publish_attempted" = "true" ]; then
+                echo "::error::Publish-attempt evidence exists. Stop for controlled reconciliation; never issue a second publish attempt."
+                exit 1
+              fi
+              echo "runtime_published=false" >> "$GITHUB_OUTPUT"
+              ;;
+            FAILED)
+              echo "::error::Runtime job is FAILED. Controlled reconciliation is required before any new execution."
+              exit 1
+              ;;
+            *)
+              echo "::error::Unexpected runtime job state: $state"
+              exit 1
+              ;;
+          esac
+
+          echo "state=$state" >> "$GITHUB_OUTPUT"
+          echo "governance_ref=$governance_ref" >> "$GITHUB_OUTPUT"
+          echo "publish_attempted=$publish_attempted" >> "$GITHUB_OUTPUT"
+
+      - name: Verify stored governance remains on main
+        if: steps.discover.outputs.due == 'true' && steps.runtime.outputs.state != 'MISSING'
+        shell: bash
+        env:
+          GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
+        run: |
+          set -euo pipefail
+          git cat-file -e "$GOVERNANCE_REF^{commit}"
+          git merge-base --is-ancestor "$GOVERNANCE_REF" "$GITHUB_SHA"
+          echo "Stored governance ancestry PASS"
+
+      - id: auth
+        name: Authenticate to Google Cloud with WIF
+        if: steps.discover.outputs.due == 'true' && steps.runtime.outputs.runtime_published != 'true'
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+          create_credentials_file: false
+
+      - name: Resolve fresh authoritative publication snapshot
+        if: steps.discover.outputs.due == 'true' && steps.runtime.outputs.runtime_published != 'true'
+        id: authority
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          CONTENT_ID: ${{ steps.discover.outputs.content_id }}
+          GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
+          EXPECTED_SCHEDULED_AT: ${{ steps.discover.outputs.scheduled_at }}
+          AUTHORITY_RESULT_OUTPUT: ${{ runner.temp }}/authority-result.json
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/live-authority-preflight.mjs
+
+          jq -e --arg scheduled_at "$EXPECTED_SCHEDULED_AT" '
+            .decision == "ALLOW_SNAPSHOT" and
+            .allow_prepare == true and
+            .scheduled_at == $scheduled_at and
+            .media_count == 5
+          ' "$AUTHORITY_RESULT_OUTPUT" >/dev/null
+
+          echo "Fresh authority PASS"
+
+      - name: Verify exact approved media via Drive
+        if: steps.discover.outputs.due == 'true' && steps.runtime.outputs.runtime_published != 'true'
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+          echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
+
+          jq -c '.execution_input.media[]' "$AUTHORITY_SNAPSHOT_OUTPUT" | while IFS= read -r media; do
+            slot="$(jq -r '.slot' <<<"$media")"
+            file_id="$(jq -r '.drive_file_id' <<<"$media")"
+            expected_sha="$(jq -r '.sha256' <<<"$media")"
+            mime_type="$(jq -r '.mime_type // "image/jpeg"' <<<"$media")"
+
+            if ! [[ "$slot" =~ ^[1-5]$ ]] || [ -z "$file_id" ] || ! [[ "$expected_sha" =~ ^[0-9a-fA-F]{64}$ ]] || [ "$mime_type" != "image/jpeg" ]; then
+              echo "::error::Invalid approved media authority row for slot $slot"
+              exit 1
+            fi
+
+            output="$RUNNER_TEMP/media-slot-$slot.jpg"
+            headers="$RUNNER_TEMP/media-slot-$slot.headers"
+
+            http_status="$(
+              curl --silent --show-error --location                 --dump-header "$headers"                 --output "$output"                 --write-out "%{http_code}"                 --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN"                 "https://www.googleapis.com/drive/v3/files/$file_id?alt=media"
+            )"
+
+            if [ "$http_status" != "200" ] || [ ! -s "$output" ]; then
+              echo "::error::Drive readiness failed for slot $slot with HTTP $http_status"
+              exit 1
+            fi
+
+            actual_sha="$(sha256sum "$output" | cut -d' ' -f1)"
+            if [ "$actual_sha" != "$expected_sha" ]; then
+              echo "::error::Drive SHA-256 mismatch for slot $slot"
+              exit 1
+            fi
+
+            content_type="$(awk 'BEGIN{IGNORECASE=1} /^content-type:/ {gsub("\r",""); print $2}' "$headers" | tail -n1)"
+            if [ -n "$content_type" ] && [ "$content_type" != "image/jpeg" ]; then
+              echo "::error::Drive media type mismatch for slot $slot: $content_type"
+              exit 1
+            fi
+
+            rm -f "$output" "$headers"
+          done
+
+          echo "Exact approved media readiness PASS"
+
+      - name: Stage or re-verify immutable D1 job
+        if: steps.discover.outputs.due == 'true' && steps.runtime.outputs.runtime_published != 'true' && steps.runtime.outputs.state != 'PUBLISHING'
+        id: stage
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+          EXPECTED_JOB_ID: ${{ steps.identity.outputs.job_id }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/stage-response.json"
+
+          http_status="$(
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @"$AUTHORITY_SNAPSHOT_OUTPUT"               "${WORKER_BASE_URL%/}/internal/stage"
+          )"
+
+          if [ "$http_status" != "200" ] && [ "$http_status" != "201" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Staging failed with HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          jq -e --arg job_id "$EXPECTED_JOB_ID" '
+            .ok == true and
+            .job_id == $job_id and
+            .media_count == 5 and
+            (.state == "SCHEDULED" or .state == "CLAIMED")
+          ' "$response_file" >/dev/null
+
+          echo "Stage/re-verification PASS"
+
+      - name: Prepare new or previously only-staged job
+        if: steps.discover.outputs.due == 'true' && steps.runtime.outputs.runtime_published != 'true' && (steps.runtime.outputs.state == 'MISSING' || steps.runtime.outputs.state == 'SCHEDULED')
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+          JOB_ID: ${{ steps.identity.outputs.job_id }}
+          GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+          echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
+
+          expires_at="$(date -u -d '+55 minutes' '+%Y-%m-%dT%H:%M:%SZ')"
+          request_file="$RUNNER_TEMP/prepare-request.json"
+          response_file="$RUNNER_TEMP/prepare-response.json"
+
+          jq -n             --arg job_id "$JOB_ID"             --arg drive_access_token "$GOOGLE_ACCESS_TOKEN"             --arg drive_token_expires_at "$expires_at"             --arg governance_ref "$GOVERNANCE_REF"             --slurpfile bundle "$AUTHORITY_SNAPSHOT_OUTPUT"             '{
+              job_id: $job_id,
+              drive_access_token: $drive_access_token,
+              drive_token_expires_at: $drive_token_expires_at,
+              governance_ref: $governance_ref,
+              authority_snapshot: $bundle[0].authority_snapshot
+            }' > "$request_file"
+
+          http_status="$(
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @"$request_file"               "${WORKER_BASE_URL%/}/internal/prepare"
+          )"
+
+          if [ "$http_status" != "201" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Prepare failed with HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          jq -e --arg job_id "$JOB_ID" '
+            .ok == true and
+            .job_id == $job_id and
+            .job_state == "CLAIMED" and
+            .credential_stored == true and
+            .authority_snapshot_stored == true
+          ' "$response_file" >/dev/null
+
+          rm -f "$request_file" "$response_file"
+          echo "Scheduled prepare PASS"
+
+      - name: Refresh interrupted prepared job safely
+        if: steps.discover.outputs.due == 'true' && steps.runtime.outputs.runtime_published != 'true' && (steps.runtime.outputs.state == 'CLAIMED' || steps.runtime.outputs.state == 'PUBLISHING')
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+          JOB_ID: ${{ steps.identity.outputs.job_id }}
+          GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
+          AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+        run: |
+          set -euo pipefail
+          echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
+
+          expires_at="$(date -u -d '+55 minutes' '+%Y-%m-%dT%H:%M:%SZ')"
+          request_file="$RUNNER_TEMP/refresh-request.json"
+          response_file="$RUNNER_TEMP/refresh-response.json"
+
+          jq -n             --arg job_id "$JOB_ID"             --arg drive_access_token "$GOOGLE_ACCESS_TOKEN"             --arg drive_token_expires_at "$expires_at"             --arg governance_ref "$GOVERNANCE_REF"             --slurpfile bundle "$AUTHORITY_SNAPSHOT_OUTPUT"             '{
+              job_id: $job_id,
+              drive_access_token: $drive_access_token,
+              drive_token_expires_at: $drive_token_expires_at,
+              governance_ref: $governance_ref,
+              authority_snapshot: $bundle[0].authority_snapshot
+            }' > "$request_file"
+
+          http_status="$(
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @"$request_file"               "${WORKER_BASE_URL%/}/internal/refresh?mode=scheduled"
+          )"
+
+          if [ "$http_status" != "200" ]; then
+            error_code="$(jq -r '.error // "UNKNOWN"' "$response_file" 2>/dev/null || true)"
+            echo "::error::Scheduled refresh failed with HTTP $http_status ($error_code)"
+            exit 1
+          fi
+
+          jq -e --arg job_id "$JOB_ID" '
+            .ok == true and
+            .job_id == $job_id and
+            .credential_refreshed == true and
+            .authority_snapshot_refreshed == true
+          ' "$response_file" >/dev/null
+
+          rm -f "$request_file" "$response_file"
+          echo "Scheduled refresh recovery PASS"
+
+      - name: Execute due job in scheduled mode
+        if: steps.discover.outputs.due == 'true' && steps.runtime.outputs.runtime_published != 'true'
+        id: execute
+        shell: bash
+        env:
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+          JOB_ID: ${{ steps.identity.outputs.job_id }}
+          GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/execute-response.json"
+          max_attempts=12
+
+          for attempt in $(seq 1 "$max_attempts"); do
+            http_status="$(
+              jq -n                 --arg job_id "$JOB_ID"                 --arg governance_ref "$GOVERNANCE_REF"                 '{job_id:$job_id, governance_ref:$governance_ref, execution_mode:"SCHEDULED"}' |
+              curl --silent --show-error                 --output "$response_file"                 --write-out "%{http_code}"                 --request POST                 --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"                 --header "Content-Type: application/json"                 --data-binary @-                 "${WORKER_BASE_URL%/}/internal/execute"
+            )"
+
+            if [ "$http_status" != "200" ] && [ "$http_status" != "202" ]; then
+              error_code="$(jq -r '.error // "UNKNOWN"' "$response_file" 2>/dev/null || true)"
+              echo "::error::Scheduled execute failed with HTTP $http_status ($error_code). Never blind-retry after an ambiguous publish attempt."
+              exit 1
+            fi
+
+            status="$(jq -r '.result.status // "UNKNOWN"' "$response_file")"
+            echo "execute_attempt=$attempt status=$status"
+
+            case "$status" in
+              PUBLISHED|ALREADY_PUBLISHED)
+                echo "final_status=$status" >> "$GITHUB_OUTPUT"
+                exit 0
+                ;;
+              WAITING_FOR_CHILDREN|WAITING_FOR_PARENT)
+                if [ "$attempt" -eq "$max_attempts" ]; then
+                  echo "::error::Container readiness timed out before a confirmed terminal publication."
+                  exit 1
+                fi
+                sleep 5
+                ;;
+              RECONCILIATION_REQUIRED|PUBLISH_ATTEMPT_AMBIGUOUS|PUBLISHED_REMOTE_ID_RECOVERY_REQUIRED|REMOTE_CAPTION_MISMATCH)
+                echo "::error::Controlled reconciliation required ($status). No second publish attempt will be made."
+                exit 1
+                ;;
+              *)
+                echo "::error::Unexpected execute status: $status"
+                exit 1
+                ;;
+            esac
+          done
+
+      - name: Build idempotent publication evidence writeback plan
+        if: steps.discover.outputs.due == 'true'
+        id: writeback_plan
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          CONTENT_ID: ${{ steps.discover.outputs.content_id }}
+          JOB_ID: ${{ steps.identity.outputs.job_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+        run: |
+          set -euo pipefail
+          result_file="$RUNNER_TEMP/writeback-plan.json"
+
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback.mjs | tee "$result_file"
+
+          decision="$(jq -r '.decision' "$result_file")"
+          if [ "$decision" != "DRY_RUN_UPDATE_READY" ] && [ "$decision" != "ALREADY_SYNCED" ]; then
+            echo "::error::Unexpected writeback plan decision: $decision"
+            exit 1
+          fi
+
+          echo "decision=$decision" >> "$GITHUB_OUTPUT"
+          echo "plan_sha256=$(jq -r '.plan_sha256' "$result_file")" >> "$GITHUB_OUTPUT"
+
+      - name: Apply exact Linear evidence writeback
+        if: steps.discover.outputs.due == 'true' && steps.writeback_plan.outputs.decision == 'DRY_RUN_UPDATE_READY'
+        id: writeback
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          CONTENT_ID: ${{ steps.discover.outputs.content_id }}
+          JOB_ID: ${{ steps.identity.outputs.job_id }}
+          EXPECTED_PLAN_SHA256: ${{ steps.writeback_plan.outputs.plan_sha256 }}
+          WRITE_CONFIRMATION: APPLY_LINEAR_WRITEBACK
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+        run: |
+          set -euo pipefail
+          result_file="$RUNNER_TEMP/writeback-result.json"
+
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback-controlled.mjs | tee "$result_file"
+
+          jq -e '.ok == true and .decision == "WRITEBACK_APPLIED" and .linear_mutation_performed == true and .post_write_verification == "ALREADY_SYNCED"' "$result_file" >/dev/null
+
+          echo "Automatic Linear writeback PASS"
+
+      - name: Verify final register/runtime convergence
+        if: steps.discover.outputs.due == 'true'
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          CONTENT_ID: ${{ steps.discover.outputs.content_id }}
+          JOB_ID: ${{ steps.identity.outputs.job_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+        run: |
+          set -euo pipefail
+          result_file="$RUNNER_TEMP/final-writeback-check.json"
+
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback.mjs | tee "$result_file"
+
+          jq -e '.ok == true and .dry_run == true and .decision == "ALREADY_SYNCED"' "$result_file" >/dev/null
+
+          {
+            echo "## SDOH unattended scheduled publication"
+            echo
+            printf -- '- Content ID: `%s`\n' "$CONTENT_ID"
+            printf -- '- Job ID: `%s`\n' "$JOB_ID"
+            echo "- Runtime publication: verified PUBLISHED"
+            echo "- Linear evidence: ALREADY_SYNCED"
+            echo "- Global manual publishing window: not opened by this workflow"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Cleanup temporary files
+        if: always()
+        shell: bash
+        run: |
+          rm -f "$RUNNER_TEMP"/authority-result.json                 "$RUNNER_TEMP"/authority-snapshot.json                 "$RUNNER_TEMP"/runtime-status-initial.json                 "$RUNNER_TEMP"/stage-response.json                 "$RUNNER_TEMP"/prepare-request.json                 "$RUNNER_TEMP"/prepare-response.json                 "$RUNNER_TEMP"/refresh-request.json                 "$RUNNER_TEMP"/refresh-response.json                 "$RUNNER_TEMP"/execute-response.json                 "$RUNNER_TEMP"/writeback-plan.json                 "$RUNNER_TEMP"/writeback-result.json                 "$RUNNER_TEMP"/final-writeback-check.json
