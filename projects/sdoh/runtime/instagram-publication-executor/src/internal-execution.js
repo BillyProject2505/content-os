@@ -5,6 +5,7 @@ import {
 
 const encoder = new TextEncoder();
 const MAX_BODY_BYTES = 8 * 1024;
+const SCHEDULED_EXECUTION_MAX_LATENESS_MS = 30 * 60 * 1000;
 
 export async function handleInternalExecute(request, env) {
   const auth = await authorizeJsonRequest(request, env);
@@ -17,8 +18,31 @@ export async function handleInternalExecute(request, env) {
   }
 
   try {
+    let executionEnv = env;
+
+    if (payload.execution_mode === "SCHEDULED") {
+      const scheduledGate = await authorizeScheduledExecution({
+        env,
+        jobId: payload.job_id,
+        governanceRef: payload.governance_ref,
+        nowMs: Date.now(),
+      });
+
+      if (!scheduledGate.ok) {
+        return json(
+          { ok: false, error: scheduledGate.error },
+          scheduledGate.status
+        );
+      }
+
+      executionEnv = {
+        ...env,
+        PUBLISHING_ENABLED: "true",
+      };
+    }
+
     const result = await executeCarouselPublication({
-      env,
+      env: executionEnv,
       jobId: payload.job_id,
       governanceRef: payload.governance_ref,
       origin: new URL(request.url).origin,
@@ -93,7 +117,129 @@ export function validateExecutePayload(payload) {
   ) {
     return { ok: false, error: "INVALID_PAYLOAD" };
   }
+
+  if (
+    Object.prototype.hasOwnProperty.call(payload, "execution_mode") &&
+    !["MANUAL", "SCHEDULED"].includes(payload.execution_mode)
+  ) {
+    return { ok: false, error: "INVALID_EXECUTION_MODE" };
+  }
+
   return { ok: true };
+}
+
+
+export function evaluateScheduledExecutionWindow({
+  scheduledAt,
+  state,
+  storedGovernanceRef,
+  requestedGovernanceRef,
+  scheduledPublishingEnabled,
+  manualPublishingEnabled,
+  nowMs,
+}) {
+  if (scheduledPublishingEnabled !== "true") {
+    return {
+      ok: false,
+      status: 409,
+      error: "SCHEDULED_PUBLISHING_DISABLED",
+    };
+  }
+
+  if (manualPublishingEnabled === "true") {
+    return {
+      ok: false,
+      status: 409,
+      error: "SCHEDULED_MODE_REQUIRES_MANUAL_WINDOW_CLOSED",
+    };
+  }
+
+  if (storedGovernanceRef !== requestedGovernanceRef) {
+    return {
+      ok: false,
+      status: 409,
+      error: "GOVERNANCE_REF_MISMATCH",
+    };
+  }
+
+  if (!["CLAIMED", "PUBLISHING"].includes(state)) {
+    return {
+      ok: false,
+      status: 409,
+      error: "JOB_STATE_REJECTED",
+    };
+  }
+
+  const scheduledAtMs = Date.parse(scheduledAt);
+  if (!Number.isFinite(scheduledAtMs) || !Number.isFinite(nowMs)) {
+    return {
+      ok: false,
+      status: 409,
+      error: "SCHEDULE_INVALID",
+    };
+  }
+
+  if (nowMs < scheduledAtMs) {
+    return {
+      ok: false,
+      status: 409,
+      error: "SCHEDULE_NOT_DUE",
+    };
+  }
+
+  if (nowMs > scheduledAtMs + SCHEDULED_EXECUTION_MAX_LATENESS_MS) {
+    return {
+      ok: false,
+      status: 409,
+      error: "SCHEDULE_STALE",
+    };
+  }
+
+  return {
+    ok: true,
+    status: 200,
+    error: null,
+  };
+}
+
+async function authorizeScheduledExecution({
+  env,
+  jobId,
+  governanceRef,
+  nowMs,
+}) {
+  if (!env?.DB) {
+    return {
+      ok: false,
+      status: 503,
+      error: "DB_NOT_CONFIGURED",
+    };
+  }
+
+  const job = await env.DB.prepare(
+    `SELECT id, scheduled_at, state, governance_ref
+       FROM publication_jobs
+      WHERE id = ?1
+      LIMIT 1`
+  ).bind(jobId).first();
+
+  if (!job) {
+    return {
+      ok: false,
+      status: 404,
+      error: "JOB_NOT_FOUND",
+    };
+  }
+
+  return evaluateScheduledExecutionWindow({
+    scheduledAt: job.scheduled_at,
+    state: job.state,
+    storedGovernanceRef: job.governance_ref,
+    requestedGovernanceRef: governanceRef,
+    scheduledPublishingEnabled: env.SCHEDULED_PUBLISHING_ENABLED,
+    manualPublishingEnabled: env.PUBLISHING_ENABLED,
+    nowMs,
+  });
 }
 
 export function validateReconcilePayload(payload) {
