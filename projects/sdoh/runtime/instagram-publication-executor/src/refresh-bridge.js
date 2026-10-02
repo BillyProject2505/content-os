@@ -1,3 +1,4 @@
+import { evaluateScheduledExecutionWindow } from "./internal-execution.js";
 import { validateAuthoritySnapshotPayload } from "./execution-authority.js";
 
 const encoder = new TextEncoder();
@@ -24,7 +25,14 @@ export async function handleRefresh(request, env) {
     return json({ ok: false, error: "UNAUTHORIZED" }, 401);
   }
 
-  if (env.PUBLISHING_ENABLED !== "true") {
+  const requestUrl = new URL(request.url);
+  const requestedMode = requestUrl.searchParams.get("mode");
+  if (requestedMode && requestedMode !== "scheduled") {
+    return json({ ok: false, error: "INVALID_REFRESH_MODE" }, 400);
+  }
+  const scheduledMode = requestedMode === "scheduled";
+
+  if (!scheduledMode && env.PUBLISHING_ENABLED !== "true") {
     return json({ ok: false, error: "PUBLISHING_WINDOW_NOT_OPEN" }, 409);
   }
 
@@ -89,6 +97,25 @@ export async function handleRefresh(request, env) {
 
   if (!job) {
     return json({ ok: false, error: "JOB_NOT_FOUND" }, 404);
+  }
+
+  if (scheduledMode) {
+    const scheduledGate = evaluateScheduledExecutionWindow({
+      scheduledAt: job.scheduled_at,
+      state: job.state,
+      storedGovernanceRef: job.governance_ref,
+      requestedGovernanceRef: governanceRef,
+      scheduledPublishingEnabled: env.SCHEDULED_PUBLISHING_ENABLED,
+      manualPublishingEnabled: env.PUBLISHING_ENABLED,
+      nowMs: now,
+    });
+
+    if (!scheduledGate.ok) {
+      return json(
+        { ok: false, error: scheduledGate.error },
+        scheduledGate.status
+      );
+    }
   }
 
   if (!REFRESH_ALLOWED_STATES.has(job.state)) {
