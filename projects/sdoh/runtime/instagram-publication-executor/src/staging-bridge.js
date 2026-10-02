@@ -1,9 +1,9 @@
 import { validateAuthoritySnapshotPayload } from "./execution-authority.js";
+import { requireCarouselRegister } from "./content-register-routing.mjs";
 
 const encoder = new TextEncoder();
 
 const EXPECTED_ACCOUNT = "@satudosisobathati";
-const EXPECTED_REGISTER_DOCUMENT_ID = "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
 const MAX_BODY_BYTES = 64 * 1024;
 const CAROUSEL_SLOTS = [1, 2, 3, 4, 5];
 
@@ -62,8 +62,12 @@ export async function handleStage(request, env) {
   const executionInput = payload.execution_input;
   const nowMs = Date.now();
 
-  if (snapshot.register_document_id !== EXPECTED_REGISTER_DOCUMENT_ID) {
-    return json({ ok: false, error: "REGISTER_DOCUMENT_MISMATCH" }, 409);
+  const registerValidation = validateSnapshotRegisterRoute(snapshot);
+  if (!registerValidation.ok) {
+    return json(
+      { ok: false, error: registerValidation.error },
+      registerValidation.status
+    );
   }
   if (snapshot.destination_account !== EXPECTED_ACCOUNT) {
     return json({ ok: false, error: "DESTINATION_ACCOUNT_MISMATCH" }, 409);
@@ -220,6 +224,34 @@ export async function handleStage(request, env) {
     },
     201
   );
+}
+
+export function validateSnapshotRegisterRoute(snapshot) {
+  let route;
+  try {
+    route = requireCarouselRegister(snapshot?.content_id);
+  } catch {
+    return {
+      ok: false,
+      status: 400,
+      error: "UNSUPPORTED_CAROUSEL_CONTENT_ID",
+    };
+  }
+
+  if (snapshot?.register_document_id !== route.register_document_id) {
+    return {
+      ok: false,
+      status: 409,
+      error: "REGISTER_DOCUMENT_ROUTE_MISMATCH",
+    };
+  }
+
+  return {
+    ok: true,
+    status: 200,
+    error: null,
+    route,
+  };
 }
 
 export function validateStagePayload(payload) {

@@ -2,6 +2,7 @@ import {
   buildStagedJobIdentity,
   handleStage,
   validateExecutionInput,
+  validateSnapshotRegisterRoute,
   validateStagePayload,
 } from "../src/staging-bridge.js";
 
@@ -71,6 +72,39 @@ const executionInput = {
 }
 
 {
+  const sageWithWrongRegister = {
+    ...structuredClone(snapshot),
+    content_id: "SDOH-SAGE-CAR-0005",
+    register_document_id: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+  };
+
+  const result = validateSnapshotRegisterRoute(sageWithWrongRegister);
+  if (
+    result.ok ||
+    result.status !== 409 ||
+    result.error !== "REGISTER_DOCUMENT_ROUTE_MISMATCH"
+  ) {
+    throw new Error("cross-theme register mismatch did not fail closed");
+  }
+}
+
+{
+  const sageCorrectRegister = {
+    ...structuredClone(snapshot),
+    content_id: "SDOH-SAGE-CAR-0005",
+    register_document_id: "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+  };
+
+  const result = validateSnapshotRegisterRoute(sageCorrectRegister);
+  if (
+    !result.ok ||
+    result.route?.theme !== "SAGE"
+  ) {
+    throw new Error("valid Sage register route was rejected");
+  }
+}
+
+{
   let dbTouched = false;
   const env = {
     DB: {
@@ -111,3 +145,5 @@ console.log("controlled staging self-test PASS");
 console.log("deterministic job identity PASS");
 console.log("ordered five-file media contract PASS");
 console.log("staging while publishing enabled: rejected before D1");
+console.log("cross-theme register mismatch guard PASS");
+console.log("valid Sage register route PASS");

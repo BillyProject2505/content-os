@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
+import { requireCarouselRegister } from "../src/content-register-routing.mjs";
 
 const LINEAR_API_URL = "https://api.linear.app/graphql";
-const DEFAULT_REGISTER_DOCUMENT_ID = "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
+const TEST_BURGUNDY_REGISTER_DOCUMENT_ID =
+  "346b4c0c-9aec-4454-a2b5-06210b2c88c6";
 const EXPECTED_ACCOUNT = "@satudosisobathati";
 
 const EXIT = Object.freeze({
@@ -10,6 +12,17 @@ const EXIT = Object.freeze({
   NOT_ELIGIBLE: 21,
   ERROR: 30,
 });
+
+export function resolveWritebackRegisterDocumentId(contentId, configuredDocumentId = "") {
+  const route = requireCarouselRegister(contentId);
+  const configured = String(configuredDocumentId ?? "").trim();
+
+  if (configured && configured !== route.register_document_id) {
+    throw new Error("REGISTER_DOCUMENT_ROUTE_MISMATCH");
+  }
+
+  return route.register_document_id;
+}
 
 function normalizeCell(value) {
   return String(value ?? "")
@@ -363,7 +376,7 @@ function selfTest() {
     plan: ready,
     evidence,
     document: {
-      id: DEFAULT_REGISTER_DOCUMENT_ID,
+      id: TEST_BURGUNDY_REGISTER_DOCUMENT_ID,
       updatedAt: "2026-10-02T04:00:00.000Z",
     },
   });
@@ -371,7 +384,7 @@ function selfTest() {
     plan: ready,
     evidence,
     document: {
-      id: DEFAULT_REGISTER_DOCUMENT_ID,
+      id: TEST_BURGUNDY_REGISTER_DOCUMENT_ID,
       updatedAt: "2026-10-02T04:00:00.000Z",
     },
   });
@@ -406,7 +419,7 @@ function selfTest() {
   const statusFixture = {
     ok: true,
     media_count: 5,
-    authority: { register_document_id: DEFAULT_REGISTER_DOCUMENT_ID },
+    authority: { register_document_id: TEST_BURGUNDY_REGISTER_DOCUMENT_ID },
     job: {
       id: evidence.job_id,
       content_id: evidence.content_id,
@@ -433,11 +446,33 @@ function selfTest() {
     statusFixture,
     evidence.content_id,
     evidence.job_id,
-    DEFAULT_REGISTER_DOCUMENT_ID
+    TEST_BURGUNDY_REGISTER_DOCUMENT_ID
   );
 
   if (runtime.published_wita !== evidence.published_wita) {
     throw new Error("self-test failed: WITA conversion");
+  }
+
+  const sageRegister = resolveWritebackRegisterDocumentId(
+    "SDOH-SAGE-CAR-0005"
+  );
+  if (sageRegister !== "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba") {
+    throw new Error("self-test failed: Sage writeback register routing");
+  }
+
+  let mismatchRejected = false;
+  try {
+    resolveWritebackRegisterDocumentId(
+      "SDOH-SAGE-CAR-0005",
+      TEST_BURGUNDY_REGISTER_DOCUMENT_ID
+    );
+  } catch (error) {
+    mismatchRejected =
+      error instanceof Error &&
+      error.message === "REGISTER_DOCUMENT_ROUTE_MISMATCH";
+  }
+  if (!mismatchRejected) {
+    throw new Error("self-test failed: writeback cross-theme mismatch");
   }
 
   console.log("publication evidence writeback dry-run self-test PASS");
@@ -454,9 +489,23 @@ async function main() {
   const contentId = String(process.env.CONTENT_ID ?? "").trim();
   const jobId = String(process.env.JOB_ID ?? "").trim();
   const workerBaseUrl = String(process.env.WORKER_BASE_URL ?? "").trim();
-  const documentId =
-    String(process.env.LINEAR_REGISTER_DOCUMENT_ID ?? "").trim() ||
-    DEFAULT_REGISTER_DOCUMENT_ID;
+  let documentId;
+  try {
+    documentId = resolveWritebackRegisterDocumentId(
+      contentId,
+      process.env.LINEAR_REGISTER_DOCUMENT_ID
+    );
+  } catch (error) {
+    console.error(JSON.stringify({
+      ok: false,
+      decision: "ERROR",
+      reason: error instanceof Error ? error.message : "REGISTER_ROUTING_FAILED",
+      dry_run: true,
+      content_id: contentId,
+      job_id: jobId,
+    }));
+    process.exit(EXIT.ERROR);
+  }
 
   if (!apiKey || !executorSecret) {
     console.error(JSON.stringify({
