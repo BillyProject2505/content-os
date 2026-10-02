@@ -72,6 +72,52 @@ const executionInput = {
 
 {
   let dbTouched = false;
+  const sageWithWrongRegister = {
+    ...structuredClone(snapshot),
+    content_id: "SDOH-SAGE-CAR-0005",
+    register_document_id: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+  };
+
+  const env = {
+    DB: {
+      prepare() {
+        dbTouched = true;
+        throw new Error("DB must not be touched on register-route mismatch");
+      },
+    },
+    EXECUTOR_INGEST_SECRET: "test-secret",
+    PUBLISHING_ENABLED: "false",
+  };
+
+  const response = await handleStage(
+    new Request("https://worker.example/internal/stage", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer test-secret",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        authority_snapshot: sageWithWrongRegister,
+        execution_input: executionInput,
+      }),
+    }),
+    env
+  );
+
+  const body = await response.json();
+  if (
+    response.status !== 409 ||
+    body.error !== "REGISTER_DOCUMENT_ROUTE_MISMATCH"
+  ) {
+    throw new Error("cross-theme register mismatch did not fail closed");
+  }
+  if (dbTouched) {
+    throw new Error("staging touched D1 on register-route mismatch");
+  }
+}
+
+{
+  let dbTouched = false;
   const env = {
     DB: {
       prepare() {
@@ -111,3 +157,4 @@ console.log("controlled staging self-test PASS");
 console.log("deterministic job identity PASS");
 console.log("ordered five-file media contract PASS");
 console.log("staging while publishing enabled: rejected before D1");
+console.log("cross-theme register mismatch: rejected before D1");
