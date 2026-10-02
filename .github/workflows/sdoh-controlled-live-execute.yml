@@ -325,6 +325,38 @@ jobs:
             esac
           done
 
+      - name: Report successful publication evidence
+        if: steps.status.outputs.already_published != 'true' && (steps.execute.outputs.final_status == 'PUBLISHED' || steps.execute.outputs.final_status == 'ALREADY_PUBLISHED')
+        shell: bash
+        env:
+          FINAL_STATUS: ${{ steps.execute.outputs.final_status }}
+          REMOTE_MEDIA_ID: ${{ steps.execute.outputs.remote_media_id }}
+          REMOTE_PERMALINK: ${{ steps.execute.outputs.remote_permalink }}
+          PUBLISHED_AT: ${{ steps.execute.outputs.published_at }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          JOB_ID: ${{ inputs.job_id }}
+        run: |
+          set -euo pipefail
+
+          echo "Publication evidence"
+          echo "content_id=$CONTENT_ID"
+          echo "job_id=$JOB_ID"
+          echo "final_status=$FINAL_STATUS"
+          echo "remote_media_id=${REMOTE_MEDIA_ID:-UNAVAILABLE}"
+          echo "remote_permalink=${REMOTE_PERMALINK:-UNAVAILABLE}"
+          echo "published_at=${PUBLISHED_AT:-UNAVAILABLE}"
+
+          {
+            echo "## SDOH Instagram publication evidence"
+            echo
+            echo "- Content ID: `$CONTENT_ID`"
+            echo "- Job ID: `$JOB_ID`"
+            echo "- Final status: `$FINAL_STATUS`"
+            echo "- Remote media ID: `${REMOTE_MEDIA_ID:-UNAVAILABLE}`"
+            echo "- Remote permalink: ${REMOTE_PERMALINK:-UNAVAILABLE}"
+            echo "- Published at: `${PUBLISHED_AT:-UNAVAILABLE}`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Report already-published idempotent state
         if: steps.status.outputs.already_published == 'true'
         run: |
