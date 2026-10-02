@@ -84,6 +84,7 @@ jobs:
             "$result_file" >/dev/null
 
           echo "decision=$(jq -r '.decision' "$result_file")" >> "$GITHUB_OUTPUT"
+          echo "plan_sha256=$(jq -r '.plan_sha256' "$result_file")" >> "$GITHUB_OUTPUT"
           echo "remote_media_id=$(jq -r '.evidence.remote_media_id' "$result_file")" >> "$GITHUB_OUTPUT"
           echo "remote_permalink=$(jq -r '.evidence.remote_permalink' "$result_file")" >> "$GITHUB_OUTPUT"
           echo "published_wita=$(jq -r '.evidence.published_wita' "$result_file")" >> "$GITHUB_OUTPUT"
@@ -94,6 +95,7 @@ jobs:
             printf -- '- Content ID: `%s`\n' "$CONTENT_ID"
             printf -- '- Job ID: `%s`\n' "$JOB_ID"
             printf -- '- Decision: `%s`\n' "$(jq -r '.decision' "$result_file")"
+            printf -- '- Plan SHA-256: `%s`\n' "$(jq -r '.plan_sha256' "$result_file")"
             printf -- '- Remote media ID: `%s`\n' "$(jq -r '.evidence.remote_media_id' "$result_file")"
             printf -- '- Remote permalink: %s\n' "$(jq -r '.evidence.remote_permalink' "$result_file")"
             printf -- '- Published WITA: `%s`\n' "$(jq -r '.evidence.published_wita' "$result_file")"
