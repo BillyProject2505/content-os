@@ -36,9 +36,10 @@ export function resolveCarouselRegister(contentId) {
 export function requireCarouselRegister(contentId) {
   const route = resolveCarouselRegister(contentId);
   if (!route) {
-    const error = new Error("UNSUPPORTED_CAROUSEL_CONTENT_ID");
-    error.code = "UNSUPPORTED_CAROUSEL_CONTENT_ID";
-    throw error;
+    throw Object.assign(
+      new Error("UNSUPPORTED_CAROUSEL_CONTENT_ID"),
+      { code: "UNSUPPORTED_CAROUSEL_CONTENT_ID" }
+    );
   }
   return route;
 }
@@ -46,9 +47,10 @@ export function requireCarouselRegister(contentId) {
 export function assertRegisterMatchesContentId(contentId, registerDocumentId) {
   const route = requireCarouselRegister(contentId);
   if (String(registerDocumentId ?? "").trim() !== route.register_document_id) {
-    const error = new Error("REGISTER_DOCUMENT_ROUTE_MISMATCH");
-    error.code = "REGISTER_DOCUMENT_ROUTE_MISMATCH";
-    throw error;
+    throw Object.assign(
+      new Error("REGISTER_DOCUMENT_ROUTE_MISMATCH"),
+      { code: "REGISTER_DOCUMENT_ROUTE_MISMATCH" }
+    );
   }
   return route;
 }
