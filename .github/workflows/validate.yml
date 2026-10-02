@@ -34,3 +34,5 @@ jobs:
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/runtime-refresh-self-test.mjs
       - name: Self-test publication evidence writeback planner
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback.mjs --self-test
+      - name: Self-test controlled publication evidence writeback
+        run: node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback-controlled.mjs --self-test
