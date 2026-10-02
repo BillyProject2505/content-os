@@ -31,13 +31,25 @@ export async function handleInternalExecute(request, env) {
     const status = result.status.startsWith("WAITING_") ? 202 : 200;
     return json({ ok: true, result }, status);
   } catch (error) {
-    return json(
-      {
-        ok: false,
-        error: error?.code || error?.message || "EXECUTION_FAILED",
-      },
-      Number(error?.httpStatus) || 502
-    );
+    const body = {
+      ok: false,
+      error: error?.code || error?.message || "EXECUTION_FAILED",
+    };
+
+    if (error?.meta && typeof error.meta === "object") {
+      body.meta = {
+        stage: error.meta.stage || null,
+        slot: Number.isInteger(error.meta.slot) ? error.meta.slot : null,
+        method: error.meta.method || null,
+        path: error.meta.path || null,
+        status: Number.isInteger(error.meta.status) ? error.meta.status : null,
+        code: error.meta.code ?? null,
+        subcode: error.meta.subcode ?? null,
+        type: error.meta.type ?? null,
+      };
+    }
+
+    return json(body, Number(error?.httpStatus) || 502);
   }
 }
 
