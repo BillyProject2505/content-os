@@ -1,0 +1,25 @@
+import fs from "node:fs";
+import {
+  createRequestFingerprint,
+  validateGenerationRequest,
+} from "./model-generation-contract.mjs";
+
+const path = new URL("../pilot-requests/SDOH-SAGE-CAR-0009.json", import.meta.url);
+const request = JSON.parse(fs.readFileSync(path, "utf8"));
+const normalized = validateGenerationRequest(request);
+
+if (normalized.content_id !== "SDOH-SAGE-CAR-0009") {
+  throw new Error("Pilot request Content ID mismatch");
+}
+if (normalized.risk_class !== "STANDARD") {
+  throw new Error("Pilot request risk class mismatch");
+}
+if (!normalized.authority_packet.carousel_copy_rules.includes("The Gentle Naming")) {
+  throw new Error("Pilot request is missing the current Sage Carousel architecture");
+}
+if (!normalized.authority_packet.caption_rules.includes("#satudosisobathati")) {
+  throw new Error("Pilot request is missing the fixed caption hashtag baseline");
+}
+
+console.log("BUS-144 pilot request contract PASS");
+console.log(`request_fingerprint=${createRequestFingerprint(normalized)}`);

@@ -1,0 +1,23 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0009",
+  "theme": "SAGE",
+  "format": "CAROUSEL",
+  "core_concept": "Memberi izin menyesuaikan ritme ketika kapasitas, keadaan, atau kebutuhan berubah tanpa menganggap adaptasi sebagai kegagalan.",
+  "campaign_context": "October 2026 Sage Carousel schedule; standalone low-risk reflective content; target publication 2026-10-15 19:30 WITA.",
+  "risk_class": "STANDARD",
+  "governance_context": {
+    "project_architecture_ref": "GitHub main projects/sdoh/DIUA-DIC-000007_SDOH-Project-Architecture.md v1.13",
+    "production_sop_ref": "GitHub main projects/sdoh/DIUA-DIC-000008_SDOH-Production-SOP.md v1.40",
+    "qa_ref": "GitHub main projects/sdoh/DIUA-DIC-000010_SDOH-QA-Document.md v1.31",
+    "format_lane_ref": "Linear BUS-47 Owner Lock Sage Carousel Character System v1.0 + locked Gentle Naming/copy-density rules",
+    "research_ref": "GitHub main projects/sdoh/DIUA-DIC-000009_SDOH-Research-Source-List.md v1.14"
+  },
+  "authority_packet": {
+    "theme_semantics": "Sage / Seri Peluk is validasi kondisi with the core promise 'kamu aman'. Give room to recognize and allow the current emotional condition without pressure to immediately change, explain, confront, or resolve it. The landing should follow recognition → permission → accompaniment, with comfort/grounding only when earned and without forced resolution.",
+    "carousel_copy_rules": "Use exactly five slides following The Gentle Naming: S1 Threshold = quietly name one emotional condition and open space, not a conventional hook; S2 Mirror Luar = recognize the visible shape of the same condition; S3 Mirror Dalam = deepen the internal experience without diagnosing; S4 Permission = release pressure or remove an expectation; S5 Landing = spacious emotional landing, not summary, motivation, or CTA. Default density is sparse → light → peak → release → sparse. Use one primary thought per slide, target 9 words or fewer per slide for AI-assisted production, default 2–3 natural lines, lowercase main narrative text, restrained punctuation, no engagement bait, no generic motivational structure, and no instructional/preachy speech act. Keep copy concise enough for the locked 720 px main-text field; renderer QA will perform the actual width measurement.",
+    "caption_rules": "Use the project-level caption architecture: natural emotional/situational opening that does not simply copy the visual hook → context/depth → Sage recognition/permission/accompaniment → optional earned grounding or light CTA only when semantically justified → signature 'satu dosis obat hati' → exactly five baseline hashtags '#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja'. Caption must add context/depth rather than repeat the slide copy. Do not include the retired temporary September commemoration line for this October content.",
+    "safety_rules": "Keep the material reflective and non-clinical. Do not diagnose, prescribe, give treatment advice, claim a symptom proves a condition, promise outcomes, or frame emotional difficulty as personal failure. Do not force positivity, immediate acceptance, productivity, or recovery. If generation would introduce a clinical, crisis, self-harm, treatment, diagnosis, or other materially sensitive claim, flag it instead of presenting it as ordinary reflective copy.",
+    "research_rules": "Do not invent evidence, statistics, psychological mechanisms, professional guidance, or citations. Respect limitations recorded in the SDOH Research Source List. For this STANDARD reflective instance, prefer language that does not require a factual psychological claim. Any research-sensitive or clinical assertion must be listed in research_sensitive_claims for later validation rather than silently treated as established."
+  },
+  "duplication_context": "No direct duplicate was found in the current planned/published SDOH Carousel set. Keep 0009 specifically about adapting one's rhythm when capacity, circumstances, or needs change without equating adaptation with failure. Distinguish it from SAGE-CAR-0006 (limited energy / adjusting expectations to available energy), SAGE-CAR-0010 (decision fatigue / small decisions feeling heavy), SAGE-CAR-0011 (permission to rest before tasks are complete), SAGE-CAR-0013 (non-linear recovery), SAGE-CAR-0005 (disappointment when plans change), and Burgundy themes about boundaries, hurt, anger, or relational truth."
+}
