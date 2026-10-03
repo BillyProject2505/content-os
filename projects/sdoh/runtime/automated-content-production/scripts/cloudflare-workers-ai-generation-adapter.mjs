@@ -27,12 +27,12 @@ const OUTPUT_SCHEMA = {
         additionalProperties: false,
         properties: {
           slide: { type: "integer", minimum: 1, maximum: 5 },
-          copy: { type: "string", minLength: 1 },
+          copy: { type: "string", minLength: 24, maxLength: 90 },
         },
         required: ["slide", "copy"],
       },
     },
-    caption: { type: "string", minLength: 1 },
+    caption: { type: "string", minLength: 220, maxLength: 1200 },
     risk_flags: {
       type: "array",
       items: { type: "string" },
@@ -61,6 +61,36 @@ export function buildCloudflareWorkersAIRequest({
 }) {
   const normalized = validateGenerationRequest(request);
 
+  const editorial = normalized.editorial_quality_guardrails;
+  const progressionSummary = editorial.slide_progression
+    .map((item) => {
+      const groups = item.required_anchor_groups
+        .map((group) => "[" + group.join(" | ") + "]")
+        .join(" + ");
+      return (
+        "S" + item.slide + ": " +
+        editorial.min_words_per_slide[item.slide - 1] + "-" +
+        editorial.max_words_per_slide[item.slide - 1] +
+        " words; satisfy at least " + item.minimum_groups +
+        " anchor groups from " + groups
+      );
+    })
+    .join("\n");
+
+  const exactEditorialConstraints = [
+    "EXACT EDITORIAL CONSTRAINTS FOR THIS CONTENT INSTANCE:",
+    progressionSummary,
+    "Across S1-S5 use at least " + editorial.min_total_slide_words + " words total.",
+    "Do not use two- or three-word fragments. Every slide must meet its minimum word count.",
+    "Caption body must contain " + editorial.caption_min_body_words + "-" +
+      editorial.caption_max_body_words + " words, excluding signature and hashtags.",
+    "Caption body must contain at least " + editorial.caption_min_body_paragraphs +
+      " paragraphs separated by blank lines.",
+    "After the body, include the exact signature: " + editorial.caption_required_signature,
+    "Then include all required hashtags exactly: " +
+      editorial.caption_required_hashtags.join(" "),
+  ].join("\n");
+
   const systemPrompt = [
     "You are the text-generation component of the SDOH automated production system.",
     "Return only the requested structured candidate.",
@@ -69,6 +99,7 @@ export function buildCloudflareWorkersAIRequest({
     "Use duplication_context to avoid direct repetition and keep this content materially distinct.",
     "semantic_guardrails are mandatory output constraints: satisfy the minimum required slide-anchor groups and avoid every forbidden slide phrase.",
     "editorial_quality_guardrails are also mandatory. Treat their word counts, slide-specific progression anchors, vocabulary depth, repetition threshold, caption depth, caption paragraph structure, signature, and hashtags as hard constraints.",
+    exactEditorialConstraints,
     "The slide sequence must keep the core_concept materially visible; do not replace it with a neighboring topic such as rest, overload, decision fatigue, disappointment, or recovery unless the supplied core_concept actually requires that topic.",
     "Produce exactly five slides numbered 1 through 5 in order.",
     "Each slide must read as a complete editorial micro-thought, not a two- or three-word label. Concision is required, but fragmentary generic copy is not acceptable.",
