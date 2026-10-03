@@ -176,7 +176,7 @@ const result = await generateWithCloudflareWorkersAI({
   },
 });
 
-if (!observedUrl.includes("/ai/run/@cf/meta/llama-3.3-70b-instruct-fp8-fast")) {
+if (!observedUrl.includes("/ai/run/@cf/meta/llama-4-scout-17b-16e-instruct")) {
   fail("Workers AI endpoint mismatch");
 }
 if (observedAuth !== `Bearer ${token}`) {

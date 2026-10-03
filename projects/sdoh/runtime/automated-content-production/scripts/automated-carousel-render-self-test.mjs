@@ -37,7 +37,7 @@ const candidateFields={
 const candidate=finalizeGenerationResponse(candidateFields,{
   request,
   provider:"cloudflare-workers-ai",
-  model:"@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+  model:"@cf/meta/llama-4-scout-17b-16e-instruct",
 });
 
 const candidatePath=path.join(root,"candidate.json");

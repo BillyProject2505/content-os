@@ -53,7 +53,7 @@ const OUTPUT_SCHEMA = {
 };
 
 export const DEFAULT_CLOUDFLARE_MODEL =
-  "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
+  "@cf/meta/llama-4-scout-17b-16e-instruct";
 
 export function buildCloudflareWorkersAIRequest({
   request,
@@ -124,7 +124,7 @@ export function buildCloudflareWorkersAIRequest({
       },
       stream: false,
       max_tokens: 900,
-      temperature: 0.35,
+      temperature: 0.2,
     },
   };
 }
