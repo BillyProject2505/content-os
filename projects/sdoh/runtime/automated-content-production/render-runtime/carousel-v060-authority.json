@@ -1,0 +1,81 @@
+{
+  "schema_version": "1",
+  "authority": {
+    "shared_carousel": "BUS-47 Owner Lock — Sage Carousel Character System v1.0",
+    "master_renderer": "BUS-49 v0.6.0 CANONICAL",
+    "asset_registry": "projects/sdoh/DIUA-DIC-000011_SDOH-Asset-Registry.md"
+  },
+  "renderer": {
+    "version": "0.6.0",
+    "drive_file_id": "1pge6BzRfvEK-ixVqB6Zx0Diaj-JYfp1M",
+    "sha256": "7bc6ffd0acf56b487e2eb88e55127d383e3e9b1709921f9af16a0e04519afb9f",
+    "file_name": "SDOH_Carousel_Master_Renderer_v0.6.0_SOURCE_SNAPSHOT_CANONICAL.zip"
+  },
+  "environment": {
+    "python": "3.13.5",
+    "pillow": "12.3.0",
+    "freetype": "2.14.3",
+    "raqm": "0.10.5"
+  },
+  "font": {
+    "asset_id": "SDOH-OBJ-000010",
+    "drive_file_id": "1_PcYi3FdilxATZqPBYXh2cJElMueFQ1x",
+    "sha256": "2003781246d27c3ea281fb2e7dbd98e9d6ce22baae7ee5e60f35d5969e918a4a",
+    "expected_filename": "Caveat-Medium.ttf"
+  },
+  "sage_default_visual_plan": {
+    "layout_mode": "illustrated_single_character",
+    "anchor": "lower_right",
+    "scale": "md",
+    "ground_mode": "embedded",
+    "pose_route": [
+      "P02",
+      "P03",
+      "P05",
+      "P06",
+      "P07"
+    ]
+  },
+  "poses": {
+    "P01": {
+      "drive_file_id": "1LkA4exwl7JjZm50WOrvvTYpakGyKq0cF",
+      "sha256": "a4349032e6e999da8e3ce101fb20465d674da6afebecf4dc844eaf055a4be795",
+      "expected_filename": "SDOH-OBJ-000006-P01_Neutral-Standing.png"
+    },
+    "P02": {
+      "drive_file_id": "1Lb_KClGLZjoL4kRrfD7PVwc1-FTZmfOY",
+      "sha256": "e1f1a8aabf6635fd6c93647cc2a98e43cfb71f831ac8939612750e8c27be89af",
+      "expected_filename": "SDOH-OBJ-000006-P02_Inward-Leaning-Standing.png"
+    },
+    "P03": {
+      "drive_file_id": "1ynEyajFUVIxtTVCVt2-oaOEOMNNVk5d7",
+      "sha256": "cfd7967008255b3f362aba91c392095a32721ac15280c11631a7015735986428",
+      "expected_filename": "SDOH-OBJ-000006-P03_Hand-on-Opposite-Forearm.png"
+    },
+    "P04": {
+      "drive_file_id": "1ePWShLdqd1pnHQqdoKAzKKBrnIQzwDMn",
+      "sha256": "58920f556a9095be3588f6560de5d523c907689e474835db31f79c4952edf5a3",
+      "expected_filename": "SDOH-OBJ-000006-P04_Hand-Near-Torso.png"
+    },
+    "P05": {
+      "drive_file_id": "1J6AMlTghdqCa-pdQhRYRaGyJ-UjzmiOT",
+      "sha256": "2038488ffd557300b8b53adaaac8bc5aa1441e67ec876c5eaf8666e8a591bc2b",
+      "expected_filename": "SDOH-OBJ-000006-P05_Seated-Hugging-Knees.png"
+    },
+    "P06": {
+      "drive_file_id": "1aegN6Z0h6a8HvGtcM73nB-Vf2tiNshps",
+      "sha256": "362a872cbd83f55a760d515afeec80c3296adff1431f7908a554e2a59c645e7b",
+      "expected_filename": "SDOH-OBJ-000006-P06_Seated-Head-Slightly-Lowered.png"
+    },
+    "P07": {
+      "drive_file_id": "12pf1kdqyF-I5ok-buD9hE6CNiPRMtEln",
+      "sha256": "5dd9d8449fcdcc48245b71183c27d193f85e3884fc3c5fe2b8beb485fa058a0f",
+      "expected_filename": "SDOH-OBJ-000006-P07_Slow-Walk-Stance.png"
+    },
+    "P08": {
+      "drive_file_id": "1SS7g2UsVKYWGx7zs5UHV6DpgTD9Vj8sL",
+      "sha256": "51547e6b877edd8de24e6893b8eb2807ec7779047020feda96d4140c045bd015",
+      "expected_filename": "SDOH-OBJ-000006-P08_Hands-in-Pockets.png"
+    }
+  }
+}
