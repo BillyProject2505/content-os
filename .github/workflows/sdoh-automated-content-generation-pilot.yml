@@ -1,0 +1,106 @@
+name: SDOH automated content generation pilot
+
+on:
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: Exact pilot Content ID
+        required: true
+        default: SDOH-SAGE-CAR-0009
+        type: string
+      confirmation:
+        description: Type GENERATE_UNAPPROVED_CANDIDATE
+        required: true
+        default: ""
+        type: string
+      model:
+        description: OpenAI generation model
+        required: true
+        default: gpt-5.6-terra
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate pilot authorization
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ "$CONTENT_ID" != "SDOH-SAGE-CAR-0009" ]; then
+            echo "::error::Pilot is locked to SDOH-SAGE-CAR-0009"
+            exit 1
+          fi
+          if [ "$CONFIRMATION" != "GENERATE_UNAPPROVED_CANDIDATE" ]; then
+            echo "::error::Exact confirmation is required"
+            exit 1
+          fi
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::error::OPENAI_API_KEY repository secret is not configured"
+            exit 1
+          fi
+          echo "Pilot authorization PASS"
+
+      - name: Generate unapproved BUS-144 candidate
+        shell: bash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SDOH_GENERATION_MODEL: ${{ inputs.model }}
+        run: |
+          set -euo pipefail
+          node projects/sdoh/runtime/automated-content-production/scripts/generate-content-candidate.mjs             --request projects/sdoh/runtime/automated-content-production/pilot-requests/SDOH-SAGE-CAR-0009.json             --output "$RUNNER_TEMP/SDOH-SAGE-CAR-0009_candidate.json"
+
+      - name: Verify candidate cannot imply approval
+        shell: bash
+        run: |
+          set -euo pipefail
+          file="$RUNNER_TEMP/SDOH-SAGE-CAR-0009_candidate.json"
+          test -s "$file"
+          jq -e '
+            .content_id == "SDOH-SAGE-CAR-0009" and
+            (.slides | length) == 5 and
+            .generation_metadata.provider == "openai" and
+            (.generation_metadata.request_fingerprint | test("^[0-9a-f]{64}$")) and
+            (.generation_metadata.response_fingerprint | test("^[0-9a-f]{64}$")) and
+            (has("approval") | not) and
+            (has("publication_state") | not)
+          ' "$file" >/dev/null
+          echo "Candidate remains UNAPPROVED"
+
+      - name: Upload unapproved review candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: SDOH-SAGE-CAR-0009-unapproved-generation
+          path: ${{ runner.temp }}/SDOH-SAGE-CAR-0009_candidate.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Report fingerprints
+        shell: bash
+        run: |
+          set -euo pipefail
+          file="$RUNNER_TEMP/SDOH-SAGE-CAR-0009_candidate.json"
+          {
+            echo "## SDOH-SAGE-CAR-0009 generation pilot"
+            echo
+            echo "- Candidate state: UNAPPROVED"
+            echo "- Provider: $(jq -r '.generation_metadata.provider' "$file")"
+            echo "- Model: $(jq -r '.generation_metadata.model' "$file")"
+            echo "- Request fingerprint: `$(jq -r '.generation_metadata.request_fingerprint' "$file")`"
+            echo "- Response fingerprint: `$(jq -r '.generation_metadata.response_fingerprint' "$file")`"
+            echo "- Owner approval: NOT GRANTED"
+            echo "- Scheduling/publication side effects: NONE"
+          } >> "$GITHUB_STEP_SUMMARY"
