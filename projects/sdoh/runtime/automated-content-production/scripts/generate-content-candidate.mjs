@@ -18,14 +18,47 @@ const outputPath = path.resolve(arg("--output"));
 const model = process.env.SDOH_GENERATION_MODEL || DEFAULT_CLOUDFLARE_MODEL;
 const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || "";
 const apiToken = process.env.CLOUDFLARE_API_TOKEN || "";
+const maxAttempts = 3;
 
-const request = JSON.parse(fs.readFileSync(requestPath, "utf8"));
-const result = await generateWithCloudflareWorkersAI({
-  request,
-  accountId,
-  apiToken,
-  model,
-});
+const baseRequest = JSON.parse(fs.readFileSync(requestPath, "utf8"));
+let request = structuredClone(baseRequest);
+let result = null;
+
+for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+  try {
+    result = await generateWithCloudflareWorkersAI({
+      request,
+      accountId,
+      apiToken,
+      model,
+    });
+    console.log(`generation_attempt=${attempt}`);
+    break;
+  } catch (error) {
+    const retryableSemanticFailure =
+      error?.code === "SEMANTIC_ALIGNMENT_FAILED" ||
+      error?.code === "FORBIDDEN_SEMANTIC_DRIFT";
+
+    if (!retryableSemanticFailure || attempt === maxAttempts) {
+      throw error;
+    }
+
+    console.warn(
+      `generation_attempt=${attempt} rejected_by=${error.code}; retrying with explicit semantic remediation`
+    );
+
+    request = {
+      ...structuredClone(baseRequest),
+      duplication_context:
+        baseRequest.duplication_context +
+        ` Automated remediation after attempt ${attempt}: the previous candidate failed ${error.code}. Regenerate from scratch. Keep the supplied core_concept materially visible across the slide sequence, satisfy semantic_guardrails exactly, and do not substitute an adjacent SDOH topic.`,
+    };
+  }
+}
+
+if (!result) {
+  throw new Error("Generation completed without a valid result");
+}
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(result, null, 2) + "\n");
@@ -35,4 +68,5 @@ console.log(`provider=${result.generation_metadata.provider}`);
 console.log(`model=${result.generation_metadata.model}`);
 console.log(`request_fingerprint=${result.generation_metadata.request_fingerprint}`);
 console.log(`response_fingerprint=${result.generation_metadata.response_fingerprint}`);
+console.log("semantic_alignment=PASS");
 console.log("candidate_state=UNAPPROVED");
