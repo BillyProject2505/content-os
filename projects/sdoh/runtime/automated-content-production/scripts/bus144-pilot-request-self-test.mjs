@@ -26,6 +26,15 @@ if (normalized.semantic_guardrails.minimum_required_slide_anchor_groups !== 2) {
 if (!normalized.semantic_guardrails.required_slide_anchor_groups.some((group) => group.includes("ritme"))) {
   throw new Error("Pilot request is missing the rhythm semantic anchor");
 }
+if (normalized.editorial_quality_guardrails.min_total_slide_words !== 30) {
+  throw new Error("Pilot request editorial density floor mismatch");
+}
+if (normalized.editorial_quality_guardrails.caption_min_body_words !== 45) {
+  throw new Error("Pilot request caption depth floor mismatch");
+}
+if (normalized.editorial_quality_guardrails.slide_progression.length !== 5) {
+  throw new Error("Pilot request editorial progression contract mismatch");
+}
 
 console.log("BUS-144 pilot request contract PASS");
 console.log(`request_fingerprint=${createRequestFingerprint(normalized)}`);

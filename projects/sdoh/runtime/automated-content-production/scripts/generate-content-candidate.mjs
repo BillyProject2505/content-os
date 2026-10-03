@@ -35,23 +35,24 @@ for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     console.log(`generation_attempt=${attempt}`);
     break;
   } catch (error) {
-    const retryableSemanticFailure =
+    const retryableGenerationQualityFailure =
       error?.code === "SEMANTIC_ALIGNMENT_FAILED" ||
-      error?.code === "FORBIDDEN_SEMANTIC_DRIFT";
+      error?.code === "FORBIDDEN_SEMANTIC_DRIFT" ||
+      error?.code === "EDITORIAL_QUALITY_FAILED";
 
-    if (!retryableSemanticFailure || attempt === maxAttempts) {
+    if (!retryableGenerationQualityFailure || attempt === maxAttempts) {
       throw error;
     }
 
     console.warn(
-      `generation_attempt=${attempt} rejected_by=${error.code}; retrying with explicit semantic remediation`
+      `generation_attempt=${attempt} rejected_by=${error.code}; retrying with explicit semantic/editorial remediation`
     );
 
     request = {
       ...structuredClone(baseRequest),
       duplication_context:
         baseRequest.duplication_context +
-        ` Automated remediation after attempt ${attempt}: the previous candidate failed ${error.code}. Regenerate from scratch. Keep the supplied core_concept materially visible across the slide sequence, satisfy semantic_guardrails exactly, and do not substitute an adjacent SDOH topic.`,
+        ` Automated remediation after attempt ${attempt}: the previous candidate failed ${error.code}. Regenerate from scratch. Keep the supplied core_concept materially visible across the slide sequence, satisfy semantic_guardrails and editorial_quality_guardrails exactly, preserve a clear five-slide progression, avoid fragmentary generic copy, and make the caption add substantive context rather than merely restating the slides.`,
     };
   }
 }
@@ -69,4 +70,5 @@ console.log(`model=${result.generation_metadata.model}`);
 console.log(`request_fingerprint=${result.generation_metadata.request_fingerprint}`);
 console.log(`response_fingerprint=${result.generation_metadata.response_fingerprint}`);
 console.log("semantic_alignment=PASS");
+console.log("editorial_quality=PASS");
 console.log("candidate_state=UNAPPROVED");

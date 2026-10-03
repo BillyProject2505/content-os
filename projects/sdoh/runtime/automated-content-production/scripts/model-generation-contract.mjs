@@ -1,3 +1,4 @@
+import { assessEditorialQuality } from "./editorial-quality-gate.mjs";
 import { createHash } from "node:crypto";
 
 export class GenerationContractError extends Error {
@@ -55,6 +56,7 @@ export function validateGenerationRequest(input) {
     authority_packet,
     duplication_context,
     semantic_guardrails,
+    editorial_quality_guardrails,
   } = input;
 
   assert(
@@ -160,6 +162,110 @@ export function validateGenerationRequest(input) {
     );
   }
 
+  assert(
+    editorial_quality_guardrails &&
+      typeof editorial_quality_guardrails === "object" &&
+      !Array.isArray(editorial_quality_guardrails),
+    "EDITORIAL_GUARDRAILS_INVALID",
+    "editorial_quality_guardrails must be an object"
+  );
+
+  const minWords = editorial_quality_guardrails.min_words_per_slide;
+  const maxWords = editorial_quality_guardrails.max_words_per_slide;
+  assert(
+    Array.isArray(minWords) && minWords.length === 5 &&
+      minWords.every((n) => Number.isInteger(n) && n >= 1),
+    "EDITORIAL_MIN_WORDS_INVALID",
+    "min_words_per_slide must contain five positive integers"
+  );
+  assert(
+    Array.isArray(maxWords) && maxWords.length === 5 &&
+      maxWords.every((n, i) => Number.isInteger(n) && n >= minWords[i]),
+    "EDITORIAL_MAX_WORDS_INVALID",
+    "max_words_per_slide must contain five integers >= the matching minimum"
+  );
+  assert(
+    Number.isInteger(editorial_quality_guardrails.min_total_slide_words) &&
+      editorial_quality_guardrails.min_total_slide_words >=
+        minWords.reduce((sum, n) => sum + n, 0),
+    "EDITORIAL_TOTAL_WORDS_INVALID",
+    "min_total_slide_words must be at least the sum of per-slide minimums"
+  );
+  assert(
+    Number.isInteger(editorial_quality_guardrails.min_unique_slide_content_words) &&
+      editorial_quality_guardrails.min_unique_slide_content_words >= 1,
+    "EDITORIAL_UNIQUE_WORDS_INVALID",
+    "min_unique_slide_content_words must be a positive integer"
+  );
+  assert(
+    typeof editorial_quality_guardrails.max_pairwise_content_similarity === "number" &&
+      editorial_quality_guardrails.max_pairwise_content_similarity >= 0 &&
+      editorial_quality_guardrails.max_pairwise_content_similarity <= 1,
+    "EDITORIAL_SIMILARITY_INVALID",
+    "max_pairwise_content_similarity must be between 0 and 1"
+  );
+  assert(
+    Array.isArray(editorial_quality_guardrails.slide_progression) &&
+      editorial_quality_guardrails.slide_progression.length === 5,
+    "EDITORIAL_PROGRESSION_INVALID",
+    "slide_progression must contain exactly five slide requirements"
+  );
+  editorial_quality_guardrails.slide_progression.forEach((item, index) => {
+    assert(
+      item && typeof item === "object" && item.slide === index + 1,
+      "EDITORIAL_PROGRESSION_SLIDE_INVALID",
+      "slide_progression must be ordered from slide 1 through 5"
+    );
+    assert(
+      Array.isArray(item.required_anchor_groups) &&
+        item.required_anchor_groups.length > 0 &&
+        item.required_anchor_groups.every(
+          (group) =>
+            Array.isArray(group) &&
+            group.length > 0 &&
+            group.every((entry) => nonEmptyString(entry))
+        ),
+      "EDITORIAL_PROGRESSION_ANCHORS_INVALID",
+      "each slide progression requirement must contain non-empty anchor groups"
+    );
+    assert(
+      Number.isInteger(item.minimum_groups) &&
+        item.minimum_groups >= 1 &&
+        item.minimum_groups <= item.required_anchor_groups.length,
+      "EDITORIAL_PROGRESSION_MINIMUM_INVALID",
+      "minimum_groups must be within each slide's anchor group count"
+    );
+  });
+  assert(
+    Number.isInteger(editorial_quality_guardrails.caption_min_body_words) &&
+      editorial_quality_guardrails.caption_min_body_words >= 1,
+    "EDITORIAL_CAPTION_MIN_INVALID",
+    "caption_min_body_words must be positive"
+  );
+  assert(
+    Number.isInteger(editorial_quality_guardrails.caption_max_body_words) &&
+      editorial_quality_guardrails.caption_max_body_words >=
+        editorial_quality_guardrails.caption_min_body_words,
+    "EDITORIAL_CAPTION_MAX_INVALID",
+    "caption_max_body_words must be >= caption_min_body_words"
+  );
+  assert(
+    Number.isInteger(editorial_quality_guardrails.caption_min_body_paragraphs) &&
+      editorial_quality_guardrails.caption_min_body_paragraphs >= 1,
+    "EDITORIAL_CAPTION_PARAGRAPHS_INVALID",
+    "caption_min_body_paragraphs must be positive"
+  );
+  assert(
+    nonEmptyString(editorial_quality_guardrails.caption_required_signature),
+    "EDITORIAL_CAPTION_SIGNATURE_INVALID",
+    "caption_required_signature is required"
+  );
+  validateStringArray(
+    editorial_quality_guardrails.caption_required_hashtags,
+    "EDITORIAL_CAPTION_HASHTAGS_INVALID",
+    "caption_required_hashtags"
+  );
+
   return {
     content_id,
     theme,
@@ -180,6 +286,7 @@ export function validateGenerationRequest(input) {
       forbidden_slide_phrases:
         semantic_guardrails.forbidden_slide_phrases.map((entry) => entry.trim()),
     },
+    editorial_quality_guardrails: structuredClone(editorial_quality_guardrails),
   };
 }
 
@@ -270,6 +377,20 @@ export function validateCandidateSemanticAlignment(candidate, request) {
   };
 }
 
+export function validateCandidateEditorialQuality(candidate, request) {
+  const normalizedRequest = validateGenerationRequest(request);
+  const assessment = assessEditorialQuality(
+    candidate,
+    normalizedRequest.editorial_quality_guardrails
+  );
+  assert(
+    assessment.ok,
+    "EDITORIAL_QUALITY_FAILED",
+    assessment.issues.join("; ")
+  );
+  return assessment;
+}
+
 export function finalizeGenerationResponse(candidate, { request, provider, model }) {
   assert(nonEmptyString(provider), "PROVIDER_MISSING", "provider is required");
   assert(nonEmptyString(model), "MODEL_MISSING", "model is required");
@@ -280,6 +401,7 @@ export function finalizeGenerationResponse(candidate, { request, provider, model
     expectedRiskClass: normalizedRequest.risk_class,
   });
   validateCandidateSemanticAlignment(normalizedCandidate, normalizedRequest);
+  validateCandidateEditorialQuality(normalizedCandidate, normalizedRequest);
   const requestFingerprint = createRequestFingerprint(normalizedRequest);
 
   const response = {
