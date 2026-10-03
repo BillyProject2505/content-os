@@ -40,6 +40,19 @@ for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       error?.code === "FORBIDDEN_SEMANTIC_DRIFT" ||
       error?.code === "EDITORIAL_QUALITY_FAILED";
 
+    if (retryableGenerationQualityFailure && error.rejectionDiagnostic) {
+      const diagnostic = { generation_attempt: attempt, ...error.rejectionDiagnostic };
+      const diagnosticsDir = process.env.SDOH_GENERATION_DIAGNOSTICS_DIR;
+      if (diagnosticsDir) {
+        fs.mkdirSync(diagnosticsDir, { recursive: true });
+        fs.writeFileSync(
+          path.join(diagnosticsDir, `rejected-attempt-${attempt}.json`),
+          JSON.stringify(diagnostic, null, 2) + "\n"
+        );
+      }
+      console.warn(`generation_attempt=${attempt} rejected_by=${error.code} candidate_state=REJECTED_NOT_FOR_RENDER request_fingerprint=${diagnostic.request_fingerprint} raw_candidate_fingerprint=${diagnostic.raw_candidate_fingerprint}`);
+    }
+
     if (!retryableGenerationQualityFailure || attempt === maxAttempts) {
       throw error;
     }

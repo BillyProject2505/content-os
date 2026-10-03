@@ -4,7 +4,12 @@ import {
   buildCloudflareWorkersAIRequest,
   generateWithCloudflareWorkersAI,
 } from "./cloudflare-workers-ai-generation-adapter.mjs";
-import { createResponseFingerprint } from "./model-generation-contract.mjs";
+import { canonicalJson, createRequestFingerprint, createResponseFingerprint, sha256Hex } from "./model-generation-contract.mjs";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 function fail(message) {
   throw new Error(message);
@@ -256,5 +261,43 @@ await expectError("provider failure", "CLOUDFLARE_API_FAILURE", () =>
     }),
   })
 );
+
+// Exercise the actual CLI's three-attempt fail-closed path with a mocked provider.
+const rejected = structuredClone(candidate);
+rejected.caption = "Ini paragraf tunggal yang tidak memenuhi aturan editorial.";
+const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sdoh-rejection-test-"));
+try {
+  const requestPath = path.join(tempDir, "request.json");
+  const outputPath = path.join(tempDir, "candidate.json");
+  const diagnosticsDir = path.join(tempDir, "diagnostics");
+  const mockPath = path.join(tempDir, "mock-provider.mjs");
+  fs.writeFileSync(requestPath, JSON.stringify(request));
+  fs.writeFileSync(mockPath, `globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ success: true, result: { response: ${JSON.stringify(rejected)} } }) });\n`);
+  const cliPath = fileURLToPath(new URL("./generate-content-candidate.mjs", import.meta.url));
+  const child = spawnSync(process.execPath, ["--import", mockPath, cliPath, "--request", requestPath, "--output", outputPath], {
+    encoding: "utf8",
+    env: { ...process.env, CLOUDFLARE_ACCOUNT_ID: accountId, CLOUDFLARE_API_TOKEN: token, SDOH_GENERATION_MODEL: DEFAULT_CLOUDFLARE_MODEL, SDOH_GENERATION_DIAGNOSTICS_DIR: diagnosticsDir },
+  });
+  if (child.status !== 1) fail("rejected generation must exit 1");
+  if (fs.existsSync(outputPath)) fail("rejected generation wrote an accepted candidate");
+  const files = fs.readdirSync(diagnosticsDir).sort();
+  if (files.length !== 3) fail("must retain all three rejected attempts");
+  files.forEach((filename, index) => {
+    const raw = fs.readFileSync(path.join(diagnosticsDir, filename), "utf8");
+    const diagnostic = JSON.parse(raw);
+    if (diagnostic.generation_attempt !== index + 1) fail("attempt order mismatch");
+    if (diagnostic.candidate_state !== "REJECTED_NOT_FOR_RENDER" || diagnostic.owner_approval !== "NOT_GRANTED") fail("diagnostic state unsafe");
+    if (diagnostic.gate_code !== "EDITORIAL_QUALITY_FAILED") fail("gate code lost");
+    if (diagnostic.rejected_candidate.caption !== rejected.caption) fail("rejected copy lost");
+    if (diagnostic.raw_candidate_fingerprint !== sha256Hex(canonicalJson(rejected))) fail("raw payload fingerprint mismatch");
+    if (index === 0 && diagnostic.request_fingerprint !== createRequestFingerprint(request)) fail("request fingerprint mismatch");
+    if (raw.includes(token) || raw.includes(accountId)) fail("credentials leaked into diagnostic");
+    if (diagnostic.response_fingerprint || diagnostic.generation_metadata || diagnostic.approval || diagnostic.publication_state) fail("diagnostic implies accepted output");
+  });
+  if (new Set(files.map(f => JSON.parse(fs.readFileSync(path.join(diagnosticsDir, f), "utf8")).request_fingerprint)).size !== 3) fail("retry requests must retain distinct fingerprints");
+  console.log("PASS three rejected attempts retained without accepted output or credentials");
+} finally {
+  fs.rmSync(tempDir, { recursive: true, force: true });
+}
 
 console.log("SDOH Cloudflare Workers AI generation adapter self-test PASS");
