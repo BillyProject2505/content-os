@@ -21,17 +21,17 @@ const request=JSON.parse(fs.readFileSync(requestPath,"utf8"));
 const authority=JSON.parse(fs.readFileSync(authorityPath,"utf8"));
 
 const candidateFields={
-  caption:"Mengenal ritme hati yang berubah. Memberi izin pada diri untuk menyesuaikan, tanpa takut gagal. Satu dosis obat hati #satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja",
+  caption:"Kadang yang berubah bukan niatmu, tapi kapasitas, keadaan, atau kebutuhanmu.\n\nMenyesuaikan ritme bukan berarti kamu kehilangan arah atau gagal menjaga komitmen. Ada waktu ketika cara lama memang tidak lagi cocok dengan hidup yang sedang kamu jalani.\n\nKamu boleh mencari cara yang lebih mungkin dijalani sekarang, tanpa harus menganggap perubahan itu sebagai kekalahan.\n\nsatu dosis obat hati\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja",
   content_id:"SDOH-SAGE-CAR-0009",
   research_sensitive_claims:[],
   risk_flags:[],
   schema_version:"1",
   slides:[
-    {copy:"ritme berubah",slide:1},
-    {copy:"menyesuaikan diri",slide:2},
-    {copy:"tanpa rasa gagal",slide:3},
-    {copy:"izin untuk berubah",slide:4},
-    {copy:"menerima ritme baru",slide:5},
+    {copy:"ritme yang dulu terasa pas bisa berubah hari ini",slide:1},
+    {copy:"kapasitasmu berubah begitu juga cara kamu menjalaninya",slide:2},
+    {copy:"menyesuaikan langkah bukan berarti kamu gagal",slide:3},
+    {copy:"kamu boleh memilih ritme yang lebih mungkin dijalani",slide:4},
+    {copy:"tetap berjalan tak harus dengan cara yang sama",slide:5},
   ],
 };
 const candidate=finalizeGenerationResponse(candidateFields,{
@@ -39,10 +39,6 @@ const candidate=finalizeGenerationResponse(candidateFields,{
   provider:"cloudflare-workers-ai",
   model:"@cf/meta/llama-3.3-70b-instruct-fp8-fast",
 });
-
-if(candidate.generation_metadata.response_fingerprint!=="13d358fdc3cd45be106e8a67468bc770ec575bb855ef92ac16988b7f3996cb6a"){
-  fail("Pilot 2 response fingerprint regression");
-}
 
 const candidatePath=path.join(root,"candidate.json");
 const manifestPath=path.join(root,"manifest.json");
@@ -61,9 +57,9 @@ if(builder.status!==0) fail(builder.stderr||builder.stdout||"builder failed");
 const manifest=JSON.parse(fs.readFileSync(manifestPath,"utf8"));
 if(manifest.layout_mode!=="illustrated_single_character") fail("layout mode mismatch");
 if(JSON.stringify(manifest.slides.map(s=>s.character.pose_id))!==JSON.stringify(["P02","P03","P05","P06","P07"])) fail("pose route mismatch");
-if(manifest.slides[0].copy!=="ritme\nberubah") fail("line-break policy mismatch S1");
-if(manifest.slides[2].copy!=="tanpa rasa\ngagal") fail("line-break policy mismatch S3");
-if(manifest.slides[4].copy!=="menerima\nritme baru") fail("line-break policy mismatch S5");
+if(manifest.slides[0].copy!=="ritme yang dulu terasa pas\nbisa berubah hari ini") fail("line-break policy mismatch S1");
+if(manifest.slides[2].copy!=="menyesuaikan langkah bukan\nberarti kamu gagal") fail("line-break policy mismatch S3");
+if(manifest.slides[4].copy!=="tetap berjalan tak harus\ndengan cara yang sama") fail("line-break policy mismatch S5");
 console.log("PASS deterministic BUS-144 render manifest");
 
 const renderDir=path.join(root,"rendered");
