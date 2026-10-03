@@ -2,6 +2,8 @@ import {
   GenerationContractError,
   createRequestFingerprint,
   createResponseFingerprint,
+  finalizeGenerationResponse,
+  validateGeneratedCandidate,
   validateGenerationRequest,
   validateGenerationResponse,
 } from "./model-generation-contract.mjs";
@@ -38,14 +40,22 @@ const request = {
     production_sop_ref: "BUS-25@v1.39",
     qa_ref: "BUS-27@v1.31",
     format_lane_ref: "BUS-47",
-    research_ref: "BUS-26",
+    research_ref: "BUS-26@v1.14",
   },
+  authority_packet: {
+    theme_semantics: "Sage uses recognition, permission, and accompaniment without forced positivity.",
+    carousel_copy_rules: "Produce exactly five concise slides forming one coherent narrative thread.",
+    caption_rules: "Caption expands rather than repeats the visual copy and uses the current SDOH signature architecture.",
+    safety_rules: "Do not diagnose, prescribe, or turn uncertainty into a definitive psychological claim.",
+    research_rules: "Flag any research-sensitive or clinical claim for review rather than inventing support.",
+  },
+  duplication_context: "No direct duplicate found; adjacent topics concern limited energy and rest but not adaptive rhythm.",
 };
 
 const normalized = validateGenerationRequest(request);
 const requestFingerprint = createRequestFingerprint(normalized);
 
-const validResponse = {
+const candidate = {
   schema_version: "1",
   content_id: request.content_id,
   slides: [
@@ -58,64 +68,61 @@ const validResponse = {
   caption: "ritme yang berubah tidak selalu berarti kamu gagal.",
   risk_flags: [],
   research_sensitive_claims: [],
-  generation_metadata: {
-    provider: "self-test",
-    model: "deterministic-fixture",
-    request_fingerprint: requestFingerprint,
-    response_fingerprint: "",
-  },
 };
-validResponse.generation_metadata.response_fingerprint = createResponseFingerprint(validResponse);
 
-const result = validateGenerationResponse(validResponse, {
+validateGeneratedCandidate(candidate, {
+  expectedContentId: request.content_id,
+  expectedRiskClass: request.risk_class,
+});
+console.log("PASS candidate validation");
+
+const finalResponse = finalizeGenerationResponse(candidate, {
+  request,
+  provider: "self-test",
+  model: "deterministic-fixture",
+});
+if (finalResponse.generation_metadata.request_fingerprint !== requestFingerprint) {
+  fail("gateway request fingerprint mismatch");
+}
+if (finalResponse.generation_metadata.response_fingerprint !== createResponseFingerprint(finalResponse)) {
+  fail("gateway response fingerprint mismatch");
+}
+validateGenerationResponse(finalResponse, {
   expectedContentId: request.content_id,
   expectedRequestFingerprint: requestFingerprint,
   expectedRiskClass: request.risk_class,
 });
-
-if (!result.ok) fail("valid response did not pass");
-console.log("PASS valid response");
+console.log("PASS gateway-owned fingerprints");
 
 expectContractError("wrong content id", "CONTENT_ID_MISMATCH", () => {
-  const response = structuredClone(validResponse);
-  response.content_id = "SDOH-SAGE-CAR-0010";
-  response.generation_metadata.response_fingerprint = createResponseFingerprint(response);
-  validateGenerationResponse(response, {
+  validateGeneratedCandidate({ ...candidate, content_id: "SDOH-SAGE-CAR-0010" }, {
     expectedContentId: request.content_id,
-    expectedRequestFingerprint: requestFingerprint,
     expectedRiskClass: request.risk_class,
   });
 });
 
 expectContractError("four slides", "SLIDE_COUNT_INVALID", () => {
-  const response = structuredClone(validResponse);
-  response.slides = response.slides.slice(0, 4);
-  response.generation_metadata.response_fingerprint = createResponseFingerprint(response);
-  validateGenerationResponse(response, {
+  validateGeneratedCandidate({ ...candidate, slides: candidate.slides.slice(0, 4) }, {
     expectedContentId: request.content_id,
-    expectedRequestFingerprint: requestFingerprint,
     expectedRiskClass: request.risk_class,
   });
 });
 
 expectContractError("six slides", "SLIDE_COUNT_INVALID", () => {
-  const response = structuredClone(validResponse);
-  response.slides.push({ slide: 6, copy: "extra slide" });
-  response.generation_metadata.response_fingerprint = createResponseFingerprint(response);
-  validateGenerationResponse(response, {
+  validateGeneratedCandidate({
+    ...candidate,
+    slides: [...candidate.slides, { slide: 6, copy: "extra slide" }],
+  }, {
     expectedContentId: request.content_id,
-    expectedRequestFingerprint: requestFingerprint,
     expectedRiskClass: request.risk_class,
   });
 });
 
 expectContractError("malformed response", "SCHEMA_VERSION_INVALID", () => {
-  const response = structuredClone(validResponse);
-  delete response.schema_version;
-  response.generation_metadata.response_fingerprint = createResponseFingerprint(response);
-  validateGenerationResponse(response, {
+  const malformed = structuredClone(candidate);
+  delete malformed.schema_version;
+  validateGeneratedCandidate(malformed, {
     expectedContentId: request.content_id,
-    expectedRequestFingerprint: requestFingerprint,
     expectedRiskClass: request.risk_class,
   });
 });
@@ -125,35 +132,41 @@ const reviewRequest = {
   content_id: "SDOH-SAGE-CAR-0099",
   risk_class: "REVIEW_REQUIRED",
 };
-const reviewFingerprint = createRequestFingerprint(reviewRequest);
 
 expectContractError("review required preservation", "REVIEW_REQUIRED_NOT_PRESERVED", () => {
-  const response = structuredClone(validResponse);
-  response.content_id = reviewRequest.content_id;
-  response.generation_metadata.request_fingerprint = reviewFingerprint;
-  response.risk_flags = [];
-  response.generation_metadata.response_fingerprint = createResponseFingerprint(response);
-  validateGenerationResponse(response, {
+  validateGeneratedCandidate({ ...candidate, content_id: reviewRequest.content_id }, {
     expectedContentId: reviewRequest.content_id,
-    expectedRequestFingerprint: reviewFingerprint,
     expectedRiskClass: reviewRequest.risk_class,
   });
 });
 
-const reviewResponse = structuredClone(validResponse);
-reviewResponse.content_id = reviewRequest.content_id;
-reviewResponse.generation_metadata.request_fingerprint = reviewFingerprint;
-reviewResponse.risk_flags = ["REVIEW_REQUIRED"];
-reviewResponse.generation_metadata.response_fingerprint = createResponseFingerprint(reviewResponse);
-validateGenerationResponse(reviewResponse, {
-  expectedContentId: reviewRequest.content_id,
-  expectedRequestFingerprint: reviewFingerprint,
-  expectedRiskClass: reviewRequest.risk_class,
+const reviewCandidate = {
+  ...candidate,
+  content_id: reviewRequest.content_id,
+  risk_flags: ["REVIEW_REQUIRED"],
+};
+finalizeGenerationResponse(reviewCandidate, {
+  request: reviewRequest,
+  provider: "self-test",
+  model: "deterministic-fixture",
 });
 console.log("PASS review required preserved");
 
 expectContractError("request theme mismatch", "THEME_CONTENT_ID_MISMATCH", () => {
   validateGenerationRequest({ ...request, theme: "BURGUNDY" });
 });
+
+expectContractError("authority packet missing", "AUTHORITY_PACKET_INVALID", () => {
+  const invalid = structuredClone(request);
+  delete invalid.authority_packet;
+  validateGenerationRequest(invalid);
+});
+
+const mutatedAuthority = structuredClone(request);
+mutatedAuthority.authority_packet.caption_rules += " Updated.";
+if (createRequestFingerprint(mutatedAuthority) === requestFingerprint) {
+  fail("authority packet mutation must change request fingerprint");
+}
+console.log("PASS authority packet participates in request fingerprint");
 
 console.log("SDOH model-generation contract self-test PASS");
