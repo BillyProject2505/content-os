@@ -4,7 +4,8 @@ import {
 } from "../src/content-register-routing.mjs";
 
 const LINEAR_API_URL = "https://api.linear.app/graphql";
-const MAX_LATENESS_MS = 30 * 60 * 1000;
+const DEFAULT_MAX_LATENESS_MS = 30 * 60 * 1000;
+const MAX_RECOVERY_LATENESS_MS = 24 * 60 * 60 * 1000;
 
 function normalizeCell(value) {
   return String(value ?? "")
@@ -72,10 +73,15 @@ export function discoverDueRecordsFromDocuments({
   documents,
   now = new Date(),
   requestedContentId = "",
+  maxLatenessMs = DEFAULT_MAX_LATENESS_MS,
 }) {
   const nowMs = now.getTime();
   if (!Number.isFinite(nowMs)) {
     throw new Error("DISCOVERY_TIME_INVALID");
+  }
+
+  if (!Number.isFinite(maxLatenessMs) || maxLatenessMs < 0 || maxLatenessMs > MAX_RECOVERY_LATENESS_MS) {
+    throw new Error("DISCOVERY_LATENESS_INVALID");
   }
 
   const requested = String(requestedContentId ?? "").trim();
@@ -115,7 +121,7 @@ export function discoverDueRecordsFromDocuments({
 
       const scheduledAtMs = Date.parse(scheduledAt);
       if (scheduledAtMs > nowMs) continue;
-      if (scheduledAtMs < nowMs - MAX_LATENESS_MS) continue;
+      if (scheduledAtMs < nowMs - maxLatenessMs) continue;
 
       candidates.push({
         content_id: contentId,
@@ -292,6 +298,9 @@ async function main() {
   if (!apiKey) throw new Error("LINEAR_API_KEY_MISSING");
 
   const requestedContentId = process.env.REQUESTED_CONTENT_ID || "";
+  const maxLatenessMs = process.env.DISCOVERY_MAX_LATENESS_MS
+    ? Number(process.env.DISCOVERY_MAX_LATENESS_MS)
+    : DEFAULT_MAX_LATENESS_MS;
   const documentIds = [
     CAROUSEL_REGISTER_ROUTES.BURGUNDY.register_document_id,
     CAROUSEL_REGISTER_ROUTES.SAGE.register_document_id,
@@ -304,6 +313,7 @@ async function main() {
   const result = discoverDueRecordsFromDocuments({
     documents,
     requestedContentId,
+    maxLatenessMs,
     now: new Date(),
   });
 

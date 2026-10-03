@@ -9,7 +9,8 @@ import {
 const LINEAR_API_URL = "https://api.linear.app/graphql";
 const EXPECTED_ACCOUNT = "@satudosisobathati";
 const MANIFEST_SCHEMA = "sdoh-execution-authority-v1";
-const MAX_SCHEDULE_LATENESS_MS = 30 * 60 * 1000;
+const DEFAULT_MAX_SCHEDULE_LATENESS_MS = 30 * 60 * 1000;
+const MAX_RECOVERY_LATENESS_MS = 24 * 60 * 60 * 1000;
 
 const EXIT = Object.freeze({
   ALLOW_SNAPSHOT: 0,
@@ -329,8 +330,13 @@ export function buildExecutionAuthority({
   registerUpdatedAt,
   governanceRef,
   now = new Date(),
+  maxScheduleLatenessMs = DEFAULT_MAX_SCHEDULE_LATENESS_MS,
 }) {
   const normalizedContentId = String(contentId ?? "").trim();
+
+  if (!Number.isFinite(maxScheduleLatenessMs) || maxScheduleLatenessMs < 0 || maxScheduleLatenessMs > MAX_RECOVERY_LATENESS_MS) {
+    return reject("AUTHORITY_ERROR", "AUTHORITY_LATENESS_INVALID", EXIT.AUTHORITY_ERROR);
+  }
 
   if (!/^SDOH-[A-Z0-9-]+$/.test(normalizedContentId)) {
     return reject("AUTHORITY_ERROR", "INVALID_CONTENT_ID", EXIT.AUTHORITY_ERROR);
@@ -418,7 +424,7 @@ export function buildExecutionAuthority({
     if (scheduledAtMs > nowMs) {
       throw authorityError("SCHEDULE_NOT_DUE");
     }
-    if (scheduledAtMs < nowMs - MAX_SCHEDULE_LATENESS_MS) {
+    if (scheduledAtMs < nowMs - maxScheduleLatenessMs) {
       throw authorityError("SCHEDULE_STALE");
     }
 
@@ -723,6 +729,9 @@ async function main() {
       registerUpdatedAt: document.updatedAt,
       governanceRef,
       now: new Date(),
+      maxScheduleLatenessMs: process.env.AUTHORITY_MAX_LATENESS_MS
+        ? Number(process.env.AUTHORITY_MAX_LATENESS_MS)
+        : DEFAULT_MAX_SCHEDULE_LATENESS_MS,
     });
 
     await writeOutputs(result);

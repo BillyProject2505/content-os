@@ -11,7 +11,7 @@ on:
         default: ""
         type: string
       confirmation:
-        description: "For manual dispatch, type RUN_DUE_SCHEDULED_PUBLICATION"
+        description: "Type RUN_DUE_SCHEDULED_PUBLICATION, or RUN_LATE_SCHEDULED_RECOVERY with an explicit content_id"
         required: true
         default: ""
         type: string
@@ -61,9 +61,20 @@ jobs:
           test -n "$LINEAR_API_KEY"
           test -n "$EXECUTOR_INGEST_SECRET"
 
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$MANUAL_CONFIRMATION" != "RUN_DUE_SCHEDULED_PUBLICATION" ]; then
-            echo "::error::Manual dispatch requires RUN_DUE_SCHEDULED_PUBLICATION"
-            exit 1
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            case "$MANUAL_CONFIRMATION" in
+              RUN_DUE_SCHEDULED_PUBLICATION) ;;
+              RUN_LATE_SCHEDULED_RECOVERY)
+                if [ -z "$REQUESTED_CONTENT_ID" ]; then
+                  echo "::error::Late recovery requires an explicit content_id"
+                  exit 1
+                fi
+                ;;
+              *)
+                echo "::error::Manual dispatch confirmation is invalid"
+                exit 1
+                ;;
+            esac
           fi
 
           if [ -n "$REQUESTED_CONTENT_ID" ] && ! [[ "$REQUESTED_CONTENT_ID" =~ ^SDOH-(BURGUNDY|SAGE)-CAR-[0-9]{4}$ ]]; then
@@ -86,6 +97,8 @@ jobs:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
           REQUESTED_CONTENT_ID: ${{ inputs.content_id }}
           EVENT_NAME: ${{ github.event_name }}
+          MANUAL_CONFIRMATION: ${{ inputs.confirmation }}
+          DISCOVERY_MAX_LATENESS_MS: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && '86400000' || '1800000' }}
         run: |
           set -euo pipefail
 
@@ -255,6 +268,7 @@ jobs:
           CONTENT_ID: ${{ steps.discover.outputs.content_id }}
           GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
           EXPECTED_SCHEDULED_AT: ${{ steps.discover.outputs.scheduled_at }}
+          AUTHORITY_MAX_LATENESS_MS: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && '86400000' || '1800000' }}
           AUTHORITY_RESULT_OUTPUT: ${{ runner.temp }}/authority-result.json
           AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
         run: |
@@ -569,6 +583,7 @@ jobs:
             printf -- '- Job ID: `%s`\n' "$JOB_ID"
             echo "- Runtime publication: verified PUBLISHED"
             echo "- Linear evidence: ALREADY_SYNCED"
+            echo "- Recovery mode: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && 'controlled late recovery (explicit content_id, <=24h)' || 'normal scheduled execution' }}"
             echo "- Global manual publishing window: not opened by this workflow"
           } >> "$GITHUB_STEP_SUMMARY"
 
