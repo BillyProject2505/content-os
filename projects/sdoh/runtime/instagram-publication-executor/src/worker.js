@@ -1,5 +1,7 @@
 import { routeRuntimeRequest } from "./runtime-router.js";
 
+// GitHub-connected Cloudflare build source.
+
 async function handleExistingHealth(request, env) {
   const url = new URL(request.url);
 
