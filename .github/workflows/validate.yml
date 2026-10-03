@@ -44,3 +44,5 @@ jobs:
         run: node projects/sdoh/runtime/automated-content-production/scripts/model-generation-contract-self-test.mjs
       - name: Self-test SDOH OpenAI generation adapter
         run: node projects/sdoh/runtime/automated-content-production/scripts/openai-generation-adapter-self-test.mjs
+      - name: Self-test BUS-144 automated-generation pilot request
+        run: node projects/sdoh/runtime/automated-content-production/scripts/bus144-pilot-request-self-test.mjs
