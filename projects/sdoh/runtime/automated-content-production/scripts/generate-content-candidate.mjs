@@ -48,11 +48,15 @@ for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       `generation_attempt=${attempt} rejected_by=${error.code}; retrying with explicit semantic/editorial remediation`
     );
 
+    const gateDiagnostics = String(error?.message || error?.code || "unknown")
+      .replace(/\s+/g, " ")
+      .slice(0, 1200);
+
     request = {
       ...structuredClone(baseRequest),
       duplication_context:
         baseRequest.duplication_context +
-        ` Automated remediation after attempt ${attempt}: the previous candidate failed ${error.code}. Regenerate from scratch. Keep the supplied core_concept materially visible across the slide sequence, satisfy semantic_guardrails and editorial_quality_guardrails exactly, preserve a clear five-slide progression, avoid fragmentary generic copy, and make the caption add substantive context rather than merely restating the slides.`,
+        ` Automated remediation after attempt ${attempt}: the previous candidate failed ${error.code}. Gate diagnostics: ${gateDiagnostics}. Regenerate from scratch. Correct every listed failure. Keep the supplied core_concept materially visible across the slide sequence, satisfy semantic_guardrails and editorial_quality_guardrails exactly, preserve a clear five-slide progression, avoid fragmentary generic copy, and make the caption add substantive context rather than merely restating the slides.`,
     };
   }
 }
