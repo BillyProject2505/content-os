@@ -1,6 +1,8 @@
 import {
   canonicalJson,
+  createRequestFingerprint,
   finalizeGenerationResponse,
+  sha256Hex,
   validateGenerationRequest,
 } from "./model-generation-contract.mjs";
 
@@ -263,9 +265,38 @@ export async function generateWithCloudflareWorkersAI({
 
   const candidate = normalizeCandidate(body);
 
-  return finalizeGenerationResponse(candidate, {
-    request: normalized,
-    provider: "cloudflare-workers-ai",
-    model,
-  });
+  try {
+    return finalizeGenerationResponse(candidate, {
+      request: normalized,
+      provider: "cloudflare-workers-ai",
+      model,
+    });
+  } catch (error) {
+    if (["SEMANTIC_ALIGNMENT_FAILED", "FORBIDDEN_SEMANTIC_DRIFT", "EDITORIAL_QUALITY_FAILED"].includes(error?.code)) {
+      // Only retain structurally validated content, never HTTP headers or credentials.
+      const rejectedCandidate = {
+        schema_version: candidate.schema_version,
+        content_id: candidate.content_id,
+        slides: candidate.slides.map(({ slide, copy }) => ({ slide, copy })),
+        caption: candidate.caption,
+        risk_flags: candidate.risk_flags,
+        research_sensitive_claims: candidate.research_sensitive_claims,
+      };
+      Object.defineProperty(error, "rejectionDiagnostic", {
+        value: {
+          candidate_state: "REJECTED_NOT_FOR_RENDER",
+          owner_approval: "NOT_GRANTED",
+          provider: "cloudflare-workers-ai",
+          model,
+          gate_code: error.code,
+          gate_reason: error.message,
+          request_fingerprint: createRequestFingerprint(normalized),
+          // Raw rejected payload hash is NOT an accepted response fingerprint.
+          raw_candidate_fingerprint: sha256Hex(canonicalJson(rejectedCandidate)),
+          rejected_candidate: rejectedCandidate,
+        },
+      });
+    }
+    throw error;
+  }
 }
