@@ -14,9 +14,9 @@ on:
         default: ""
         type: string
       model:
-        description: Cloudflare Workers AI generation model
+        description: Cloudflare Workers AI model (Kimi K2.6 requires paid billing)
         required: true
-        default: "@cf/meta/llama-4-scout-17b-16e-instruct"
+        default: "@cf/moonshotai/kimi-k2.6"
         type: string
 
 permissions:

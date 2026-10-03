@@ -58,13 +58,14 @@ const OUTPUT_SCHEMA = {
 };
 
 export const DEFAULT_CLOUDFLARE_MODEL =
-  "@cf/meta/llama-4-scout-17b-16e-instruct";
+  "@cf/moonshotai/kimi-k2.6";
 
 export function buildCloudflareWorkersAIRequest({
   request,
   model = DEFAULT_CLOUDFLARE_MODEL,
 }) {
   const normalized = validateGenerationRequest(request);
+  const usesChatCompletions = model === "@cf/moonshotai/kimi-k2.6";
 
   const editorial = normalized.editorial_quality_guardrails;
   const outputSchema = structuredClone(OUTPUT_SCHEMA);
@@ -128,16 +129,20 @@ export function buildCloudflareWorkersAIRequest({
       ],
       response_format: {
         type: "json_schema",
-        json_schema: outputSchema,
+        json_schema: usesChatCompletions
+          ? { name: "sdoh_content_candidate", strict: true, schema: outputSchema }
+          : outputSchema,
       },
       stream: false,
-      max_tokens: 900,
+      ...(usesChatCompletions
+        ? { max_completion_tokens: 8192, reasoning_effort: "high" }
+        : { max_tokens: 900 }),
       temperature: 0.2,
     },
   };
 }
 
-function normalizeCandidate(body) {
+function normalizeCandidate(body, model) {
   if (!body || typeof body !== "object") {
     throw new CloudflareGenerationError(
       "CLOUDFLARE_RESPONSE_INVALID",
@@ -156,7 +161,20 @@ function normalizeCandidate(body) {
     );
   }
 
-  const raw = body.result?.response;
+  let raw;
+  if (model === "@cf/moonshotai/kimi-k2.6") {
+    const choices = body.result?.choices;
+    if (!Array.isArray(choices) || choices.length !== 1 || choices[0]?.finish_reason !== "stop" || choices[0]?.message?.refusal || choices[0]?.message?.tool_calls?.length) {
+      throw new CloudflareGenerationError(
+        "CLOUDFLARE_COMPLETION_INVALID",
+        "Expected one completed text response without truncation, refusal, or tool calls"
+      );
+    }
+    raw = choices[0].message?.content;
+    // reasoning_content is deliberately excluded from editorial candidates.
+  } else {
+    raw = body.result?.response;
+  }
   if (raw == null) {
     throw new CloudflareGenerationError(
       "CLOUDFLARE_OUTPUT_MISSING",
@@ -240,6 +258,7 @@ export async function generateWithCloudflareWorkersAI({
         "Content-Type": "application/json",
       },
       body: JSON.stringify(providerRequest.body),
+      signal: AbortSignal.timeout(180000),
     });
   } catch {
     throw new CloudflareGenerationError(
@@ -269,7 +288,7 @@ export async function generateWithCloudflareWorkersAI({
     );
   }
 
-  const providerCandidate = normalizeCandidate(body);
+  const providerCandidate = normalizeCandidate(body, model);
   const paragraphs = providerCandidate.caption_body_paragraphs;
   if (
     !Array.isArray(paragraphs) || paragraphs.length === 0 ||
