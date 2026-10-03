@@ -5,6 +5,8 @@ const encoder = new TextEncoder();
 const EXPECTED_ACCOUNT = "@satudosisobathati";
 const MAX_BODY_BYTES = 64 * 1024;
 const CAROUSEL_SLOTS = [1, 2, 3, 4, 5];
+const NORMAL_MAX_LATENESS_MS = 30 * 60 * 1000;
+const RECOVERY_MAX_LATENESS_MS = 24 * 60 * 60 * 1000;
 const CAROUSEL_REGISTER_DOCUMENT_IDS = Object.freeze({
   BURGUNDY: "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
   SAGE: "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
@@ -56,6 +58,15 @@ export async function handleStage(request, env) {
     return json({ ok: false, error: "INVALID_JSON" }, 400);
   }
 
+  const requestUrl = new URL(request.url);
+  const requestedMode = requestUrl.searchParams.get("mode") || "scheduled";
+  if (!["scheduled", "late-recovery"].includes(requestedMode)) {
+    return json({ ok: false, error: "INVALID_STAGE_MODE" }, 400);
+  }
+  const maxScheduleLatenessMs = requestedMode === "late-recovery"
+    ? RECOVERY_MAX_LATENESS_MS
+    : NORMAL_MAX_LATENESS_MS;
+
   const shape = validateStagePayload(payload);
   if (!shape.ok) {
     return json({ ok: false, error: shape.error }, 400);
@@ -90,6 +101,7 @@ export async function handleStage(request, env) {
     job: syntheticJob,
     governanceRef: snapshot.governance_ref,
     nowMs,
+    maxScheduleLatenessMs,
   });
 
   if (!authorityValidation.ok) {
