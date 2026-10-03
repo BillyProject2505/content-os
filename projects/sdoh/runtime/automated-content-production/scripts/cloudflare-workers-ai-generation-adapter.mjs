@@ -34,7 +34,10 @@ const OUTPUT_SCHEMA = {
         required: ["slide", "copy"],
       },
     },
-    caption: { type: "string", minLength: 220, maxLength: 1200 },
+    caption_body_paragraphs: {
+      type: "array",
+      items: { type: "string", minLength: 1 },
+    },
     risk_flags: {
       type: "array",
       items: { type: "string" },
@@ -48,7 +51,7 @@ const OUTPUT_SCHEMA = {
     "schema_version",
     "content_id",
     "slides",
-    "caption",
+    "caption_body_paragraphs",
     "risk_flags",
     "research_sensitive_claims",
   ],
@@ -64,6 +67,8 @@ export function buildCloudflareWorkersAIRequest({
   const normalized = validateGenerationRequest(request);
 
   const editorial = normalized.editorial_quality_guardrails;
+  const outputSchema = structuredClone(OUTPUT_SCHEMA);
+  outputSchema.properties.caption_body_paragraphs.minItems = editorial.caption_min_body_paragraphs;
   const progressionSummary = editorial.slide_progression
     .map((item) => {
       const groups = item.required_anchor_groups
@@ -88,9 +93,9 @@ export function buildCloudflareWorkersAIRequest({
       editorial.caption_max_body_words + " words, excluding signature and hashtags.",
     "Caption body must contain at least " + editorial.caption_min_body_paragraphs +
       " paragraphs separated by blank lines.",
-    "After the body, include the exact signature: " + editorial.caption_required_signature,
-    "Then include all required hashtags exactly: " +
-      editorial.caption_required_hashtags.join(" "),
+    "Return those body paragraphs as separate strings in caption_body_paragraphs. Each array item is one substantive paragraph, not a heading or a sentence fragment.",
+    "Do not return a caption field, signature, or hashtags. The gateway appends the exact registered signature and hashtags after joining the body paragraphs.",
+    "Aim toward the upper half of each slide's allowed word range; silently count the words before returning. Do not pad with disconnected keywords.",
   ].join("\n");
 
   const systemPrompt = [
@@ -107,7 +112,8 @@ export function buildCloudflareWorkersAIRequest({
     "Each slide must read as a complete editorial micro-thought, not a two- or three-word label. Concision is required, but fragmentary generic copy is not acceptable.",
     "Build a clear progression across S1–S5: recognition of change, contextualization, reframing, permission/adaptive choice, then a spacious landing. Do not make the five slides interchangeable quotes.",
     "Keep slide copy natural in Indonesian. Satisfy required concepts without awkward keyword stuffing or repeating the same sentence structure.",
-    "Caption must add substantive context/depth rather than simply repeat the visual copy. Use multiple short paragraphs before the project signature and fixed hashtags.",
+    "Use lowercase slide narrative as required by carousel_copy_rules. Avoid broken grammar, universal claims such as 'kita semua pernah', and pressure such as 'kita harus', 'yang penting terus melangkah', or 'mari'. Recognition and permission must remain gentle, not become an instruction to accept or keep progressing.",
+    "Caption body paragraphs must add substantive context/depth rather than simply repeat the visual copy. Do not turn adapting rhythm into a requirement to slow down, rest, or improve productivity.",
     "If a statement becomes research-sensitive, clinical, diagnostic, treatment-related, crisis-related, or otherwise evidence-sensitive, list it in research_sensitive_claims rather than inventing evidence.",
     "If risk_class is REVIEW_REQUIRED, include REVIEW_REQUIRED in risk_flags.",
     "Do not include provider metadata or cryptographic fingerprints; the trusted gateway adds them after validation.",
@@ -122,7 +128,7 @@ export function buildCloudflareWorkersAIRequest({
       ],
       response_format: {
         type: "json_schema",
-        json_schema: OUTPUT_SCHEMA,
+        json_schema: outputSchema,
       },
       stream: false,
       max_tokens: 900,
@@ -263,7 +269,30 @@ export async function generateWithCloudflareWorkersAI({
     );
   }
 
-  const candidate = normalizeCandidate(body);
+  const providerCandidate = normalizeCandidate(body);
+  const paragraphs = providerCandidate.caption_body_paragraphs;
+  if (
+    !Array.isArray(paragraphs) || paragraphs.length === 0 ||
+    paragraphs.some((value) => typeof value !== "string" || !value.trim() || /[\r\n#]/.test(value) || value.toLowerCase().includes(normalized.editorial_quality_guardrails.caption_required_signature.toLowerCase())) ||
+    Object.hasOwn(providerCandidate, "caption")
+  ) {
+    throw new CloudflareGenerationError(
+      "CLOUDFLARE_OUTPUT_INVALID",
+      "Expected separate caption body paragraphs without a caption field, embedded paragraph breaks, signature, or hashtags"
+    );
+  }
+  // Fixed project furniture is deterministic; generated body text stays unedited.
+  // Both gates still assess the complete assembled candidate before acceptance.
+  const candidate = {
+    schema_version: providerCandidate.schema_version,
+    content_id: providerCandidate.content_id,
+    slides: providerCandidate.slides,
+    caption: paragraphs.join("\n\n") + "\n\n" +
+      normalized.editorial_quality_guardrails.caption_required_signature + "\n" +
+      normalized.editorial_quality_guardrails.caption_required_hashtags.join(" "),
+    risk_flags: providerCandidate.risk_flags,
+    research_sensitive_claims: providerCandidate.research_sensitive_claims,
+  };
 
   try {
     return finalizeGenerationResponse(candidate, {

@@ -126,10 +126,8 @@ const copySchema = providerRequest.body.response_format.json_schema.properties.s
 if (copySchema.minLength !== 24 || copySchema.maxLength !== 90) {
   fail("slide copy schema bounds mismatch");
 }
-const captionSchema = providerRequest.body.response_format.json_schema.properties.caption;
-if (captionSchema.minLength !== 220 || captionSchema.maxLength !== 1200) {
-  fail("caption schema bounds mismatch");
-}
+const captionSchema = providerRequest.body.response_format.json_schema.properties.caption_body_paragraphs;
+if (captionSchema.type !== "array" || captionSchema.minItems !== 3 || providerRequest.body.response_format.json_schema.properties.caption) fail("structured caption body schema mismatch");
 const instructions = providerRequest.body.messages[0].content;
 if (!instructions.includes("S1: 5-9 words")) fail("S1 word-count constraint missing");
 if (!instructions.includes("Caption body must contain 45-110 words")) fail("caption word-count constraint missing");
@@ -150,6 +148,11 @@ const candidate = {
   risk_flags: [],
   research_sensitive_claims: [],
 };
+
+function providerOutput(canonicalCandidate) {
+  const { caption, ...fields } = canonicalCandidate;
+  return { ...fields, caption_body_paragraphs: caption.split("\n\nsatu dosis obat hati")[0].split("\n\n") };
+}
 
 let observedAuth = null;
 let observedUrl = null;
@@ -174,7 +177,7 @@ const result = await generateWithCloudflareWorkersAI({
           success: true,
           errors: [],
           messages: [],
-          result: { response: candidate },
+          result: { response: providerOutput(candidate) },
         };
       },
     };
@@ -203,6 +206,24 @@ if (
   fail("response fingerprint mismatch");
 }
 console.log("PASS successful Workers AI normalization and gateway fingerprints");
+if (result.caption !== candidate.caption) fail("assembled caption changed body or footer");
+if (result.caption_body_paragraphs) fail("provider-only caption field leaked into canonical contract");
+console.log("PASS body preserved and fixed caption footer assembled deterministically");
+
+await expectError("legacy free-form caption is not silently repaired", "CLOUDFLARE_OUTPUT_INVALID", () =>
+  generateWithCloudflareWorkersAI({ request, accountId, apiToken: token, fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ success: true, result: { response: candidate } }) }) })
+);
+
+const sparse = structuredClone(candidate);
+sparse.slides[2].copy = "Menyesuaikan langkah, bukan gagal.";
+try {
+  await generateWithCloudflareWorkersAI({ request, accountId, apiToken: token, fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ success: true, result: { response: providerOutput(sparse) } }) }) });
+  fail("sparse copy must still fail after deterministic footer assembly");
+} catch (error) {
+  if (error.code !== "EDITORIAL_QUALITY_FAILED" || !error.message.includes("S3_TOO_SPARSE")) fail("sparse copy gate bypassed");
+  if (error.rejectionDiagnostic.rejected_candidate.slides[2].copy !== sparse.slides[2].copy) fail("adapter edited rejected slide copy");
+}
+console.log("PASS deterministic footer cannot rescue editorially rejected slide copy");
 
 await expectError("missing account id", "CLOUDFLARE_ACCOUNT_ID_MISSING", () =>
   generateWithCloudflareWorkersAI({
@@ -264,7 +285,7 @@ await expectError("provider failure", "CLOUDFLARE_API_FAILURE", () =>
 
 // Exercise the actual CLI's three-attempt fail-closed path with a mocked provider.
 const rejected = structuredClone(candidate);
-rejected.caption = "Ini paragraf tunggal yang tidak memenuhi aturan editorial.";
+rejected.caption = "Ini paragraf tunggal yang tidak memenuhi aturan editorial.\n\nsatu dosis obat hati\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja";
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sdoh-rejection-test-"));
 try {
   const requestPath = path.join(tempDir, "request.json");
@@ -272,7 +293,7 @@ try {
   const diagnosticsDir = path.join(tempDir, "diagnostics");
   const mockPath = path.join(tempDir, "mock-provider.mjs");
   fs.writeFileSync(requestPath, JSON.stringify(request));
-  fs.writeFileSync(mockPath, `globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ success: true, result: { response: ${JSON.stringify(rejected)} } }) });\n`);
+  fs.writeFileSync(mockPath, `globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ success: true, result: { response: ${JSON.stringify(providerOutput(rejected))} } }) });\n`);
   const cliPath = fileURLToPath(new URL("./generate-content-candidate.mjs", import.meta.url));
   const child = spawnSync(process.execPath, ["--import", mockPath, cliPath, "--request", requestPath, "--output", outputPath], {
     encoding: "utf8",
@@ -288,6 +309,7 @@ try {
     if (diagnostic.generation_attempt !== index + 1) fail("attempt order mismatch");
     if (diagnostic.candidate_state !== "REJECTED_NOT_FOR_RENDER" || diagnostic.owner_approval !== "NOT_GRANTED") fail("diagnostic state unsafe");
     if (diagnostic.gate_code !== "EDITORIAL_QUALITY_FAILED") fail("gate code lost");
+    if (!diagnostic.gate_reason.includes("CAPTION_STRUCTURE_THIN") || diagnostic.gate_reason.includes("CAPTION_SIGNATURE_MISSING") || diagnostic.gate_reason.includes("CAPTION_HASHTAG_MISSING")) fail("assembled caption bypassed body gate or lost footer");
     if (diagnostic.rejected_candidate.caption !== rejected.caption) fail("rejected copy lost");
     if (diagnostic.raw_candidate_fingerprint !== sha256Hex(canonicalJson(rejected))) fail("raw payload fingerprint mismatch");
     if (index === 0 && diagnostic.request_fingerprint !== createRequestFingerprint(request)) fail("request fingerprint mismatch");
