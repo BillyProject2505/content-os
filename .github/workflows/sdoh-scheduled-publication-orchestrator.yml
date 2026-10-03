@@ -240,6 +240,7 @@ jobs:
         shell: bash
         env:
           GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
+          EXECUTION_MODE: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && 'LATE_RECOVERY' || 'SCHEDULED' }}
         run: |
           set -euo pipefail
           git cat-file -e "$GOVERNANCE_REF^{commit}"
@@ -291,6 +292,7 @@ jobs:
         env:
           GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
           AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+          EXECUTION_MODE: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && 'LATE_RECOVERY' || 'SCHEDULED' }}
         run: |
           set -euo pipefail
           echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
@@ -344,12 +346,13 @@ jobs:
           WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
           AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
           EXPECTED_JOB_ID: ${{ steps.identity.outputs.job_id }}
+          STAGE_MODE: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && 'late-recovery' || 'scheduled' }}
         run: |
           set -euo pipefail
           response_file="$RUNNER_TEMP/stage-response.json"
 
           http_status="$(
-            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @"$AUTHORITY_SNAPSHOT_OUTPUT"               "${WORKER_BASE_URL%/}/internal/stage"
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @"$AUTHORITY_SNAPSHOT_OUTPUT"               "${WORKER_BASE_URL%/}/internal/stage?mode=$STAGE_MODE"
           )"
 
           if [ "$http_status" != "200" ] && [ "$http_status" != "201" ]; then
@@ -377,6 +380,7 @@ jobs:
           JOB_ID: ${{ steps.identity.outputs.job_id }}
           GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
           AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
+          REFRESH_MODE: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && 'late-recovery' || 'scheduled' }}
         run: |
           set -euo pipefail
           echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
@@ -390,6 +394,7 @@ jobs:
               drive_access_token: $drive_access_token,
               drive_token_expires_at: $drive_token_expires_at,
               governance_ref: $governance_ref,
+              execution_mode: env.EXECUTION_MODE,
               authority_snapshot: $bundle[0].authority_snapshot
             }' > "$request_file"
 
@@ -441,7 +446,7 @@ jobs:
             }' > "$request_file"
 
           http_status="$(
-            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @"$request_file"               "${WORKER_BASE_URL%/}/internal/refresh?mode=scheduled"
+            curl --silent --show-error               --output "$response_file"               --write-out "%{http_code}"               --request POST               --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"               --header "Content-Type: application/json"               --data-binary @"$request_file"               "${WORKER_BASE_URL%/}/internal/refresh?mode=$REFRESH_MODE"
           )"
 
           if [ "$http_status" != "200" ]; then
@@ -476,7 +481,7 @@ jobs:
 
           for attempt in $(seq 1 "$max_attempts"); do
             http_status="$(
-              jq -n                 --arg job_id "$JOB_ID"                 --arg governance_ref "$GOVERNANCE_REF"                 '{job_id:$job_id, governance_ref:$governance_ref, execution_mode:"SCHEDULED"}' |
+              jq -n                 --arg job_id "$JOB_ID"                 --arg governance_ref "$GOVERNANCE_REF"                 '{job_id:$job_id, governance_ref:$governance_ref, execution_mode:env.EXECUTION_MODE}' |
               curl --silent --show-error                 --output "$response_file"                 --write-out "%{http_code}"                 --request POST                 --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET"                 --header "Content-Type: application/json"                 --data-binary @-                 "${WORKER_BASE_URL%/}/internal/execute"
             )"
 
