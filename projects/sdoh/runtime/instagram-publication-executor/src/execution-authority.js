@@ -3,14 +3,20 @@ const encoder = new TextEncoder();
 const AUTHORITY_MAX_AGE_MS = 5 * 60 * 1000;
 const AUTHORITY_MAX_REMAINING_MS = 15 * 60 * 1000;
 const AUTHORITY_MIN_REMAINING_MS = 60 * 1000;
-const AUTHORITY_MAX_SCHEDULE_LATENESS_MS = 30 * 60 * 1000;
+const AUTHORITY_DEFAULT_MAX_SCHEDULE_LATENESS_MS = 30 * 60 * 1000;
+const AUTHORITY_MAX_RECOVERY_LATENESS_MS = 24 * 60 * 60 * 1000;
 
 export async function validateAuthoritySnapshotPayload({
   snapshot,
   job,
   governanceRef,
   nowMs = Date.now(),
+  maxScheduleLatenessMs = AUTHORITY_DEFAULT_MAX_SCHEDULE_LATENESS_MS,
 }) {
+  if (!Number.isFinite(maxScheduleLatenessMs) || maxScheduleLatenessMs < 0 || maxScheduleLatenessMs > AUTHORITY_MAX_RECOVERY_LATENESS_MS) {
+    return { ok: false, error: "AUTHORITY_LATENESS_INVALID" };
+  }
+
   if (!snapshot || typeof snapshot !== "object" || Array.isArray(snapshot)) {
     return { ok: false, error: "AUTHORITY_SNAPSHOT_INVALID" };
   }
@@ -64,7 +70,7 @@ export async function validateAuthoritySnapshotPayload({
   if (scheduledAtMs > nowMs) {
     return { ok: false, error: "AUTHORITY_SCHEDULE_NOT_DUE" };
   }
-  if (scheduledAtMs < nowMs - AUTHORITY_MAX_SCHEDULE_LATENESS_MS) {
+  if (scheduledAtMs < nowMs - maxScheduleLatenessMs) {
     return { ok: false, error: "AUTHORITY_SCHEDULE_STALE" };
   }
 
@@ -190,7 +196,12 @@ export async function loadAndValidateStoredAuthority({
   governanceRef,
   nowMs = Date.now(),
   requireFresh = true,
+  maxScheduleLatenessMs = AUTHORITY_DEFAULT_MAX_SCHEDULE_LATENESS_MS,
 }) {
+  if (!Number.isFinite(maxScheduleLatenessMs) || maxScheduleLatenessMs < 0 || maxScheduleLatenessMs > AUTHORITY_MAX_RECOVERY_LATENESS_MS) {
+    throw authorityError("AUTHORITY_LATENESS_INVALID", 409);
+  }
+
   const snapshot = await db.prepare(
     `SELECT
        content_id,
@@ -244,7 +255,7 @@ export async function loadAndValidateStoredAuthority({
     if (scheduledAtMs > nowMs) {
       throw authorityError("AUTHORITY_SCHEDULE_NOT_DUE", 409);
     }
-    if (scheduledAtMs < nowMs - AUTHORITY_MAX_SCHEDULE_LATENESS_MS) {
+    if (scheduledAtMs < nowMs - maxScheduleLatenessMs) {
       throw authorityError("AUTHORITY_SCHEDULE_STALE", 409);
     }
   }
