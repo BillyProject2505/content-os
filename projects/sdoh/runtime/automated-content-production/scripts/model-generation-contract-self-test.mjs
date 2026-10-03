@@ -63,6 +63,32 @@ const request = {
       "napas dalam diam",
     ],
   },
+  editorial_quality_guardrails: {
+    min_words_per_slide: [5, 5, 5, 5, 5],
+    max_words_per_slide: [9, 9, 9, 9, 9],
+    min_total_slide_words: 30,
+    min_unique_slide_content_words: 18,
+    max_pairwise_content_similarity: 0.72,
+    slide_progression: [
+      { slide: 1, required_anchor_groups: [["ritme"], ["berubah", "berbeda", "tidak sama"]], minimum_groups: 2 },
+      { slide: 2, required_anchor_groups: [["kapasitas", "keadaan", "kebutuhan", "hari ini"], ["cara", "menjalani", "langkah", "ritme"]], minimum_groups: 2 },
+      { slide: 3, required_anchor_groups: [["menyesuaikan", "adaptasi", "langkah"], ["gagal", "kegagalan"]], minimum_groups: 2 },
+      { slide: 4, required_anchor_groups: [["boleh", "izin"], ["memilih", "menyesuaikan", "cara", "ritme"]], minimum_groups: 2 },
+      { slide: 5, required_anchor_groups: [["berjalan", "melangkah", "lanjut"], ["cara", "ritme", "sama", "berbeda"]], minimum_groups: 2 },
+    ],
+    caption_min_body_words: 45,
+    caption_max_body_words: 110,
+    caption_min_body_paragraphs: 3,
+    caption_required_signature: "satu dosis obat hati",
+    caption_required_hashtags: [
+      "#satudosisobathati",
+      "#obathati",
+      "#manado",
+      "#mentalhealthmanado",
+      "#pelanpelanaja",
+    ],
+  },
+
 
 };
 
@@ -73,13 +99,13 @@ const candidate = {
   schema_version: "1",
   content_id: request.content_id,
   slides: [
-    { slide: 1, copy: "kadang ritmemu memang perlu berubah" },
-    { slide: 2, copy: "kapasitasmu hari ini tidak harus sama dengan kemarin" },
-    { slide: 3, copy: "menyesuaikan langkah bukan berarti menyerah" },
+    { slide: 1, copy: "ritme yang dulu terasa pas bisa berubah hari ini" },
+    { slide: 2, copy: "kapasitasmu berubah begitu juga cara kamu menjalaninya" },
+    { slide: 3, copy: "menyesuaikan langkah bukan berarti kamu gagal" },
     { slide: 4, copy: "kamu boleh memilih ritme yang lebih mungkin dijalani" },
-    { slide: 5, copy: "pelan tetap bisa menjadi cara untuk terus berjalan" },
+    { slide: 5, copy: "tetap berjalan tak harus dengan cara yang sama" },
   ],
-  caption: "ritme yang berubah tidak selalu berarti kamu gagal.",
+  caption: "Kadang yang berubah bukan niatmu, tapi kapasitas, keadaan, atau kebutuhanmu.\n\nMenyesuaikan ritme bukan berarti kamu kehilangan arah atau gagal menjaga komitmen. Ada waktu ketika cara lama memang tidak lagi cocok dengan hidup yang sedang kamu jalani.\n\nKamu boleh mencari cara yang lebih mungkin dijalani sekarang, tanpa harus menganggap perubahan itu sebagai kekalahan.\n\nsatu dosis obat hati\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja",
   risk_flags: [],
   research_sensitive_claims: [],
 };
@@ -107,6 +133,26 @@ expectContractError("semantic drift rejected", "SEMANTIC_ALIGNMENT_FAILED", () =
   });
 });
 console.log("PASS semantic drift rejected");
+
+expectContractError("editorial thin copy rejected", "EDITORIAL_QUALITY_FAILED", () => {
+  finalizeGenerationResponse({
+    ...candidate,
+    slides: [
+      { slide: 1, copy: "ritme berubah" },
+      { slide: 2, copy: "menyesuaikan diri" },
+      { slide: 3, copy: "tanpa rasa gagal" },
+      { slide: 4, copy: "izin untuk berubah" },
+      { slide: 5, copy: "menerima ritme baru" },
+    ],
+    caption: "Mengenal ritme hati yang berubah. Memberi izin pada diri untuk menyesuaikan, tanpa takut gagal. Satu dosis obat hati #satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja",
+  }, {
+    request,
+    provider: "self-test",
+    model: "deterministic-fixture",
+  });
+});
+console.log("PASS editorial thin copy rejected");
+
 
 const finalResponse = finalizeGenerationResponse(candidate, {
   request,
