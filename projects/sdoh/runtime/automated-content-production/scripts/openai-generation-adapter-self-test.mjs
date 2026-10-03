@@ -46,7 +46,21 @@ const request = {
     safety_rules: "Do not diagnose, prescribe, or turn uncertainty into a definitive psychological claim.",
     research_rules: "Flag research-sensitive claims instead of inventing evidence.",
   },
-  duplication_context: "No direct duplicate found; distinguish from limited-energy and rest topics.",
+  duplication_context: "No direct duplicate found; distinguish from limited-energy and rest topics.",  semantic_guardrails: {
+    required_slide_anchor_groups: [
+      ["ritme"],
+      ["menyesuaikan", "mengubah", "berubah"],
+      ["gagal", "kegagalan"],
+    ],
+    minimum_required_slide_anchor_groups: 2,
+    forbidden_slide_phrases: [
+      "beban terlalu banyak",
+      "perlu waktu sendiri",
+      "izin untuk berhenti",
+      "napas dalam diam",
+    ],
+  },
+
 };
 
 const payload = buildOpenAIRequest({ request, model: "gpt-5.6-terra" });

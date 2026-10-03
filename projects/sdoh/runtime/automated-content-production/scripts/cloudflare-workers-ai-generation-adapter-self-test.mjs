@@ -54,7 +54,21 @@ const request = {
       "Flag research-sensitive claims instead of inventing evidence.",
   },
   duplication_context:
-    "No direct duplicate found; distinguish from limited-energy, rest, disappointment, and recovery topics.",
+    "No direct duplicate found; distinguish from limited-energy, rest, disappointment, and recovery topics.",  semantic_guardrails: {
+    required_slide_anchor_groups: [
+      ["ritme"],
+      ["menyesuaikan", "mengubah", "berubah"],
+      ["gagal", "kegagalan"],
+    ],
+    minimum_required_slide_anchor_groups: 2,
+    forbidden_slide_phrases: [
+      "beban terlalu banyak",
+      "perlu waktu sendiri",
+      "izin untuk berhenti",
+      "napas dalam diam",
+    ],
+  },
+
 };
 
 const providerRequest = buildCloudflareWorkersAIRequest({ request });

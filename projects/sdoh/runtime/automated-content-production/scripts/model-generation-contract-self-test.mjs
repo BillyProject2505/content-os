@@ -49,7 +49,21 @@ const request = {
     safety_rules: "Do not diagnose, prescribe, or turn uncertainty into a definitive psychological claim.",
     research_rules: "Flag any research-sensitive or clinical claim for review rather than inventing support.",
   },
-  duplication_context: "No direct duplicate found; adjacent topics concern limited energy and rest but not adaptive rhythm.",
+  duplication_context: "No direct duplicate found; adjacent topics concern limited energy and rest but not adaptive rhythm.",  semantic_guardrails: {
+    required_slide_anchor_groups: [
+      ["ritme"],
+      ["menyesuaikan", "mengubah", "berubah"],
+      ["gagal", "kegagalan"],
+    ],
+    minimum_required_slide_anchor_groups: 2,
+    forbidden_slide_phrases: [
+      "beban terlalu banyak",
+      "perlu waktu sendiri",
+      "izin untuk berhenti",
+      "napas dalam diam",
+    ],
+  },
+
 };
 
 const normalized = validateGenerationRequest(request);
@@ -75,6 +89,24 @@ validateGeneratedCandidate(candidate, {
   expectedRiskClass: request.risk_class,
 });
 console.log("PASS candidate validation");
+
+expectContractError("semantic drift rejected", "SEMANTIC_ALIGNMENT_FAILED", () => {
+  finalizeGenerationResponse({
+    ...candidate,
+    slides: [
+      { slide: 1, copy: "hati berat" },
+      { slide: 2, copy: "beban terlalu banyak" },
+      { slide: 3, copy: "perlu waktu sendiri" },
+      { slide: 4, copy: "izin untuk berhenti" },
+      { slide: 5, copy: "napas dalam diam" },
+    ],
+  }, {
+    request,
+    provider: "self-test",
+    model: "deterministic-fixture",
+  });
+});
+console.log("PASS semantic drift rejected");
 
 const finalResponse = finalizeGenerationResponse(candidate, {
   request,

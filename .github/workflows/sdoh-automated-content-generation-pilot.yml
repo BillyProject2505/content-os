@@ -86,7 +86,7 @@ jobs:
             (has("approval") | not) and
             (has("publication_state") | not)
           ' "$file" >/dev/null
-          echo "Candidate remains UNAPPROVED"
+          echo "Candidate structural + semantic contract PASS; remains UNAPPROVED"
 
       - name: Upload unapproved review candidate
         uses: actions/upload-artifact@v4
@@ -107,8 +107,9 @@ jobs:
             echo "- Candidate state: UNAPPROVED"
             echo "- Provider: $(jq -r '.generation_metadata.provider' "$file")"
             echo "- Model: $(jq -r '.generation_metadata.model' "$file")"
-            echo "- Request fingerprint: `$(jq -r '.generation_metadata.request_fingerprint' "$file")`"
-            echo "- Response fingerprint: `$(jq -r '.generation_metadata.response_fingerprint' "$file")`"
+            echo "- Request fingerprint: $(jq -r '.generation_metadata.request_fingerprint' "$file")"
+            echo "- Response fingerprint: $(jq -r '.generation_metadata.response_fingerprint' "$file")"
+            echo "- Semantic alignment gate: PASS"
             echo "- Owner approval: NOT GRANTED"
             echo "- Scheduling/publication side effects: NONE"
           } >> "$GITHUB_STEP_SUMMARY"

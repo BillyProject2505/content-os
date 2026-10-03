@@ -19,5 +19,28 @@
     "safety_rules": "Keep the material reflective and non-clinical. Do not diagnose, prescribe, give treatment advice, claim a symptom proves a condition, promise outcomes, or frame emotional difficulty as personal failure. Do not force positivity, immediate acceptance, productivity, or recovery. If generation would introduce a clinical, crisis, self-harm, treatment, diagnosis, or other materially sensitive claim, flag it instead of presenting it as ordinary reflective copy.",
     "research_rules": "Do not invent evidence, statistics, psychological mechanisms, professional guidance, or citations. Respect limitations recorded in the SDOH Research Source List. For this STANDARD reflective instance, prefer language that does not require a factual psychological claim. Any research-sensitive or clinical assertion must be listed in research_sensitive_claims for later validation rather than silently treated as established."
   },
-  "duplication_context": "No direct duplicate was found in the current planned/published SDOH Carousel set. Keep 0009 specifically about adapting one's rhythm when capacity, circumstances, or needs change without equating adaptation with failure. Distinguish it from SAGE-CAR-0006 (limited energy / adjusting expectations to available energy), SAGE-CAR-0010 (decision fatigue / small decisions feeling heavy), SAGE-CAR-0011 (permission to rest before tasks are complete), SAGE-CAR-0013 (non-linear recovery), SAGE-CAR-0005 (disappointment when plans change), and Burgundy themes about boundaries, hurt, anger, or relational truth."
+  "duplication_context": "No direct duplicate was found in the current planned/published SDOH Carousel set. Keep 0009 specifically about adapting one's rhythm when capacity, circumstances, or needs change without equating adaptation with failure. Distinguish it from SAGE-CAR-0006 (limited energy / adjusting expectations to available energy), SAGE-CAR-0010 (decision fatigue / small decisions feeling heavy), SAGE-CAR-0011 (permission to rest before tasks are complete), SAGE-CAR-0013 (non-linear recovery), SAGE-CAR-0005 (disappointment when plans change), and Burgundy themes about boundaries, hurt, anger, or relational truth.",
+  "semantic_guardrails": {
+    "required_slide_anchor_groups": [
+      [
+        "ritme"
+      ],
+      [
+        "menyesuaikan",
+        "mengubah",
+        "berubah"
+      ],
+      [
+        "gagal",
+        "kegagalan"
+      ]
+    ],
+    "minimum_required_slide_anchor_groups": 2,
+    "forbidden_slide_phrases": [
+      "beban terlalu banyak",
+      "perlu waktu sendiri",
+      "izin untuk berhenti",
+      "napas dalam diam"
+    ]
+  }
 }

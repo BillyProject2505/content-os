@@ -67,6 +67,8 @@ export function buildCloudflareWorkersAIRequest({
     "Do not approve, schedule, publish, or claim that any governance gate passed.",
     "Treat the authority_packet as binding editorial constraints for this generation.",
     "Use duplication_context to avoid direct repetition and keep this content materially distinct.",
+    "semantic_guardrails are mandatory output constraints: satisfy the minimum required slide-anchor groups and avoid every forbidden slide phrase.",
+    "The slide sequence must keep the core_concept materially visible; do not replace it with a neighboring topic such as rest, overload, decision fatigue, disappointment, or recovery unless the supplied core_concept actually requires that topic.",
     "Produce exactly five slides numbered 1 through 5 in order.",
     "Keep slide copy concise, natural in Indonesian, and coherent as one narrative thread.",
     "Caption must add context/depth rather than simply repeat the visual copy.",

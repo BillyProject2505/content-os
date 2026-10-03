@@ -54,6 +54,7 @@ export function validateGenerationRequest(input) {
     governance_context,
     authority_packet,
     duplication_context,
+    semantic_guardrails,
   } = input;
 
   assert(
@@ -111,6 +112,54 @@ export function validateGenerationRequest(input) {
 
   assert(nonEmptyString(duplication_context), "DUPLICATION_CONTEXT_MISSING", "duplication_context is required");
 
+  assert(
+    semantic_guardrails &&
+      typeof semantic_guardrails === "object" &&
+      !Array.isArray(semantic_guardrails),
+    "SEMANTIC_GUARDRAILS_INVALID",
+    "semantic_guardrails must be an object"
+  );
+  assert(
+    Array.isArray(semantic_guardrails.required_slide_anchor_groups) &&
+      semantic_guardrails.required_slide_anchor_groups.length > 0,
+    "SEMANTIC_ANCHORS_INVALID",
+    "semantic_guardrails.required_slide_anchor_groups must be a non-empty array"
+  );
+  for (const group of semantic_guardrails.required_slide_anchor_groups) {
+    assert(
+      Array.isArray(group) && group.length > 0,
+      "SEMANTIC_ANCHOR_GROUP_INVALID",
+      "each required slide anchor group must be a non-empty array"
+    );
+    for (const entry of group) {
+      assert(
+        nonEmptyString(entry),
+        "SEMANTIC_ANCHOR_INVALID",
+        "semantic anchor entries must be non-empty strings"
+      );
+    }
+  }
+  assert(
+    Number.isInteger(semantic_guardrails.minimum_required_slide_anchor_groups) &&
+      semantic_guardrails.minimum_required_slide_anchor_groups >= 1 &&
+      semantic_guardrails.minimum_required_slide_anchor_groups <=
+        semantic_guardrails.required_slide_anchor_groups.length,
+    "SEMANTIC_ANCHOR_MINIMUM_INVALID",
+    "minimum_required_slide_anchor_groups must be within the required group count"
+  );
+  assert(
+    Array.isArray(semantic_guardrails.forbidden_slide_phrases),
+    "SEMANTIC_FORBIDDEN_PHRASES_INVALID",
+    "semantic_guardrails.forbidden_slide_phrases must be an array"
+  );
+  for (const entry of semantic_guardrails.forbidden_slide_phrases) {
+    assert(
+      nonEmptyString(entry),
+      "SEMANTIC_FORBIDDEN_PHRASE_INVALID",
+      "forbidden slide phrase entries must be non-empty strings"
+    );
+  }
+
   return {
     content_id,
     theme,
@@ -121,6 +170,16 @@ export function validateGenerationRequest(input) {
     governance_context: Object.fromEntries(governanceKeys.map((key) => [key, governance_context[key]])),
     authority_packet: Object.fromEntries(authorityKeys.map((key) => [key, authority_packet[key]])),
     duplication_context: duplication_context.trim(),
+    semantic_guardrails: {
+      required_slide_anchor_groups:
+        semantic_guardrails.required_slide_anchor_groups.map((group) =>
+          group.map((entry) => entry.trim())
+        ),
+      minimum_required_slide_anchor_groups:
+        semantic_guardrails.minimum_required_slide_anchor_groups,
+      forbidden_slide_phrases:
+        semantic_guardrails.forbidden_slide_phrases.map((entry) => entry.trim()),
+    },
   };
 }
 
@@ -165,6 +224,52 @@ export function validateGeneratedCandidate(candidate, { expectedContentId, expec
   return structuredClone(candidate);
 }
 
+function normalizeSemanticText(value) {
+  return String(value ?? "")
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^a-z0-9\u00c0-\u024f\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function validateCandidateSemanticAlignment(candidate, request) {
+  const normalizedRequest = validateGenerationRequest(request);
+  const slideText = normalizeSemanticText(
+    candidate.slides.map((slide) => slide.copy).join(" ")
+  );
+
+  const groups = normalizedRequest.semantic_guardrails.required_slide_anchor_groups;
+  const hits = groups.map((group) =>
+    group.some((entry) => slideText.includes(normalizeSemanticText(entry)))
+  );
+  const hitCount = hits.filter(Boolean).length;
+
+  assert(
+    hitCount >=
+      normalizedRequest.semantic_guardrails.minimum_required_slide_anchor_groups,
+    "SEMANTIC_ALIGNMENT_FAILED",
+    `candidate hit ${hitCount}/${groups.length} required slide anchor groups; minimum is ${normalizedRequest.semantic_guardrails.minimum_required_slide_anchor_groups}`
+  );
+
+  const forbiddenHits =
+    normalizedRequest.semantic_guardrails.forbidden_slide_phrases.filter(
+      (phrase) => slideText.includes(normalizeSemanticText(phrase))
+    );
+
+  assert(
+    forbiddenHits.length === 0,
+    "FORBIDDEN_SEMANTIC_DRIFT",
+    `candidate contains forbidden drift phrase(s): ${forbiddenHits.join(", ")}`
+  );
+
+  return {
+    ok: true,
+    hit_count: hitCount,
+    required_group_count: groups.length,
+  };
+}
+
 export function finalizeGenerationResponse(candidate, { request, provider, model }) {
   assert(nonEmptyString(provider), "PROVIDER_MISSING", "provider is required");
   assert(nonEmptyString(model), "MODEL_MISSING", "model is required");
@@ -174,6 +279,7 @@ export function finalizeGenerationResponse(candidate, { request, provider, model
     expectedContentId: normalizedRequest.content_id,
     expectedRiskClass: normalizedRequest.risk_class,
   });
+  validateCandidateSemanticAlignment(normalizedCandidate, normalizedRequest);
   const requestFingerprint = createRequestFingerprint(normalizedRequest);
 
   const response = {
