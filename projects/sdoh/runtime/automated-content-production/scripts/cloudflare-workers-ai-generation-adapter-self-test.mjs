@@ -117,6 +117,20 @@ if (
 }
 console.log("PASS Cloudflare JSON Mode request excludes trusted metadata");
 
+const copySchema = providerRequest.body.response_format.json_schema.properties.slides.items.properties.copy;
+if (copySchema.minLength !== 24 || copySchema.maxLength !== 90) {
+  fail("slide copy schema bounds mismatch");
+}
+const captionSchema = providerRequest.body.response_format.json_schema.properties.caption;
+if (captionSchema.minLength !== 220 || captionSchema.maxLength !== 1200) {
+  fail("caption schema bounds mismatch");
+}
+const instructions = providerRequest.body.messages[0].content;
+if (!instructions.includes("S1: 5-9 words")) fail("S1 word-count constraint missing");
+if (!instructions.includes("Caption body must contain 45-110 words")) fail("caption word-count constraint missing");
+if (!instructions.includes("at least 3 paragraphs")) fail("caption paragraph constraint missing");
+console.log("PASS explicit editorial constraints surfaced");
+
 const candidate = {
   schema_version: "1",
   content_id: request.content_id,
