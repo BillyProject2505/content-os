@@ -1,6 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import { generateWithOpenAI } from "./openai-generation-adapter.mjs";
+import {
+  DEFAULT_CLOUDFLARE_MODEL,
+  generateWithCloudflareWorkersAI,
+} from "./cloudflare-workers-ai-generation-adapter.mjs";
 
 function arg(name) {
   const index = process.argv.indexOf(name);
@@ -12,11 +15,17 @@ function arg(name) {
 
 const requestPath = path.resolve(arg("--request"));
 const outputPath = path.resolve(arg("--output"));
-const model = process.env.SDOH_GENERATION_MODEL || "gpt-5.6-terra";
-const apiKey = process.env.OPENAI_API_KEY || "";
+const model = process.env.SDOH_GENERATION_MODEL || DEFAULT_CLOUDFLARE_MODEL;
+const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || "";
+const apiToken = process.env.CLOUDFLARE_API_TOKEN || "";
 
 const request = JSON.parse(fs.readFileSync(requestPath, "utf8"));
-const result = await generateWithOpenAI({ request, apiKey, model });
+const result = await generateWithCloudflareWorkersAI({
+  request,
+  accountId,
+  apiToken,
+  model,
+});
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(result, null, 2) + "\n");

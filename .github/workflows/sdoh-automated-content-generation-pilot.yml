@@ -14,9 +14,9 @@ on:
         default: ""
         type: string
       model:
-        description: OpenAI generation model
+        description: Cloudflare Workers AI generation model
         required: true
-        default: gpt-5.6-terra
+        default: "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
         type: string
 
 permissions:
@@ -37,7 +37,8 @@ jobs:
         env:
           CONTENT_ID: ${{ inputs.content_id }}
           CONFIRMATION: ${{ inputs.confirmation }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -euo pipefail
           if [ "$CONTENT_ID" != "SDOH-SAGE-CAR-0009" ]; then
@@ -48,16 +49,23 @@ jobs:
             echo "::error::Exact confirmation is required"
             exit 1
           fi
-          if [ -z "$OPENAI_API_KEY" ]; then
-            echo "::error::OPENAI_API_KEY repository secret is not configured"
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN repository secret is not configured"
+            exit 1
+          fi
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_ACCOUNT_ID repository variable is not configured"
             exit 1
           fi
           echo "Pilot authorization PASS"
+          echo "Provider: Cloudflare Workers AI"
+          echo "No OpenAI credential required"
 
       - name: Generate unapproved BUS-144 candidate
         shell: bash
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           SDOH_GENERATION_MODEL: ${{ inputs.model }}
         run: |
           set -euo pipefail
@@ -72,7 +80,7 @@ jobs:
           jq -e '
             .content_id == "SDOH-SAGE-CAR-0009" and
             (.slides | length) == 5 and
-            .generation_metadata.provider == "openai" and
+            .generation_metadata.provider == "cloudflare-workers-ai" and
             (.generation_metadata.request_fingerprint | test("^[0-9a-f]{64}$")) and
             (.generation_metadata.response_fingerprint | test("^[0-9a-f]{64}$")) and
             (has("approval") | not) and
