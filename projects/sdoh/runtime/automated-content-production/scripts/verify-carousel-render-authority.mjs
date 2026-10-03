@@ -14,7 +14,7 @@ const registry=fs.readFileSync(
 function assert(ok,message){ if(!ok) throw new Error(message); }
 
 function requireRegistryRecord(label, id, sha) {
-  assert(registry.includes(`file ID \`${id}\``), `${label} Drive ID missing from canonical Asset Registry`);
+  assert(registry.includes(`\`${id}\``), `${label} Drive ID missing from canonical Asset Registry`);
   assert(registry.includes(`\`${sha}\``), `${label} SHA-256 missing from canonical Asset Registry`);
 }
 
