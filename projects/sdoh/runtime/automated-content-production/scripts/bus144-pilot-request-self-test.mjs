@@ -20,6 +20,12 @@ if (!normalized.authority_packet.carousel_copy_rules.includes("The Gentle Naming
 if (!normalized.authority_packet.caption_rules.includes("#satudosisobathati")) {
   throw new Error("Pilot request is missing the fixed caption hashtag baseline");
 }
+if (normalized.semantic_guardrails.minimum_required_slide_anchor_groups !== 2) {
+  throw new Error("Pilot request semantic anchor minimum mismatch");
+}
+if (!normalized.semantic_guardrails.required_slide_anchor_groups.some((group) => group.includes("ritme"))) {
+  throw new Error("Pilot request is missing the rhythm semantic anchor");
+}
 
 console.log("BUS-144 pilot request contract PASS");
 console.log(`request_fingerprint=${createRequestFingerprint(normalized)}`);
