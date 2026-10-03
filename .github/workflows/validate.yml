@@ -48,3 +48,7 @@ jobs:
         run: node projects/sdoh/runtime/automated-content-production/scripts/cloudflare-workers-ai-generation-adapter-self-test.mjs
       - name: Self-test BUS-144 automated-generation pilot request
         run: node projects/sdoh/runtime/automated-content-production/scripts/bus144-pilot-request-self-test.mjs
+      - name: Self-test SDOH carousel render authority
+        run: node projects/sdoh/runtime/automated-content-production/scripts/verify-carousel-render-authority.mjs
+      - name: Self-test SDOH automated carousel render
+        run: node projects/sdoh/runtime/automated-content-production/scripts/automated-carousel-render-self-test.mjs
