@@ -11,6 +11,8 @@ const PREPARE_ALLOWED_STATES = new Set(["SCHEDULED", "CLAIMED"]);
 const MAX_BODY_BYTES = 32 * 1024;
 const MIN_TOKEN_REMAINING_MS = 60 * 1000;
 const MAX_TOKEN_REMAINING_MS = 3700 * 1000;
+const NORMAL_MAX_LATENESS_MS = 30 * 60 * 1000;
+const RECOVERY_MAX_LATENESS_MS = 24 * 60 * 60 * 1000;
 
 export async function handlePrepare(request, env) {
   if (request.method !== "POST") {
@@ -63,7 +65,12 @@ export async function handlePrepare(request, env) {
     drive_token_expires_at: expiresAt,
     governance_ref: governanceRef,
     authority_snapshot: authoritySnapshot,
+    execution_mode: executionMode = "SCHEDULED",
   } = payload;
+
+  const maxScheduleLatenessMs = executionMode === "LATE_RECOVERY"
+    ? RECOVERY_MAX_LATENESS_MS
+    : NORMAL_MAX_LATENESS_MS;
 
   const now = Date.now();
   const expiresAtMs = Date.parse(expiresAt);
@@ -109,6 +116,7 @@ export async function handlePrepare(request, env) {
       job,
       governanceRef,
       nowMs: now,
+      maxScheduleLatenessMs,
     });
 
     if (!authorityValidation.ok) {
@@ -323,6 +331,13 @@ function validatePreparePayload(payload) {
     !/^[0-9a-f]{40}$/i.test(payload.governance_ref)
   ) {
     return { ok: false, error: "INVALID_GOVERNANCE_REF" };
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(payload, "execution_mode") &&
+    !["SCHEDULED", "LATE_RECOVERY"].includes(payload.execution_mode)
+  ) {
+    return { ok: false, error: "INVALID_EXECUTION_MODE" };
   }
 
   if (

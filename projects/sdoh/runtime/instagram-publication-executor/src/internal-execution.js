@@ -6,6 +6,7 @@ import {
 const encoder = new TextEncoder();
 const MAX_BODY_BYTES = 8 * 1024;
 const SCHEDULED_EXECUTION_MAX_LATENESS_MS = 30 * 60 * 1000;
+const LATE_RECOVERY_MAX_LATENESS_MS = 24 * 60 * 60 * 1000;
 
 export async function handleInternalExecute(request, env) {
   const auth = await authorizeJsonRequest(request, env);
@@ -20,12 +21,15 @@ export async function handleInternalExecute(request, env) {
   try {
     let executionEnv = env;
 
-    if (payload.execution_mode === "SCHEDULED") {
+    if (["SCHEDULED", "LATE_RECOVERY"].includes(payload.execution_mode)) {
       const scheduledGate = await authorizeScheduledExecution({
         env,
         jobId: payload.job_id,
         governanceRef: payload.governance_ref,
         nowMs: Date.now(),
+        maxLatenessMs: payload.execution_mode === "LATE_RECOVERY"
+          ? LATE_RECOVERY_MAX_LATENESS_MS
+          : SCHEDULED_EXECUTION_MAX_LATENESS_MS,
       });
 
       if (!scheduledGate.ok) {
@@ -46,6 +50,9 @@ export async function handleInternalExecute(request, env) {
       jobId: payload.job_id,
       governanceRef: payload.governance_ref,
       origin: new URL(request.url).origin,
+      maxScheduleLatenessMs: payload.execution_mode === "LATE_RECOVERY"
+        ? LATE_RECOVERY_MAX_LATENESS_MS
+        : SCHEDULED_EXECUTION_MAX_LATENESS_MS,
     });
 
     if (result.status === "PUBLISHING_DISABLED") {
@@ -120,7 +127,7 @@ export function validateExecutePayload(payload) {
 
   if (
     Object.prototype.hasOwnProperty.call(payload, "execution_mode") &&
-    !["MANUAL", "SCHEDULED"].includes(payload.execution_mode)
+    !["MANUAL", "SCHEDULED", "LATE_RECOVERY"].includes(payload.execution_mode)
   ) {
     return { ok: false, error: "INVALID_EXECUTION_MODE" };
   }
@@ -137,6 +144,7 @@ export function evaluateScheduledExecutionWindow({
   scheduledPublishingEnabled,
   manualPublishingEnabled,
   nowMs,
+  maxLatenessMs = SCHEDULED_EXECUTION_MAX_LATENESS_MS,
 }) {
   if (scheduledPublishingEnabled !== "true") {
     return {
@@ -187,7 +195,11 @@ export function evaluateScheduledExecutionWindow({
     };
   }
 
-  if (nowMs > scheduledAtMs + SCHEDULED_EXECUTION_MAX_LATENESS_MS) {
+  if (!Number.isFinite(maxLatenessMs) || maxLatenessMs < 0 || maxLatenessMs > LATE_RECOVERY_MAX_LATENESS_MS) {
+    return { ok: false, status: 409, error: "SCHEDULE_LATENESS_INVALID" };
+  }
+
+  if (nowMs > scheduledAtMs + maxLatenessMs) {
     return {
       ok: false,
       status: 409,
@@ -207,6 +219,7 @@ async function authorizeScheduledExecution({
   jobId,
   governanceRef,
   nowMs,
+  maxLatenessMs = SCHEDULED_EXECUTION_MAX_LATENESS_MS,
 }) {
   if (!env?.DB) {
     return {
@@ -239,6 +252,7 @@ async function authorizeScheduledExecution({
     scheduledPublishingEnabled: env.SCHEDULED_PUBLISHING_ENABLED,
     manualPublishingEnabled: env.PUBLISHING_ENABLED,
     nowMs,
+    maxLatenessMs,
   });
 }
 

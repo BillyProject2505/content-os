@@ -142,6 +142,7 @@ export async function executeCarouselPublication({
   origin,
   fetchImpl = fetch,
   now = () => Date.now(),
+  maxScheduleLatenessMs = 30 * 60 * 1000,
 }) {
   requireRuntime(env);
   validateJobId(jobId);
@@ -184,6 +185,7 @@ export async function executeCarouselPublication({
     governanceRef,
     nowMs,
     requireFresh: false,
+    maxScheduleLatenessMs,
   });
 
   const artifacts = await loadArtifacts(env.DB, jobId);
@@ -219,6 +221,7 @@ export async function executeCarouselPublication({
     governanceRef,
     nowMs,
     requireFresh: true,
+    maxScheduleLatenessMs,
   });
 
   const caption = authoritySnapshot.approved_caption;

@@ -7,6 +7,8 @@ const MAX_BODY_BYTES = 32 * 1024;
 const MIN_TOKEN_REMAINING_MS = 60 * 1000;
 const MAX_TOKEN_REMAINING_MS = 3700 * 1000;
 const REFRESH_ALLOWED_STATES = new Set(["CLAIMED", "PUBLISHING"]);
+const NORMAL_MAX_LATENESS_MS = 30 * 60 * 1000;
+const RECOVERY_MAX_LATENESS_MS = 24 * 60 * 60 * 1000;
 
 export async function handleRefresh(request, env) {
   if (request.method !== "POST") {
@@ -27,10 +29,13 @@ export async function handleRefresh(request, env) {
 
   const requestUrl = new URL(request.url);
   const requestedMode = requestUrl.searchParams.get("mode");
-  if (requestedMode && requestedMode !== "scheduled") {
+  if (requestedMode && !["scheduled", "late-recovery"].includes(requestedMode)) {
     return json({ ok: false, error: "INVALID_REFRESH_MODE" }, 400);
   }
-  const scheduledMode = requestedMode === "scheduled";
+  const scheduledMode = ["scheduled", "late-recovery"].includes(requestedMode);
+  const maxScheduleLatenessMs = requestedMode === "late-recovery"
+    ? RECOVERY_MAX_LATENESS_MS
+    : NORMAL_MAX_LATENESS_MS;
 
   if (!scheduledMode && env.PUBLISHING_ENABLED !== "true") {
     return json({ ok: false, error: "PUBLISHING_WINDOW_NOT_OPEN" }, 409);
@@ -108,6 +113,7 @@ export async function handleRefresh(request, env) {
       scheduledPublishingEnabled: env.SCHEDULED_PUBLISHING_ENABLED,
       manualPublishingEnabled: env.PUBLISHING_ENABLED,
       nowMs: now,
+      maxLatenessMs: maxScheduleLatenessMs,
     });
 
     if (!scheduledGate.ok) {
@@ -153,6 +159,7 @@ export async function handleRefresh(request, env) {
     job,
     governanceRef,
     nowMs: now,
+    maxScheduleLatenessMs,
   });
   if (!authorityValidation.ok) {
     return json({ ok: false, error: authorityValidation.error }, 409);
