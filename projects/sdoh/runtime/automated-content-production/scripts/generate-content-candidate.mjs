@@ -20,17 +20,21 @@ const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || "";
 const apiToken = process.env.CLOUDFLARE_API_TOKEN || "";
 const maxAttempts = 3;
 
-const baseRequest = JSON.parse(fs.readFileSync(requestPath, "utf8"));
-let request = structuredClone(baseRequest);
+// The canonical request is immutable across attempts: it alone defines
+// request_fingerprint. Retry feedback travels as a separate provider hint.
+const canonicalRequest = Object.freeze(JSON.parse(fs.readFileSync(requestPath, "utf8")));
+let remediationHint = null;
 let result = null;
 
 for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
   try {
     result = await generateWithCloudflareWorkersAI({
-      request,
+      request: structuredClone(canonicalRequest),
       accountId,
       apiToken,
       model,
+      generationAttempt: attempt,
+      remediationHint,
     });
     console.log(`generation_attempt=${attempt}`);
     break;
@@ -65,12 +69,8 @@ for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       .replace(/\s+/g, " ")
       .slice(0, 1200);
 
-    request = {
-      ...structuredClone(baseRequest),
-      duplication_context:
-        baseRequest.duplication_context +
-        ` Automated remediation after attempt ${attempt}: the previous candidate failed ${error.code}. Gate diagnostics: ${gateDiagnostics}. Regenerate from scratch. Correct every listed failure. Keep the supplied core_concept materially visible across the slide sequence, satisfy semantic_guardrails and editorial_quality_guardrails exactly, preserve a clear five-slide progression, avoid fragmentary generic copy, and make the caption add substantive context rather than merely restating the slides.`,
-    };
+    remediationHint =
+      `Automated remediation after attempt ${attempt}: the previous candidate failed ${error.code}. Gate diagnostics: ${gateDiagnostics}. Regenerate from scratch. Correct every listed failure. Keep the supplied core_concept materially visible across the slide sequence, satisfy semantic_guardrails and editorial_quality_guardrails exactly, preserve a clear five-slide progression, avoid fragmentary generic copy, and make the caption add substantive context rather than merely restating the slides.`;
   }
 }
 
@@ -86,6 +86,8 @@ console.log(`provider=${result.generation_metadata.provider}`);
 console.log(`model=${result.generation_metadata.model}`);
 console.log(`request_fingerprint=${result.generation_metadata.request_fingerprint}`);
 console.log(`response_fingerprint=${result.generation_metadata.response_fingerprint}`);
+console.log(`accepted_generation_attempt=${result.generation_metadata.generation_attempt}`);
+console.log(`remediation_hint_fingerprint=${result.generation_metadata.remediation_hint_fingerprint ?? "none"}`);
 console.log("semantic_alignment=PASS");
 console.log("editorial_quality=PASS");
 console.log("candidate_state=UNAPPROVED");

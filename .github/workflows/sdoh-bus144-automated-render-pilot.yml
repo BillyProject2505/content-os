@@ -4,14 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       generation_run_id:
-        description: Successful generation run containing the exact candidate
+        description: Successful 'SDOH automated content generation pilot' run on main holding the candidate artifact
         required: true
-        default: "37089189231"
         type: string
       expected_response_fingerprint:
-        description: Exact BUS-161 candidate response fingerprint
+        description: Exact BUS-161 response_fingerprint of that candidate (64 lowercase hex)
         required: true
-        default: "13d358fdc3cd45be106e8a67468bc770ec575bb855ef92ac16988b7f3996cb6a"
         type: string
       confirmation:
         description: Type RENDER_UNAPPROVED_REVIEW_PACKAGE
@@ -42,10 +40,40 @@ jobs:
           CONFIRMATION: ${{ inputs.confirmation }}
         run: |
           set -euo pipefail
-          test "$GENERATION_RUN_ID" = "37089189231"
-          test "$EXPECTED_RESPONSE_FINGERPRINT" = "13d358fdc3cd45be106e8a67468bc770ec575bb855ef92ac16988b7f3996cb6a"
-          test "$CONFIRMATION" = "RENDER_UNAPPROVED_REVIEW_PACKAGE"
-          echo "BUS-144 render authorization PASS"
+          if ! [[ "$GENERATION_RUN_ID" =~ ^[1-9][0-9]{0,19}$ ]]; then
+            echo "::error::generation_run_id must be a numeric GitHub Actions run ID"
+            exit 1
+          fi
+          if ! [[ "$EXPECTED_RESPONSE_FINGERPRINT" =~ ^[0-9a-f]{64}$ ]]; then
+            echo "::error::expected_response_fingerprint must be 64 lowercase hex characters"
+            exit 1
+          fi
+          if [ "$CONFIRMATION" != "RENDER_UNAPPROVED_REVIEW_PACKAGE" ]; then
+            echo "::error::Exact confirmation is required"
+            exit 1
+          fi
+          echo "BUS-144 render input format PASS"
+
+      - name: Verify generation run provenance
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GENERATION_RUN_ID: ${{ inputs.generation_run_id }}
+        run: |
+          set -euo pipefail
+          run_json="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GENERATION_RUN_ID}")"
+          jq -e --arg repo "$GITHUB_REPOSITORY" '
+            .repository.full_name == $repo and
+            .path == ".github/workflows/sdoh-automated-content-generation-pilot.yml" and
+            .head_branch == "main" and
+            .event == "workflow_dispatch" and
+            .status == "completed" and
+            .conclusion == "success"
+          ' <<<"$run_json" >/dev/null || {
+            echo "::error::Run ${GENERATION_RUN_ID} is not a successful main-branch generation pilot run"
+            exit 1
+          }
+          echo "Generation run ${GENERATION_RUN_ID} provenance PASS (head $(jq -r '.head_sha' <<<"$run_json"))"
 
       - name: Download exact generation candidate
         uses: actions/download-artifact@v4
@@ -173,6 +201,8 @@ jobs:
 
       - name: Technical QA and assemble review evidence
         shell: bash
+        env:
+          GENERATION_RUN_ID: ${{ inputs.generation_run_id }}
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/review"
@@ -180,7 +210,7 @@ jobs:
           cp "$RUNNER_TEMP/render_manifest.json" "$RUNNER_TEMP/review/"
           cp projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json "$RUNNER_TEMP/review/"
 
-          node projects/sdoh/runtime/automated-content-production/scripts/validate-carousel-review-package.mjs             --report "$RUNNER_TEMP/review/rendered/render_report.json"             --manifest "$RUNNER_TEMP/render_manifest.json"             --candidate "$RUNNER_TEMP/generation/SDOH-SAGE-CAR-0009_candidate.json"             --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json             --out "$RUNNER_TEMP/review/review_package.json"
+          node projects/sdoh/runtime/automated-content-production/scripts/validate-carousel-review-package.mjs             --report "$RUNNER_TEMP/review/rendered/render_report.json"             --manifest "$RUNNER_TEMP/render_manifest.json"             --candidate "$RUNNER_TEMP/generation/SDOH-SAGE-CAR-0009_candidate.json"             --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json             --generation-run-id "$GENERATION_RUN_ID"             --out "$RUNNER_TEMP/review/review_package.json"
 
       - name: Build contact sheet
         shell: bash
@@ -208,14 +238,17 @@ jobs:
 
       - name: Final review-package fail-closed check
         shell: bash
+        env:
+          GENERATION_RUN_ID: ${{ inputs.generation_run_id }}
         run: |
           set -euo pipefail
-          jq -e '
+          jq -e --arg run_id "$GENERATION_RUN_ID" '
             .content_id == "SDOH-SAGE-CAR-0009" and
             .state == "READY_FOR_OWNER_REVIEW" and
             .approval == "NOT_GRANTED" and
             .publication_state == "PLANNED" and
             .technical_qa.result == "PASS" and
+            .source_candidate.generation_run_id == $run_id and
             (.outputs | length) == 5
           ' "$RUNNER_TEMP/review/review_package.json" >/dev/null
           echo "Review package READY_FOR_OWNER_REVIEW"
@@ -244,5 +277,7 @@ jobs:
             echo "- Renderer: BUS-49 v0.6.0"
             echo "- Pose route: P02 → P03 → P05 → P06 → P07"
             echo "- Technical QA: PASS"
+            echo "- Generation run: $(jq -r '.source_candidate.generation_run_id' "$pkg") (attempt $(jq -r '.source_candidate.generation_attempt' "$pkg"))"
+            echo "- Request fingerprint: $(jq -r '.source_candidate.request_fingerprint' "$pkg")"
             echo "- Response fingerprint: $(jq -r '.source_candidate.response_fingerprint' "$pkg")"
           } >> "$GITHUB_STEP_SUMMARY"

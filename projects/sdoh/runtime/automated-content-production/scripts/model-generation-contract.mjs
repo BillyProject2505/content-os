@@ -294,6 +294,60 @@ export function createRequestFingerprint(input) {
   return sha256Hex(canonicalJson(validateGenerationRequest(input)));
 }
 
+// Retry remediation is a non-canonical provider hint. It never enters the
+// canonical request (and therefore never changes request_fingerprint); it is
+// recorded as provenance inside generation_metadata, which the response
+// fingerprint covers.
+export const MAX_REMEDIATION_HINT_LENGTH = 2000;
+
+export function normalizeRemediationHint(hint) {
+  if (hint == null) return null;
+  assert(typeof hint === "string", "REMEDIATION_HINT_INVALID", "remediation hint must be a string");
+  const normalized = hint.replace(/\s+/g, " ").trim();
+  assert(normalized.length > 0, "REMEDIATION_HINT_INVALID", "remediation hint must not be empty");
+  assert(
+    normalized.length <= MAX_REMEDIATION_HINT_LENGTH,
+    "REMEDIATION_HINT_INVALID",
+    `remediation hint must be at most ${MAX_REMEDIATION_HINT_LENGTH} characters`
+  );
+  return normalized;
+}
+
+function validateRetryProvenance(metadata) {
+  const hasAttempt = Object.hasOwn(metadata, "generation_attempt");
+  const hasHint = Object.hasOwn(metadata, "remediation_hint");
+  const hasHintFingerprint = Object.hasOwn(metadata, "remediation_hint_fingerprint");
+  if (!hasAttempt && !hasHint && !hasHintFingerprint) return;
+  assert(
+    hasAttempt && hasHint && hasHintFingerprint,
+    "RETRY_PROVENANCE_INVALID",
+    "generation_attempt, remediation_hint and remediation_hint_fingerprint must be recorded together"
+  );
+  assert(
+    Number.isInteger(metadata.generation_attempt) && metadata.generation_attempt >= 1,
+    "RETRY_PROVENANCE_INVALID",
+    "generation_attempt must be a positive integer"
+  );
+  if (metadata.remediation_hint === null) {
+    assert(
+      metadata.remediation_hint_fingerprint === null,
+      "RETRY_PROVENANCE_INVALID",
+      "remediation_hint_fingerprint must be null when no hint was used"
+    );
+    return;
+  }
+  assert(
+    normalizeRemediationHint(metadata.remediation_hint) === metadata.remediation_hint,
+    "RETRY_PROVENANCE_INVALID",
+    "remediation_hint must be stored in normalized form"
+  );
+  assert(
+    metadata.remediation_hint_fingerprint === sha256Hex(metadata.remediation_hint),
+    "RETRY_PROVENANCE_INVALID",
+    "remediation_hint_fingerprint does not match remediation_hint"
+  );
+}
+
 export function createResponseFingerprint(response) {
   assert(response && typeof response === "object" && !Array.isArray(response), "RESPONSE_INVALID", "response must be an object");
   const copy = structuredClone(response);
@@ -391,7 +445,10 @@ export function validateCandidateEditorialQuality(candidate, request) {
   return assessment;
 }
 
-export function finalizeGenerationResponse(candidate, { request, provider, model }) {
+export function finalizeGenerationResponse(
+  candidate,
+  { request, provider, model, generationAttempt, remediationHint }
+) {
   assert(nonEmptyString(provider), "PROVIDER_MISSING", "provider is required");
   assert(nonEmptyString(model), "MODEL_MISSING", "model is required");
 
@@ -404,6 +461,14 @@ export function finalizeGenerationResponse(candidate, { request, provider, model
   validateCandidateEditorialQuality(normalizedCandidate, normalizedRequest);
   const requestFingerprint = createRequestFingerprint(normalizedRequest);
 
+  const retryProvenance = {};
+  if (generationAttempt !== undefined || remediationHint !== undefined) {
+    const hint = normalizeRemediationHint(remediationHint);
+    retryProvenance.generation_attempt = generationAttempt ?? 1;
+    retryProvenance.remediation_hint = hint;
+    retryProvenance.remediation_hint_fingerprint = hint === null ? null : sha256Hex(hint);
+  }
+
   const response = {
     ...normalizedCandidate,
     generation_metadata: {
@@ -411,6 +476,7 @@ export function finalizeGenerationResponse(candidate, { request, provider, model
       model,
       request_fingerprint: requestFingerprint,
       response_fingerprint: "",
+      ...retryProvenance,
     },
   };
   response.generation_metadata.response_fingerprint = createResponseFingerprint(response);
@@ -440,6 +506,7 @@ export function validateGenerationResponse(
     "response request_fingerprint does not match the validated request"
   );
   assert(/^[0-9a-f]{64}$/.test(metadata.response_fingerprint || ""), "RESPONSE_FINGERPRINT_INVALID", "response_fingerprint must be lowercase SHA-256 hex");
+  validateRetryProvenance(metadata);
 
   const expectedResponseFingerprint = createResponseFingerprint(response);
   assert(
