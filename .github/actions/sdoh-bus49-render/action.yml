@@ -1,0 +1,131 @@
+name: SDOH BUS-49 deterministic render
+description: >
+  Fetches the checksum-locked BUS-49 v0.6.0 renderer, font and pose binaries from
+  Google Drive, verifies the canonical render environment, renders a render
+  manifest and builds a contact sheet. Shared by the approved-copy Production
+  Path and the Optional Generation Path. It never reads copy, approves, schedules
+  or publishes anything.
+
+inputs:
+  google_access_token:
+    description: Drive read-only access token from google-github-actions/auth
+    required: true
+  manifest:
+    description: Path to the deterministic render manifest
+    required: true
+  out_dir:
+    description: Directory that receives the rendered JPEGs and render_report.json
+    required: true
+  contact_sheet:
+    description: Path of the contact sheet JPEG to write
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python 3.13.5
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13.5"
+
+    - name: Fetch canonical BUS-49 renderer, font, and pose binaries
+      shell: bash
+      env:
+        GOOGLE_ACCESS_TOKEN: ${{ inputs.google_access_token }}
+      run: |
+        set -euo pipefail
+        cfg="projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json"
+        root="$RUNNER_TEMP/render-input"
+        char_dir="$root/characters"
+        mkdir -p "$char_dir"
+
+        download_drive() {
+          local file_id="$1"
+          local output="$2"
+          local expected_sha="$3"
+          local label="$4"
+
+          local status
+          status="$(curl --silent --show-error --location --output "$output" --write-out "%{http_code}" --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN" "https://www.googleapis.com/drive/v3/files/$file_id?alt=media")"
+
+          if [ "$status" != "200" ] || [ ! -s "$output" ]; then
+            echo "::error::$label Drive fetch failed (HTTP $status)"
+            exit 1
+          fi
+
+          actual="$(sha256sum "$output" | awk '{print $1}')"
+          if [ "$actual" != "$expected_sha" ]; then
+            echo "::error::$label SHA-256 mismatch"
+            exit 1
+          fi
+          echo "$label SHA-256 PASS"
+        }
+
+        download_drive "$(jq -r '.renderer.drive_file_id' "$cfg")" "$root/renderer.zip" "$(jq -r '.renderer.sha256' "$cfg")" "BUS-49 v0.6.0 renderer"
+
+        download_drive "$(jq -r '.font.drive_file_id' "$cfg")" "$root/Caveat-Medium.ttf" "$(jq -r '.font.sha256' "$cfg")" "Caveat Medium"
+
+        for pose in P02 P03 P05 P06 P07; do
+          file_id="$(jq -r --arg p "$pose" '.poses[$p].drive_file_id' "$cfg")"
+          expected_sha="$(jq -r --arg p "$pose" '.poses[$p].sha256' "$cfg")"
+          filename="$(jq -r --arg p "$pose" '.poses[$p].expected_filename' "$cfg")"
+          download_drive "$file_id" "$char_dir/$filename" "$expected_sha" "$pose"
+        done
+
+        mkdir -p "$root/renderer"
+        unzip -q "$root/renderer.zip" -d "$root/renderer"
+        test -f "$root/renderer/bus49_v060canonical/renderer.py"
+
+    - name: Install and verify canonical render environment
+      shell: bash
+      run: |
+        set -euo pipefail
+        python -m pip install --disable-pip-version-check --quiet Pillow==12.3.0
+        python - <<'PY'
+        import sys
+        from PIL import __version__, features
+        assert sys.version.startswith("3.13.5"), sys.version
+        assert __version__ == "12.3.0", __version__
+        assert features.version("freetype2") == "2.14.3", features.version("freetype2")
+        assert features.version("raqm") == "0.10.5", features.version("raqm")
+        print("Canonical renderer environment PASS")
+        PY
+
+    - name: Render BUS-49 v0.6.0 review candidate
+      shell: bash
+      env:
+        MANIFEST: ${{ inputs.manifest }}
+        OUT_DIR: ${{ inputs.out_dir }}
+      run: |
+        set -euo pipefail
+        root="$RUNNER_TEMP/render-input"
+        mkdir -p "$OUT_DIR"
+        python "$root/renderer/bus49_v060canonical/renderer.py" --content "$MANIFEST" --font "$root/Caveat-Medium.ttf" --character-dir "$root/characters" --out "$OUT_DIR"
+
+    - name: Build contact sheet
+      shell: bash
+      env:
+        OUT_DIR: ${{ inputs.out_dir }}
+        CONTACT_SHEET: ${{ inputs.contact_sheet }}
+      run: |
+        set -euo pipefail
+        python - <<'PY'
+        import os
+        from pathlib import Path
+        from PIL import Image, ImageDraw
+
+        files = sorted(Path(os.environ["OUT_DIR"]).glob("*.jpg"))
+        assert len(files) == 5
+        cells = []
+        for p in files:
+            im = Image.open(p).convert("RGB")
+            im.thumbnail((324, 405))
+            c = Image.new("RGB", (344, 445), "white")
+            c.paste(im, ((344 - im.width) // 2, 10))
+            ImageDraw.Draw(c).text((10, 420), p.name, fill="black")
+            cells.append(c)
+        sheet = Image.new("RGB", (344 * 5, 445), "white")
+        for i, c in enumerate(cells):
+            sheet.paste(c, (i * 344, 0))
+        sheet.save(os.environ["CONTACT_SHEET"], quality=92)
+        PY

@@ -157,6 +157,7 @@ if(qa.status!==0) fail(qa.stderr||qa.stdout||"review QA failed");
 
 const review=JSON.parse(fs.readFileSync(reviewPath,"utf8"));
 if(review.state!=="READY_FOR_OWNER_REVIEW") fail("review state mismatch");
+if(review.production_path!=="OPTIONAL_GENERATION") fail("generation package must be labelled as the Optional Generation Path");
 if(review.approval!=="NOT_GRANTED") fail("approval boundary mismatch");
 if(review.publication_state!=="PLANNED") fail("publication boundary mismatch");
 console.log("PASS review-package state boundary");

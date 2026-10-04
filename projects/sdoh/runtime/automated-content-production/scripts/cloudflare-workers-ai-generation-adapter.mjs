@@ -1,4 +1,5 @@
 import {
+  assembleCaption,
   canonicalJson,
   createRequestFingerprint,
   finalizeGenerationResponse,
@@ -320,9 +321,7 @@ export async function generateWithCloudflareWorkersAI({
     schema_version: providerCandidate.schema_version,
     content_id: providerCandidate.content_id,
     slides: providerCandidate.slides,
-    caption: paragraphs.join("\n\n") + "\n\n" +
-      normalized.editorial_quality_guardrails.caption_required_signature + "\n" +
-      normalized.editorial_quality_guardrails.caption_required_hashtags.join(" "),
+    caption: assembleCaption(paragraphs, normalized.editorial_quality_guardrails),
     risk_flags: providerCandidate.risk_flags,
     research_sensitive_claims: providerCandidate.research_sensitive_claims,
   };
