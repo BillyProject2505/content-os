@@ -14,6 +14,7 @@ import {
 } from "./remediation-hint.mjs";
 import { MAX_REMEDIATION_HINT_LENGTH, createRequestFingerprint } from "./model-generation-contract.mjs";
 import { assessEditorialQuality } from "./editorial-quality-gate.mjs";
+import { DEFAULT_CLOUDFLARE_MODEL } from "./cloudflare-workers-ai-generation-adapter.mjs";
 
 function fail(message) { throw new Error(message); }
 const here = (name) => fileURLToPath(new URL(`./${name}`, import.meta.url));
@@ -93,7 +94,7 @@ globalThis.fetch = async (_u, init) => { fs.appendFileSync(${JSON.stringify(call
   const token = "test-token-not-a-real-secret-0000";
   const child = spawnSync(process.execPath, ["--import", mockPath, here("generate-content-candidate.mjs"), "--request", fileURLToPath(new URL("../pilot-requests/SDOH-SAGE-CAR-0009.json", import.meta.url)), "--output", path.join(tempDir, "out.json")], {
     encoding: "utf8",
-    env: { ...process.env, GITHUB_ACTIONS: "true", CLOUDFLARE_ACCOUNT_ID: "test-account-0000", CLOUDFLARE_API_TOKEN: token, SDOH_GENERATION_MODEL: "@cf/meta/llama-4-scout-17b-16e-instruct" },
+    env: { ...process.env, GITHUB_ACTIONS: "true", CLOUDFLARE_ACCOUNT_ID: "test-account-0000", CLOUDFLARE_API_TOKEN: token, SDOH_GENERATION_MODEL: DEFAULT_CLOUDFLARE_MODEL },
   });
   if (child.status !== 1) fail("all-rejected generation must fail closed");
   const calls = fs.readFileSync(callLog, "utf8").trim().split("\n").map((l) => JSON.parse(l));

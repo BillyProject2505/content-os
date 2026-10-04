@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   DEFAULT_CLOUDFLARE_MODEL,
+  PAID_MODELS_NOT_AUTHORIZED,
   generateWithCloudflareWorkersAI,
 } from "./cloudflare-workers-ai-generation-adapter.mjs";
 import { buildRemediationHint } from "./remediation-hint.mjs";
@@ -30,6 +31,17 @@ const model = process.env.SDOH_GENERATION_MODEL || DEFAULT_CLOUDFLARE_MODEL;
 const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || "";
 const apiToken = process.env.CLOUDFLARE_API_TOKEN || "";
 const maxAttempts = 3;
+
+// BUS-160 AI Cost Policy: paid models are refused before any provider call.
+if (PAID_MODELS_NOT_AUTHORIZED.includes(model)) {
+  annotate(
+    "error",
+    "SDOH generation model not authorized",
+    `model=${model} code=MODEL_NOT_AUTHORIZED reason=paid AI model not authorized by BUS-160 cost policy candidate_state=NONE owner_approval=NOT_GRANTED`
+  );
+  console.error(`MODEL_NOT_AUTHORIZED: ${model} requires paid billing and is not authorized (BUS-160 AI Cost Policy).`);
+  process.exit(1);
+}
 
 // The canonical request is immutable across attempts: it alone defines
 // request_fingerprint. Retry feedback travels as a separate provider hint.
