@@ -131,9 +131,12 @@ if (copySchema.minLength !== 24 || copySchema.maxLength !== 90) {
 const captionSchema = schema.properties.caption_body_paragraphs;
 if (captionSchema.type !== "array" || captionSchema.minItems !== 3 || schema.properties.caption) fail("structured caption body schema mismatch");
 const instructions = providerRequest.body.messages[0].content;
-if (!instructions.includes("S1: 5-9 words")) fail("S1 word-count constraint missing");
-if (!instructions.includes("Caption body must contain 45-110 words")) fail("caption word-count constraint missing");
-if (!instructions.includes("at least 3 paragraphs")) fail("caption paragraph constraint missing");
+if (!instructions.includes("S1 [sparse]: 5-6 words (gate 5-9); MUST contain (\"ritme\") AND")) fail("S1 word-count/anchor constraint missing");
+if (!instructions.includes("S3 [peak]: 8-9 words (gate 5-9); MUST contain")) fail("S3 peak constraint missing");
+if (!instructions.includes("body total 45-110 words")) fail("caption word-count constraint missing");
+if (!instructions.includes("exactly 3 paragraphs")) fail("caption paragraph constraint missing");
+if (!instructions.includes("Never write a two-, three- or four-word label")) fail("anti-fragment density mapping missing");
+if (instructions.includes("RETRY REMEDIATION")) fail("first-attempt prompt must not carry a remediation hint");
 console.log("PASS explicit editorial constraints surfaced");
 
 const candidate = {
