@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sdoh-instagram-publication-executor",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-21",
+  "keep_vars": true,
+  "previews": {},
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "sdoh-publication-executor",
+      "database_id": "da3b3232-36d4-4919-ba0d-1796a2530a09"
+    }
+  ]
+}
