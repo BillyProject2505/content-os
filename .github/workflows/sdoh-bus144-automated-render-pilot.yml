@@ -1,3 +1,8 @@
+# OPTIONAL GENERATION PATH (experimental, not a production dependency).
+# The canonical BUS-160 Production Path is sdoh-approved-copy-render.yml, which
+# renders Owner/editor-approved copy from the repository and needs no model.
+# This workflow only renders an unapproved AI-generation candidate artifact and
+# remains manual (workflow_dispatch); nothing in the Production Path calls it.
 name: SDOH BUS-144 automated render pilot
 
 on:
@@ -104,10 +109,13 @@ jobs:
       - name: Verify runtime authority against canonical Asset Registry
         run: node projects/sdoh/runtime/automated-content-production/scripts/verify-carousel-render-authority.mjs
 
-      - name: Set up Python 3.13.5
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13.5"
+      - name: Build deterministic BUS-144 render manifest
+        shell: bash
+        env:
+          EXPECTED_RESPONSE_FINGERPRINT: ${{ inputs.expected_response_fingerprint }}
+        run: |
+          set -euo pipefail
+          node projects/sdoh/runtime/automated-content-production/scripts/build-carousel-render-manifest.mjs             --candidate "$RUNNER_TEMP/generation/SDOH-SAGE-CAR-0009_candidate.json"             --request projects/sdoh/runtime/automated-content-production/pilot-requests/SDOH-SAGE-CAR-0009.json             --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json             --expected-response-fingerprint "$EXPECTED_RESPONSE_FINGERPRINT"             --out "$RUNNER_TEMP/render_manifest.json"
 
       - name: Authenticate to Google Cloud with WIF
         id: auth
@@ -119,85 +127,13 @@ jobs:
           access_token_scopes: https://www.googleapis.com/auth/drive.readonly
           access_token_lifetime: 3600s
 
-      - name: Fetch canonical BUS-49 renderer, font, and pose binaries
-        shell: bash
-        env:
-          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
-        run: |
-          set -euo pipefail
-          cfg="projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json"
-          root="$RUNNER_TEMP/render-input"
-          char_dir="$root/characters"
-          mkdir -p "$char_dir"
-
-          download_drive() {
-            local file_id="$1"
-            local output="$2"
-            local expected_sha="$3"
-            local label="$4"
-
-            local status
-            status="$(curl --silent --show-error --location               --output "$output"               --write-out "%{http_code}"               --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN"               "https://www.googleapis.com/drive/v3/files/$file_id?alt=media")"
-
-            if [ "$status" != "200" ] || [ ! -s "$output" ]; then
-              echo "::error::$label Drive fetch failed (HTTP $status)"
-              exit 1
-            fi
-
-            actual="$(sha256sum "$output" | awk '{print $1}')"
-            if [ "$actual" != "$expected_sha" ]; then
-              echo "::error::$label SHA-256 mismatch"
-              exit 1
-            fi
-            echo "$label SHA-256 PASS"
-          }
-
-          download_drive             "$(jq -r '.renderer.drive_file_id' "$cfg")"             "$root/renderer.zip"             "$(jq -r '.renderer.sha256' "$cfg")"             "BUS-49 v0.6.0 renderer"
-
-          download_drive             "$(jq -r '.font.drive_file_id' "$cfg")"             "$root/Caveat-Medium.ttf"             "$(jq -r '.font.sha256' "$cfg")"             "Caveat Medium"
-
-          for pose in P02 P03 P05 P06 P07; do
-            file_id="$(jq -r --arg p "$pose" '.poses[$p].drive_file_id' "$cfg")"
-            expected_sha="$(jq -r --arg p "$pose" '.poses[$p].sha256' "$cfg")"
-            filename="$(jq -r --arg p "$pose" '.poses[$p].expected_filename' "$cfg")"
-            download_drive "$file_id" "$char_dir/$filename" "$expected_sha" "$pose"
-          done
-
-          mkdir -p "$root/renderer"
-          unzip -q "$root/renderer.zip" -d "$root/renderer"
-          test -f "$root/renderer/bus49_v060canonical/renderer.py"
-
-      - name: Install and verify canonical render environment
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m pip install --disable-pip-version-check --quiet Pillow==12.3.0
-          python - <<'PY'
-          import sys
-          from PIL import __version__, features
-          assert sys.version.startswith("3.13.5"), sys.version
-          assert __version__ == "12.3.0", __version__
-          assert features.version("freetype2") == "2.14.3", features.version("freetype2")
-          assert features.version("raqm") == "0.10.5", features.version("raqm")
-          print("Canonical renderer environment PASS")
-          PY
-
-      - name: Build deterministic BUS-144 render manifest
-        shell: bash
-        env:
-          EXPECTED_RESPONSE_FINGERPRINT: ${{ inputs.expected_response_fingerprint }}
-        run: |
-          set -euo pipefail
-          node projects/sdoh/runtime/automated-content-production/scripts/build-carousel-render-manifest.mjs             --candidate "$RUNNER_TEMP/generation/SDOH-SAGE-CAR-0009_candidate.json"             --request projects/sdoh/runtime/automated-content-production/pilot-requests/SDOH-SAGE-CAR-0009.json             --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json             --expected-response-fingerprint "$EXPECTED_RESPONSE_FINGERPRINT"             --out "$RUNNER_TEMP/render_manifest.json"
-
-      - name: Render BUS-49 v0.6.0 review candidate
-        shell: bash
-        run: |
-          set -euo pipefail
-          root="$RUNNER_TEMP/render-input"
-          out="$RUNNER_TEMP/review/rendered"
-          mkdir -p "$out"
-          python "$root/renderer/bus49_v060canonical/renderer.py"             --content "$RUNNER_TEMP/render_manifest.json"             --font "$root/Caveat-Medium.ttf"             --character-dir "$root/characters"             --out "$out"
+      - name: Render with BUS-49 v0.6.0 (shared render action)
+        uses: ./.github/actions/sdoh-bus49-render
+        with:
+          google_access_token: ${{ steps.auth.outputs.access_token }}
+          manifest: ${{ runner.temp }}/render_manifest.json
+          out_dir: ${{ runner.temp }}/review/rendered
+          contact_sheet: ${{ runner.temp }}/review/SDOH-SAGE-CAR-0009_contact_sheet.jpg
 
       - name: Technical QA and assemble review evidence
         shell: bash
@@ -211,30 +147,6 @@ jobs:
           cp projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json "$RUNNER_TEMP/review/"
 
           node projects/sdoh/runtime/automated-content-production/scripts/validate-carousel-review-package.mjs             --report "$RUNNER_TEMP/review/rendered/render_report.json"             --manifest "$RUNNER_TEMP/render_manifest.json"             --candidate "$RUNNER_TEMP/generation/SDOH-SAGE-CAR-0009_candidate.json"             --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json             --generation-run-id "$GENERATION_RUN_ID"             --out "$RUNNER_TEMP/review/review_package.json"
-
-      - name: Build contact sheet
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
-          from PIL import Image, ImageDraw
-
-          files=sorted(Path("${{ runner.temp }}/review/rendered").glob("*.jpg"))
-          assert len(files)==5
-          cells=[]
-          for p in files:
-              im=Image.open(p).convert("RGB")
-              im.thumbnail((324,405))
-              c=Image.new("RGB",(344,445),"white")
-              c.paste(im,((344-im.width)//2,10))
-              ImageDraw.Draw(c).text((10,420),p.name,fill="black")
-              cells.append(c)
-          sheet=Image.new("RGB",(344*5,445),"white")
-          for i,c in enumerate(cells):
-              sheet.paste(c,(i*344,0))
-          sheet.save("${{ runner.temp }}/review/SDOH-SAGE-CAR-0009_contact_sheet.jpg",quality=92)
-          PY
 
       - name: Final review-package fail-closed check
         shell: bash

@@ -1,6 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
+import {
+  assertManifestMatchesCopy,
+  copyToCandidate,
+  runApprovedCopyGates,
+  validateApprovedCopy,
+} from "./approved-copy-contract.mjs";
 
 function arg(name) {
   const i = process.argv.indexOf(name);
@@ -22,7 +28,12 @@ function assert(ok, message) {
 
 const reportPath=path.resolve(arg("--report"));
 const manifestPath=path.resolve(arg("--manifest"));
-const candidatePath=path.resolve(arg("--candidate"));
+// Exactly one source: the approved-copy snapshot (Production Path) or a
+// generation candidate (Optional Generation Path).
+const copyArg=optionalArg("--copy");
+const candidateArg=optionalArg("--candidate");
+assert((copyArg===null)!==(candidateArg===null), "Provide exactly one of --copy or --candidate");
+const expectedCopyFingerprint=optionalArg("--expected-copy-fingerprint");
 const authorityPath=path.resolve(arg("--authority"));
 const outPath=path.resolve(arg("--out"));
 const generationRunId=optionalArg("--generation-run-id");
@@ -31,12 +42,12 @@ const renderDir=path.dirname(reportPath);
 
 const report=JSON.parse(fs.readFileSync(reportPath,"utf8"));
 const manifest=JSON.parse(fs.readFileSync(manifestPath,"utf8"));
-const candidate=JSON.parse(fs.readFileSync(candidatePath,"utf8"));
 const authority=JSON.parse(fs.readFileSync(authorityPath,"utf8"));
 const plan=authority.sage_default_visual_plan;
 
 assert(report.template_version === authority.renderer.version, "Renderer version mismatch");
-assert(report.content_id === "SDOH-SAGE-CAR-0009", "Content ID mismatch");
+assert(report.content_id === manifest.content_id, "Content ID mismatch");
+assert(manifest.theme === "SAGE", "Manifest theme mismatch");
 assert(report.theme === "SAGE", "Theme mismatch");
 assert(report.layout_mode === "illustrated_single_character", "Layout mode mismatch");
 assert(report.outputs.length === 5, "Expected five render outputs");
@@ -62,22 +73,52 @@ for (const [index, output] of report.outputs.entries()) {
   assert(sha256File(jpg) === output.sha256, `Rendered JPEG SHA mismatch S${slide}`);
 }
 
+let source;
+if(copyArg!==null){
+  // Production Path: re-verify the run's frozen copy (status, integrity, both
+  // gates) and prove the renderer received exactly that copy.
+  assert(generationRunId===null, "--generation-run-id applies only to the Optional Generation Path");
+  const copy=validateApprovedCopy(
+    JSON.parse(fs.readFileSync(path.resolve(copyArg),"utf8")),
+    {expectedContentId:manifest.content_id, expectedCopyFingerprint:expectedCopyFingerprint ?? undefined}
+  );
+  runApprovedCopyGates(copy);
+  assertManifestMatchesCopy(manifest, copy);
+  source={
+    production_path:"APPROVED_COPY",
+    source_copy:{
+      status:copy.status,
+      copy_fingerprint:copy.copy_fingerprint,
+      caption:copyToCandidate(copy).caption
+    }
+  };
+}else{
+  assert(expectedCopyFingerprint===null, "--expected-copy-fingerprint applies only to the Production Path");
+  const candidate=JSON.parse(fs.readFileSync(path.resolve(candidateArg),"utf8"));
+  assert(manifest.content_id === "SDOH-SAGE-CAR-0009", "Generation pilot is locked to SDOH-SAGE-CAR-0009");
+  assert(candidate.content_id === manifest.content_id, "Candidate content ID mismatch");
+  source={
+    production_path:"OPTIONAL_GENERATION",
+    source_candidate:{
+      provider:candidate.generation_metadata.provider,
+      model:candidate.generation_metadata.model,
+      request_fingerprint:candidate.generation_metadata.request_fingerprint,
+      response_fingerprint:candidate.generation_metadata.response_fingerprint,
+      generation_run_id:generationRunId,
+      generation_attempt:candidate.generation_metadata.generation_attempt ?? null,
+      remediation_hint_fingerprint:candidate.generation_metadata.remediation_hint_fingerprint ?? null,
+      caption:candidate.caption
+    }
+  };
+}
+
 const review={
   schema_version:"1",
-  content_id:"SDOH-SAGE-CAR-0009",
+  content_id:manifest.content_id,
   state:"READY_FOR_OWNER_REVIEW",
   approval:"NOT_GRANTED",
   publication_state:"PLANNED",
-  source_candidate:{
-    provider:candidate.generation_metadata.provider,
-    model:candidate.generation_metadata.model,
-    request_fingerprint:candidate.generation_metadata.request_fingerprint,
-    response_fingerprint:candidate.generation_metadata.response_fingerprint,
-    generation_run_id:generationRunId,
-    generation_attempt:candidate.generation_metadata.generation_attempt ?? null,
-    remediation_hint_fingerprint:candidate.generation_metadata.remediation_hint_fingerprint ?? null,
-    caption:candidate.caption
-  },
+  ...source,
   visual_plan:{
     layout_mode:plan.layout_mode,
     pose_route:plan.pose_route,

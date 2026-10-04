@@ -1,3 +1,7 @@
+# OPTIONAL / EXPERIMENTAL GENERATION CAPABILITY (BUS-161/BUS-162, PRs #98-#102).
+# Not a production dependency: the canonical BUS-160 Production Path renders
+# Owner/editor-approved copy (sdoh-approved-copy-render.yml) and never calls this
+# workflow. A failure here does not block approved-copy production. Manual only.
 name: SDOH automated content generation pilot
 
 on:

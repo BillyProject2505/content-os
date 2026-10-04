@@ -42,78 +42,9 @@ function validateStringArray(value, code, field) {
   }
 }
 
-export function validateGenerationRequest(input) {
-  assert(input && typeof input === "object" && !Array.isArray(input), "REQUEST_INVALID", "request must be an object");
-
-  const {
-    content_id,
-    theme,
-    format,
-    core_concept,
-    campaign_context,
-    risk_class,
-    governance_context,
-    authority_packet,
-    duplication_context,
-    semantic_guardrails,
-    editorial_quality_guardrails,
-  } = input;
-
-  assert(
-    /^SDOH-(SAGE|BURGUNDY)-CAR-\d{4}$/.test(content_id || ""),
-    "CONTENT_ID_INVALID",
-    "content_id must be an SDOH Sage/Burgundy Carousel ID"
-  );
-  assert(theme === "SAGE" || theme === "BURGUNDY", "THEME_INVALID", "theme must be SAGE or BURGUNDY");
-  assert(
-    content_id.startsWith(`SDOH-${theme}-CAR-`),
-    "THEME_CONTENT_ID_MISMATCH",
-    "theme must match content_id"
-  );
-  assert(format === "CAROUSEL", "FORMAT_INVALID", "format must be CAROUSEL");
-  assert(nonEmptyString(core_concept), "CORE_CONCEPT_MISSING", "core_concept is required");
-  assert(typeof campaign_context === "string", "CAMPAIGN_CONTEXT_INVALID", "campaign_context must be a string");
-  assert(
-    risk_class === "STANDARD" || risk_class === "REVIEW_REQUIRED",
-    "RISK_CLASS_INVALID",
-    "risk_class must be STANDARD or REVIEW_REQUIRED"
-  );
-
-  assert(
-    governance_context && typeof governance_context === "object" && !Array.isArray(governance_context),
-    "GOVERNANCE_CONTEXT_INVALID",
-    "governance_context must be an object"
-  );
-
-  const governanceKeys = [
-    "project_architecture_ref",
-    "production_sop_ref",
-    "qa_ref",
-    "format_lane_ref",
-    "research_ref",
-  ];
-  for (const key of governanceKeys) {
-    assert(nonEmptyString(governance_context[key]), "GOVERNANCE_REF_MISSING", `governance_context.${key} is required`);
-  }
-
-  assert(
-    authority_packet && typeof authority_packet === "object" && !Array.isArray(authority_packet),
-    "AUTHORITY_PACKET_INVALID",
-    "authority_packet must be an object"
-  );
-  const authorityKeys = [
-    "theme_semantics",
-    "carousel_copy_rules",
-    "caption_rules",
-    "safety_rules",
-    "research_rules",
-  ];
-  for (const key of authorityKeys) {
-    assert(nonEmptyString(authority_packet[key]), "AUTHORITY_PACKET_FIELD_MISSING", `authority_packet.${key} is required`);
-  }
-
-  assert(nonEmptyString(duplication_context), "DUPLICATION_CONTEXT_MISSING", "duplication_context is required");
-
+// Shared by the request validator and the approved-copy gates so both paths
+// enforce exactly the same guardrail shape.
+export function normalizeSemanticGuardrails(semantic_guardrails) {
   assert(
     semantic_guardrails &&
       typeof semantic_guardrails === "object" &&
@@ -161,7 +92,19 @@ export function validateGenerationRequest(input) {
       "forbidden slide phrase entries must be non-empty strings"
     );
   }
+  return {
+    required_slide_anchor_groups:
+      semantic_guardrails.required_slide_anchor_groups.map((group) =>
+        group.map((entry) => entry.trim())
+      ),
+    minimum_required_slide_anchor_groups:
+      semantic_guardrails.minimum_required_slide_anchor_groups,
+    forbidden_slide_phrases:
+      semantic_guardrails.forbidden_slide_phrases.map((entry) => entry.trim()),
+  };
+}
 
+export function normalizeEditorialGuardrails(editorial_quality_guardrails) {
   assert(
     editorial_quality_guardrails &&
       typeof editorial_quality_guardrails === "object" &&
@@ -265,6 +208,83 @@ export function validateGenerationRequest(input) {
     "EDITORIAL_CAPTION_HASHTAGS_INVALID",
     "caption_required_hashtags"
   );
+  return structuredClone(editorial_quality_guardrails);
+}
+
+export function validateGenerationRequest(input) {
+  assert(input && typeof input === "object" && !Array.isArray(input), "REQUEST_INVALID", "request must be an object");
+
+  const {
+    content_id,
+    theme,
+    format,
+    core_concept,
+    campaign_context,
+    risk_class,
+    governance_context,
+    authority_packet,
+    duplication_context,
+    semantic_guardrails,
+    editorial_quality_guardrails,
+  } = input;
+
+  assert(
+    /^SDOH-(SAGE|BURGUNDY)-CAR-\d{4}$/.test(content_id || ""),
+    "CONTENT_ID_INVALID",
+    "content_id must be an SDOH Sage/Burgundy Carousel ID"
+  );
+  assert(theme === "SAGE" || theme === "BURGUNDY", "THEME_INVALID", "theme must be SAGE or BURGUNDY");
+  assert(
+    content_id.startsWith(`SDOH-${theme}-CAR-`),
+    "THEME_CONTENT_ID_MISMATCH",
+    "theme must match content_id"
+  );
+  assert(format === "CAROUSEL", "FORMAT_INVALID", "format must be CAROUSEL");
+  assert(nonEmptyString(core_concept), "CORE_CONCEPT_MISSING", "core_concept is required");
+  assert(typeof campaign_context === "string", "CAMPAIGN_CONTEXT_INVALID", "campaign_context must be a string");
+  assert(
+    risk_class === "STANDARD" || risk_class === "REVIEW_REQUIRED",
+    "RISK_CLASS_INVALID",
+    "risk_class must be STANDARD or REVIEW_REQUIRED"
+  );
+
+  assert(
+    governance_context && typeof governance_context === "object" && !Array.isArray(governance_context),
+    "GOVERNANCE_CONTEXT_INVALID",
+    "governance_context must be an object"
+  );
+
+  const governanceKeys = [
+    "project_architecture_ref",
+    "production_sop_ref",
+    "qa_ref",
+    "format_lane_ref",
+    "research_ref",
+  ];
+  for (const key of governanceKeys) {
+    assert(nonEmptyString(governance_context[key]), "GOVERNANCE_REF_MISSING", `governance_context.${key} is required`);
+  }
+
+  assert(
+    authority_packet && typeof authority_packet === "object" && !Array.isArray(authority_packet),
+    "AUTHORITY_PACKET_INVALID",
+    "authority_packet must be an object"
+  );
+  const authorityKeys = [
+    "theme_semantics",
+    "carousel_copy_rules",
+    "caption_rules",
+    "safety_rules",
+    "research_rules",
+  ];
+  for (const key of authorityKeys) {
+    assert(nonEmptyString(authority_packet[key]), "AUTHORITY_PACKET_FIELD_MISSING", `authority_packet.${key} is required`);
+  }
+
+  assert(nonEmptyString(duplication_context), "DUPLICATION_CONTEXT_MISSING", "duplication_context is required");
+
+  const normalizedSemanticGuardrails = normalizeSemanticGuardrails(semantic_guardrails);
+  const normalizedEditorialGuardrails = normalizeEditorialGuardrails(editorial_quality_guardrails);
 
   return {
     content_id,
@@ -276,17 +296,8 @@ export function validateGenerationRequest(input) {
     governance_context: Object.fromEntries(governanceKeys.map((key) => [key, governance_context[key]])),
     authority_packet: Object.fromEntries(authorityKeys.map((key) => [key, authority_packet[key]])),
     duplication_context: duplication_context.trim(),
-    semantic_guardrails: {
-      required_slide_anchor_groups:
-        semantic_guardrails.required_slide_anchor_groups.map((group) =>
-          group.map((entry) => entry.trim())
-        ),
-      minimum_required_slide_anchor_groups:
-        semantic_guardrails.minimum_required_slide_anchor_groups,
-      forbidden_slide_phrases:
-        semantic_guardrails.forbidden_slide_phrases.map((entry) => entry.trim()),
-    },
-    editorial_quality_guardrails: structuredClone(editorial_quality_guardrails),
+    semantic_guardrails: normalizedSemanticGuardrails,
+    editorial_quality_guardrails: normalizedEditorialGuardrails,
   };
 }
 
@@ -395,12 +406,18 @@ function normalizeSemanticText(value) {
 }
 
 export function validateCandidateSemanticAlignment(candidate, request) {
-  const normalizedRequest = validateGenerationRequest(request);
+  return validateSemanticAlignment(candidate, validateGenerationRequest(request).semantic_guardrails);
+}
+
+// Guardrail-level form shared with the approved-copy path: the gate logic lives
+// here once and is never re-implemented.
+export function validateSemanticAlignment(candidate, semanticGuardrails) {
+  const normalizedGuardrails = normalizeSemanticGuardrails(semanticGuardrails);
   const slideText = normalizeSemanticText(
     candidate.slides.map((slide) => slide.copy).join(" ")
   );
 
-  const groups = normalizedRequest.semantic_guardrails.required_slide_anchor_groups;
+  const groups = normalizedGuardrails.required_slide_anchor_groups;
   const hits = groups.map((group) =>
     group.some((entry) => slideText.includes(normalizeSemanticText(entry)))
   );
@@ -408,13 +425,13 @@ export function validateCandidateSemanticAlignment(candidate, request) {
 
   assert(
     hitCount >=
-      normalizedRequest.semantic_guardrails.minimum_required_slide_anchor_groups,
+      normalizedGuardrails.minimum_required_slide_anchor_groups,
     "SEMANTIC_ALIGNMENT_FAILED",
-    `candidate hit ${hitCount}/${groups.length} required slide anchor groups; minimum is ${normalizedRequest.semantic_guardrails.minimum_required_slide_anchor_groups}`
+    `candidate hit ${hitCount}/${groups.length} required slide anchor groups; minimum is ${normalizedGuardrails.minimum_required_slide_anchor_groups}`
   );
 
   const forbiddenHits =
-    normalizedRequest.semantic_guardrails.forbidden_slide_phrases.filter(
+    normalizedGuardrails.forbidden_slide_phrases.filter(
       (phrase) => slideText.includes(normalizeSemanticText(phrase))
     );
 
@@ -432,10 +449,13 @@ export function validateCandidateSemanticAlignment(candidate, request) {
 }
 
 export function validateCandidateEditorialQuality(candidate, request) {
-  const normalizedRequest = validateGenerationRequest(request);
+  return validateEditorialQuality(candidate, validateGenerationRequest(request).editorial_quality_guardrails);
+}
+
+export function validateEditorialQuality(candidate, editorialGuardrails) {
   const assessment = assessEditorialQuality(
     candidate,
-    normalizedRequest.editorial_quality_guardrails
+    normalizeEditorialGuardrails(editorialGuardrails)
   );
   assert(
     assessment.ok,
@@ -443,6 +463,18 @@ export function validateCandidateEditorialQuality(candidate, request) {
     assessment.issues.join("; ")
   );
   return assessment;
+}
+
+// Fixed project furniture (signature + hashtags) is deterministic; body text is
+// never edited. Used by the optional generation adapter and the approved-copy path.
+export function assembleCaption(bodyParagraphs, editorialGuardrails) {
+  return (
+    bodyParagraphs.join("\n\n") +
+    "\n\n" +
+    editorialGuardrails.caption_required_signature +
+    "\n" +
+    editorialGuardrails.caption_required_hashtags.join(" ")
+  );
 }
 
 export function finalizeGenerationResponse(
