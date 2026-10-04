@@ -48,7 +48,8 @@ const envelope = (output) => ({
   success: true,
   errors: [],
   messages: [],
-  result: { choices: [{ finish_reason: "stop", message: { role: "assistant", content: JSON.stringify(output) } }] },
+  // Workers AI JSON Mode envelope of the canonical free-tier default model.
+  result: { response: output },
 });
 
 const sparseSlides = [...goodSlides];

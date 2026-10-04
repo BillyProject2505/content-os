@@ -59,8 +59,20 @@ const OUTPUT_SCHEMA = {
   ],
 };
 
+// BUS-160 AI Cost Policy (Owner decision 2026-10-04): FREE-TIER ONLY.
+// Paid AI providers/models are not authorized; the canonical runtime must work
+// without paid AI billing. This constant is the single source of truth for the
+// canonical default model (workflow input and tests resolve to it).
 export const DEFAULT_CLOUDFLARE_MODEL =
-  "@cf/moonshotai/kimi-k2.6";
+  "@cf/meta/llama-4-scout-17b-16e-instruct";
+
+// Historical/optional only (PR #93). Requires Workers Paid or prepaid credits:
+// NOT the default, NOT a fallback, and NOT authorized for runtime calls
+// without a new Owner decision (see PAID_MODELS_NOT_AUTHORIZED).
+export const KIMI_K2_6_MODEL = "@cf/moonshotai/kimi-k2.6";
+
+// Models that require paid billing. Runtime entry points must refuse them.
+export const PAID_MODELS_NOT_AUTHORIZED = Object.freeze([KIMI_K2_6_MODEL]);
 
 export function buildCloudflareWorkersAIRequest({
   request,
@@ -69,7 +81,7 @@ export function buildCloudflareWorkersAIRequest({
 }) {
   const normalized = validateGenerationRequest(request);
   const hint = normalizeRemediationHint(remediationHint);
-  const usesChatCompletions = model === "@cf/moonshotai/kimi-k2.6";
+  const usesChatCompletions = model === KIMI_K2_6_MODEL;
 
   const editorial = normalized.editorial_quality_guardrails;
   const outputSchema = structuredClone(OUTPUT_SCHEMA);
@@ -160,7 +172,7 @@ function normalizeCandidate(body, model) {
   }
 
   let raw;
-  if (model === "@cf/moonshotai/kimi-k2.6") {
+  if (model === KIMI_K2_6_MODEL) {
     const choices = body.result?.choices;
     if (!Array.isArray(choices) || choices.length !== 1 || choices[0]?.finish_reason !== "stop" || choices[0]?.message?.refusal || choices[0]?.message?.tool_calls?.length) {
       throw new CloudflareGenerationError(

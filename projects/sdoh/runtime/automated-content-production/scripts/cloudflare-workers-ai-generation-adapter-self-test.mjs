@@ -1,6 +1,8 @@
 import {
   CloudflareGenerationError,
   DEFAULT_CLOUDFLARE_MODEL,
+  KIMI_K2_6_MODEL,
+  PAID_MODELS_NOT_AUTHORIZED,
   buildCloudflareWorkersAIRequest,
   generateWithCloudflareWorkersAI,
 } from "./cloudflare-workers-ai-generation-adapter.mjs";
@@ -102,9 +104,22 @@ const request = {
 
 };
 
-const providerRequest = buildCloudflareWorkersAIRequest({ request });
-if (providerRequest.model !== DEFAULT_CLOUDFLARE_MODEL) {
-  fail("default model mismatch");
+// BUS-160 AI Cost Policy: canonical default is the free-tier Llama 4 Scout;
+// Kimi K2.6 is paid, never the default, and listed as not authorized.
+if (DEFAULT_CLOUDFLARE_MODEL !== "@cf/meta/llama-4-scout-17b-16e-instruct") fail("canonical default must be the free-tier model");
+if (PAID_MODELS_NOT_AUTHORIZED.includes(DEFAULT_CLOUDFLARE_MODEL)) fail("canonical default must not require paid billing");
+if (!PAID_MODELS_NOT_AUTHORIZED.includes(KIMI_K2_6_MODEL)) fail("Kimi K2.6 must stay listed as not authorized");
+console.log("PASS canonical default is free-tier; paid model not authorized");
+
+const defaultRequest = buildCloudflareWorkersAIRequest({ request });
+if (defaultRequest.model !== DEFAULT_CLOUDFLARE_MODEL) fail("default model mismatch");
+if (defaultRequest.body.stream !== false || defaultRequest.body.response_format?.type !== "json_schema" || !defaultRequest.body.response_format.json_schema.properties || defaultRequest.body.reasoning_effort || defaultRequest.body.max_tokens !== 900) fail("default free-tier JSON Mode request shape mismatch");
+console.log("PASS default free-tier request shape");
+
+// The remaining request-shape checks cover the inactive Kimi path (history/optional).
+const providerRequest = buildCloudflareWorkersAIRequest({ request, model: KIMI_K2_6_MODEL });
+if (providerRequest.model !== KIMI_K2_6_MODEL) {
+  fail("explicit Kimi model mismatch");
 }
 if (providerRequest.body.stream !== false) {
   fail("JSON Mode must remain non-streaming");
@@ -172,6 +187,7 @@ const accountId = "0123456789abcdef0123456789abcdef";
 
 const result = await generateWithCloudflareWorkersAI({
   request,
+  model: KIMI_K2_6_MODEL,
   accountId,
   apiToken: token,
   fetchImpl: async (url, options) => {
@@ -200,7 +216,7 @@ if (JSON.stringify(observedBody).includes(token)) {
 if (result.generation_metadata.provider !== "cloudflare-workers-ai") {
   fail("provider metadata mismatch");
 }
-if (result.generation_metadata.model !== DEFAULT_CLOUDFLARE_MODEL) {
+if (result.generation_metadata.model !== KIMI_K2_6_MODEL) {
   fail("model metadata mismatch");
 }
 if (
@@ -215,14 +231,30 @@ if (result.caption_body_paragraphs) fail("provider-only caption field leaked int
 if (JSON.stringify(result).includes("TEST_INTERNAL_REASONING_MUST_NOT_LEAK")) fail("reasoning leaked into candidate");
 console.log("PASS body preserved and fixed caption footer assembled deterministically");
 
+// Canonical default (free-tier) end-to-end normalization: Workers AI JSON Mode envelope.
+let defaultUrl = null;
+const defaultResult = await generateWithCloudflareWorkersAI({
+  request,
+  accountId,
+  apiToken: token,
+  fetchImpl: async (url) => {
+    defaultUrl = url;
+    return { ok: true, status: 200, json: async () => ({ success: true, result: { response: providerOutput(candidate) } }) };
+  },
+});
+if (!defaultUrl.includes(`/ai/run/${DEFAULT_CLOUDFLARE_MODEL}`)) fail("default endpoint mismatch");
+if (defaultResult.generation_metadata.model !== DEFAULT_CLOUDFLARE_MODEL || defaultResult.generation_metadata.provider !== "cloudflare-workers-ai") fail("default provenance mismatch");
+if (defaultResult.caption !== candidate.caption) fail("default path caption assembly mismatch");
+console.log("PASS canonical free-tier default normalizes and records provenance");
+
 await expectError("legacy free-form caption is not silently repaired", "CLOUDFLARE_OUTPUT_INVALID", () =>
-  generateWithCloudflareWorkersAI({ request, accountId, apiToken: token, fetchImpl: async () => ({ ok: true, status: 200, json: async () => providerEnvelope(candidate) }) })
+  generateWithCloudflareWorkersAI({ request, model: KIMI_K2_6_MODEL, accountId, apiToken: token, fetchImpl: async () => ({ ok: true, status: 200, json: async () => providerEnvelope(candidate) }) })
 );
 
 const sparse = structuredClone(candidate);
 sparse.slides[2].copy = "Menyesuaikan langkah, bukan gagal.";
 try {
-  await generateWithCloudflareWorkersAI({ request, accountId, apiToken: token, fetchImpl: async () => ({ ok: true, status: 200, json: async () => providerEnvelope(providerOutput(sparse)) }) });
+  await generateWithCloudflareWorkersAI({ request, model: KIMI_K2_6_MODEL, accountId, apiToken: token, fetchImpl: async () => ({ ok: true, status: 200, json: async () => providerEnvelope(providerOutput(sparse)) }) });
   fail("sparse copy must still fail after deterministic footer assembly");
 } catch (error) {
   if (error.code !== "EDITORIAL_QUALITY_FAILED" || !error.message.includes("S3_TOO_SPARSE")) fail("sparse copy gate bypassed");
@@ -231,9 +263,9 @@ try {
 console.log("PASS deterministic footer cannot rescue editorially rejected slide copy");
 
 await expectError("truncated Kimi response", "CLOUDFLARE_COMPLETION_INVALID", () =>
-  generateWithCloudflareWorkersAI({ request, accountId, apiToken: token, fetchImpl: async () => ({ ok: true, status: 200, json: async () => providerEnvelope(providerOutput(candidate), "length") }) })
+  generateWithCloudflareWorkersAI({ request, model: KIMI_K2_6_MODEL, accountId, apiToken: token, fetchImpl: async () => ({ ok: true, status: 200, json: async () => providerEnvelope(providerOutput(candidate), "length") }) })
 );
-const legacyRequest = buildCloudflareWorkersAIRequest({ request, model: "@cf/meta/llama-4-scout-17b-16e-instruct" });
+const legacyRequest = buildCloudflareWorkersAIRequest({ request, model: DEFAULT_CLOUDFLARE_MODEL });
 if (!legacyRequest.body.response_format.json_schema.properties || legacyRequest.body.reasoning_effort || legacyRequest.body.max_tokens !== 900) fail("legacy model request shape changed");
 
 await expectError("missing account id", "CLOUDFLARE_ACCOUNT_ID_MISSING", () =>
@@ -304,7 +336,7 @@ try {
   const diagnosticsDir = path.join(tempDir, "diagnostics");
   const mockPath = path.join(tempDir, "mock-provider.mjs");
   fs.writeFileSync(requestPath, JSON.stringify(request));
-  fs.writeFileSync(mockPath, `globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => (${JSON.stringify(providerEnvelope(providerOutput(rejected)))}) });\n`);
+  fs.writeFileSync(mockPath, `globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => (${JSON.stringify({ success: true, result: { response: providerOutput(rejected) } })}) });\n`);
   const cliPath = fileURLToPath(new URL("./generate-content-candidate.mjs", import.meta.url));
   const child = spawnSync(process.execPath, ["--import", mockPath, cliPath, "--request", requestPath, "--output", outputPath], {
     encoding: "utf8",
@@ -339,6 +371,29 @@ try {
   console.log("PASS three rejected attempts retained without accepted output or credentials");
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });
+}
+
+// BUS-160 AI Cost Policy: the runtime CLI refuses paid models before any provider call.
+{
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sdoh-paid-model-test-"));
+  try {
+    const marker = path.join(dir, "provider-called");
+    const mock = path.join(dir, "mock.mjs");
+    fs.writeFileSync(mock, `import fs from "node:fs"; globalThis.fetch = async () => { fs.writeFileSync(${JSON.stringify(marker)}, "x"); throw new Error("must not be called"); };\n`);
+    const requestFile = path.join(dir, "request.json");
+    fs.writeFileSync(requestFile, JSON.stringify(request));
+    const child = spawnSync(process.execPath, ["--import", mock, fileURLToPath(new URL("./generate-content-candidate.mjs", import.meta.url)), "--request", requestFile, "--output", path.join(dir, "out.json")], {
+      encoding: "utf8",
+      env: { ...process.env, GITHUB_ACTIONS: "true", CLOUDFLARE_ACCOUNT_ID: accountId, CLOUDFLARE_API_TOKEN: token, SDOH_GENERATION_MODEL: KIMI_K2_6_MODEL },
+    });
+    if (child.status !== 1 || !child.stderr.includes("MODEL_NOT_AUTHORIZED")) fail("paid model must be refused by the runtime CLI");
+    if (fs.existsSync(marker) || fs.existsSync(path.join(dir, "out.json"))) fail("paid model refusal must happen before any provider call");
+    if (!child.stdout.includes("::error title=SDOH generation model not authorized::")) fail("paid model refusal must be annotated");
+    if (child.stdout.includes(token)) fail("credentials leaked");
+    console.log("PASS runtime CLI refuses paid model before any provider call");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 }
 
 console.log("SDOH Cloudflare Workers AI generation adapter self-test PASS");
