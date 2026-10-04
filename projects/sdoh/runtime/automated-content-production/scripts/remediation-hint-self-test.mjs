@@ -76,6 +76,68 @@ const okHint = buildRemediationHint({ ...args, rejectedCandidate: good });
 if (/S[1-5] "[^"]*": (?!ok\.)/.test(okHint)) fail("passing slides must be reported ok: " + okHint);
 console.log("PASS slides that already pass are left as ok");
 
+// Live run 37198898819 attempt 3 (verbatim rejected slides; captions passed).
+{
+  const { repeatedWordCandidates } = await import("./remediation-hint.mjs");
+  const { sha256Hex } = await import("./model-generation-contract.mjs");
+  const passingCaption =
+    "Kadang yang berubah bukan niatmu, tapi kapasitas, keadaan, atau kebutuhanmu.\n\n" +
+    "Menyesuaikan ritme bukan berarti kamu kehilangan arah atau gagal menjaga komitmen. Ada waktu ketika cara lama memang tidak lagi cocok dengan hidup yang sedang kamu jalani.\n\n" +
+    "Kamu boleh mencari cara yang lebih mungkin dijalani sekarang, tanpa harus menganggap perubahan itu sebagai kekalahan." + footer;
+  const live = {
+    ...rejected,
+    caption: passingCaption,
+    slides: [
+      "ritme hidup kita berubah hari ini",
+      "kapasitas kita berbeda menjalani hari ini",
+      "menyesuaikan langkah tidak selalu gagal",
+      "kita boleh memilih cara berbeda",
+      "melangkah dengan ritme yang berbeda",
+    ].map((copy, i) => ({ slide: i + 1, copy })),
+  };
+  const liveReason = assessEditorialQuality(live, editorial).issues.join("; ");
+  if (liveReason !== "TOTAL_SLIDE_DENSITY_LOW:27<30; VOCABULARY_TOO_THIN:15<18") fail("live attempt-3 fixture drifted: " + liveReason);
+  const requestSnapshot = JSON.stringify(request);
+  const liveArgs = { request, rejectedCandidate: live, gateCode: "EDITORIAL_QUALITY_FAILED", gateReason: liveReason, attempt: 3 };
+  const liveHint = buildRemediationHint(liveArgs);
+
+  // 1. total-density failure names slides below their generation target, with exact counts
+  for (const expected of [
+    'S3 "menyesuaikan langkah tidak selalu gagal": 5 words, below target 8-9: add 3 word(s).',
+    'S4 "kita boleh memilih cara berbeda": 5 words, below target 6-8: add 1 word(s).',
+  ]) {
+    if (!liveHint.includes(expected)) fail(`target-aware density missing: ${expected}\n${liveHint}`);
+  }
+  // 2. slides already at/above target are not lengthened
+  for (const ok of ['S1 "ritme hidup kita berubah hari ini": ok.', 'S2 "kapasitas kita berbeda menjalani hari ini": ok.', 'S5 "melangkah dengan ritme yang berbeda": ok.']) {
+    if (!liveHint.includes(ok)) fail(`slide at target must stay ok: ${ok}`);
+  }
+  // density guidance only applies while the total-word gate is failing
+  const longEnough = structuredClone(live);
+  longEnough.slides[0].copy = "ritme hidup kita berubah pelan pelan sekali hari ini"; // total >= 30
+  const longHint = buildRemediationHint({ ...liveArgs, rejectedCandidate: longEnough, gateReason: assessEditorialQuality(longEnough, editorial).issues.join("; ") });
+  if (/below target/.test(longHint)) fail("gate-valid slides must not be lengthened when total density passes");
+  console.log("PASS target-aware density remediation names only slides below target");
+
+  // 3. vocabulary-thin failure lists deterministic repeated-word candidates
+  const expectedRepeated = 'Repeated words: "berbeda" x3 (replace in S2, S4); "kita" x3 (replace in S1, S2, S4); "hari" x2 (replace in S1).';
+  if (!liveHint.includes(expectedRepeated)) fail(`repeated-word remediation mismatch\n${liveHint}`);
+  // 4. protected/required words are excluded
+  const candidates = repeatedWordCandidates(live.slides, editorial, request.semantic_guardrails);
+  if (candidates.some((c) => c.word === "ritme")) fail("semantic anchor 'ritme' must never be a replacement candidate");
+  if (candidates.find((c) => c.word === "berbeda").replaceable.includes(5)) fail("S5 'berbeda' carries a required S5 anchor and must be protected");
+  if (candidates.find((c) => c.word === "hari").replaceable.includes(2)) fail("S2 'hari ini' carries a required S2 anchor and must be protected");
+  console.log("PASS repeated-word remediation is deterministic and excludes protected anchors");
+
+  // 5./6. identical rejected candidate -> identical hint and fingerprint
+  const again = buildRemediationHint(structuredClone(liveArgs));
+  if (again !== liveHint || sha256Hex(again) !== sha256Hex(liveHint)) fail("hint or fingerprint not deterministic");
+  if (liveHint.length > MAX_REMEDIATION_HINT_LENGTH) fail("hint exceeds contract bound");
+  // 7. canonical request unchanged
+  if (JSON.stringify(request) !== requestSnapshot) fail("remediation mutated the canonical request");
+  console.log("PASS identical input yields identical hint/fingerprint; canonical request untouched");
+}
+
 // Real CLI: attempt 1 rejected, attempt 2 must carry exactly the deterministic hint,
 // and both attempts must be annotated for GitHub without credentials.
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sdoh-remediation-"));

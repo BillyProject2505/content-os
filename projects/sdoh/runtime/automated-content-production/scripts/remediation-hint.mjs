@@ -4,6 +4,7 @@
 import {
   anchorGroupHit,
   assessEditorialQuality,
+  contentWords,
   normalizeText,
   words,
 } from "./editorial-quality-gate.mjs";
@@ -72,6 +73,37 @@ export function slideRequirementLines(guardrails) {
   });
 }
 
+// A content word is protected on a slide when it carries one of that slide's
+// required progression anchors, or one of the global semantic anchors.
+// Protected occurrences are never offered as replacement candidates.
+function isProtected(word, slideGroups, semanticGroups) {
+  const entries = [...slideGroups, ...semanticGroups].flat();
+  return entries.some((entry) =>
+    words(entry).some((anchorWord) => anchorWord.length >= 3 && word.includes(anchorWord))
+  );
+}
+
+// Deterministic repeated-word candidates: content words used 2+ times across
+// slides with at least one unprotected occurrence. Ordered by count desc, then
+// alphabetically; slides list only where replacement is allowed.
+export function repeatedWordCandidates(slides, editorial, semantic) {
+  const stats = new Map();
+  editorial.slide_progression.forEach((requirement) => {
+    const copy = slides[requirement.slide - 1]?.copy ?? "";
+    for (const word of contentWords(copy)) {
+      const entry = stats.get(word) ?? { word, count: 0, replaceable: [] };
+      entry.count += 1;
+      if (!isProtected(word, requirement.required_anchor_groups, semantic.required_slide_anchor_groups)) {
+        if (!entry.replaceable.includes(requirement.slide)) entry.replaceable.push(requirement.slide);
+      }
+      stats.set(word, entry);
+    }
+  });
+  return [...stats.values()]
+    .filter((entry) => entry.count >= 2 && entry.replaceable.length > 0)
+    .sort((a, b) => b.count - a.count || (a.word < b.word ? -1 : a.word > b.word ? 1 : 0));
+}
+
 function truncate(text, limit) {
   const value = String(text ?? "").replace(/\s+/g, " ").trim();
   return value.length <= limit ? value : value.slice(0, limit - 1) + "…";
@@ -85,6 +117,9 @@ export function buildRemediationHint({ request, rejectedCandidate, gateCode, gat
   const slides = rejectedCandidate?.slides ?? [];
   const targets = slideWordTargets(editorial);
   const assessment = assessEditorialQuality(rejectedCandidate ?? {}, editorial);
+  // Target-aware density: when the total-word gate fails, slides that are
+  // inside the gate window but below their generation target are named.
+  const totalDensityLow = assessment.metrics.total_slide_words < editorial.min_total_slide_words;
   const lines = [
     `Attempt ${attempt} was rejected by ${gateCode}. Gate codes: ${truncate(gateReason, 300)}.`,
     "Rewrite all five slides and the caption from scratch. Fix every item below; keep everything that already passes.",
@@ -98,7 +133,11 @@ export function buildRemediationHint({ request, rejectedCandidate, gateCode, gat
     const missing = requirement.required_anchor_groups.filter((group) => !anchorGroupHit(copy, group));
     const hits = requirement.required_anchor_groups.length - missing.length;
     const problems = [];
-    if (count < target.min || count > target.max) problems.push(`${count} words, need ${target.low}-${target.high}`);
+    if (count < target.min || count > target.max) {
+      problems.push(`${count} words, need ${target.low}-${target.high}`);
+    } else if (totalDensityLow && count < target.low) {
+      problems.push(`${count} words, below target ${target.low}-${target.high}: add ${target.low - count} word(s)`);
+    }
     if (hits < requirement.minimum_groups) problems.push(`add ${missing.map((g) => `(${quoteList(g)})`).join(" and ")}`);
     const forbidden = semantic.forbidden_slide_phrases.filter((phrase) =>
       normalizeText(copy).includes(normalizeText(phrase))
@@ -117,10 +156,20 @@ export function buildRemediationHint({ request, rejectedCandidate, gateCode, gat
   }
   const metrics = assessment.metrics;
   if (metrics.total_slide_words < editorial.min_total_slide_words) {
-    lines.push(`Slides total ${metrics.total_slide_words} words; need at least ${editorial.min_total_slide_words}.`);
+    lines.push(`Slides total ${metrics.total_slide_words} words; need at least ${editorial.min_total_slide_words}. Add words only to slides marked below target; leave slides marked ok at their length.`);
   }
   if (metrics.unique_slide_content_words < editorial.min_unique_slide_content_words) {
     lines.push(`Use more varied words: ${metrics.unique_slide_content_words} distinct content words, need ${editorial.min_unique_slide_content_words}.`);
+    const repeated = repeatedWordCandidates(slides, editorial, semantic).slice(0, 5);
+    if (repeated.length) {
+      lines.push(
+        "Repeated words: " +
+          repeated
+            .map((entry) => `"${entry.word}" x${entry.count} (replace in ${entry.replaceable.map((n) => `S${n}`).join(", ")})`)
+            .join("; ") +
+          ". Replace some of those occurrences with context-appropriate words that keep the meaning; do not replace required anchor words and do not add unrelated vocabulary."
+      );
+    }
   }
   if (metrics.max_pairwise_content_similarity > editorial.max_pairwise_content_similarity) {
     lines.push("Two slides repeat each other; give every slide a different thought.");
