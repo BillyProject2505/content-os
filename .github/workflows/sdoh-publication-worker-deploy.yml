@@ -1,0 +1,58 @@
+name: SDOH publication Worker production deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "projects/sdoh/runtime/instagram-publication-executor/**"
+      - ".github/workflows/sdoh-publication-worker-deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sdoh-publication-worker-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: projects/sdoh/runtime/instagram-publication-executor
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate production deploy credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          test -f wrangler.jsonc
+          echo "Cloudflare production deploy credentials/config PASS"
+
+      - name: Deploy canonical Worker to production
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx --yes wrangler@4.147.0 deploy --config wrangler.jsonc
+
+      - name: Verify production health endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error \
+            https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev/health)"
+          echo "$response"
+          jq -e '.ok == true' <<<"$response" >/dev/null
+          echo "Production Worker health PASS"
