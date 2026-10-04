@@ -3,7 +3,12 @@ import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { finalizeGenerationResponse } from "./model-generation-contract.mjs";
+import {
+  createRequestFingerprint,
+  createResponseFingerprint,
+  finalizeGenerationResponse,
+} from "./model-generation-contract.mjs";
+import { DEFAULT_CLOUDFLARE_MODEL } from "./cloudflare-workers-ai-generation-adapter.mjs";
 
 function fail(message){ throw new Error(message); }
 function sha256File(p){
@@ -37,7 +42,7 @@ const candidateFields={
 const candidate=finalizeGenerationResponse(candidateFields,{
   request,
   provider:"cloudflare-workers-ai",
-  model:"@cf/meta/llama-4-scout-17b-16e-instruct",
+  model:DEFAULT_CLOUDFLARE_MODEL,
 });
 
 const candidatePath=path.join(root,"candidate.json");
@@ -61,6 +66,46 @@ if(manifest.slides[0].copy!=="ritme yang dulu terasa pas\nbisa berubah hari ini"
 if(manifest.slides[2].copy!=="menyesuaikan langkah bukan\nberarti kamu gagal") fail("line-break policy mismatch S3");
 if(manifest.slides[4].copy!=="tetap berjalan tak harus\ndengan cara yang sama") fail("line-break policy mismatch S5");
 console.log("PASS deterministic BUS-144 render manifest");
+
+// Regression (BUS-160 Editorial Quality Gate): the Owner-rejected run 37089189231
+// copy, correctly fingerprinted against the current request, must NOT get render authority.
+const rejectedFields={
+  schema_version:"1",
+  content_id:"SDOH-SAGE-CAR-0009",
+  slides:["ritme berubah","menyesuaikan diri","tanpa rasa gagal","izin untuk berubah","menerima ritme baru"]
+    .map((copy,index)=>({slide:index+1,copy})),
+  caption:"Mengenal ritme hati yang berubah. Memberi izin pada diri untuk menyesuaikan, tanpa takut gagal. Satu dosis obat hati #satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja",
+  risk_flags:[],
+  research_sensitive_claims:[],
+};
+const rejected={
+  ...rejectedFields,
+  generation_metadata:{
+    provider:"cloudflare-workers-ai",
+    model:DEFAULT_CLOUDFLARE_MODEL,
+    request_fingerprint:createRequestFingerprint(request),
+    response_fingerprint:"",
+  },
+};
+rejected.generation_metadata.response_fingerprint=createResponseFingerprint(rejected);
+const rejectedPath=path.join(root,"rejected-candidate.json");
+fs.writeFileSync(rejectedPath,JSON.stringify(rejected,null,2));
+const rejectedManifestPath=path.join(root,"rejected-manifest.json");
+const rejectedBuild=spawnSync(process.execPath,[
+  path.resolve("projects/sdoh/runtime/automated-content-production/scripts/build-carousel-render-manifest.mjs"),
+  "--candidate",rejectedPath,
+  "--request",requestPath,
+  "--authority",authorityPath,
+  "--expected-response-fingerprint",rejected.generation_metadata.response_fingerprint,
+  "--out",rejectedManifestPath,
+],{encoding:"utf8"});
+if(rejectedBuild.status===0||fs.existsSync(rejectedManifestPath)){
+  fail("editorial-failing candidate received render authority");
+}
+if(!/EDITORIAL_QUALITY_FAILED|S1_TOO_SPARSE/.test(rejectedBuild.stderr)){
+  fail("render builder rejected the candidate for an unexpected reason: "+rejectedBuild.stderr.slice(0,400));
+}
+console.log("PASS editorial-failing candidate is denied render authority");
 
 const renderDir=path.join(root,"rendered");
 fs.mkdirSync(renderDir);

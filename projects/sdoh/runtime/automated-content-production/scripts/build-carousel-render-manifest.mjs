@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   createRequestFingerprint,
+  validateCandidateEditorialQuality,
   validateCandidateSemanticAlignment,
   validateGenerationResponse,
   validateGenerationRequest,
@@ -49,6 +50,9 @@ validateGenerationResponse(candidate, {
   expectedRiskClass: request.risk_class,
 });
 validateCandidateSemanticAlignment(candidate, request);
+// BUS-160 Editorial Quality Gate — Pilot Lock: a candidate that fails the gate
+// must not receive render authority, even when its fingerprints are valid.
+validateCandidateEditorialQuality(candidate, request);
 
 if (candidate.generation_metadata.response_fingerprint !== expectedResponseFingerprint) {
   throw new Error(
