@@ -4,7 +4,7 @@ const STOPWORDS = new Set([
   "ketika","karena","juga","jadi","agar","dalam","sebuah","satu","sama"
 ]);
 
-function normalizeText(value) {
+export function normalizeText(value) {
   return String(value ?? "")
     .normalize("NFKD")
     .toLowerCase()
@@ -13,11 +13,11 @@ function normalizeText(value) {
     .trim();
 }
 
-function words(value) {
+export function words(value) {
   return normalizeText(value).split(/\s+/).filter(Boolean);
 }
 
-function contentWords(value) {
+export function contentWords(value) {
   return words(value).filter((word) => word.length >= 3 && !STOPWORDS.has(word));
 }
 
@@ -30,7 +30,7 @@ function jaccard(a, b) {
   return union === 0 ? 0 : intersection / union;
 }
 
-function anchorGroupHit(text, group) {
+export function anchorGroupHit(text, group) {
   const normalized = normalizeText(text);
   return group.some((entry) => normalized.includes(normalizeText(entry)));
 }

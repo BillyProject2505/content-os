@@ -6,6 +6,7 @@ import {
   sha256Hex,
   validateGenerationRequest,
 } from "./model-generation-contract.mjs";
+import { captionParagraphTarget, slideRequirementLines } from "./remediation-hint.mjs";
 
 export class CloudflareGenerationError extends Error {
   constructor(code, message) {
@@ -73,33 +74,21 @@ export function buildCloudflareWorkersAIRequest({
   const editorial = normalized.editorial_quality_guardrails;
   const outputSchema = structuredClone(OUTPUT_SCHEMA);
   outputSchema.properties.caption_body_paragraphs.minItems = editorial.caption_min_body_paragraphs;
-  const progressionSummary = editorial.slide_progression
-    .map((item) => {
-      const groups = item.required_anchor_groups
-        .map((group) => "[" + group.join(" | ") + "]")
-        .join(" + ");
-      return (
-        "S" + item.slide + ": " +
-        editorial.min_words_per_slide[item.slide - 1] + "-" +
-        editorial.max_words_per_slide[item.slide - 1] +
-        " words; satisfy at least " + item.minimum_groups +
-        " anchor groups from " + groups
-      );
-    })
-    .join("\n");
-
+  const captionTarget = captionParagraphTarget(editorial);
   const exactEditorialConstraints = [
-    "EXACT EDITORIAL CONSTRAINTS FOR THIS CONTENT INSTANCE:",
-    progressionSummary,
-    "Across S1-S5 use at least " + editorial.min_total_slide_words + " words total.",
-    "Do not use two- or three-word fragments. Every slide must meet its minimum word count.",
-    "Caption body must contain " + editorial.caption_min_body_words + "-" +
-      editorial.caption_max_body_words + " words, excluding signature and hashtags.",
-    "Caption body must contain at least " + editorial.caption_min_body_paragraphs +
-      " paragraphs separated by blank lines.",
-    "Return those body paragraphs as separate strings in caption_body_paragraphs. Each array item is one substantive paragraph, not a heading or a sentence fragment.",
+    "EXACT EDITORIAL CONSTRAINTS FOR THIS CONTENT INSTANCE (hard gates; a candidate that misses any line is rejected):",
+    ...slideRequirementLines(editorial),
+    "The Gentle Naming density words (sparse, light, peak, release) describe relative weight only. Even a sparse slide is a complete thought of at least " +
+      Math.min(...editorial.min_words_per_slide) + " words. Never write a two-, three- or four-word label.",
+    "Across S1-S5 use at least " + editorial.min_total_slide_words + " words total and at least " +
+      editorial.min_unique_slide_content_words + " different content words; no two slides may repeat the same sentence shape.",
+    "caption_body_paragraphs: exactly " + captionTarget.paragraphs + " paragraphs, each " +
+      captionTarget.low + "-" + captionTarget.high + " words (body total " + editorial.caption_min_body_words + "-" +
+      editorial.caption_max_body_words + " words). Paragraph 1 = situational opening, 2 = context/depth, 3 = gentle permission/accompaniment.",
     "Do not return a caption field, signature, or hashtags. The gateway appends the exact registered signature and hashtags after joining the body paragraphs.",
-    "Aim toward the upper half of each slide's allowed word range; silently count the words before returning. Do not pad with disconnected keywords.",
+    "Before answering, count the words of every slide and paragraph and check every MUST line above.",
+    "FORMAT EXAMPLE ONLY (different topic: moving to a new city; do not reuse its words or topic):",
+    '  S1 "pindah ke kota baru ternyata terasa asing" (7 words) / S2 "jalan setapak itu belum terasa seperti rumah" (7 words) / ... each slide one complete lowercase thought.',
   ].join("\n");
 
   const systemPrompt = [

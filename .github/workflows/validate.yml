@@ -54,3 +54,5 @@ jobs:
         run: node projects/sdoh/runtime/automated-content-production/scripts/automated-carousel-render-self-test.mjs
       - name: Self-test SDOH retry canonical-fingerprint integrity
         run: node projects/sdoh/runtime/automated-content-production/scripts/retry-fingerprint-self-test.mjs
+      - name: Self-test SDOH deterministic remediation and gate observability
+        run: node projects/sdoh/runtime/automated-content-production/scripts/remediation-hint-self-test.mjs

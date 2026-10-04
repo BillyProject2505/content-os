@@ -4,6 +4,17 @@ import {
   DEFAULT_CLOUDFLARE_MODEL,
   generateWithCloudflareWorkersAI,
 } from "./cloudflare-workers-ai-generation-adapter.mjs";
+import { buildRemediationHint } from "./remediation-hint.mjs";
+
+// GitHub annotations are readable through the checks API even when run logs
+// and artifacts are not, so every rejection stays observable. Content only;
+// never credentials, headers, or provider reasoning.
+function annotate(level, title, message) {
+  if (process.env.GITHUB_ACTIONS !== "true") return;
+  const escape = (value) => String(value).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+  const safeTitle = String(title).replace(/[,:]/g, " ");
+  console.log(`::${level} title=${escape(safeTitle)}::${escape(message)}`);
+}
 
 function arg(name) {
   const index = process.argv.indexOf(name);
@@ -55,9 +66,26 @@ for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
         );
       }
       console.warn(`generation_attempt=${attempt} rejected_by=${error.code} candidate_state=REJECTED_NOT_FOR_RENDER request_fingerprint=${diagnostic.request_fingerprint} raw_candidate_fingerprint=${diagnostic.raw_candidate_fingerprint}`);
+      const rejected = diagnostic.rejected_candidate;
+      annotate(
+        "warning",
+        `SDOH gate rejection attempt ${attempt}`,
+        [
+          `model=${diagnostic.provider}/${diagnostic.model} gate=${error.code} candidate_state=REJECTED_NOT_FOR_RENDER owner_approval=NOT_GRANTED`,
+          `request_fingerprint=${diagnostic.request_fingerprint} remediation_hint_fingerprint=${diagnostic.remediation_hint_fingerprint ?? "none"}`,
+          `reason=${String(error.message).slice(0, 600)}`,
+          ...rejected.slides.map((slide) => `S${slide.slide}: ${slide.copy}`),
+          `caption_body=${rejected.caption.split("\n\n").length - 1} block(s): ${rejected.caption.slice(0, 500)}`,
+        ].join("\n")
+      );
     }
 
     if (!retryableGenerationQualityFailure || attempt === maxAttempts) {
+      annotate(
+        "error",
+        `SDOH generation failed closed attempt ${attempt}`,
+        `model=${model} code=${error?.code ?? "UNKNOWN"} message=${String(error?.message ?? "").slice(0, 400)} candidate_state=NONE owner_approval=NOT_GRANTED`
+      );
       throw error;
     }
 
@@ -65,12 +93,15 @@ for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       `generation_attempt=${attempt} rejected_by=${error.code}; retrying with explicit semantic/editorial remediation`
     );
 
-    const gateDiagnostics = String(error?.message || error?.code || "unknown")
-      .replace(/\s+/g, " ")
-      .slice(0, 1200);
-
-    remediationHint =
-      `Automated remediation after attempt ${attempt}: the previous candidate failed ${error.code}. Gate diagnostics: ${gateDiagnostics}. Regenerate from scratch. Correct every listed failure. Keep the supplied core_concept materially visible across the slide sequence, satisfy semantic_guardrails and editorial_quality_guardrails exactly, preserve a clear five-slide progression, avoid fragmentary generic copy, and make the caption add substantive context rather than merely restating the slides.`;
+    // Deterministic per-slide remediation computed from the canonical guardrails
+    // and the rejected candidate; it never changes the canonical request.
+    remediationHint = buildRemediationHint({
+      request: canonicalRequest,
+      rejectedCandidate: error.rejectionDiagnostic?.rejected_candidate,
+      gateCode: error.code,
+      gateReason: error.message,
+      attempt,
+    });
   }
 }
 
