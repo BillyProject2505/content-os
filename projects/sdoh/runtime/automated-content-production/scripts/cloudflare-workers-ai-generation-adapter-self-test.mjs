@@ -325,7 +325,14 @@ try {
     if (raw.includes("TEST_INTERNAL_REASONING_MUST_NOT_LEAK")) fail("reasoning leaked into diagnostic");
     if (diagnostic.response_fingerprint || diagnostic.generation_metadata || diagnostic.approval || diagnostic.publication_state) fail("diagnostic implies accepted output");
   });
-  if (new Set(files.map(f => JSON.parse(fs.readFileSync(path.join(diagnosticsDir, f), "utf8")).request_fingerprint)).size !== 3) fail("retry requests must retain distinct fingerprints");
+  // Retry feedback is a non-canonical provider hint: every attempt must carry
+  // the same canonical request fingerprint, while the hint provenance differs.
+  const retryDiagnostics = files.map(f => JSON.parse(fs.readFileSync(path.join(diagnosticsDir, f), "utf8")));
+  if (new Set(retryDiagnostics.map(d => d.request_fingerprint)).size !== 1) fail("retry must not change the canonical request fingerprint");
+  if (retryDiagnostics[0].request_fingerprint !== createRequestFingerprint(request)) fail("retry diagnostics lost canonical request fingerprint");
+  if (retryDiagnostics[0].remediation_hint_fingerprint !== null) fail("first attempt must not carry a remediation hint");
+  if (!retryDiagnostics.slice(1).every(d => /^[0-9a-f]{64}$/.test(d.remediation_hint_fingerprint || ""))) fail("retry attempts must record a remediation hint fingerprint");
+  if (new Set(retryDiagnostics.map(d => d.remediation_hint_fingerprint)).size !== 3) fail("each attempt must record distinct remediation provenance");
   console.log("PASS three rejected attempts retained without accepted output or credentials");
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });

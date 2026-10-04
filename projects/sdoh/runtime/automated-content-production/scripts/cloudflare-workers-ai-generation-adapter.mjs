@@ -2,6 +2,7 @@ import {
   canonicalJson,
   createRequestFingerprint,
   finalizeGenerationResponse,
+  normalizeRemediationHint,
   sha256Hex,
   validateGenerationRequest,
 } from "./model-generation-contract.mjs";
@@ -63,8 +64,10 @@ export const DEFAULT_CLOUDFLARE_MODEL =
 export function buildCloudflareWorkersAIRequest({
   request,
   model = DEFAULT_CLOUDFLARE_MODEL,
+  remediationHint = null,
 }) {
   const normalized = validateGenerationRequest(request);
+  const hint = normalizeRemediationHint(remediationHint);
   const usesChatCompletions = model === "@cf/moonshotai/kimi-k2.6";
 
   const editorial = normalized.editorial_quality_guardrails;
@@ -118,6 +121,12 @@ export function buildCloudflareWorkersAIRequest({
     "If a statement becomes research-sensitive, clinical, diagnostic, treatment-related, crisis-related, or otherwise evidence-sensitive, list it in research_sensitive_claims rather than inventing evidence.",
     "If risk_class is REVIEW_REQUIRED, include REVIEW_REQUIRED in risk_flags.",
     "Do not include provider metadata or cryptographic fingerprints; the trusted gateway adds them after validation.",
+    ...(hint
+      ? [
+          "RETRY REMEDIATION (provider hint only; the canonical request in the user message is unchanged and remains authoritative):",
+          hint,
+        ]
+      : []),
   ].join("\n");
 
   return {
@@ -209,6 +218,8 @@ export async function generateWithCloudflareWorkersAI({
   apiToken,
   model = process.env.SDOH_GENERATION_MODEL || DEFAULT_CLOUDFLARE_MODEL,
   fetchImpl = globalThis.fetch,
+  generationAttempt = 1,
+  remediationHint = null,
 }) {
   if (typeof accountId !== "string" || accountId.trim().length < 8) {
     throw new CloudflareGenerationError(
@@ -239,9 +250,11 @@ export async function generateWithCloudflareWorkersAI({
   }
 
   const normalized = validateGenerationRequest(request);
+  const hint = normalizeRemediationHint(remediationHint);
   const providerRequest = buildCloudflareWorkersAIRequest({
     request: normalized,
     model,
+    remediationHint: hint,
   });
 
   const endpoint =
@@ -318,6 +331,8 @@ export async function generateWithCloudflareWorkersAI({
       request: normalized,
       provider: "cloudflare-workers-ai",
       model,
+      generationAttempt,
+      remediationHint: hint,
     });
   } catch (error) {
     if (["SEMANTIC_ALIGNMENT_FAILED", "FORBIDDEN_SEMANTIC_DRIFT", "EDITORIAL_QUALITY_FAILED"].includes(error?.code)) {
@@ -339,6 +354,7 @@ export async function generateWithCloudflareWorkersAI({
           gate_code: error.code,
           gate_reason: error.message,
           request_fingerprint: createRequestFingerprint(normalized),
+          remediation_hint_fingerprint: hint === null ? null : sha256Hex(hint),
           // Raw rejected payload hash is NOT an accepted response fingerprint.
           raw_candidate_fingerprint: sha256Hex(canonicalJson(rejectedCandidate)),
           rejected_candidate: rejectedCandidate,

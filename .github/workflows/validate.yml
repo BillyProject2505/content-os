@@ -52,3 +52,5 @@ jobs:
         run: node projects/sdoh/runtime/automated-content-production/scripts/verify-carousel-render-authority.mjs
       - name: Self-test SDOH automated carousel render
         run: node projects/sdoh/runtime/automated-content-production/scripts/automated-carousel-render-self-test.mjs
+      - name: Self-test SDOH retry canonical-fingerprint integrity
+        run: node projects/sdoh/runtime/automated-content-production/scripts/retry-fingerprint-self-test.mjs

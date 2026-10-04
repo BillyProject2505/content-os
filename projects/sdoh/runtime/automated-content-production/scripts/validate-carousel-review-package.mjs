@@ -7,6 +7,10 @@ function arg(name) {
   if (i < 0 || !process.argv[i + 1]) throw new Error(`Missing ${name}`);
   return process.argv[i + 1];
 }
+function optionalArg(name) {
+  const i = process.argv.indexOf(name);
+  return i < 0 ? null : (process.argv[i + 1] ?? null);
+}
 function sha256File(p) {
   const h=createHash("sha256");
   h.update(fs.readFileSync(p));
@@ -21,6 +25,8 @@ const manifestPath=path.resolve(arg("--manifest"));
 const candidatePath=path.resolve(arg("--candidate"));
 const authorityPath=path.resolve(arg("--authority"));
 const outPath=path.resolve(arg("--out"));
+const generationRunId=optionalArg("--generation-run-id");
+assert(generationRunId === null || /^[1-9][0-9]{0,19}$/.test(generationRunId), "generation run ID must be a positive integer");
 const renderDir=path.dirname(reportPath);
 
 const report=JSON.parse(fs.readFileSync(reportPath,"utf8"));
@@ -67,6 +73,9 @@ const review={
     model:candidate.generation_metadata.model,
     request_fingerprint:candidate.generation_metadata.request_fingerprint,
     response_fingerprint:candidate.generation_metadata.response_fingerprint,
+    generation_run_id:generationRunId,
+    generation_attempt:candidate.generation_metadata.generation_attempt ?? null,
+    remediation_hint_fingerprint:candidate.generation_metadata.remediation_hint_fingerprint ?? null,
     caption:candidate.caption
   },
   visual_plan:{
