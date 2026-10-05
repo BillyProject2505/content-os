@@ -1,0 +1,33 @@
+name: SDOH 0005 controlled publication trigger
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/sdoh-0005-controlled-trigger.yml"
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch BUS-140 for SDOH-SAGE-CAR-0005
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/$REPO/actions/workflows/sdoh-scheduled-publication-orchestrator.yml/dispatches" \
+            -f ref=main \
+            -F 'inputs[content_id]=SDOH-SAGE-CAR-0005' \
+            -F 'inputs[confirmation]=RUN_DUE_SCHEDULED_PUBLICATION' \
+            -F 'inputs[worker_base_url]=https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev'
+          echo "Controlled BUS-140 dispatch accepted for SDOH-SAGE-CAR-0005"
