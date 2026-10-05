@@ -474,6 +474,7 @@ jobs:
           WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
           JOB_ID: ${{ steps.identity.outputs.job_id }}
           GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
+          EXECUTION_MODE: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && 'LATE_RECOVERY' || 'SCHEDULED' }}
         run: |
           set -euo pipefail
           response_file="$RUNNER_TEMP/execute-response.json"
