@@ -380,7 +380,7 @@ jobs:
           JOB_ID: ${{ steps.identity.outputs.job_id }}
           GOVERNANCE_REF: ${{ steps.runtime.outputs.governance_ref }}
           AUTHORITY_SNAPSHOT_OUTPUT: ${{ runner.temp }}/authority-snapshot.json
-          EXECUTION_MODE: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && 'late-recovery' || 'scheduled' }}
+          EXECUTION_MODE: ${{ inputs.confirmation == 'RUN_LATE_SCHEDULED_RECOVERY' && 'LATE_RECOVERY' || 'SCHEDULED' }}
         run: |
           set -euo pipefail
           echo "::add-mask::$GOOGLE_ACCESS_TOKEN"
