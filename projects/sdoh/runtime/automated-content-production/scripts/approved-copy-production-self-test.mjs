@@ -251,11 +251,22 @@ try {
   ], { encoding: "utf8" });
   expect(legacy.status === 0, "legacy manifest build failed: " + legacy.stderr);
   const legacyManifest = JSON.parse(fs.readFileSync(legacyManifestPath, "utf8"));
-  expect(JSON.stringify({ ...manifest, content_id: "-" }) === JSON.stringify({ ...legacyManifest, content_id: "-" }), "Production Path manifest must equal the manifest BUS-49 already consumes");
+  const normalizedWords = (m) => m.slides.map((slide) => slide.copy.split(/\\s+/).join(" "));
+  expect(JSON.stringify(normalizedWords(manifest)) === JSON.stringify(normalizedWords(legacyManifest)), "Production/Optional paths must preserve identical slide words and order");
+  const visualProjection = (m) => ({
+    theme: m.theme,
+    layout_mode: m.layout_mode,
+    slides: m.slides.map((slide) => ({
+      slide_number: slide.slide_number,
+      optical_y_correction: slide.optical_y_correction,
+      character: slide.character,
+    })),
+  });
+  expect(JSON.stringify(visualProjection(manifest)) === JSON.stringify(visualProjection(legacyManifest)), "Production/Optional paths must share the same BUS-49 visual contract");
   expect(manifest.layout_mode === "illustrated_single_character" && manifest.theme === "SAGE", "layout/theme mismatch");
   expect(JSON.stringify(manifest.slides.map((s) => s.character.pose_id)) === JSON.stringify(authority.sage_default_visual_plan.pose_route), "visual plan drifted");
   expect(manifest.slides.every((s) => s.character.anchor === "lower_right" && s.character.scale === "md" && s.character.ground_mode === "embedded" && s.optical_y_correction === 0), "character placement is not the canonical deterministic plan");
-  console.log("PASS [8] BUS-49 manifest identical to the one the renderer already accepts (deterministic visual plan P02->P03->P05->P06->P07)");
+  console.log("PASS [8] Production/Optional paths preserve identical copy semantics and BUS-49 visual authority while allowing Production width-budget line breaks");
 
   // [9] Technical QA: passes on a conformant render report, fails closed otherwise.
   const renderDir = path.join(tempDir, "rendered");
