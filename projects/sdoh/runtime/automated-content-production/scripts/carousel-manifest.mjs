@@ -40,26 +40,57 @@ function assertVisualPlan(plan, label) {
 
 function wrapSageCopy(copy) {
   const words = String(copy).trim().split(/\s+/).filter(Boolean);
-  const MAX_LINES = 3;
   const TARGET_CHARS = 24;
-  const lines = [];
-  let current = "";
+  const MAX_LINES = Math.min(3, words.length);
 
-  for (const word of words) {
-    const candidate = current ? `${current} ${word}` : word;
-    if (current && candidate.length > TARGET_CHARS && lines.length < MAX_LINES - 1) {
-      lines.push(current);
-      current = word;
+  const line = (from, to) => words.slice(from, to).join(" ");
+  const score = (lines, counts) => {
+    const lengths = lines.map((entry) => entry.length);
+    const orphanPenalty = counts.filter((count) => count === 1).length;
+    const maxLength = Math.max(...lengths);
+    const minLength = Math.min(...lengths);
+    const mean = lengths.reduce((sum, value) => sum + value, 0) / lengths.length;
+    const variance = lengths.reduce((sum, value) => sum + ((value - mean) ** 2), 0);
+    return [orphanPenalty, maxLength, maxLength - minLength, variance];
+  };
+  const better = (a, b) => {
+    for (let i = 0; i < a.score.length; i += 1) {
+      if (a.score[i] !== b.score[i]) return a.score[i] < b.score[i];
+    }
+    return false;
+  };
+
+  for (let lineCount = 2; lineCount <= MAX_LINES; lineCount += 1) {
+    const candidates = [];
+    if (lineCount === 2) {
+      for (let i = 1; i < words.length; i += 1) {
+        const lines = [line(0, i), line(i, words.length)];
+        const counts = [i, words.length - i];
+        if (Math.max(...lines.map((entry) => entry.length)) <= TARGET_CHARS) {
+          candidates.push({ lines, score: score(lines, counts) });
+        }
+      }
     } else {
-      current = candidate;
+      for (let i = 1; i < words.length - 1; i += 1) {
+        for (let j = i + 1; j < words.length; j += 1) {
+          const lines = [line(0, i), line(i, j), line(j, words.length)];
+          const counts = [i, j - i, words.length - j];
+          if (Math.max(...lines.map((entry) => entry.length)) <= TARGET_CHARS) {
+            candidates.push({ lines, score: score(lines, counts) });
+          }
+        }
+      }
+    }
+    if (candidates.length > 0) {
+      let best = candidates[0];
+      for (const candidate of candidates.slice(1)) {
+        if (better(candidate, best)) best = candidate;
+      }
+      return best.lines.join("\n");
     }
   }
-  if (current) lines.push(current);
 
-  if (lines.length > MAX_LINES) {
-    throw new Error("Sage copy requires more than three deterministic lines");
-  }
-  return lines.join("\n");
+  throw new Error("Sage copy cannot fit deterministic three-line width budget");
 }
 
 function wrapBurgundyCopy(copy) {
