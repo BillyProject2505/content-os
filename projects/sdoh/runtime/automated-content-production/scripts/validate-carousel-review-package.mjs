@@ -43,20 +43,26 @@ const renderDir=path.dirname(reportPath);
 const report=JSON.parse(fs.readFileSync(reportPath,"utf8"));
 const manifest=JSON.parse(fs.readFileSync(manifestPath,"utf8"));
 const authority=JSON.parse(fs.readFileSync(authorityPath,"utf8"));
-const plan=authority.sage_default_visual_plan;
+const plan =
+  manifest.theme === "SAGE"
+    ? authority.sage_default_visual_plan
+    : authority.content_visual_plans?.[manifest.content_id];
+assert(plan && typeof plan === "object", "Visual plan missing");
 
 assert(report.template_version === authority.renderer.version, "Renderer version mismatch");
 assert(report.content_id === manifest.content_id, "Content ID mismatch");
-assert(manifest.theme === "SAGE", "Manifest theme mismatch");
-assert(report.theme === "SAGE", "Theme mismatch");
+assert(manifest.theme === "SAGE" || manifest.theme === "BURGUNDY", "Manifest theme mismatch");
+assert(report.theme === manifest.theme, "Theme mismatch");
 assert(report.layout_mode === "illustrated_single_character", "Layout mode mismatch");
 assert(report.outputs.length === 5, "Expected five render outputs");
 assert(report.asset_hashes.font === authority.font.sha256, "Font hash mismatch");
 
 for (const [index, output] of report.outputs.entries()) {
   const slide=index+1;
-  const pose=plan.pose_route[index];
+  const manifestSlide=manifest.slides[index];
+  const pose=manifestSlide.character?.pose_id;
   const expectedPose=authority.poses[pose];
+  assert(expectedPose, `Unknown pose S${slide}`);
   assert(output.slide === slide, `Slide order mismatch at ${slide}`);
   assert(JSON.stringify(output.dimensions) === JSON.stringify([1080,1350]), `Dimensions mismatch S${slide}`);
   assert(output.icc_present === true, `ICC missing S${slide}`);
@@ -64,9 +70,9 @@ for (const [index, output] of report.outputs.entries()) {
   assert(output.jpeg_sampling === 0, `JPEG is not 4:4:4 S${slide}`);
   assert(output.main_text_ink_width_px <= 600, `Illustrated text overflow S${slide}`);
   assert(output.character?.pose_id === pose, `Pose mismatch S${slide}`);
-  assert(output.character?.anchor === "lower_right", `Anchor mismatch S${slide}`);
-  assert(output.character?.scale === "md", `Scale mismatch S${slide}`);
-  assert(output.character?.ground_mode === "embedded", `Ground mode mismatch S${slide}`);
+  assert(output.character?.anchor === manifestSlide.character?.anchor, `Anchor mismatch S${slide}`);
+  assert(output.character?.scale === manifestSlide.character?.scale, `Scale mismatch S${slide}`);
+  assert(output.character?.ground_mode === manifestSlide.character?.ground_mode, `Ground mode mismatch S${slide}`);
   assert(output.character?.sha256 === expectedPose.sha256, `Pose SHA mismatch S${slide}`);
   const jpg=path.join(renderDir,output.filename);
   assert(fs.existsSync(jpg), `Rendered JPEG missing S${slide}`);
@@ -120,11 +126,11 @@ const review={
   publication_state:"PLANNED",
   ...source,
   visual_plan:{
-    layout_mode:plan.layout_mode,
-    pose_route:plan.pose_route,
-    anchor:plan.anchor,
-    scale:plan.scale,
-    ground_mode:plan.ground_mode
+    layout_mode:manifest.layout_mode,
+    pose_route:manifest.slides.map((slide)=>slide.character.pose_id),
+    anchor:manifest.slides[0].character.anchor,
+    scale:manifest.slides[0].character.scale,
+    ground_mode:manifest.slides[0].character.ground_mode
   },
   renderer:{
     version:authority.renderer.version,

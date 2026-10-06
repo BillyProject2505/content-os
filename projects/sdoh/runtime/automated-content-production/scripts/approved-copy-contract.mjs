@@ -24,6 +24,7 @@ import {
 } from "./model-generation-contract.mjs";
 
 export const APPROVED_COPY_STATUS = "COPY_APPROVED";
+export const APPROVED_COPY_ROOT = "projects/sdoh/content";
 export const APPROVED_COPY_DIR = "projects/sdoh/content/sage/carousel";
 
 // Project-level caption furniture (SDOH Production SOP caption architecture).
@@ -89,11 +90,12 @@ function normalizeCopy(input, { expectedContentId, requireApproved }) {
   for (const key of Object.keys(input)) {
     check(FIELDS.includes(key), "COPY_FIELD_UNKNOWN", `unexpected field: ${key}`);
   }
-  check(CONTENT_ID_RE.test(input.content_id ?? ""), "COPY_CONTENT_ID_INVALID", "content_id must be an SDOH Sage Carousel ID");
+  check(CONTENT_ID_RE.test(input.content_id ?? ""), "COPY_CONTENT_ID_INVALID", "content_id must be an SDOH Sage/Burgundy Carousel ID");
   if (expectedContentId !== undefined) {
     check(input.content_id === expectedContentId, "COPY_CONTENT_ID_MISMATCH", "approved copy content_id does not match the requested content item");
   }
-  check(input.theme === "SAGE", "COPY_THEME_INVALID", "theme must be SAGE (only the Sage deterministic visual plan exists)");
+  check(input.theme === "SAGE" || input.theme === "BURGUNDY", "COPY_THEME_INVALID", "theme must be SAGE or BURGUNDY");
+  check(input.content_id.startsWith(`SDOH-${input.theme}-CAR-`), "COPY_THEME_INVALID", "theme must match content_id");
 
   // Approval state is checked before content so a draft never looks "valid".
   if (requireApproved) {
@@ -214,13 +216,19 @@ export function assertManifestMatchesCopy(manifest, copy) {
   });
 }
 
-export function approvedCopyPath(contentId, dir = APPROVED_COPY_DIR) {
-  check(CONTENT_ID_RE.test(contentId ?? ""), "COPY_CONTENT_ID_INVALID", "content_id must be an SDOH Sage Carousel ID");
-  return path.join(dir, `${contentId}.json`);
+export function approvedCopyDirectory(contentId) {
+  check(CONTENT_ID_RE.test(contentId ?? ""), "COPY_CONTENT_ID_INVALID", "content_id must be an SDOH Sage/Burgundy Carousel ID");
+  const theme = contentId.includes("-BURGUNDY-") ? "burgundy" : "sage";
+  return path.join(APPROVED_COPY_ROOT, theme, "carousel");
+}
+
+export function approvedCopyPath(contentId, dir) {
+  const resolvedDir = dir ?? approvedCopyDirectory(contentId);
+  return path.join(resolvedDir, `${contentId}.json`);
 }
 
 // Discovery: the canonical file for a content item is <dir>/<content_id>.json.
-export function loadApprovedCopy(contentId, { dir = APPROVED_COPY_DIR, expectedCopyFingerprint } = {}) {
+export function loadApprovedCopy(contentId, { dir, expectedCopyFingerprint } = {}) {
   const file = approvedCopyPath(contentId, dir);
   check(fs.existsSync(file), "COPY_NOT_FOUND", `no canonical copy file for ${contentId} in ${dir}`);
   const raw = JSON.parse(fs.readFileSync(file, "utf8"));

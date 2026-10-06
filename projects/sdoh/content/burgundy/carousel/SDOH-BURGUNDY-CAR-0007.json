@@ -1,0 +1,152 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0007",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kamu tidak harus menjelaskan batasmu sampai orang lain setuju"
+    },
+    {
+      "slide": 2,
+      "copy": "kadang kamu sudah bilang apa yang membuatmu tidak nyaman"
+    },
+    {
+      "slide": 3,
+      "copy": "tapi mereka tetap meminta alasan yang lebih bisa mereka terima"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu boleh menjelaskan tanpa harus terus membela keputusanmu"
+    },
+    {
+      "slide": 5,
+      "copy": "batasmu tetap batas meski orang lain tidak menyukainya"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "kadang yang melelahkan bukan cuma mengatakan batasmu, tapi merasa harus terus menjelaskannya sampai orang lain menganggap alasanmu cukup masuk akal.",
+    "kamu boleh menjelaskan apa yang membuatmu tidak nyaman. tapi penjelasan bukan kewajiban untuk berdebat tanpa akhir, dan batasmu tidak harus menunggu persetujuan orang lain untuk tetap berarti.",
+    "ada kalanya menjaga batas berarti berhenti meyakinkan, lalu tetap berdiri pada apa yang sudah kamu sampaikan dengan jelas."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "batas"
+        ],
+        [
+          "setuju",
+          "persetujuan"
+        ],
+        [
+          "menjelaskan",
+          "alasan",
+          "membela"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 2,
+      "forbidden_slide_phrases": [
+        "harus membuat mereka setuju",
+        "kalau sayang harus menerima"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "max_words_per_slide": [
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 20,
+      "max_pairwise_content_similarity": 0.72,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "batas"
+            ],
+            [
+              "setuju"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "bilang"
+            ],
+            [
+              "tidak nyaman"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "meminta",
+              "alasan"
+            ],
+            [
+              "terima",
+              "menerima"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "menjelaskan"
+            ],
+            [
+              "membela",
+              "keputusan"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "batas"
+            ],
+            [
+              "tidak menyukainya",
+              "menyukai"
+            ]
+          ],
+          "minimum_groups": 2
+        }
+      ],
+      "caption_min_body_words": 45,
+      "caption_max_body_words": 110,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "33b81f553e40513af219a70b8d014332d293396bf1d320471225977b75df50c1"
+}
