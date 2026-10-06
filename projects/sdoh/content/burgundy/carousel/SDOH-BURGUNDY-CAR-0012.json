@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0012",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "memaafkan tidak selalu berarti kembali seperti dulu"
+    },
+    {
+      "slide": 2,
+      "copy": "kamu bisa memilih untuk tidak terus membawa kemarahan yang sama"
+    },
+    {
+      "slide": 3,
+      "copy": "tanpa harus mengembalikan kedekatan yang pernah ada"
+    },
+    {
+      "slide": 4,
+      "copy": "setelah terluka batas dalam hubungan boleh berubah"
+    },
+    {
+      "slide": 5,
+      "copy": "memaafkan tidak mewajibkanmu membangun hubungan yang sama"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "memaafkan seseorang tidak selalu berarti hubungan harus kembali ke bentuk yang sama.",
+    "kamu bisa memilih untuk tidak terus membawa kemarahan yang sama, sambil tetap menyadari bahwa batas, kedekatan, atau cara berhubungan mungkin sudah berubah setelah luka itu terjadi.",
+    "memaafkan tidak mewajibkanmu membangun kembali hubungan dengan ukuran yang lama."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "memaafkan"
+        ],
+        [
+          "kemarahan"
+        ],
+        [
+          "batas"
+        ],
+        [
+          "hubungan"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "memaafkan berarti harus kembali",
+        "harus membangun hubungan lagi"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        5,
+        8,
+        5,
+        5,
+        5
+      ],
+      "max_words_per_slide": [
+        9,
+        12,
+        9,
+        9,
+        9
+      ],
+      "min_total_slide_words": 34,
+      "min_unique_slide_content_words": 20,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "memaafkan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "kemarahan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "kedekatan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "batas"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "hubungan"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 38,
+      "caption_max_body_words": 68,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "7fd7931660a754fba37a0bcc849be9bc0d7990060fdb516c4c1e4282f5f0af93"
+}
