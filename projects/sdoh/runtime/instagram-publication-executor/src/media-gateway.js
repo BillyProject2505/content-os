@@ -4,6 +4,8 @@ const encoder = new TextEncoder();
 const MAX_SIGNED_URL_TTL_SECONDS = 15 * 60;
 const MEDIA_ALLOWED_STATES = new Set(["CLAIMED", "PUBLISHING"]);
 const ALLOWED_MIME_TYPES = new Set(["image/jpeg"]);
+const MAX_MEDIA_BYTES = 10 * 1024 * 1024;
+const DRIVE_FETCH_TIMEOUT_MS = 20_000;
 
 export async function handleMediaRequest(request, env) {
   if (request.method !== "GET") {
@@ -63,6 +65,7 @@ export async function handleMediaRequest(request, env) {
        p.governance_ref,
        m.drive_file_id,
        m.mime_type,
+       m.expected_sha256,
        e.drive_token_ciphertext,
        e.drive_token_expires_at
      FROM publication_jobs p
@@ -114,57 +117,121 @@ export async function handleMediaRequest(request, env) {
     return json({ ok: false, error: "DRIVE_CREDENTIAL_UNAVAILABLE" }, 500);
   }
 
-  let upstream;
+  if (
+    typeof row.expected_sha256 !== "string" ||
+    !/^[0-9a-f]{64}$/i.test(row.expected_sha256)
+  ) {
+    driveAccessToken = undefined;
+    return json({ ok: false, error: "MEDIA_AUTHORITY_SHA_MISSING" }, 409);
+  }
+
+  // Phase 6: fetch the exact Drive bytes, hash them, and serve only when the
+  // SHA-256 equals the execution authority. No byte is sent before the hash
+  // check passes.
+  let verified;
   try {
-    upstream = await fetch(
-      `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(
-        row.drive_file_id
-      )}?alt=media`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${driveAccessToken}`,
-          Accept: row.mime_type,
-        },
-        redirect: "follow",
-      }
-    );
+    verified = await fetchVerifiedDriveMedia({
+      fileId: row.drive_file_id,
+      accessToken: driveAccessToken,
+      mimeType: row.mime_type,
+      expectedSha256: row.expected_sha256,
+    });
   } finally {
     driveAccessToken = undefined;
   }
 
-  if (!upstream.ok || !upstream.body) {
-    return json({ ok: false, error: "DRIVE_MEDIA_FETCH_FAILED" }, 502);
+  if (!verified.ok) {
+    return json({ ok: false, error: verified.error }, verified.status);
   }
 
-  const upstreamType = normalizeContentType(
-    upstream.headers.get("Content-Type")
-  );
-
-  if (upstreamType && upstreamType !== row.mime_type) {
-    try {
-      await upstream.body.cancel();
-    } catch {
-      // Best-effort cancellation only.
-    }
-    return json({ ok: false, error: "DRIVE_MEDIA_TYPE_MISMATCH" }, 502);
-  }
-
-  const headers = new Headers({
-    "Content-Type": row.mime_type,
-    "Cache-Control": "no-store, max-age=0",
-    "X-Content-Type-Options": "nosniff",
-  });
-
-  const contentLength = upstream.headers.get("Content-Length");
-  if (contentLength && /^\d+$/.test(contentLength)) {
-    headers.set("Content-Length", contentLength);
-  }
-
-  return new Response(upstream.body, {
+  return new Response(verified.bytes, {
     status: 200,
-    headers,
+    headers: {
+      "Content-Type": row.mime_type,
+      "Content-Length": String(verified.bytes.byteLength),
+      "Cache-Control": "no-store, max-age=0",
+      "X-Content-Type-Options": "nosniff",
+    },
   });
+}
+
+export async function fetchVerifiedDriveMedia({
+  fileId,
+  accessToken,
+  mimeType,
+  expectedSha256,
+  fetchImpl = fetch,
+  timeoutMs = DRIVE_FETCH_TIMEOUT_MS,
+  maxBytes = MAX_MEDIA_BYTES,
+}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  let upstream;
+  let bytes;
+  try {
+    upstream = await fetchImpl(
+      `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}?alt=media`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: mimeType,
+        },
+        redirect: "follow",
+        signal: controller.signal,
+      }
+    );
+
+    if (!upstream.ok || !upstream.body) {
+      return { ok: false, status: 502, error: "DRIVE_MEDIA_FETCH_FAILED" };
+    }
+
+    const upstreamType = normalizeContentType(upstream.headers.get("Content-Type"));
+    if (upstreamType && upstreamType !== mimeType) {
+      try {
+        await upstream.body.cancel();
+      } catch {
+        // Best-effort cancellation only.
+      }
+      return { ok: false, status: 502, error: "DRIVE_MEDIA_TYPE_MISMATCH" };
+    }
+
+    const declared = Number(upstream.headers.get("Content-Length") || "0");
+    if (Number.isFinite(declared) && declared > maxBytes) {
+      try {
+        await upstream.body.cancel();
+      } catch {
+        // Best-effort cancellation only.
+      }
+      return { ok: false, status: 413, error: "DRIVE_MEDIA_TOO_LARGE" };
+    }
+
+    bytes = await upstream.arrayBuffer();
+  } catch {
+    return {
+      ok: false,
+      status: controller.signal.aborted ? 504 : 502,
+      error: controller.signal.aborted ? "DRIVE_MEDIA_TIMEOUT" : "DRIVE_MEDIA_FETCH_FAILED",
+    };
+  } finally {
+    clearTimeout(timer);
+  }
+
+  if (bytes.byteLength === 0 || bytes.byteLength > maxBytes) {
+    return { ok: false, status: 502, error: "DRIVE_MEDIA_SIZE_INVALID" };
+  }
+
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const actual = [...new Uint8Array(digest)]
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+
+  if (actual !== String(expectedSha256).toLowerCase()) {
+    return { ok: false, status: 409, error: "MEDIA_SHA_MISMATCH" };
+  }
+
+  return { ok: true, bytes };
 }
 
 export async function createSignedMediaUrl({
