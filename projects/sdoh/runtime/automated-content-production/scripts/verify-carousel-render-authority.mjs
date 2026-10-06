@@ -33,6 +33,18 @@ assert(p.scale==="md","Sage character scale drift");
 assert(p.ground_mode==="embedded","Sage ground mode drift");
 assert(p.layout_mode==="illustrated_single_character","Sage layout mode drift");
 
+const b=authority.content_visual_plans?.["SDOH-BURGUNDY-CAR-0007"];
+assert(b && typeof b==="object","Burgundy 0007 visual plan missing");
+assert(
+  JSON.stringify(b.pose_route)===JSON.stringify(["P03","P04","P08","P02","P01"]),
+  "Burgundy 0007 pose route drift"
+);
+assert(b.anchor==="lower_right","Burgundy 0007 anchor drift");
+assert(b.scale==="md","Burgundy 0007 character scale drift");
+assert(b.ground_mode==="embedded","Burgundy 0007 ground mode drift");
+assert(b.layout_mode==="illustrated_single_character","Burgundy 0007 layout mode drift");
+
+
 assert(authority.renderer.version==="0.6.0","Renderer version drift");
 assert(
   authority.renderer.sha256==="7bc6ffd0acf56b487e2eb88e55127d383e3e9b1709921f9af16a0e04519afb9f",
