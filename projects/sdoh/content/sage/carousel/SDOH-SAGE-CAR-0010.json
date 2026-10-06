@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0010",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "ada hari ketika keputusan kecil pun terasa berat"
+    },
+    {
+      "slide": 2,
+      "copy": "memilih mau makan apa mau mulai dari mana atau harus menjawab siapa"
+    },
+    {
+      "slide": 3,
+      "copy": "hal yang biasanya sederhana bisa terasa membutuhkan banyak tenaga"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu gak harus menyelesaikan semuanya sekaligus"
+    },
+    {
+      "slide": 5,
+      "copy": "satu keputusan kecil untuk sekarang juga sudah cukup"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "ada hari ketika memilih hal sederhana pun terasa membutuhkan lebih banyak tenaga dari biasanya.",
+    "kamu mungkin tidak perlu menyelesaikan semua keputusan sekaligus. memilih satu hal yang paling dekat, lalu memberi jeda sebelum keputusan berikutnya, juga boleh.",
+    "kalau hari ini kapasitasmu terasa lebih kecil, satu keputusan kecil untuk sekarang tetap berarti."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "keputusan"
+        ],
+        [
+          "berat"
+        ],
+        [
+          "tenaga"
+        ],
+        [
+          "cukup"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "ini pasti gangguan",
+        "kamu harus memutuskan sekarang"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        6,
+        10,
+        7,
+        4,
+        6
+      ],
+      "max_words_per_slide": [
+        10,
+        14,
+        11,
+        8,
+        10
+      ],
+      "min_total_slide_words": 39,
+      "min_unique_slide_content_words": 26,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "keputusan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "memilih"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "tenaga"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "menyelesaikan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "cukup"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 40,
+      "caption_max_body_words": 70,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "8257e67df6818936ee722e48e6f675e399f35eeb0655e6b6b07386a9bc8424b4"
+}
