@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0012",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "saat hal yang biasanya kamu suka terasa tidak menarik"
+    },
+    {
+      "slide": 2,
+      "copy": "mungkin kamu bingung kenapa rasanya berbeda dari biasanya"
+    },
+    {
+      "slide": 3,
+      "copy": "kamu gak harus langsung tahu apa penyebabnya"
+    },
+    {
+      "slide": 4,
+      "copy": "cukup perhatikan apa yang sedang terjadi dalam dirimu"
+    },
+    {
+      "slide": 5,
+      "copy": "perubahan kecil pun boleh menjadi alasan untuk lebih memperhatikan diri"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "kadang ada perubahan kecil yang membuat kita bertanya-tanya, termasuk saat hal yang biasanya menyenangkan terasa berbeda.",
+    "kamu tidak harus langsung tahu penyebabnya atau memberi nama pada semuanya. cukup perhatikan perubahan itu dengan lembut, terutama kalau mulai terasa menetap atau mengganggu keseharian.",
+    "memperhatikan diri bukan berarti menyimpulkan sesuatu terlalu cepat. itu hanya memberi ruang untuk melihat apa yang sedang terjadi."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "terasa tidak menarik"
+        ],
+        [
+          "berbeda"
+        ],
+        [
+          "penyebabnya"
+        ],
+        [
+          "memperhatikan"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "ini pasti depresi",
+        "kamu pasti sakit"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        6,
+        5,
+        6,
+        8
+      ],
+      "max_words_per_slide": [
+        11,
+        10,
+        9,
+        10,
+        12
+      ],
+      "min_total_slide_words": 38,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "menarik"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "berbeda"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "penyebabnya"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "perhatikan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "memperhatikan"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 49,
+      "caption_max_body_words": 79,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "2a1c2792b296932e86feb59bfe862b5086eb2708a6613ed492ee955432555bd7"
+}
