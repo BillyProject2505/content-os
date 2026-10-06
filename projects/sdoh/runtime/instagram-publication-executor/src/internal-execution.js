@@ -78,6 +78,18 @@ export async function handleInternalExecute(request, env) {
         subcode: error.meta.subcode ?? null,
         type: error.meta.type ?? null,
       };
+      if (error.meta.account && typeof error.meta.account === "object") {
+        body.meta.account = {
+          expected_user_id: String(error.meta.account.expected_user_id ?? ""),
+          resolved_user_id: error.meta.account.resolved_user_id ?? null,
+          expected_username: String(error.meta.account.expected_username ?? ""),
+          resolved_username: error.meta.account.resolved_username ?? null,
+        };
+      }
+      if (typeof error.meta.sibling_job_id === "string") {
+        body.meta.sibling_job_id = error.meta.sibling_job_id;
+        body.meta.sibling_reason = String(error.meta.sibling_reason ?? "");
+      }
     }
 
     return json(body, Number(error?.httpStatus) || 502);
