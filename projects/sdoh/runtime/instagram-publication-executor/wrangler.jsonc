@@ -11,5 +11,10 @@
       "database_name": "sdoh-publication-executor",
       "database_id": "da3b3232-36d4-4919-ba0d-1796a2530a09"
     }
-  ]
+  ],
+  "triggers": {
+    "crons": [
+      "*/5 * * * *"
+    ]
+  }
 }
