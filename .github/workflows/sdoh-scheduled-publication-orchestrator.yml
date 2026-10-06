@@ -20,6 +20,14 @@ on:
         required: true
         default: "https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev"
         type: string
+      wake_source:
+        description: "Wake-up source. Leave manual unless dispatched by the approved Cloudflare cron."
+        required: false
+        default: "manual"
+        type: choice
+        options:
+          - manual
+          - cloudflare-cron
 
 permissions:
   contents: read
@@ -31,7 +39,7 @@ concurrency:
 
 jobs:
   orchestrate:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.SDOH_SCHEDULED_AUTOMATION_ENABLED == 'true')
+    if: github.ref == 'refs/heads/main' && ((github.event_name == 'schedule' && vars.SDOH_SCHEDULED_AUTOMATION_ENABLED == 'true') || (github.event_name == 'workflow_dispatch' && (inputs.wake_source != 'cloudflare-cron' || vars.SDOH_SCHEDULED_AUTOMATION_ENABLED == 'true')))
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -47,6 +55,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           MANUAL_CONFIRMATION: ${{ inputs.confirmation }}
           REQUESTED_CONTENT_ID: ${{ inputs.content_id }}
+          WAKE_SOURCE: ${{ inputs.wake_source || 'github-schedule' }}
           WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
           GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
           GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
@@ -62,6 +71,25 @@ jobs:
           test -n "$EXECUTOR_INGEST_SECRET"
 
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            case "$WAKE_SOURCE" in
+              manual|cloudflare-cron) ;;
+              *)
+                echo "::error::Unknown wake_source: $WAKE_SOURCE"
+                exit 1
+                ;;
+            esac
+
+            if [ "$WAKE_SOURCE" = "cloudflare-cron" ]; then
+              if [ -n "$REQUESTED_CONTENT_ID" ]; then
+                echo "::error::Cloudflare cron wake-up must not carry content_id"
+                exit 1
+              fi
+              if [ "$MANUAL_CONFIRMATION" != "RUN_DUE_SCHEDULED_PUBLICATION" ]; then
+                echo "::error::Cloudflare cron may only request normal due-content discovery"
+                exit 1
+              fi
+            fi
+
             case "$MANUAL_CONFIRMATION" in
               RUN_DUE_SCHEDULED_PUBLICATION) ;;
               RUN_LATE_SCHEDULED_RECOVERY)
