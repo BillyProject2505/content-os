@@ -1,0 +1,54 @@
+name: SDOH approved-copy batch render (Owner Review)
+
+# Batch wrapper around the canonical BUS-160 Production Path.
+# Every item independently validates COPY_APPROVED authority, renders with
+# BUS-49, runs Technical QA, and stops at READY_FOR_OWNER_REVIEW.
+# This workflow cannot grant Owner approval, schedule, call BUS-140, or publish.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - projects/sdoh/runtime/automated-content-production/batches/2026-10-remaining-carousels-owner-review.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  plan:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v5
+      - id: plan
+        shell: bash
+        run: |
+          set -euo pipefail
+          batch="projects/sdoh/runtime/automated-content-production/batches/2026-10-remaining-carousels-owner-review.json"
+          jq -e '
+            .schema == "sdoh-approved-copy-batch-v1" and
+            .confirmation == "RENDER_UNAPPROVED_REVIEW_PACKAGE" and
+            .hard_stop == "READY_FOR_OWNER_REVIEW" and
+            (.items | length) == 16 and
+            ([.items[].content_id] | unique | length) == 16 and
+            ([.items[].expected_copy_fingerprint | test("^[0-9a-f]{64}$")] | all)
+          ' "$batch" >/dev/null
+          echo "matrix=$(jq -c '{include:.items}' "$batch")" >> "$GITHUB_OUTPUT"
+
+  render:
+    needs: plan
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    uses: ./.github/workflows/sdoh-approved-copy-render.yml
+    with:
+      content_id: ${{ matrix.content_id }}
+      expected_copy_fingerprint: ${{ matrix.expected_copy_fingerprint }}
+      confirmation: RENDER_UNAPPROVED_REVIEW_PACKAGE
+    secrets: inherit
