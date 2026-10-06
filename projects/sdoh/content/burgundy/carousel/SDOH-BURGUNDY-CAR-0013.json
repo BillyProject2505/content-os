@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0013",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "ada doa yang belum bisa kamu ucapkan dengan tenang"
+    },
+    {
+      "slide": 2,
+      "copy": "mungkin masih ada marah takut atau kecewa di dalamnya"
+    },
+    {
+      "slide": 3,
+      "copy": "dan kamu belum tahu bagaimana harus merangkai semuanya"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu gak harus berpura-pura tenang di dalam doamu"
+    },
+    {
+      "slide": 5,
+      "copy": "kadang kejujuran dimulai dari mengakui apa yang benar-benar kamu rasakan"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "ada doa yang mungkin belum bisa diucapkan dengan tenang karena di dalamnya masih ada marah, takut, bingung, atau kecewa.",
+    "kamu tidak harus merapikan semua perasaan itu dulu sebelum berdoa. kejujuran juga bisa dimulai dari mengakui bahwa kamu belum tahu bagaimana harus merangkai semuanya.",
+    "tidak semua doa harus terdengar tenang untuk menjadi jujur."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "doa"
+        ],
+        [
+          "marah"
+        ],
+        [
+          "tenang"
+        ],
+        [
+          "mengakui"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "Tuhan pasti menjawab seperti ini",
+        "doa yang marah itu salah"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        6,
+        6,
+        8
+      ],
+      "max_words_per_slide": [
+        11,
+        11,
+        10,
+        10,
+        12
+      ],
+      "min_total_slide_words": 40,
+      "min_unique_slide_content_words": 24,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "doa"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "marah"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "merangkai"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "doamu"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "mengakui"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 42,
+      "caption_max_body_words": 72,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "395e1c70c45f918f5406053ae057567b235d9efc71f0e5b7e7d0009f233287f5"
+}
