@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       content_id:
-        description: Content item with a COPY_APPROVED file under projects/sdoh/content/sage/carousel/
+        description: Content item with a COPY_APPROVED file under projects/sdoh/content/<theme>/carousel/
         required: true
         type: string
       expected_copy_fingerprint:
@@ -49,8 +49,8 @@ jobs:
           CONFIRMATION: ${{ inputs.confirmation }}
         run: |
           set -euo pipefail
-          if ! [[ "$CONTENT_ID" =~ ^SDOH-SAGE-CAR-[0-9]{4}$ ]]; then
-            echo "::error::content_id must be an SDOH Sage Carousel ID"
+          if ! [[ "$CONTENT_ID" =~ ^SDOH-(SAGE|BURGUNDY)-CAR-[0-9]{4}$ ]]; then
+            echo "::error::content_id must be an SDOH Sage/Burgundy Carousel ID"
             exit 1
           fi
           if ! [[ "$EXPECTED_COPY_FINGERPRINT" =~ ^[0-9a-f]{64}$ ]]; then
@@ -150,7 +150,7 @@ jobs:
             echo "- Owner approval: NOT GRANTED"
             echo "- Publication state: PLANNED"
             echo "- Renderer: BUS-49 v0.6.0"
-            echo "- Pose route: P02 → P03 → P05 → P06 → P07"
+            echo "- Pose route: $(jq -r '.visual_plan.pose_route | join(" → ")' "$pkg")"
             echo "- Technical QA: PASS"
             echo "- Copy fingerprint: $(jq -r '.source_copy.copy_fingerprint' "$pkg")"
           } >> "$GITHUB_STEP_SUMMARY"
