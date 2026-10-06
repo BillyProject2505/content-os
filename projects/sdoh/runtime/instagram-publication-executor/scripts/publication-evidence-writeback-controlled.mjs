@@ -71,29 +71,111 @@ async function fetchRuntimeStatus({ workerBaseUrl, executorSecret, jobId }) {
   });
 }
 
-async function linearRequest({ apiKey, query, variables }) {
-  const response = await fetch(LINEAR_API_URL, {
+const SECRET_PATTERNS = [
+  /lin_api_[A-Za-z0-9]+/g,
+  /lin_oauth_[A-Za-z0-9]+/g,
+  /Bearer\s+[A-Za-z0-9._~+/=-]+/gi,
+];
+
+export function redactSecrets(value, secrets = []) {
+  let text = String(value ?? "");
+  for (const secret of secrets) {
+    if (typeof secret === "string" && secret.length >= 8) {
+      text = text.split(secret).join("[REDACTED]");
+    }
+  }
+  for (const pattern of SECRET_PATTERNS) {
+    text = text.replace(pattern, "[REDACTED]");
+  }
+  return text;
+}
+
+// Safe, bounded summary of a Linear GraphQL error response. Never includes
+// request headers, variables, or document content; strings are redacted and
+// truncated.
+export function summarizeLinearErrors(payload, secrets = []) {
+  const errors = Array.isArray(payload?.errors) ? payload.errors : [];
+  return errors.slice(0, 5).map((error) => ({
+    message: redactSecrets(error?.message, secrets).slice(0, 300),
+    code: error?.extensions?.code
+      ? redactSecrets(error.extensions.code, secrets).slice(0, 80)
+      : null,
+    type: error?.extensions?.type
+      ? redactSecrets(error.extensions.type, secrets).slice(0, 80)
+      : null,
+    user_presentable_message: error?.extensions?.userPresentableMessage
+      ? redactSecrets(error.extensions.userPresentableMessage, secrets).slice(0, 300)
+      : null,
+    path: Array.isArray(error?.path)
+      ? error.path.map((part) => String(part).slice(0, 60)).slice(0, 5)
+      : null,
+  }));
+}
+
+function linearError(code, diagnostics) {
+  const error = new Error(code);
+  error.diagnostics = diagnostics;
+  return error;
+}
+
+export async function linearRequest({
+  apiKey,
+  query,
+  variables,
+  operation = "unknown",
+  fetchImpl = fetch,
+}) {
+  const requestBody = JSON.stringify({ query, variables });
+  const response = await fetchImpl(LINEAR_API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: apiKey,
     },
-    body: JSON.stringify({ query, variables }),
+    body: requestBody,
   });
 
-  if (!response.ok) {
-    throw new Error(`LINEAR_HTTP_${response.status}`);
+  const text = await response.text();
+  let payload = null;
+  try {
+    payload = JSON.parse(text);
+  } catch {
+    payload = null;
   }
 
-  const payload = await response.json();
-  if (Array.isArray(payload.errors) && payload.errors.length > 0) {
-    throw new Error("LINEAR_GRAPHQL_ERROR");
+  if (!response.ok) {
+    throw linearError(`LINEAR_HTTP_${response.status}`, {
+      operation,
+      http_status: response.status,
+      request_body_bytes: Buffer.byteLength(requestBody, "utf8"),
+      response_is_json: payload !== null,
+      errors: summarizeLinearErrors(payload, [apiKey]),
+      response_snippet: payload === null
+        ? redactSecrets(text, [apiKey]).slice(0, 300)
+        : null,
+    });
+  }
+
+  if (Array.isArray(payload?.errors) && payload.errors.length > 0) {
+    throw linearError("LINEAR_GRAPHQL_ERROR", {
+      operation,
+      http_status: response.status,
+      request_body_bytes: Buffer.byteLength(requestBody, "utf8"),
+      errors: summarizeLinearErrors(payload, [apiKey]),
+    });
+  }
+
+  if (payload === null) {
+    throw linearError("LINEAR_NON_JSON_RESPONSE", {
+      operation,
+      http_status: response.status,
+    });
   }
 
   return payload.data;
 }
 
-async function fetchLinearDocument({ apiKey, documentId }) {
+export async function fetchLinearDocument({ apiKey, documentId }) {
   const query = `
     query PublicationRegister($id: String!) {
       document(id: $id) {
@@ -109,6 +191,7 @@ async function fetchLinearDocument({ apiKey, documentId }) {
     apiKey,
     query,
     variables: { id: documentId },
+    operation: "document_read",
   });
 
   if (!data?.document?.content) {
@@ -118,7 +201,7 @@ async function fetchLinearDocument({ apiKey, documentId }) {
   return data.document;
 }
 
-async function updateLinearDocument({ apiKey, documentId, content }) {
+export async function updateLinearDocument({ apiKey, documentId, content }) {
   const query = `
     mutation PublicationRegisterWriteback(
       $id: String!
@@ -141,6 +224,7 @@ async function updateLinearDocument({ apiKey, documentId, content }) {
       id: documentId,
       input: { content },
     },
+    operation: "document_update",
   });
 
   if (
@@ -244,7 +328,33 @@ function runSelfTest() {
     throw new Error("self-test failed: missing row did not fail closed");
   }
 
+  const leaked = summarizeLinearErrors(
+    {
+      errors: [
+        {
+          message: "Argument Validation Error: lin_api_SECRETVALUE123 Bearer abc.def",
+          extensions: {
+            code: "INVALID_INPUT",
+            userPresentableMessage: "content too long for key lin_api_SECRETVALUE123",
+          },
+          path: ["documentUpdate"],
+        },
+      ],
+    },
+    ["lin_api_SECRETVALUE123"]
+  );
+  const serialized = JSON.stringify(leaked);
+  if (
+    serialized.includes("SECRETVALUE123") ||
+    serialized.includes("abc.def") ||
+    leaked[0].code !== "INVALID_INPUT" ||
+    !leaked[0].message.startsWith("Argument Validation Error")
+  ) {
+    throw new Error("self-test failed: Linear error diagnostics are unsafe or incomplete");
+  }
+
   console.log("publication evidence controlled writeback self-test PASS");
+  console.log("safe Linear GraphQL error diagnostics (secrets redacted) PASS");
 }
 
 async function main() {
@@ -423,6 +533,8 @@ async function main() {
         ? "WRITEBACK_APPLIED_VERIFY_OR_READBACK_FAILED"
         : "WRITEBACK_REJECTED_BEFORE_CONFIRMED_MUTATION",
       reason: error instanceof Error ? error.message : "UNKNOWN_ERROR",
+      linear_diagnostics: error?.diagnostics ?? null,
+      reconciliation: "RECONCILIATION_REQUIRED",
       content_id: contentId,
       job_id: jobId,
       linear_mutation_may_have_occurred: mutationApplied,
