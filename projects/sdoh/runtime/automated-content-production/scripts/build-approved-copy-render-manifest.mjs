@@ -11,12 +11,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
-  APPROVED_COPY_DIR,
   assertManifestMatchesCopy,
   loadApprovedCopy,
   runApprovedCopyGates,
 } from "./approved-copy-contract.mjs";
-import { buildSageRenderManifest } from "./carousel-manifest.mjs";
+import { buildCarouselRenderManifest, resolveVisualPlan } from "./carousel-manifest.mjs";
 
 function arg(name) {
   const i = process.argv.indexOf(name);
@@ -30,7 +29,8 @@ function optionalArg(name) {
 
 try {
   const contentId = arg("--content-id");
-  const copyDir = path.resolve(optionalArg("--copy-dir") ?? APPROVED_COPY_DIR);
+  const copyDirArg = optionalArg("--copy-dir");
+  const copyDir = copyDirArg ? path.resolve(copyDirArg) : undefined;
   const authorityPath = path.resolve(arg("--authority"));
   const outPath = path.resolve(arg("--out"));
   const snapshotPath = path.resolve(arg("--snapshot-out"));
@@ -43,7 +43,7 @@ try {
   const gates = runApprovedCopyGates(copy);
 
   const authority = JSON.parse(fs.readFileSync(authorityPath, "utf8"));
-  const manifest = buildSageRenderManifest({ contentId: copy.content_id, slides: copy.slides, authority });
+  const manifest = buildCarouselRenderManifest({ contentId: copy.content_id, theme: copy.theme, slides: copy.slides, authority });
   assertManifestMatchesCopy(manifest, copy);
 
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
@@ -59,7 +59,8 @@ try {
   console.log(`copy_fingerprint=${copy.copy_fingerprint}`);
   console.log(`semantic_gate=PASS hits=${gates.semantic.hit_count}/${gates.semantic.required_group_count}`);
   console.log(`editorial_gate=PASS total_words=${gates.editorial.metrics.total_slide_words}`);
-  console.log(`pose_route=${authority.sage_default_visual_plan.pose_route.join("->")}`);
+  const plan = resolveVisualPlan({ contentId: copy.content_id, theme: copy.theme, authority });
+  console.log(`pose_route=${plan.pose_route.join("->")}`);
   console.log("render_manifest_state=UNAPPROVED");
 } catch (error) {
   const code = error?.code ?? "ERROR";
