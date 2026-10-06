@@ -1,6 +1,7 @@
 import { routeRuntimeRequest } from "./runtime-router.js";
 
 import { dispatchScheduledPublicationWakeup } from "./scheduled-wakeup.js";
+import { deploymentInfo } from "./deployment-info.js";
 
 // GitHub-connected Cloudflare build source.
 
@@ -29,6 +30,7 @@ async function handleExistingHealth(request, env) {
           ok: false,
           instagram: "unavailable",
           publishing_enabled: false,
+          deployment: deploymentInfo(env),
         },
         { status: 502 }
       );
@@ -53,6 +55,8 @@ async function handleExistingHealth(request, env) {
         account_type: data.account_type,
       },
       publishing_enabled: publishingEnabled,
+      scheduled_wakeup_enabled: env.SCHEDULED_WAKEUP_ENABLED === "true",
+      deployment: deploymentInfo(env),
     });
   } catch {
     return Response.json(
@@ -60,6 +64,7 @@ async function handleExistingHealth(request, env) {
         ok: false,
         instagram: "unavailable",
         publishing_enabled: false,
+        deployment: deploymentInfo(env),
       },
       { status: 500 }
     );
