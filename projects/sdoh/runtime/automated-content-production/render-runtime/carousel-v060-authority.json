@@ -91,6 +91,19 @@
         "P02",
         "P01"
       ]
+    },
+    "SDOH-BURGUNDY-CAR-0008": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P03",
+        "P04",
+        "P02",
+        "P08",
+        "P01"
+      ]
     }
   }
 }

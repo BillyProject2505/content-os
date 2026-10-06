@@ -1,0 +1,163 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0008",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "ada hal yang sudah kamu maafkan tapi masih terasa sakit"
+    },
+    {
+      "slide": 2,
+      "copy": "keputusan untuk memaafkan tidak selalu membuat rasa sakit langsung hilang"
+    },
+    {
+      "slide": 3,
+      "copy": "kadang lukanya masih terasa di waktu tertentu"
+    },
+    {
+      "slide": 4,
+      "copy": "itu tidak otomatis berarti kamu gagal untuk memaafkan"
+    },
+    {
+      "slide": 5,
+      "copy": "rasa sakitmu masih boleh diakui tanpa menyangkal keputusanmu"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "kadang kita sudah memilih untuk memaafkan, tapi ada bagian dari luka yang belum langsung ikut tenang.",
+    "memaafkan adalah sebuah keputusan. rasa sakit punya waktunya sendiri. keduanya bisa berjalan bersamaan tanpa membuat keputusanmu jadi kurang berarti.",
+    "kalau sesekali rasa itu muncul lagi, kamu tidak harus menganggap dirimu kembali ke awal. kamu boleh mengakuinya tanpa menyangkal bahwa kamu sudah memilih untuk melepaskan sebagian yang dulu kamu bawa."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "memaafkan"
+        ],
+        [
+          "rasa sakit",
+          "sakit"
+        ],
+        [
+          "masih terasa"
+        ],
+        [
+          "diakui",
+          "mengakui"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kalau sudah memaafkan tidak boleh sakit",
+        "memaafkan berarti harus kembali",
+        "kamu gagal memaafkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        8,
+        8,
+        6,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        10,
+        11,
+        11
+      ],
+      "min_total_slide_words": 36,
+      "min_unique_slide_content_words": 20,
+      "max_pairwise_content_similarity": 0.72,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "maafkan"
+            ],
+            [
+              "terasa sakit"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "memaafkan"
+            ],
+            [
+              "rasa sakit"
+            ],
+            [
+              "hilang"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "lukanya"
+            ],
+            [
+              "masih terasa"
+            ],
+            [
+              "waktu tertentu"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "tidak otomatis"
+            ],
+            [
+              "gagal"
+            ],
+            [
+              "memaafkan"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "rasa sakitmu"
+            ],
+            [
+              "diakui"
+            ],
+            [
+              "keputusanmu"
+            ]
+          ],
+          "minimum_groups": 2
+        }
+      ],
+      "caption_min_body_words": 45,
+      "caption_max_body_words": 110,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "5ac1af8161cf5ccdc183503e3be270f017e4b648885f20145b30a0dabbfab18c"
+}
