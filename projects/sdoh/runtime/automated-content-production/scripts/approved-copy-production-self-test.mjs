@@ -221,7 +221,7 @@ try {
   manifest.slides.forEach((slide, index) => {
     expect(slide.copy.split(/\s+/).join(" ") === goodSlides[index], `manifest slide ${index + 1} is not the exact approved copy`);
   });
-  expect(manifest.slides[0].copy === "ritme yang dulu terasa pas\nbisa berubah hari ini", "line-break policy mismatch S1");
+  expect(manifest.slides[0].copy === "ritme yang dulu\nterasa pas bisa\nberubah hari ini", "line-break policy mismatch S1");
   expect(manifest.slides[2].copy === "menyesuaikan langkah bukan\nberarti kamu gagal", "line-break policy mismatch S3");
   const altered = clone(manifest);
   altered.slides[3].copy = "kamu boleh memilih ritme yang lebih\nmungkin dijalani nanti";
