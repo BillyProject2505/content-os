@@ -1,0 +1,59 @@
+name: SDOH publication Worker provenance check
+
+# Read-only. Proves the live Worker runs code equal to main for the executor
+# path: the live version must be tagged with a commit that (a) is on main and
+# (b) contains the latest main commit touching the executor directory.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  provenance:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Verify live Worker provenance against main
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error \
+            https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev/health)"
+          jq -c '{ok, publishing_enabled, scheduled_wakeup_enabled, deployment}' <<<"$response"
+
+          deployed="$(jq -r '.deployment.commit_sha // empty' <<<"$response")"
+          if ! [[ "$deployed" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::Live Worker provenance UNVERIFIED (no commit tag)"
+            exit 1
+          fi
+
+          git cat-file -e "${deployed}^{commit}" || { echo "::error::Deployed commit not found in repository"; exit 1; }
+          git merge-base --is-ancestor "$deployed" "$GITHUB_SHA" || { echo "::error::Deployed commit is not on main"; exit 1; }
+
+          last_runtime_change="$(git log -1 --format=%H "$GITHUB_SHA" -- projects/sdoh/runtime/instagram-publication-executor)"
+          git merge-base --is-ancestor "$last_runtime_change" "$deployed" || {
+            echo "::error::Deployed $deployed predates latest executor change $last_runtime_change"
+            exit 1
+          }
+
+          if [ "$(jq -r '.publishing_enabled' <<<"$response")" != "false" ]; then
+            echo "::error::Manual publishing window is open"
+            exit 1
+          fi
+
+          {
+            echo "## Worker provenance"
+            echo "- Deployed commit: \`$deployed\`"
+            echo "- Latest executor change on main: \`$last_runtime_change\`"
+            echo "- Result: deployed executor code == main"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "Worker provenance PASS"
