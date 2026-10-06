@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0010",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kedekatan tidak menghapus hakmu untuk merasa tidak nyaman"
+    },
+    {
+      "slide": 2,
+      "copy": "kamu bisa menyayangi seseorang dan tetap merasa ada yang melewati batasmu"
+    },
+    {
+      "slide": 3,
+      "copy": "hubungan yang dekat tidak membuat semua hal otomatis terasa aman"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu boleh memperhatikan rasa tidak nyaman itu tanpa mengecilkannya"
+    },
+    {
+      "slide": 5,
+      "copy": "dekat dengan seseorang tidak berarti kamu kehilangan batasmu"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "dekat dengan seseorang tidak membuat setiap hal otomatis terasa nyaman atau aman.",
+    "kamu bisa menyayangi seseorang dan tetap menyadari ada bagian dari interaksi itu yang melewati batasmu. rasa tidak nyaman tidak harus dikecilkan hanya karena hubungan itu penting bagimu.",
+    "kedekatan tidak menghapus hakmu untuk memperhatikan, menyampaikan, dan menjaga batasmu sendiri."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "kedekatan"
+        ],
+        [
+          "tidak nyaman"
+        ],
+        [
+          "batasmu"
+        ],
+        [
+          "aman"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kedekatan menghapus batas",
+        "kalau sayang harus nyaman"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        6,
+        9,
+        8,
+        7,
+        6
+      ],
+      "max_words_per_slide": [
+        10,
+        13,
+        12,
+        11,
+        10
+      ],
+      "min_total_slide_words": 42,
+      "min_unique_slide_content_words": 21,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "kedekatan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "batasmu"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "aman"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "mengecilkannya"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "batasmu"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 40,
+      "caption_max_body_words": 70,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "5174de846023230a085414f24da9dae7dfb98266c52614f634f8d35c7b83a4ce"
+}
