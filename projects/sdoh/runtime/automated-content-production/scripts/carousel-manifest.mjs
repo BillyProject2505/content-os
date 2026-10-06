@@ -122,12 +122,15 @@ export function assertCanonicalSageVisualPlan(authority) {
 }
 
 export function resolveVisualPlan({ contentId, theme, authority }) {
+  const instancePlan = authority.content_visual_plans?.[contentId];
+  if (instancePlan) {
+    return assertVisualPlan(instancePlan, `${theme} ${contentId}`);
+  }
   if (theme === "SAGE") {
     return assertCanonicalSageVisualPlan(authority);
   }
   if (theme === "BURGUNDY") {
-    const plan = authority.content_visual_plans?.[contentId];
-    return assertVisualPlan(plan, `Burgundy ${contentId}`);
+    throw new Error(`Burgundy ${contentId} visual plan missing`);
   }
   throw new Error(`Unsupported carousel theme: ${theme}`);
 }
@@ -140,9 +143,11 @@ export function buildCarouselRenderManifest({ contentId, theme, slides, authorit
     layout_mode: plan.layout_mode,
     slides: slides.map((slide, index) => ({
       slide_number: slide.slide,
-      copy: theme === "BURGUNDY"
-        ? (contentId === "SDOH-BURGUNDY-CAR-0008" ? wrapBalancedThreeLines(slide.copy) : wrapBurgundyCopy(slide.copy))
-        : (contentId === "SDOH-SAGE-CAR-0006" ? wrapSageIllustratedCopy(slide.copy) : wrapCopy(slide.copy)),
+      copy: plan.wrap_mode === "balanced_3"
+        ? wrapBalancedThreeLines(slide.copy)
+        : theme === "BURGUNDY"
+          ? (contentId === "SDOH-BURGUNDY-CAR-0008" ? wrapBalancedThreeLines(slide.copy) : wrapBurgundyCopy(slide.copy))
+          : (contentId === "SDOH-SAGE-CAR-0006" ? wrapSageIllustratedCopy(slide.copy) : wrapCopy(slide.copy)),
       optical_y_correction: 0,
       character: {
         enabled: true,
