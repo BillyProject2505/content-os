@@ -70,7 +70,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npx --yes wrangler@4.147.0 deploy --config wrangler.jsonc
+          # Tag the Worker version with the exact deployed commit so /health can
+          # prove provenance through the version_metadata binding.
+          npx --yes wrangler@4.147.0 deploy --config wrangler.jsonc \
+            --tag "$GITHUB_SHA" \
+            --message "content-os ${GITHUB_SHA} via sdoh-publication-worker-deploy run ${GITHUB_RUN_ID}"
 
       - name: Verify production health endpoint
         shell: bash
@@ -81,3 +85,24 @@ jobs:
           echo "$response"
           jq -e '.ok == true' <<<"$response" >/dev/null
           echo "Production Worker health PASS"
+
+      - name: Verify deployed version provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Fail if the live version is not tagged with this exact commit, e.g.
+          # because another deploy path (Workers Builds) replaced it.
+          for attempt in 1 2 3 4 5 6; do
+            response="$(curl --fail --silent --show-error \
+              https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev/health)"
+            tag="$(jq -r '.deployment.commit_sha // empty' <<<"$response")"
+            if [ "$tag" = "$GITHUB_SHA" ]; then
+              jq -c '.deployment' <<<"$response"
+              echo "Deployed Worker provenance PASS: $GITHUB_SHA"
+              exit 0
+            fi
+            sleep 10
+          done
+          jq -c '.deployment' <<<"$response"
+          echo "::error::Live Worker version is not tagged with $GITHUB_SHA (provenance UNVERIFIED)"
+          exit 1
