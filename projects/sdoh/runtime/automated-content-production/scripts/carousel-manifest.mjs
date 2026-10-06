@@ -44,6 +44,33 @@ function wrapSageIllustratedCopy(copy) {
   return lines.join("\n");
 }
 
+function wrapBalancedThreeLines(copy) {
+  const words = String(copy).trim().split(/\s+/).filter(Boolean);
+  if (words.length < 3) return wrapCopy(copy);
+
+  let best = null;
+  for (let i = 1; i < words.length - 1; i += 1) {
+    for (let j = i + 1; j < words.length; j += 1) {
+      const lines = [
+        words.slice(0, i).join(" "),
+        words.slice(i, j).join(" "),
+        words.slice(j).join(" "),
+      ];
+      const lengths = lines.map((line) => line.length);
+      const max = Math.max(...lengths);
+      const min = Math.min(...lengths);
+      const score = [max, max - min, i, j];
+      if (
+        best === null ||
+        score.some((value, index) => value < best.score[index] && score.slice(0, index).every((v, k) => v === best.score[k]))
+      ) {
+        best = { score, lines };
+      }
+    }
+  }
+  return best.lines.join("\n");
+}
+
 function assertVisualPlan(plan, label) {
   if (!plan || typeof plan !== "object") {
     throw new Error(`${label} visual plan missing`);
@@ -113,7 +140,9 @@ export function buildCarouselRenderManifest({ contentId, theme, slides, authorit
     layout_mode: plan.layout_mode,
     slides: slides.map((slide, index) => ({
       slide_number: slide.slide,
-      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : (contentId === "SDOH-SAGE-CAR-0006" ? wrapSageIllustratedCopy(slide.copy) : wrapCopy(slide.copy)),
+      copy: theme === "BURGUNDY"
+        ? (contentId === "SDOH-BURGUNDY-CAR-0008" ? wrapBalancedThreeLines(slide.copy) : wrapBurgundyCopy(slide.copy))
+        : (contentId === "SDOH-SAGE-CAR-0006" ? wrapSageIllustratedCopy(slide.copy) : wrapCopy(slide.copy)),
       optical_y_correction: 0,
       character: {
         enabled: true,
