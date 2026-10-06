@@ -105,7 +105,7 @@ export function resolveVisualPlan({ contentId, theme, authority }) {
   throw new Error(`Unsupported carousel theme: ${theme}`);
 }
 
-export function buildCarouselRenderManifest({ contentId, theme, slides, authority }) {
+export function buildCarouselRenderManifest({ contentId, theme, slides, authority, lineBreakPolicy = "legacy" }) {
   const plan = resolveVisualPlan({ contentId, theme, authority });
   return {
     content_id: contentId,
@@ -113,7 +113,7 @@ export function buildCarouselRenderManifest({ contentId, theme, slides, authorit
     layout_mode: plan.layout_mode,
     slides: slides.map((slide, index) => ({
       slide_number: slide.slide,
-      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : wrapSageCopy(slide.copy),
+      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : (lineBreakPolicy === "width_budget" ? wrapSageCopy(slide.copy) : wrapCopy(slide.copy)),
       optical_y_correction: 0,
       character: {
         enabled: true,
