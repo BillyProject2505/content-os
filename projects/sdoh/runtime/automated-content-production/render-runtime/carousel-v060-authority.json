@@ -77,5 +77,20 @@
       "sha256": "51547e6b877edd8de24e6893b8eb2807ec7779047020feda96d4140c045bd015",
       "expected_filename": "SDOH-OBJ-000006-P08_Hands-in-Pockets.png"
     }
+  },
+  "content_visual_plans": {
+    "SDOH-BURGUNDY-CAR-0007": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P03",
+        "P04",
+        "P08",
+        "P02",
+        "P01"
+      ]
+    }
   }
 }
