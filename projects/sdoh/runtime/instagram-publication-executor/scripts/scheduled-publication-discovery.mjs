@@ -100,8 +100,10 @@ export function discoverDueRecordsFromDocuments({
       if (!/^SDOH-(?:BURGUNDY|SAGE)-CAR-\d{4}$/.test(contentId)) continue;
       if (requested && contentId !== requested) continue;
 
+      // Exact state match only: substrings such as RESCHEDULED or
+      // NOT SCHEDULED must never be treated as an eligible SCHEDULED row.
       const state = normalizeCell(cells[3]).toUpperCase();
-      if (!state.includes("SCHEDULED")) continue;
+      if (state !== "SCHEDULED") continue;
 
       let route;
       try {
@@ -280,7 +282,43 @@ function runSelfTest() {
     throw new Error("self-test failed: stale row must not be selected");
   }
 
+  for (const lookalike of ["RESCHEDULED", "NOT SCHEDULED", "SCHEDULED?", "UNSCHEDULED"]) {
+    const result = discoverDueRecordsFromDocuments({
+      documents: [
+        fixture({
+          id: CAROUSEL_REGISTER_ROUTES.BURGUNDY.register_document_id,
+          contentId: "SDOH-BURGUNDY-CAR-0099",
+          schedule: "2026-10-02, 19:30 WITA",
+          state: lookalike,
+        }),
+      ],
+      now: new Date("2026-10-02T11:30:00Z"),
+    });
+    if (result.decision !== "NO_DUE_CONTENT") {
+      throw new Error(`self-test failed: look-alike state ${lookalike} was treated as SCHEDULED`);
+    }
+  }
+
+  const early = discoverDueRecordsFromDocuments({
+    documents: [burgundy],
+    now: new Date("2026-10-02T11:29:59Z"),
+  });
+  if (early.decision !== "NO_DUE_CONTENT") {
+    throw new Error("self-test failed: row selected one second before scheduled_at");
+  }
+
+  const witaBoundary = discoverDueRecordsFromDocuments({
+    documents: [burgundy],
+    now: new Date("2026-10-02T11:30:00Z"),
+  });
+  if (witaBoundary.scheduled_at !== "2026-10-02T19:30:00+08:00") {
+    throw new Error("self-test failed: WITA schedule not resolved to +08:00");
+  }
+
   console.log("scheduled publication discovery self-test PASS");
+  console.log("look-alike states (RESCHEDULED / NOT SCHEDULED) excluded PASS");
+  console.log("not-before-scheduled_at (one second early) PASS");
+  console.log("19:30 WITA resolves to 2026-10-02T19:30:00+08:00 PASS");
   console.log("future row no-op PASS");
   console.log("single due row selection PASS");
   console.log("requested content selection PASS");
