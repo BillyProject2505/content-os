@@ -38,6 +38,30 @@ function assertVisualPlan(plan, label) {
   return plan;
 }
 
+function wrapBurgundyCopy(copy) {
+  const words = String(copy).trim().split(/\s+/).filter(Boolean);
+  const MAX_LINES = 3;
+  const TARGET_CHARS = 24;
+  const lines = [];
+  let current = "";
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (current && candidate.length > TARGET_CHARS && lines.length < MAX_LINES - 1) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = candidate;
+    }
+  }
+  if (current) lines.push(current);
+
+  if (lines.length > MAX_LINES) {
+    throw new Error("Burgundy copy requires more than three deterministic lines");
+  }
+  return lines.join("\n");
+}
+
 export function assertCanonicalSageVisualPlan(authority) {
   const plan = assertVisualPlan(authority.sage_default_visual_plan, "Canonical Sage");
   if (JSON.stringify(plan.pose_route) !== JSON.stringify(["P02", "P03", "P05", "P06", "P07"])) {
@@ -65,7 +89,7 @@ export function buildCarouselRenderManifest({ contentId, theme, slides, authorit
     layout_mode: plan.layout_mode,
     slides: slides.map((slide, index) => ({
       slide_number: slide.slide,
-      copy: wrapCopy(slide.copy),
+      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : wrapCopy(slide.copy),
       optical_y_correction: 0,
       character: {
         enabled: true,
