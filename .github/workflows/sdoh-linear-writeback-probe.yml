@@ -1,0 +1,65 @@
+name: SDOH Linear writeback round-trip probe
+
+# BUS-137 / BUS-140 remediation Phase 4.
+# Proves runtime evidence -> plan -> documentUpdate (WRITEBACK_APPLIED) ->
+# fresh re-read (ALREADY_SYNCED) for an EXISTING, already-published job, using
+# a separate non-authoritative probe document. The canonical register is read
+# only and is verified unchanged. No Meta, Instagram, or Drive call is made.
+
+on:
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: "Already-published SDOH carousel Content ID"
+        required: true
+        type: string
+      job_id:
+        description: "Terminal PUBLISHED D1 job ID for that content"
+        required: true
+        type: string
+      confirmation:
+        description: "Type RUN_WRITEBACK_ROUNDTRIP_PROBE exactly"
+        required: true
+        type: string
+      worker_base_url:
+        description: "Production Worker HTTPS base URL"
+        required: true
+        default: "https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sdoh-linear-writeback-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Run writeback round-trip probe
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          CONTENT_ID: ${{ inputs.content_id }}
+          JOB_ID: ${{ inputs.job_id }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url }}
+          PROBE_CONFIRMATION: ${{ inputs.confirmation }}
+          # BUS-140 issue UUID; probe document is attached there for audit.
+          PROBE_ISSUE_ID: 3b1fd08a-c6e5-4083-b780-52d0ff95392c
+        run: |
+          set -euo pipefail
+          if ! [[ "$CONTENT_ID" =~ ^SDOH-(SAGE|BURGUNDY)-CAR-[0-9]{4}$ ]]; then
+            echo "::error::Invalid content_id"
+            exit 1
+          fi
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/writeback-roundtrip-probe.mjs | tee "$RUNNER_TEMP/probe.json"
+          jq -e '.ok == true and .decision == "WRITEBACK_APPLIED" and .linear_mutation_performed == true and .post_write_verification == "ALREADY_SYNCED" and .canonical_register_unchanged == true' "$RUNNER_TEMP/probe.json" >/dev/null
+          echo "Writeback round-trip probe PASS"
