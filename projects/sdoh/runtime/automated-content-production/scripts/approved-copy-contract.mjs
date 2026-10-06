@@ -38,7 +38,7 @@ const PROJECT_CAPTION_HASHTAGS = [
   "#pelanpelanaja",
 ];
 
-const CONTENT_ID_RE = /^SDOH-SAGE-CAR-\d{4}$/;
+const CONTENT_ID_RE = /^SDOH-(SAGE|BURGUNDY)-CAR-\d{4}$/;
 const FIELDS = [
   "content_id",
   "status",
@@ -230,7 +230,7 @@ export function approvedCopyPath(contentId, dir) {
 // Discovery: the canonical file for a content item is <dir>/<content_id>.json.
 export function loadApprovedCopy(contentId, { dir, expectedCopyFingerprint } = {}) {
   const file = approvedCopyPath(contentId, dir);
-  check(fs.existsSync(file), "COPY_NOT_FOUND", `no canonical copy file for ${contentId} in ${dir}`);
+  check(fs.existsSync(file), "COPY_NOT_FOUND", `no canonical copy file for ${contentId} at ${file}`);
   const raw = JSON.parse(fs.readFileSync(file, "utf8"));
   return { file, copy: validateApprovedCopy(raw, { expectedContentId: contentId, expectedCopyFingerprint }) };
 }
