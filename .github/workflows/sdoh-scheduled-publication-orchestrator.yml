@@ -1,8 +1,6 @@
 name: SDOH unattended scheduled publication
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       content_id:
@@ -39,7 +37,7 @@ concurrency:
 
 jobs:
   orchestrate:
-    if: github.ref == 'refs/heads/main' && ((github.event_name == 'schedule' && vars.SDOH_SCHEDULED_AUTOMATION_ENABLED == 'true') || (github.event_name == 'workflow_dispatch' && (inputs.wake_source != 'cloudflare-cron' || vars.SDOH_SCHEDULED_AUTOMATION_ENABLED == 'true')))
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && (inputs.wake_source != 'cloudflare-cron' || vars.SDOH_SCHEDULED_AUTOMATION_ENABLED == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
