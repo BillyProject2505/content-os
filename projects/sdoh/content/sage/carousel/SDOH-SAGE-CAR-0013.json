@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0013",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "pemulihan tidak selalu terlihat seperti maju"
+    },
+    {
+      "slide": 2,
+      "copy": "ada hari yang ringan dan ada hari yang terasa berat lagi"
+    },
+    {
+      "slide": 3,
+      "copy": "hari yang sulit tidak otomatis menghapus yang sudah kamu lewati"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu tidak harus menilai seluruh perjalanan dari satu hari"
+    },
+    {
+      "slide": 5,
+      "copy": "prosesmu tetap ada meski jalannya tidak selalu lurus"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "proses pulih tidak selalu terlihat seperti garis yang terus naik.",
+    "ada hari yang terasa lebih ringan, lalu ada hari ketika hal lama terasa berat lagi. satu hari yang sulit tidak otomatis menghapus semua yang sudah kamu lewati.",
+    "jangan ukur seluruh perjalananmu hanya dari satu titik. prosesmu tetap ada, meski jalannya tidak selalu lurus."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "pemulihan"
+        ],
+        [
+          "berat"
+        ],
+        [
+          "menghapus"
+        ],
+        [
+          "prosesmu"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "pemulihan harus selalu maju",
+        "hari buruk berarti gagal"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        4,
+        9,
+        8,
+        7,
+        6
+      ],
+      "max_words_per_slide": [
+        8,
+        13,
+        12,
+        11,
+        10
+      ],
+      "min_total_slide_words": 40,
+      "min_unique_slide_content_words": 21,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "pemulihan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "ringan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "menghapus"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "perjalanan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "prosesmu"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 43,
+      "caption_max_body_words": 73,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "9d6c182064b317eae6290b4b8559eb90d7952d3f3e1da7054b6da497fb8452c7"
+}
