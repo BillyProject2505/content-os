@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0009",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "jujur bahwa kamu iri tidak membuatmu jahat"
+    },
+    {
+      "slide": 2,
+      "copy": "kadang keberhasilan orang lain menyentuh sesuatu yang kita inginkan"
+    },
+    {
+      "slide": 3,
+      "copy": "mengakui rasa itu tidak sama dengan ingin mereka kehilangan sesuatu"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu boleh melihat apa yang sebenarnya sedang kamu rindukan"
+    },
+    {
+      "slide": 5,
+      "copy": "perasaan boleh diakui tanpa harus menentukan tindakanmu"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "iri kadang datang ketika kita melihat sesuatu pada orang lain yang sebenarnya juga kita inginkan.",
+    "mengakui rasa itu tidak otomatis membuatmu jahat, dan tidak berarti kamu berharap orang lain kehilangan apa yang mereka punya. perasaan bisa menjadi petunjuk tentang sesuatu yang sedang kamu rindukan.",
+    "kamu boleh jujur pada rasa iri tanpa membiarkannya menentukan bagaimana kamu memperlakukan orang lain."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "iri"
+        ],
+        [
+          "inginkan"
+        ],
+        [
+          "mengakui"
+        ],
+        [
+          "tindakanmu"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "iri membuatmu jahat",
+        "ikuti saja rasa iri"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        5,
+        7,
+        8,
+        7,
+        5
+      ],
+      "max_words_per_slide": [
+        9,
+        11,
+        12,
+        11,
+        9
+      ],
+      "min_total_slide_words": 38,
+      "min_unique_slide_content_words": 27,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "iri"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "inginkan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "mengakui"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "rindukan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "tindakanmu"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 48,
+      "caption_max_body_words": 78,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "c8a8b211c195916e06eac070fce5bd974f2805fe423944d87caa2454fefe432d"
+}
