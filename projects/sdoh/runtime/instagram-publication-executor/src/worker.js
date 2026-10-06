@@ -1,5 +1,7 @@
 import { routeRuntimeRequest } from "./runtime-router.js";
 
+import { dispatchScheduledPublicationWakeup } from "./scheduled-wakeup.js";
+
 // GitHub-connected Cloudflare build source.
 
 async function handleExistingHealth(request, env) {
@@ -67,5 +69,16 @@ async function handleExistingHealth(request, env) {
 export default {
   async fetch(request, env) {
     return routeRuntimeRequest(request, env, handleExistingHealth);
+  },
+
+  async scheduled(_controller, env, ctx) {
+    ctx.waitUntil(
+      dispatchScheduledPublicationWakeup(env).catch((error) => {
+        console.error("Scheduled BUS-140 wake-up failed", {
+          message: error instanceof Error ? error.message : String(error),
+        });
+        throw error;
+      })
+    );
   },
 };
