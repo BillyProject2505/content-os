@@ -43,7 +43,7 @@ try {
   const gates = runApprovedCopyGates(copy);
 
   const authority = JSON.parse(fs.readFileSync(authorityPath, "utf8"));
-  const manifest = buildCarouselRenderManifest({ contentId: copy.content_id, theme: copy.theme, slides: copy.slides, authority });
+  const manifest = buildCarouselRenderManifest({ contentId: copy.content_id, theme: copy.theme, slides: copy.slides, authority, lineBreakPolicy: "width_budget" });
   assertManifestMatchesCopy(manifest, copy);
 
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
