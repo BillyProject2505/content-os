@@ -1,3 +1,4 @@
+import { findBlockingSiblingJob } from "./cross-job-guard.js";
 import { validateAuthoritySnapshotPayload } from "./execution-authority.js";
 
 const encoder = new TextEncoder();
@@ -157,6 +158,26 @@ export async function handleStage(request, env) {
         media_count: mediaRows.length,
       },
       200
+    );
+  }
+
+  // Phase 5: a new runtime identity for a content_id (for example after a
+  // reschedule) is refused while any other job for that content_id carries
+  // publish evidence or can still execute.
+  const blockingSibling = await findBlockingSiblingJob(env.DB, {
+    contentId: snapshot.content_id,
+    excludeJobId: stagedIdentity.job_id,
+    nowMs,
+  });
+  if (blockingSibling) {
+    return json(
+      {
+        ok: false,
+        error: "CROSS_JOB_PUBLICATION_EVIDENCE",
+        sibling_job_id: blockingSibling.job_id,
+        sibling_reason: blockingSibling.reason,
+      },
+      409
     );
   }
 
