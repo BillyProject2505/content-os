@@ -38,6 +38,30 @@ function assertVisualPlan(plan, label) {
   return plan;
 }
 
+function wrapSageCopy(copy) {
+  const words = String(copy).trim().split(/\s+/).filter(Boolean);
+  const MAX_LINES = 3;
+  const TARGET_CHARS = 24;
+  const lines = [];
+  let current = "";
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (current && candidate.length > TARGET_CHARS && lines.length < MAX_LINES - 1) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = candidate;
+    }
+  }
+  if (current) lines.push(current);
+
+  if (lines.length > MAX_LINES) {
+    throw new Error("Sage copy requires more than three deterministic lines");
+  }
+  return lines.join("\n");
+}
+
 function wrapBurgundyCopy(copy) {
   const words = String(copy).trim().split(/\s+/).filter(Boolean);
   const MAX_LINES = 3;
@@ -89,7 +113,7 @@ export function buildCarouselRenderManifest({ contentId, theme, slides, authorit
     layout_mode: plan.layout_mode,
     slides: slides.map((slide, index) => ({
       slide_number: slide.slide,
-      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : wrapCopy(slide.copy),
+      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : wrapSageCopy(slide.copy),
       optical_y_correction: 0,
       character: {
         enabled: true,
