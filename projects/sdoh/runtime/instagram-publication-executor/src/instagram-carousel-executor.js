@@ -1,8 +1,10 @@
 import { createSignedMediaUrl } from "./media-gateway.js";
 import { loadAndValidateStoredAuthority } from "./execution-authority.js";
+import { findBlockingSiblingJob } from "./cross-job-guard.js";
 
 const META_BASE_DEFAULT = "https://graph.instagram.com";
 const EXPECTED_ACCOUNT = "@satudosisobathati";
+const EXPECTED_USERNAME = "satudosisobathati";
 const CAROUSEL_SLOTS = [1, 2, 3, 4, 5];
 const TERMINAL_CONTAINER_STATES = new Set(["ERROR", "EXPIRED", "PUBLISHED"]);
 
@@ -71,6 +73,19 @@ export function createInstagramClient({ accessToken, igUserId, apiBase = META_BA
   }
 
   return {
+    async getAuthenticatedAccount() {
+      const result = await graphRequest("me", {
+        method: "GET",
+        params: { fields: "id,user_id,username" },
+      });
+      return {
+        user_id: result.user_id === undefined || result.user_id === null
+          ? null
+          : String(result.user_id),
+        username: typeof result.username === "string" ? result.username : null,
+      };
+    },
+
     async createCarouselChild({ imageUrl }) {
       const result = await graphRequest(`${igUserId}/media`, {
         method: "POST",
@@ -236,6 +251,34 @@ export async function executeCarouselPublication({
     throw executorError("DRIVE_CREDENTIAL_EXPIRED", 409);
   }
 
+  // Phase 5: no publication authority while any other job for the same
+  // content_id carries publish evidence or can still execute.
+  const blockingSibling = await findBlockingSiblingJob(env.DB, {
+    contentId: job.content_id,
+    excludeJobId: jobId,
+    nowMs,
+  });
+  if (blockingSibling) {
+    const error = executorError("CROSS_JOB_PUBLICATION_EVIDENCE", 409);
+    error.meta = {
+      stage: "CROSS_JOB_GUARD",
+      sibling_job_id: blockingSibling.job_id,
+      sibling_reason: blockingSibling.reason,
+    };
+    throw error;
+  }
+
+  const client = createInstagramClient({
+    accessToken: env.META_ACCESS_TOKEN,
+    igUserId: env.META_IG_USER_ID,
+    apiBase: env.META_API_BASE || META_BASE_DEFAULT,
+    fetchImpl,
+  });
+
+  // Phase 7: the live token must resolve to the expected account before any
+  // Meta write. Mismatch stops with no state change.
+  await assertDestinationAccount({ client, env, stage: "BEFORE_CONTAINER_CREATE" });
+
   if (job.state === "CLAIMED") {
     const changed = await env.DB.prepare(
       `UPDATE publication_jobs
@@ -251,13 +294,6 @@ export async function executeCarouselPublication({
       throw executorError("JOB_CLAIM_TRANSITION_FAILED", 409);
     }
   }
-
-  const client = createInstagramClient({
-    accessToken: env.META_ACCESS_TOKEN,
-    igUserId: env.META_IG_USER_ID,
-    apiBase: env.META_API_BASE || META_BASE_DEFAULT,
-    fetchImpl,
-  });
 
   const signedExpiry = Math.min(
     Math.floor(credentialExpiryMs / 1000) - 30,
@@ -377,7 +413,9 @@ export async function executeCarouselPublication({
       throw error;
     }
 
-    await upsertArtifact(env.DB, {
+    // Phase 8: never overwrite an existing parent row (its state may already
+    // be PUBLISH_ATTEMPTED from a concurrent execute).
+    const inserted = await insertArtifactIfAbsent(env.DB, {
       jobId,
       kind: "PARENT",
       slot: 0,
@@ -385,6 +423,9 @@ export async function executeCarouselPublication({
       state: "CREATED",
       nowIso: new Date(now()).toISOString(),
     });
+    if (!inserted) {
+      throw executorError("PARENT_ARTIFACT_RACE", 409);
+    }
     parentArtifact = {
       kind: "PARENT",
       slot: 0,
@@ -424,17 +465,29 @@ export async function executeCarouselPublication({
     });
   }
 
-  await setArtifactState(env.DB, jobId, "PARENT", 0, "READY", new Date(now()).toISOString());
-
-  // Persist the attempt marker BEFORE the non-idempotent publish call.
-  await setArtifactState(
-    env.DB,
+  await transitionArtifactState(env.DB, {
     jobId,
-    "PARENT",
-    0,
-    "PUBLISH_ATTEMPTED",
-    new Date(now()).toISOString()
-  );
+    kind: "PARENT",
+    slot: 0,
+    fromStates: ["CREATED", "READY"],
+    toState: "READY",
+    remoteId: parentArtifact.remote_id,
+    nowIso: new Date(now()).toISOString(),
+  });
+
+  await assertDestinationAccount({ client, env, stage: "BEFORE_MEDIA_PUBLISH" });
+
+  // Phase 8: compare-and-swap READY -> PUBLISH_ATTEMPTED, persisted BEFORE the
+  // non-idempotent publish call. Exactly one execute can win this transition.
+  await transitionArtifactState(env.DB, {
+    jobId,
+    kind: "PARENT",
+    slot: 0,
+    fromStates: ["READY"],
+    toState: "PUBLISH_ATTEMPTED",
+    remoteId: parentArtifact.remote_id,
+    nowIso: new Date(now()).toISOString(),
+  });
 
   let mediaId;
   try {
@@ -697,6 +750,66 @@ async function upsertArtifact(db, { jobId, kind, slot, remoteId, state, nowIso }
        state = excluded.state,
        updated_at = excluded.updated_at`
   ).bind(jobId, kind, slot, remoteId, state, nowIso).run();
+}
+
+async function insertArtifactIfAbsent(db, { jobId, kind, slot, remoteId, state, nowIso }) {
+  const result = await db.prepare(
+    `INSERT INTO publication_job_remote_artifacts (
+       job_id, kind, slot, remote_id, state, created_at, updated_at
+     ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?6)
+     ON CONFLICT(job_id, kind, slot) DO NOTHING`
+  ).bind(jobId, kind, slot, remoteId, state, nowIso).run();
+  return (result.meta?.changes || 0) === 1;
+}
+
+async function transitionArtifactState(
+  db,
+  { jobId, kind, slot, fromStates, toState, remoteId, nowIso }
+) {
+  if (!Array.isArray(fromStates) || fromStates.length === 0 || fromStates.length > 4) {
+    throw executorError("INVALID_ARTIFACT_TRANSITION", 500);
+  }
+  const placeholders = fromStates.map((_, i) => `?${i + 7}`).join(", ");
+  const changed = await db.prepare(
+    `UPDATE publication_job_remote_artifacts
+        SET state = ?4,
+            updated_at = ?5
+      WHERE job_id = ?1
+        AND kind = ?2
+        AND slot = ?3
+        AND remote_id = ?6
+        AND state IN (${placeholders})`
+  ).bind(jobId, kind, slot, toState, nowIso, remoteId, ...fromStates).run();
+  if ((changed.meta?.changes || 0) !== 1) {
+    throw executorError("ARTIFACT_STATE_CAS_FAILED", 409);
+  }
+}
+
+export async function assertDestinationAccount({ client, env, stage }) {
+  let account;
+  try {
+    account = await client.getAuthenticatedAccount();
+  } catch (cause) {
+    const error = executorError("DESTINATION_ACCOUNT_UNVERIFIED", 503);
+    error.cause = cause;
+    error.meta = { stage: `DESTINATION_ACCOUNT_${stage}` };
+    throw error;
+  }
+
+  const expectedUserId = String(env.META_IG_USER_ID ?? "");
+  if (account.user_id !== expectedUserId || account.username !== EXPECTED_USERNAME) {
+    const error = executorError("DESTINATION_ACCOUNT_MISMATCH", 409);
+    error.meta = {
+      stage: `DESTINATION_ACCOUNT_${stage}`,
+      account: {
+        expected_user_id: expectedUserId,
+        resolved_user_id: account.user_id,
+        expected_username: EXPECTED_USERNAME,
+        resolved_username: account.username,
+      },
+    };
+    throw error;
+  }
 }
 
 async function setArtifactState(db, jobId, kind, slot, state, nowIso) {
