@@ -113,7 +113,7 @@ export function buildCarouselRenderManifest({ contentId, theme, slides, authorit
     layout_mode: plan.layout_mode,
     slides: slides.map((slide, index) => ({
       slide_number: slide.slide,
-      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : wrapSageIllustratedCopy(slide.copy),
+      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : (contentId === "SDOH-SAGE-CAR-0006" ? wrapSageIllustratedCopy(slide.copy) : wrapCopy(slide.copy)),
       optical_y_correction: 0,
       character: {
         enabled: true,
