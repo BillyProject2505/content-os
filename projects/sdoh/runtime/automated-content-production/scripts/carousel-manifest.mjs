@@ -121,8 +121,8 @@ export function assertCanonicalSageVisualPlan(authority) {
   return plan;
 }
 
-export function resolveVisualPlan({ contentId, theme, authority }) {
-  const instancePlan = authority.content_visual_plans?.[contentId];
+export function resolveVisualPlan({ contentId, theme, authority, preferInstancePlan = true }) {
+  const instancePlan = preferInstancePlan ? authority.content_visual_plans?.[contentId] : null;
   if (instancePlan) {
     return assertVisualPlan(instancePlan, `${theme} ${contentId}`);
   }
@@ -135,8 +135,8 @@ export function resolveVisualPlan({ contentId, theme, authority }) {
   throw new Error(`Unsupported carousel theme: ${theme}`);
 }
 
-export function buildCarouselRenderManifest({ contentId, theme, slides, authority }) {
-  const plan = resolveVisualPlan({ contentId, theme, authority });
+export function buildCarouselRenderManifest({ contentId, theme, slides, authority, preferInstancePlan = true }) {
+  const plan = resolveVisualPlan({ contentId, theme, authority, preferInstancePlan });
   return {
     content_id: contentId,
     theme,
@@ -167,5 +167,6 @@ export function buildSageRenderManifest({ contentId, slides, authority }) {
     theme: "SAGE",
     slides,
     authority,
+    preferInstancePlan: false,
   });
 }
