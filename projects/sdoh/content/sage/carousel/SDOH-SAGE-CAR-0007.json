@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0007",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "yang kamu alami tetap nyata meski orang lain belum memahaminya"
+    },
+    {
+      "slide": 2,
+      "copy": "tidak semua orang akan langsung mengerti apa yang kamu rasakan"
+    },
+    {
+      "slide": 3,
+      "copy": "dan kamu tidak harus terus membuktikan bahwa ini memang berat"
+    },
+    {
+      "slide": 4,
+      "copy": "pengalamanmu tidak menjadi kurang nyata karena belum dipahami"
+    },
+    {
+      "slide": 5,
+      "copy": "kamu tetap boleh mengakui apa yang sedang kamu alami"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "kadang yang paling melelahkan bukan cuma mengalami sesuatu yang berat, tapi merasa harus terus menjelaskannya sampai orang lain akhirnya mengerti.",
+    "pengalamanmu tidak menjadi kurang nyata hanya karena belum semua orang bisa melihatnya dari tempatmu berdiri. kamu boleh mengakui apa yang sedang kamu alami tanpa harus terus membuktikannya.",
+    "didengar itu penting. tapi sebelum orang lain memahami semuanya, kamu tetap boleh percaya pada apa yang kamu rasakan."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "nyata"
+        ],
+        [
+          "memahami"
+        ],
+        [
+          "membuktikan"
+        ],
+        [
+          "mengakui"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kamu hanya berlebihan",
+        "harus membuat semua orang mengerti"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        8,
+        8,
+        8,
+        6,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        10,
+        11
+      ],
+      "min_total_slide_words": 43,
+      "min_unique_slide_content_words": 23,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "nyata"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "mengerti"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "membuktikan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "dipahami"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "mengakui"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 55,
+      "caption_max_body_words": 85,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "1e3dfb5c4d8b29daae4553053d1a7416ff0ee9e6f0ac5d301b2dd14bfbc7233e"
+}
