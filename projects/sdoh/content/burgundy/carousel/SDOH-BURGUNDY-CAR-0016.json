@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0016",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kamu boleh mengakui bahwa kepercayaanmu belum pulih"
+    },
+    {
+      "slide": 2,
+      "copy": "meski sudah ada permintaan maaf atau perubahan"
+    },
+    {
+      "slide": 3,
+      "copy": "bagian dirimu mungkin masih berhati-hati untuk percaya lagi"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu gak harus memaksa rasa aman datang lebih cepat"
+    },
+    {
+      "slide": 5,
+      "copy": "kepercayaan boleh tumbuh sesuai bukti dan ritmemu sendiri"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "permintaan maaf atau perubahan tidak selalu membuat rasa percaya langsung kembali.",
+    "bagian dari dirimu mungkin masih berhati-hati, dan itu tidak harus dipaksa selesai lebih cepat hanya supaya semuanya terlihat normal lagi. rasa aman dan kepercayaan bisa membutuhkan bukti yang konsisten serta waktu.",
+    "kamu boleh membiarkan kepercayaan tumbuh sesuai ritmemu sendiri."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "kepercayaanmu"
+        ],
+        [
+          "permintaan maaf"
+        ],
+        [
+          "rasa aman"
+        ],
+        [
+          "bukti"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kamu harus percaya lagi sekarang",
+        "kalau belum percaya berarti salah"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        5,
+        5,
+        6,
+        7,
+        6
+      ],
+      "max_words_per_slide": [
+        9,
+        9,
+        10,
+        11,
+        10
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 28,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "kepercayaanmu"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "permintaan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "percaya"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "aman"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "bukti"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 40,
+      "caption_max_body_words": 70,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "9fc6ef68a0b0882e3fc7174b63fd1b561d709585d9675e5f9ca749afac87f771"
+}

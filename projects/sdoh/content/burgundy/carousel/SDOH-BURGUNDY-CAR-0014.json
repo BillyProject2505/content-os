@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0014",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kamu boleh marah tanpa menjadikan marah sebagai keputusan"
+    },
+    {
+      "slide": 2,
+      "copy": "ada hal yang memang bisa membuatmu merasa sangat kesal"
+    },
+    {
+      "slide": 3,
+      "copy": "kamu tidak harus menolak rasa itu agar tetap terkendali"
+    },
+    {
+      "slide": 4,
+      "copy": "perasaanmu boleh ada sementara keputusan bisa menunggu"
+    },
+    {
+      "slide": 5,
+      "copy": "marah adalah perasaan bukan perintah untuk langsung bertindak"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "marah adalah perasaan, bukan perintah untuk langsung mengambil keputusan.",
+    "kamu boleh mengakui bahwa sesuatu membuatmu sangat kesal tanpa harus menyangkal rasa itu atau bertindak saat intensitasnya masih tinggi. perasaan dan keputusan tidak harus terjadi pada saat yang sama.",
+    "memberi jeda bukan berarti kemarahanmu tidak valid. itu hanya memberi ruang agar tindakanmu tetap menjadi pilihanmu sendiri."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "marah"
+        ],
+        [
+          "keputusan"
+        ],
+        [
+          "terkendali"
+        ],
+        [
+          "bertindak"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kalau marah langsung bertindak",
+        "amarah membenarkan tindakan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        6,
+        7,
+        7,
+        5,
+        6
+      ],
+      "max_words_per_slide": [
+        10,
+        11,
+        11,
+        9,
+        10
+      ],
+      "min_total_slide_words": 37,
+      "min_unique_slide_content_words": 21,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "marah"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "kesal"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "terkendali"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "keputusan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "bertindak"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 45,
+      "caption_max_body_words": 75,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "6c74866338803d4763d682e636f6853f2192fe0ce580e27acbb5903636708e84"
+}

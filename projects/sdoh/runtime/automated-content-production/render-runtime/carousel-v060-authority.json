@@ -104,6 +104,230 @@
         "P08",
         "P01"
       ]
+    },
+    "SDOH-SAGE-CAR-0007": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-SAGE-CAR-0008": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-SAGE-CAR-0009": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-SAGE-CAR-0010": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-SAGE-CAR-0011": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-SAGE-CAR-0012": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-SAGE-CAR-0013": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-SAGE-CAR-0014": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-BURGUNDY-CAR-0009": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P04",
+        "P02",
+        "P08",
+        "P06",
+        "P01"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-BURGUNDY-CAR-0010": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P03",
+        "P04",
+        "P08",
+        "P02",
+        "P01"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-BURGUNDY-CAR-0011": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P08",
+        "P03",
+        "P05",
+        "P06",
+        "P01"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-BURGUNDY-CAR-0012": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P03",
+        "P02",
+        "P08",
+        "P06",
+        "P01"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-BURGUNDY-CAR-0013": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P05",
+        "P04",
+        "P02",
+        "P06",
+        "P01"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-BURGUNDY-CAR-0014": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P04",
+        "P03",
+        "P08",
+        "P02",
+        "P01"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-BURGUNDY-CAR-0015": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P08",
+        "P06",
+        "P01"
+      ],
+      "wrap_mode": "balanced_3"
+    },
+    "SDOH-BURGUNDY-CAR-0016": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P03",
+        "P04",
+        "P08",
+        "P02",
+        "P01"
+      ],
+      "wrap_mode": "balanced_3"
     }
   }
 }

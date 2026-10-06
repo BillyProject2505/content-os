@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0011",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kamu boleh mengakui bahwa kamu lelah menjadi yang selalu kuat"
+    },
+    {
+      "slide": 2,
+      "copy": "mungkin orang terbiasa melihatmu sebagai orang yang bisa diandalkan"
+    },
+    {
+      "slide": 3,
+      "copy": "sampai kamu sendiri merasa tidak punya ruang untuk terlihat lelah"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu tidak harus selalu menjadi tempat semua orang bersandar"
+    },
+    {
+      "slide": 5,
+      "copy": "menjadi kuat tidak menghapus hakmu untuk juga ditopang"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "menjadi orang yang sering diandalkan kadang membuat kita lupa bahwa kita juga bisa lelah.",
+    "orang lain mungkin terbiasa melihatmu kuat, tenang, atau selalu siap membantu. tapi peran itu tidak menghapus kebutuhanmu untuk ditopang, didengar, atau diberi ruang untuk tidak baik-baik saja.",
+    "kamu boleh mengakui lelah tanpa kehilangan semua hal baik yang selama ini kamu bawa."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "lelah"
+        ],
+        [
+          "diandalkan"
+        ],
+        [
+          "ruang"
+        ],
+        [
+          "ditopang"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "orang kuat tidak boleh lelah",
+        "kamu harus selalu kuat"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        8,
+        7,
+        8,
+        7,
+        6
+      ],
+      "max_words_per_slide": [
+        12,
+        11,
+        12,
+        11,
+        10
+      ],
+      "min_total_slide_words": 42,
+      "min_unique_slide_content_words": 22,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "lelah"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "diandalkan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "ruang"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "bersandar"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "ditopang"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 45,
+      "caption_max_body_words": 75,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "bb978b581f4308f525f9a4e1f9c102755b5daa0bca6f0ad61b56e7448872b07b"
+}

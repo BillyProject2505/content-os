@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0014",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kamu tidak harus kembali menjadi dirimu yang dulu"
+    },
+    {
+      "slide": 2,
+      "copy": "beberapa pengalaman memang bisa mengubah banyak hal"
+    },
+    {
+      "slide": 3,
+      "copy": "mungkin ada bagian dirimu yang sekarang terasa berbeda"
+    },
+    {
+      "slide": 4,
+      "copy": "bergerak ke depan tidak selalu berarti kembali seperti sebelumnya"
+    },
+    {
+      "slide": 5,
+      "copy": "kamu boleh mengenal dirimu yang sekarang pelan-pelan"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "setelah melewati sesuatu yang berat, kita kadang sibuk berharap bisa kembali persis seperti dulu.",
+    "padahal beberapa pengalaman memang mengubah cara kita melihat, merasakan, atau menjalani banyak hal. bergerak ke depan tidak selalu berarti mengembalikan semua bagian diri ke bentuk sebelumnya.",
+    "kamu boleh mengenal dirimu yang sekarang tanpa harus menganggap perubahan itu sebagai kegagalan."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "dirimu"
+        ],
+        [
+          "mengubah"
+        ],
+        [
+          "berbeda"
+        ],
+        [
+          "pelan-pelan"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kamu harus kembali seperti dulu",
+        "perubahan berarti rusak"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        6,
+        5,
+        6,
+        7,
+        5
+      ],
+      "max_words_per_slide": [
+        10,
+        9,
+        10,
+        11,
+        9
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 21,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "dirimu"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "pengalaman"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "berbeda"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "bergerak"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "mengenal"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 43,
+      "caption_max_body_words": 73,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "3aff6c9d06c64ffa46a4ef5bc4666115e05bc4830507e9a0ce0a511788b71c66"
+}

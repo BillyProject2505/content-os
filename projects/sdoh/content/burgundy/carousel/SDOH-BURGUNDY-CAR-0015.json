@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0015",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kamu boleh berhenti mengejar penjelasan yang tidak pernah datang"
+    },
+    {
+      "slide": 2,
+      "copy": "mungkin sudah lama kamu menunggu satu jawaban"
+    },
+    {
+      "slide": 3,
+      "copy": "karena rasanya semuanya baru akan masuk akal kalau kamu mendapatkannya"
+    },
+    {
+      "slide": 4,
+      "copy": "tapi hidupmu tidak harus terus tertahan oleh jawaban orang lain"
+    },
+    {
+      "slide": 5,
+      "copy": "kamu boleh bergerak meski beberapa pertanyaan masih belum terjawab"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "kadang kita menunggu satu penjelasan karena berharap semuanya akan terasa lebih masuk akal setelah jawaban itu datang.",
+    "tapi tidak semua jawaban tersedia, dan hidupmu tidak harus terus berhenti di depan pintu yang sama. berhenti mengejar penjelasan bukan berarti semua pertanyaan sudah selesai.",
+    "kamu boleh bergerak sambil tetap membawa beberapa bagian yang belum terjawab."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "penjelasan"
+        ],
+        [
+          "jawaban"
+        ],
+        [
+          "tertahan"
+        ],
+        [
+          "bergerak"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kamu pasti akan mendapat jawaban",
+        "harus mendapat penjelasan untuk pulih"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        5,
+        8,
+        8,
+        7
+      ],
+      "max_words_per_slide": [
+        11,
+        9,
+        12,
+        12,
+        11
+      ],
+      "min_total_slide_words": 41,
+      "min_unique_slide_content_words": 31,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "penjelasan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "jawaban"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "mendapatkannya"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "tertahan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "terjawab"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 43,
+      "caption_max_body_words": 73,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "91ae6fd44f0a93441e2e6df4ab4fdff733b96760d4f910a92422e9c8b023ac6e"
+}

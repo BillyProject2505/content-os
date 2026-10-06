@@ -1,0 +1,72 @@
+{
+  "schema": "sdoh-approved-copy-batch-v1",
+  "batch_id": "SDOH-OCT-2026-REMAINING-CAROUSELS",
+  "confirmation": "RENDER_UNAPPROVED_REVIEW_PACKAGE",
+  "hard_stop": "READY_FOR_OWNER_REVIEW",
+  "items": [
+    {
+      "content_id": "SDOH-SAGE-CAR-0007",
+      "expected_copy_fingerprint": "1e3dfb5c4d8b29daae4553053d1a7416ff0ee9e6f0ac5d301b2dd14bfbc7233e"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0008",
+      "expected_copy_fingerprint": "09d354d8dbd008e50a21dea109af63297503b65137afdfd67cab21884f2be64d"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0009",
+      "expected_copy_fingerprint": "15292ef20f1b20b3e10c79e0709019033a5f1d701f6c5970f189d144fa87e357"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0010",
+      "expected_copy_fingerprint": "8257e67df6818936ee722e48e6f675e399f35eeb0655e6b6b07386a9bc8424b4"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0011",
+      "expected_copy_fingerprint": "3316b5b636a8095151ece1c07553c1e65f7594f1f6308113436399b90b4445f0"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0012",
+      "expected_copy_fingerprint": "2a1c2792b296932e86feb59bfe862b5086eb2708a6613ed492ee955432555bd7"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0013",
+      "expected_copy_fingerprint": "9d6c182064b317eae6290b4b8559eb90d7952d3f3e1da7054b6da497fb8452c7"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0014",
+      "expected_copy_fingerprint": "3aff6c9d06c64ffa46a4ef5bc4666115e05bc4830507e9a0ce0a511788b71c66"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0009",
+      "expected_copy_fingerprint": "c8a8b211c195916e06eac070fce5bd974f2805fe423944d87caa2454fefe432d"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0010",
+      "expected_copy_fingerprint": "5174de846023230a085414f24da9dae7dfb98266c52614f634f8d35c7b83a4ce"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0011",
+      "expected_copy_fingerprint": "bb978b581f4308f525f9a4e1f9c102755b5daa0bca6f0ad61b56e7448872b07b"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0012",
+      "expected_copy_fingerprint": "7fd7931660a754fba37a0bcc849be9bc0d7990060fdb516c4c1e4282f5f0af93"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0013",
+      "expected_copy_fingerprint": "395e1c70c45f918f5406053ae057567b235d9efc71f0e5b7e7d0009f233287f5"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0014",
+      "expected_copy_fingerprint": "6c74866338803d4763d682e636f6853f2192fe0ce580e27acbb5903636708e84"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0015",
+      "expected_copy_fingerprint": "91ae6fd44f0a93441e2e6df4ab4fdff733b96760d4f910a92422e9c8b023ac6e"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0016",
+      "expected_copy_fingerprint": "9fc6ef68a0b0882e3fc7174b63fd1b561d709585d9675e5f9ca749afac87f771"
+    }
+  ]
+}

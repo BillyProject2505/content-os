@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0011",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kamu tidak harus menyelesaikan semuanya sebelum beristirahat"
+    },
+    {
+      "slide": 2,
+      "copy": "selalu ada hal lain yang mungkin masih belum selesai"
+    },
+    {
+      "slide": 3,
+      "copy": "tapi tubuh dan pikiranmu tidak harus menunggu semua tugas berakhir"
+    },
+    {
+      "slide": 4,
+      "copy": "istirahat bukan hadiah yang baru boleh datang setelah kamu produktif"
+    },
+    {
+      "slide": 5,
+      "copy": "kamu boleh berhenti sebentar meski masih ada yang menunggu"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "istirahat tidak harus menunggu semua daftar selesai.",
+    "selalu mungkin ada pesan yang belum dibalas, pekerjaan yang masih tertunda, atau hal lain yang bisa dikerjakan. tapi tubuh dan pikiranmu tidak harus menunggu semuanya beres untuk mendapat jeda.",
+    "kamu boleh berhenti sebentar tanpa harus lebih dulu membuktikan bahwa kamu sudah cukup produktif."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "beristirahat"
+        ],
+        [
+          "menunggu"
+        ],
+        [
+          "istirahat"
+        ],
+        [
+          "berhenti"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "istirahat hanya boleh setelah selesai",
+        "malas jika beristirahat"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        5,
+        7,
+        8,
+        8,
+        7
+      ],
+      "max_words_per_slide": [
+        9,
+        11,
+        12,
+        12,
+        11
+      ],
+      "min_total_slide_words": 41,
+      "min_unique_slide_content_words": 27,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "beristirahat"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "selesai"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "menunggu"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "istirahat"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "berhenti"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 40,
+      "caption_max_body_words": 70,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "3316b5b636a8095151ece1c07553c1e65f7594f1f6308113436399b90b4445f0"
+}

@@ -9,20 +9,34 @@ name: SDOH approved-copy render (BUS-160 Production Path)
 # No model, generation provider, retry, prompt remediation or billing is used.
 # This workflow never grants Owner approval, schedules, calls BUS-140 or
 # publishes. Final visual approval is a separate explicit Owner action.
+#
+# Manual-only modes:
+#   SINGLE                  -> one approved content item
+#   OCTOBER_REMAINING_BATCH -> repository-pinned 16-item review batch
 
 on:
   workflow_dispatch:
     inputs:
-      content_id:
-        description: Content item with a COPY_APPROVED file under projects/sdoh/content/<theme>/carousel/
+      mode:
+        description: Render one item or the pinned remaining-October review batch
         required: true
+        default: SINGLE
+        type: choice
+        options:
+          - SINGLE
+          - OCTOBER_REMAINING_BATCH
+      content_id:
+        description: SINGLE mode only; COPY_APPROVED content ID
+        required: false
+        default: ""
         type: string
       expected_copy_fingerprint:
-        description: copy_fingerprint of the approved copy recorded with the copy approval (64 lowercase hex)
-        required: true
+        description: SINGLE mode only; approved copy fingerprint
+        required: false
+        default: ""
         type: string
       confirmation:
-        description: Type RENDER_UNAPPROVED_REVIEW_PACKAGE
+        description: SINGLE=RENDER_UNAPPROVED_REVIEW_PACKAGE; batch=RENDER_UNAPPROVED_REVIEW_BATCH
         required: true
         default: ""
         type: string
@@ -32,23 +46,49 @@ permissions:
   id-token: write
 
 jobs:
-  render:
+  plan:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Validate inputs
+      - name: Validate manual render request and build matrix
+        id: plan
         shell: bash
         env:
+          MODE: ${{ inputs.mode }}
           CONTENT_ID: ${{ inputs.content_id }}
           EXPECTED_COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
           CONFIRMATION: ${{ inputs.confirmation }}
         run: |
           set -euo pipefail
+
+          if [ "$MODE" = "OCTOBER_REMAINING_BATCH" ]; then
+            if [ "$CONFIRMATION" != "RENDER_UNAPPROVED_REVIEW_BATCH" ]; then
+              echo "::error::Exact batch confirmation is required"
+              exit 1
+            fi
+            batch="projects/sdoh/runtime/automated-content-production/batches/2026-10-remaining-carousels-owner-review.json"
+            jq -e '
+              .schema == "sdoh-approved-copy-batch-v1" and
+              .confirmation == "RENDER_UNAPPROVED_REVIEW_PACKAGE" and
+              .hard_stop == "READY_FOR_OWNER_REVIEW" and
+              (.items | length) == 16 and
+              ([.items[].content_id] | unique | length) == 16 and
+              ([.items[].expected_copy_fingerprint | test("^[0-9a-f]{64}$")] | all)
+            ' "$batch" >/dev/null
+            echo "matrix=$(jq -c '{include:.items}' "$batch")" >> "$GITHUB_OUTPUT"
+            echo "Manual batch render plan PASS"
+            exit 0
+          fi
+
+          if [ "$MODE" != "SINGLE" ]; then
+            echo "::error::Unsupported render mode"
+            exit 1
+          fi
           if ! [[ "$CONTENT_ID" =~ ^SDOH-(SAGE|BURGUNDY)-CAR-[0-9]{4}$ ]]; then
             echo "::error::content_id must be an SDOH Sage/Burgundy Carousel ID"
             exit 1
@@ -58,10 +98,37 @@ jobs:
             exit 1
           fi
           if [ "$CONFIRMATION" != "RENDER_UNAPPROVED_REVIEW_PACKAGE" ]; then
-            echo "::error::Exact confirmation is required"
+            echo "::error::Exact single-item confirmation is required"
             exit 1
           fi
-          echo "Approved-copy render input format PASS"
+
+          jq -nc             --arg content_id "$CONTENT_ID"             --arg expected_copy_fingerprint "$EXPECTED_COPY_FINGERPRINT"             '{include:[{content_id:$content_id,expected_copy_fingerprint:$expected_copy_fingerprint}]}'             | sed 's/^/matrix=/' >> "$GITHUB_OUTPUT"
+          echo "Manual single render plan PASS"
+
+  render:
+    needs: plan
+    if: needs.plan.result == 'success'
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate item inputs
+        shell: bash
+        env:
+          CONTENT_ID: ${{ matrix.content_id }}
+          EXPECTED_COPY_FINGERPRINT: ${{ matrix.expected_copy_fingerprint }}
+        run: |
+          set -euo pipefail
+          [[ "$CONTENT_ID" =~ ^SDOH-(SAGE|BURGUNDY)-CAR-[0-9]{4}$ ]]
+          [[ "$EXPECTED_COPY_FINGERPRINT" =~ ^[0-9a-f]{64}$ ]]
+          echo "Approved-copy render item format PASS"
 
       - name: Verify runtime authority against canonical Asset Registry
         run: node projects/sdoh/runtime/automated-content-production/scripts/verify-carousel-render-authority.mjs
@@ -69,8 +136,8 @@ jobs:
       - name: Validate approved copy and build deterministic render manifest
         shell: bash
         env:
-          CONTENT_ID: ${{ inputs.content_id }}
-          EXPECTED_COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          CONTENT_ID: ${{ matrix.content_id }}
+          EXPECTED_COPY_FINGERPRINT: ${{ matrix.expected_copy_fingerprint }}
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/review"
@@ -95,12 +162,12 @@ jobs:
           google_access_token: ${{ steps.auth.outputs.access_token }}
           manifest: ${{ runner.temp }}/render_manifest.json
           out_dir: ${{ runner.temp }}/review/rendered
-          contact_sheet: ${{ runner.temp }}/review/${{ inputs.content_id }}_contact_sheet.jpg
+          contact_sheet: ${{ runner.temp }}/review/${{ matrix.content_id }}_contact_sheet.jpg
 
       - name: Technical QA and assemble review evidence
         shell: bash
         env:
-          EXPECTED_COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          EXPECTED_COPY_FINGERPRINT: ${{ matrix.expected_copy_fingerprint }}
         run: |
           set -euo pipefail
           cp "$RUNNER_TEMP/render_manifest.json" "$RUNNER_TEMP/review/"
@@ -110,8 +177,8 @@ jobs:
       - name: Final review-package fail-closed check
         shell: bash
         env:
-          CONTENT_ID: ${{ inputs.content_id }}
-          EXPECTED_COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          CONTENT_ID: ${{ matrix.content_id }}
+          EXPECTED_COPY_FINGERPRINT: ${{ matrix.expected_copy_fingerprint }}
         run: |
           set -euo pipefail
           jq -e --arg id "$CONTENT_ID" --arg fp "$EXPECTED_COPY_FINGERPRINT" '
@@ -132,7 +199,7 @@ jobs:
       - name: Upload owner review package
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.content_id }}-owner-review-package
+          name: ${{ matrix.content_id }}-owner-review-package
           path: ${{ runner.temp }}/review
           if-no-files-found: error
           retention-days: 14
