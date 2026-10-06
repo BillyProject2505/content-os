@@ -1,0 +1,154 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0006",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "kalau hari ini kamu cuma punya sedikit tenaga"
+    },
+    {
+      "slide": 2,
+      "copy": "mungkin ada banyak hal yang sebenarnya ingin kamu kerjakan"
+    },
+    {
+      "slide": 3,
+      "copy": "tapi tenaga hari ini mungkin memang tidak sebanyak biasanya"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu boleh memilih mana yang paling perlu untuk sekarang"
+    },
+    {
+      "slide": 5,
+      "copy": "hari ini boleh lebih sedikit tanpa harus menjadi hari yang gagal"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "kadang kita tetap ingin menyelesaikan banyak hal, meski tenaga hari ini tidak sebanyak yang kita harapkan.",
+    "menyesuaikan rencana dengan kapasitas bukan berarti menyerah. ada hari ketika memilih satu atau dua hal yang paling perlu sudah cukup, dan sisanya boleh menunggu.",
+    "kamu tidak harus membuat hari yang berat terlihat produktif supaya tetap terasa berarti."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "tenaga"
+        ],
+        [
+          "hari ini"
+        ],
+        [
+          "memilih",
+          "paling perlu"
+        ],
+        [
+          "lebih sedikit",
+          "gagal"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kamu harus tetap produktif",
+        "jangan menyerah",
+        "paksa diri"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        5,
+        6,
+        6,
+        6,
+        7
+      ],
+      "max_words_per_slide": [
+        9,
+        10,
+        10,
+        10,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 20,
+      "max_pairwise_content_similarity": 0.72,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "hari ini"
+            ],
+            [
+              "tenaga"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "banyak hal"
+            ],
+            [
+              "ingin",
+              "kerjakan"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "tenaga"
+            ],
+            [
+              "tidak sebanyak",
+              "biasanya"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "memilih"
+            ],
+            [
+              "paling perlu",
+              "sekarang"
+            ]
+          ],
+          "minimum_groups": 2
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "lebih sedikit"
+            ],
+            [
+              "gagal"
+            ]
+          ],
+          "minimum_groups": 2
+        }
+      ],
+      "caption_min_body_words": 45,
+      "caption_max_body_words": 100,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "e27609dd4b0cf70fdde3ceb26799f4218e4e69143e966129c6706d7e91b2b7b0"
+}
