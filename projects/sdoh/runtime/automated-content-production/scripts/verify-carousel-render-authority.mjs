@@ -44,6 +44,20 @@ assert(b.scale==="md","Burgundy 0007 character scale drift");
 assert(b.ground_mode==="embedded","Burgundy 0007 ground mode drift");
 assert(b.layout_mode==="illustrated_single_character","Burgundy 0007 layout mode drift");
 
+for (const [contentId, plan] of Object.entries(authority.content_visual_plans ?? {})) {
+  assert(plan && typeof plan === "object", `${contentId} visual plan invalid`);
+  assert(plan.layout_mode === "illustrated_single_character", `${contentId} layout mode invalid`);
+  assert(["lower_right", "lower_center"].includes(plan.anchor), `${contentId} anchor invalid`);
+  assert(["md", "lg"].includes(plan.scale), `${contentId} scale invalid`);
+  assert(plan.ground_mode === "embedded", `${contentId} ground mode invalid`);
+  assert(Array.isArray(plan.pose_route) && plan.pose_route.length === 5, `${contentId} pose route invalid`);
+  for (const pose of plan.pose_route) {
+    assert(authority.poses[pose], `${contentId} references unknown pose ${pose}`);
+  }
+  if (plan.wrap_mode !== undefined) {
+    assert(plan.wrap_mode === "balanced_3", `${contentId} wrap mode invalid`);
+  }
+}
 
 assert(authority.renderer.version==="0.6.0","Renderer version drift");
 assert(
