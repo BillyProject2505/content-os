@@ -38,6 +38,61 @@ function assertVisualPlan(plan, label) {
   return plan;
 }
 
+function wrapSageCopy(copy) {
+  const words = String(copy).trim().split(/\s+/).filter(Boolean);
+  const TARGET_CHARS = 24;
+  const MAX_LINES = Math.min(3, words.length);
+
+  const line = (from, to) => words.slice(from, to).join(" ");
+  const score = (lines, counts) => {
+    const lengths = lines.map((entry) => entry.length);
+    const orphanPenalty = counts.filter((count) => count === 1).length;
+    const maxLength = Math.max(...lengths);
+    const minLength = Math.min(...lengths);
+    const mean = lengths.reduce((sum, value) => sum + value, 0) / lengths.length;
+    const variance = lengths.reduce((sum, value) => sum + ((value - mean) ** 2), 0);
+    return [orphanPenalty, maxLength, maxLength - minLength, variance];
+  };
+  const better = (a, b) => {
+    for (let i = 0; i < a.score.length; i += 1) {
+      if (a.score[i] !== b.score[i]) return a.score[i] < b.score[i];
+    }
+    return false;
+  };
+
+  for (let lineCount = 2; lineCount <= MAX_LINES; lineCount += 1) {
+    const candidates = [];
+    if (lineCount === 2) {
+      for (let i = 1; i < words.length; i += 1) {
+        const lines = [line(0, i), line(i, words.length)];
+        const counts = [i, words.length - i];
+        if (Math.max(...lines.map((entry) => entry.length)) <= TARGET_CHARS) {
+          candidates.push({ lines, score: score(lines, counts) });
+        }
+      }
+    } else {
+      for (let i = 1; i < words.length - 1; i += 1) {
+        for (let j = i + 1; j < words.length; j += 1) {
+          const lines = [line(0, i), line(i, j), line(j, words.length)];
+          const counts = [i, j - i, words.length - j];
+          if (Math.max(...lines.map((entry) => entry.length)) <= TARGET_CHARS) {
+            candidates.push({ lines, score: score(lines, counts) });
+          }
+        }
+      }
+    }
+    if (candidates.length > 0) {
+      let best = candidates[0];
+      for (const candidate of candidates.slice(1)) {
+        if (better(candidate, best)) best = candidate;
+      }
+      return best.lines.join("\n");
+    }
+  }
+
+  throw new Error("Sage copy cannot fit deterministic three-line width budget");
+}
+
 function wrapBurgundyCopy(copy) {
   const words = String(copy).trim().split(/\s+/).filter(Boolean);
   const MAX_LINES = 3;
@@ -81,7 +136,7 @@ export function resolveVisualPlan({ contentId, theme, authority }) {
   throw new Error(`Unsupported carousel theme: ${theme}`);
 }
 
-export function buildCarouselRenderManifest({ contentId, theme, slides, authority }) {
+export function buildCarouselRenderManifest({ contentId, theme, slides, authority, lineBreakPolicy = "legacy" }) {
   const plan = resolveVisualPlan({ contentId, theme, authority });
   return {
     content_id: contentId,
@@ -89,7 +144,7 @@ export function buildCarouselRenderManifest({ contentId, theme, slides, authorit
     layout_mode: plan.layout_mode,
     slides: slides.map((slide, index) => ({
       slide_number: slide.slide,
-      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : wrapCopy(slide.copy),
+      copy: theme === "BURGUNDY" ? wrapBurgundyCopy(slide.copy) : (lineBreakPolicy === "width_budget" ? wrapSageCopy(slide.copy) : wrapCopy(slide.copy)),
       optical_y_correction: 0,
       character: {
         enabled: true,
