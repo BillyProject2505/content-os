@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0008",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "didengar tidak berarti kamu harus menceritakan semuanya"
+    },
+    {
+      "slide": 2,
+      "copy": "ada bagian dari ceritamu yang mungkin belum siap dibagikan"
+    },
+    {
+      "slide": 3,
+      "copy": "kamu boleh memilih apa yang ingin kamu ceritakan"
+    },
+    {
+      "slide": 4,
+      "copy": "dan kamu boleh berhenti ketika rasanya sudah cukup"
+    },
+    {
+      "slide": 5,
+      "copy": "didengar juga berarti batasmu tetap dihormati"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "didengar tidak harus berarti membuka seluruh bagian dari ceritamu sekaligus.",
+    "kamu boleh memilih apa yang ingin dibagikan, apa yang masih ingin disimpan, dan kapan sebuah percakapan sudah terasa cukup. batas itu tetap bagian dari rasa amanmu.",
+    "orang yang benar-benar mendengarkan tidak hanya memberi ruang untuk bicara, tapi juga menghormati saat kamu memilih berhenti."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "didengar"
+        ],
+        [
+          "menceritakan"
+        ],
+        [
+          "memilih"
+        ],
+        [
+          "batas"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 3,
+      "forbidden_slide_phrases": [
+        "kamu wajib menceritakan semuanya",
+        "kalau diam berarti tidak jujur"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        5,
+        7,
+        6,
+        6,
+        4
+      ],
+      "max_words_per_slide": [
+        9,
+        11,
+        10,
+        10,
+        8
+      ],
+      "min_total_slide_words": 34,
+      "min_unique_slide_content_words": 19,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "didengar"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "dibagikan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "memilih"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "berhenti"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "batasmu"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 43,
+      "caption_max_body_words": 73,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "09d354d8dbd008e50a21dea109af63297503b65137afdfd67cab21884f2be64d"
+}
