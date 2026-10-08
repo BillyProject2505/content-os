@@ -554,3 +554,31 @@ Owner explicitly approved Cover Candidate v1.
 - Final Master v1 remains CANONICAL / LOCKED
 - Publication remains PLANNED
 - Remaining gate before publication: caption approval
+
+
+## Caption v0.1 Candidate — SDOH-SAGE-REEL-0003 — 2026-10-08
+
+**Status: QA PASS / AWAITING OWNER APPROVAL**
+
+kadang, pengalaman kita belum punya nama yang jelas.
+
+bukan berarti pengalaman itu kurang nyata, kurang penting, atau harus menunggu sampai kita bisa menjelaskannya dengan sempurna.
+
+di Hari Kesehatan Mental Sedunia 2026, kita diingatkan bahwa pengalaman hidup bukan sekadar cerita untuk didengar. suara orang yang menjalaninya juga perlu punya tempat dalam percakapan tentang kesehatan mental.
+
+mendengar dengan sungguh-sungguh bisa dimulai dengan memberi ruang—tanpa buru-buru menyimpulkan, memperbaiki, atau mewakili cerita orang lain.
+
+satu dosis obat hati
+
+#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja
+
+QA basis:
+- follows Sage Reels ↔ Sage Carousel caption parity;
+- complements rather than transcribes Narration v1.0;
+- World Mental Health Day 2026 wording is factual and aligned with WHO 2026 campaign framing;
+- does not imply that one person with lived experience represents everyone;
+- no diagnosis, statistic, treatment promise, or crisis claim;
+- five fixed project hashtags retained;
+- Drive source: https://docs.google.com/document/d/1lyS0-JGXfr06W-oKeywuxzED_ufy2oEb6Zb_v_wkMXE/edit
+
+Caption remains a candidate until explicit Owner approval.
