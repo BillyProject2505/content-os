@@ -535,3 +535,22 @@ Owner explicitly approved AV Master Candidate v2 after Creative Rebuild v2 QA.
 - final timing: F1 0.000–3.733; F2 3.733–11.233; F3 11.233–17.600; F4 17.600–24.300; F5 24.300–30.600 s
 - prior AV Master Candidate v1 remains rejected historical evidence
 - publication remains **PLANNED** until each platform publication event is independently verified
+
+
+## Owner Decision Record — Final Cover v1 Lock — SDOH-SAGE-REEL-0003 — 2026-10-08
+
+Owner explicitly approved Cover Candidate v1.
+
+- Cover state: **FINAL COVER v1 — CANONICAL / LOCKED**
+- Drive file ID: `1VaeAoUqD6adLk_37xNumTdHIYFEsZ4AV`
+- SHA-256: `ad27ce8078bb7e86dc870604f5fdd81f01aeb91c344636db8d44c6ec29a1e047`
+- Canvas: 1080×1920
+- Active workspace: Y 285–1635
+- Cover copy: `pengalamanmu / punya tempat / dalam percakapan`
+- Palette: Sage #94AC9C + Burgundy #5C1B29
+- Canonical Sun emblem and canonical P01 stickman
+- Two-chair conversation-space cue
+- Reel-cover delta: `slide NN` omitted
+- Final Master v1 remains CANONICAL / LOCKED
+- Publication remains PLANNED
+- Remaining gate before publication: caption approval
