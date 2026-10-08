@@ -556,9 +556,9 @@ Owner explicitly approved Cover Candidate v1.
 - Remaining gate before publication: caption approval
 
 
-## Caption v0.1 Candidate — SDOH-SAGE-REEL-0003 — 2026-10-08
+## Caption v1.0 — SDOH-SAGE-REEL-0003 — 2026-10-08
 
-**Status: QA PASS / AWAITING OWNER APPROVAL**
+**Status: APPROVED / LOCKED**
 
 kadang, pengalaman kita belum punya nama yang jelas.
 
@@ -581,4 +581,16 @@ QA basis:
 - five fixed project hashtags retained;
 - Drive source: https://docs.google.com/document/d/1lyS0-JGXfr06W-oKeywuxzED_ufy2oEb6Zb_v_wkMXE/edit
 
-Caption remains a candidate until explicit Owner approval.
+Caption v1.0 is APPROVED / LOCKED. Publication remains a separate gate and requires platform-specific evidence.
+
+
+## Owner Decision Record — Caption v1.0 Lock — SDOH-SAGE-REEL-0003 — 2026-10-08
+
+Owner explicitly approved Caption v0.1 unchanged.
+
+- Caption state: **v1.0 APPROVED / LOCKED**
+- Drive document ID: `1lyS0-JGXfr06W-oKeywuxzED_ufy2oEb6Zb_v_wkMXE`
+- Final Master v1 remains **CANONICAL / LOCKED**
+- Final Cover v1 remains **CANONICAL / LOCKED**
+- Publication remains **PLANNED**
+- Instagram Reels and TikTok must use the same exact final video binary; each platform still requires separate publication evidence.
