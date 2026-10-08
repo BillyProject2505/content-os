@@ -47,7 +47,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Scope | Instance konten Sage Reels dan kejadian publikasinya |
 | References | [BUS-45](<https://linear.app/bussiness-content-os/issue/BUS-45>) eksekusi; [BUS-24](<https://linear.app/bussiness-content-os/issue/BUS-24>) semantik; [BUS-25](<https://linear.app/bussiness-content-os/issue/BUS-25>) SOP; [BUS-26](<https://linear.app/bussiness-content-os/issue/BUS-26>) riset; [BUS-27](<https://linear.app/bussiness-content-os/issue/BUS-27>) QA; [BUS-28](<https://linear.app/bussiness-content-os/issue/BUS-28>) aset |
 | Aturan pencatatan | [BUS-51](<https://linear.app/bussiness-content-os/issue/BUS-51>) — Aturan pencatatan bersama v0.1 |
-| ID konten lokal | SDOH-SAGE-REEL-NNNN; 0001 allocated/published; 0002 allocated 2026-09-19 for September suicide-prevention campaign; nomor berikutnya 0003 |
+| ID konten lokal | SDOH-SAGE-REEL-NNNN; 0001 allocated/published; 0002 allocated/published; 0003 allocated 2026-10-06 for World Mental Health Day 2026 production; nomor berikutnya 0004 |
 
 ## Fokus tema
 
@@ -64,6 +64,7 @@ Satu Final Master terkonfirmasi telah dimigrasikan dari [BUS-45](https://linear.
 | SDOH-SAGE-REEL-0001 | Perasaan yang belum punya nama — validasi kondisi tanpa memaksa penjelasan; judul deskriptif register | Hook: Ada hari ketika kita tidak sedang sedih. Transkripsi on-screen dan beat map tersedia di rincian entri; Caption v1.0 APPROVED / LOCKED tersedia di bagian akhir; QA editorial PASS dan Owner lock tercatat 2026-09-12 | READY — master CANONICAL / LOCKED menurut [BUS-45](https://linear.app/bussiness-content-os/issue/BUS-45/satu-dosis-obat-hati-sage-reels-production); publication event pertama tercatat PUBLISHED pada 2026-09-15 | Teks visual bersifat reflektif, tanpa diagnosis, statistik atau janji terapi; narasi dan caption belum ditinjau sebagai transkripsi lengkap | Marcel Take 2 cocok secara sinyal; Library identity dan checksum tercatat di rincian. Lima frame produksi 1080×1920, audio source, timing map, assembly script, checksum manifest, canonical master, dan verification rebuild kini dipersistenkan dalam Reproduction Package v1 di Google Drive | Master pada [BUS-45](https://linear.app/bussiness-content-os/issue/BUS-45/satu-dosis-obat-hati-sage-reels-production); QA dan lock ditelusuri ke komentar spesifik di rincian | Migrasi historis; pemeriksaan duplikasi akun/antrean belum dilakukan; jangan menganggap Prototype 02 bertema berhenti sebentar sebagai naskah final ini |
 
 | SDOH-SAGE-REEL-0002 | Suicide prevention — Start the Conversation / membuka ruang percakapan | Five locked visual beats: F1 `kadang kita bingung / harus mulai dari mana`; F2 `coba mulai sederhana: / “akhir-akhir ini kamu gimana?”`; F3 `lalu beri ruang / untuk jawaban yang jujur`; F4 `dengarkan tanpa / buru-buru memperbaiki`; F5 `satu percakapan / bisa membuka jalan / menuju dukungan`. Narration locked and expanded beyond the visual anchors. | **READY — Final Master v1 CANONICAL / LOCKED**, Owner approved 2026-09-26. Publication remains a separate gate and is still PLANNED. | WHO WSPD 2026; IASP WSPD 2026; WHO responsible media guidance 2023. | Marcel / ElevenLabs Take 2 selected. F1–F5 locked static masters; final waveform-derived timing: 0.000–6.506 / 6.506–14.079 / 14.079–18.837 / 18.837–24.154 / 24.154–32.300 s. | [Final Master v1](<https://drive.google.com/file/d/16dpIT4G1_eHTcqqssaVGpKZYEEM4p9Cl/view?usp=drivesdk>) — 1080×1920, H.264/AAC, 30 fps, 32.300 s, SHA-256 `75c497db2ca35e16e425367ef3658cc1e4fa6827777247d4a80e604f54c55fe6`; QA PASS; loudness −17.58 LUFS, true peak −1.63 dBTP; final hold \~0.797 s. | 2026-09-19 cross-format campaign check found no direct duplicate of the conversation-opening angle. |
+| SDOH-SAGE-REEL-0003 | World Mental Health Day 2026 — Pengalamanmu punya tempat dalam percakapan | Narration v1.0 APPROVED / LOCKED. Creative Rebuild v2 APPROVED: no on-screen text; five environment-backed animated scenes; concept `dari ruang dalam diri ke ruang percakapan`; voiceover carries explicit meaning. | **READY — Final Master v1 CANONICAL / LOCKED**, Owner approved 2026-10-08. Publication remains a separate gate and is still PLANNED. | WHO World Mental Health Day 2026 — `Lived experiences heard: real voices, real change`; WHO WMHD webinar 2026. | Marcel / ElevenLabs Take 2 selected. F1–F5 Creative Rebuild v2 environment-backed clips QA-passed. Final waveform timing: F1 0.000–3.733; F2 3.733–11.233; F3 11.233–17.600; F4 17.600–24.300; F5 24.300–30.600 s. | [Final Master v1](https://drive.google.com/file/d/12WYyPlmOkCw06kN6iGample4Fnm0O-Gl/view?usp=drivesdk) — 1080×1920, 30 fps, 30.600 s, no on-screen text/subtitles, Flow audio discarded, −17.5 LUFS, true peak −1.7 dBFS, SHA-256 `467bf2551031225092abaffbbf5af5b2186368907a3b8ed8f0f1d0b56f92b0f7`; QA PASS. | 2026-10-06 cross-format check: distinct from Sage Carousel 0007 (`yang kamu alami tetap nyata...`) and 0008 (`didengar tidak berarti...`); Reel direction now further differentiated by environment-led cinematic animation and no in-video typography. |
 
 ### Provenance SDOH-SAGE-REEL-0001
 
@@ -83,6 +84,8 @@ Satu baris per kejadian publikasi yang diketahui, bukan per master. Ikuti status
 
 | SDOH-SAGE-REEL-0002 | Instagram — **@satudosisobathati** | 2026-09-24, time TBD (WITA) | **PUBLISHED** | 2026-09-26 — Owner provided live Instagram Reel URL; attachment preview confirms the locked caption text is present | **2026-09-26, 21.40 WITA** — confirmed by Owner | [https://www.instagram.com/reel/DdwKHXGvSP\_/](<https://www.instagram.com/reel/DdwKHXGvSP_/>) — Instagram Reel ID `DdwKHXGvSP_` | Published using SDOH-SAGE-REEL-0002; TikTok remains a separate publication event and is still PLANNED |
 | SDOH-SAGE-REEL-0002 | TikTok — account not independently resolved from short URL | 2026-09-24, time TBD (WITA) | **PUBLISHED** | 2026-09-26 — Owner provided live TikTok short URL and actual publication time | **2026-09-26, 21.35 WITA** — confirmed by Owner | [https://vt.tiktok.com/ZSbY5g3EC/](<https://vt.tiktok.com/ZSbY5g3EC/>) — short-link ID `ZSbY5g3EC` | Published as the second platform event for the same SDOH-SAGE-REEL-0002 master; no new Content ID or rerender |
+| SDOH-SAGE-REEL-0003 | Instagram — @satudosisobathati | **2026-10-10, 19.30 WITA** | **PLANNED** | Pre-publish account/queue check required before scheduling | — | — | World Mental Health Day 2026; same exact final master as TikTok publication event |
+| SDOH-SAGE-REEL-0003 | TikTok — account to verify before scheduling | **2026-10-10, 19.30 WITA** | **PLANNED** | Pre-publish account/queue check required before scheduling | — | — | Same Content ID and exact final video master as Instagram; separate publication evidence required |
 
 Status publikasi SDOH-SAGE-REEL-0001: **PUBLISHED**. URL/ID posting, akun tujuan **@satudosisobathati**, dan waktu terbit aktual **2026-09-15 pukul 17.00 WITA** dikonfirmasi Owner.
 
@@ -461,3 +464,133 @@ Owner provided the live TikTok short URL and confirmed actual publication time *
 * No new Content ID or platform-specific rerender was created.
 
 Both required publication events are now verified. [BUS-72](https://linear.app/bussiness-content-os/issue/BUS-72/24-sep-sdoh-sage-reel-0002-start-the-conversation) may be treated as operationally complete.
+
+## Allocation Record — SDOH-SAGE-REEL-0003 — 2026-10-06
+
+- Content ID: `SDOH-SAGE-REEL-0003`
+- Issue: [BUS-163](https://linear.app/bussiness-content-os/issue/BUS-163/10-oct-sdoh-sage-reel-0003-pengalamanmu-punya-tempat-dalam-percakapan)
+- Theme: Sage / Seri Peluk
+- Working title: **Pengalamanmu punya tempat dalam percakapan**
+- Context: World Mental Health Day 2026
+- Target publication: **2026-10-10 19:30 WITA**
+- Platforms: Instagram Reels + TikTok
+- Material state: **DRAFT**
+- Publication state: **PLANNED**
+- Source basis: WHO World Mental Health Day 2026 — “Lived experiences heard: real voices, real change.”
+- Script: **v0.1 Candidate / awaiting Owner review**
+- Drive workspace: https://drive.google.com/drive/folders/1ywKrrvLHAK9VHqmHOlG0W6dX0l-wpfw4
+- Script source: https://docs.google.com/document/d/1bXpWEyhUchYOxAi_KD-ELQ-6aUbg2P7ToID1yjy28UY/edit
+
+This allocation does not approve or lock the script. Final master, cover, caption, and publication remain separate gates.
+
+
+## Creative Rebuild v2 — SDOH-SAGE-REEL-0003 — 2026-10-08
+
+Owner approved a creative pivot after reviewing AV Master Candidate v1.
+
+Decision:
+- Narration v1.0 remains **APPROVED / LOCKED** and unchanged.
+- Google Flow remains the motion-generation tool.
+- Reel becomes a **voice-led animated short-scene sequence**, not animated-slide/carousel presentation.
+- **No on-screen text** and **no baked subtitles** in the video.
+- Five scenes must share one coherent illustrated environment family.
+- Canonical stickman identity is retained.
+- Visual progression: private interior → reflection → spatial opening → conversation space.
+- Environment motion, subtle parallax, and restrained camera movement may be used to make the work read as video.
+- F5 uses a two-chair conversation space with the second chair empty as room for listening, not rescue.
+- Prior AV Master Candidate v1 is **REJECTED FOR FINAL DIRECTION** and retained only as historical working evidence.
+- No Final Master exists yet after this pivot.
+- Next active artifact: **F1 v2 environment-backed Google Flow clip**.
+
+
+## AV Master Candidate v2 — Creative Rebuild — 2026-10-08
+
+- Status: **QA PASS / OWNER REVIEW REQUIRED**
+- Video: https://drive.google.com/file/d/12WYyPlmOkCw06kN6iGample4Fnm0O-Gl/view?usp=drivesdk
+- Timing: https://drive.google.com/file/d/1ob97MiDW42Mjs-3ZbNxGwr0kat1kEnii/view?usp=drivesdk
+- QA: https://drive.google.com/file/d/1IPJ_pG7TvG3rnWb4Gt_52CbB8guuoljE/view?usp=drivesdk
+- 1080×1920, H.264/yuv420p, 30 fps, 918 frames, 30.600 s.
+- No on-screen text and no baked subtitles.
+- All Google Flow audio discarded.
+- Audio authority: Narration v1.0 / Marcel ElevenLabs Take 2.
+- Integrated loudness: **−17.5 LUFS**; true peak **−1.7 dBFS**.
+- SHA-256: `467bf2551031225092abaffbbf5af5b2186368907a3b8ed8f0f1d0b56f92b0f7`.
+- Candidate v2 supersedes candidate v1 for review purposes only.
+- No Final Master exists until explicit Owner approval.
+
+
+## Owner Decision Record — Final Master v1 Lock — SDOH-SAGE-REEL-0003 — 2026-10-08
+
+Owner explicitly approved AV Master Candidate v2 after Creative Rebuild v2 QA.
+
+- Content ID: `SDOH-SAGE-REEL-0003`
+- Material state: **READY**
+- Final Master v1: **CANONICAL / LOCKED**
+- Drive file ID: `12WYyPlmOkCw06kN6iGample4Fnm0O-Gl`
+- SHA-256: `467bf2551031225092abaffbbf5af5b2186368907a3b8ed8f0f1d0b56f92b0f7`
+- 1080×1920, H.264/yuv420p, 30 fps, 30.600 s
+- no on-screen text; no baked subtitles
+- Flow-generated audio discarded
+- audio authority: Narration v1.0 / Marcel ElevenLabs Take 2
+- final timing: F1 0.000–3.733; F2 3.733–11.233; F3 11.233–17.600; F4 17.600–24.300; F5 24.300–30.600 s
+- prior AV Master Candidate v1 remains rejected historical evidence
+- publication remains **PLANNED** until each platform publication event is independently verified
+
+
+## Owner Decision Record — Final Cover v1 Lock — SDOH-SAGE-REEL-0003 — 2026-10-08
+
+Owner explicitly approved Cover Candidate v1.
+
+- Cover state: **FINAL COVER v1 — CANONICAL / LOCKED**
+- Drive file ID: `1VaeAoUqD6adLk_37xNumTdHIYFEsZ4AV`
+- SHA-256: `ad27ce8078bb7e86dc870604f5fdd81f01aeb91c344636db8d44c6ec29a1e047`
+- Canvas: 1080×1920
+- Active workspace: Y 285–1635
+- Cover copy: `pengalamanmu / punya tempat / dalam percakapan`
+- Palette: Sage #94AC9C + Burgundy #5C1B29
+- Canonical Sun emblem and canonical P01 stickman
+- Two-chair conversation-space cue
+- Reel-cover delta: `slide NN` omitted
+- Final Master v1 remains CANONICAL / LOCKED
+- Publication remains PLANNED
+- Remaining gate before publication: caption approval
+
+
+## Caption v1.0 — SDOH-SAGE-REEL-0003 — 2026-10-08
+
+**Status: APPROVED / LOCKED**
+
+kadang, pengalaman kita belum punya nama yang jelas.
+
+bukan berarti pengalaman itu kurang nyata, kurang penting, atau harus menunggu sampai kita bisa menjelaskannya dengan sempurna.
+
+di Hari Kesehatan Mental Sedunia 2026, kita diingatkan bahwa pengalaman hidup bukan sekadar cerita untuk didengar. suara orang yang menjalaninya juga perlu punya tempat dalam percakapan tentang kesehatan mental.
+
+mendengar dengan sungguh-sungguh bisa dimulai dengan memberi ruang—tanpa buru-buru menyimpulkan, memperbaiki, atau mewakili cerita orang lain.
+
+satu dosis obat hati
+
+#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja
+
+QA basis:
+- follows Sage Reels ↔ Sage Carousel caption parity;
+- complements rather than transcribes Narration v1.0;
+- World Mental Health Day 2026 wording is factual and aligned with WHO 2026 campaign framing;
+- does not imply that one person with lived experience represents everyone;
+- no diagnosis, statistic, treatment promise, or crisis claim;
+- five fixed project hashtags retained;
+- Drive source: https://docs.google.com/document/d/1lyS0-JGXfr06W-oKeywuxzED_ufy2oEb6Zb_v_wkMXE/edit
+
+Caption v1.0 is APPROVED / LOCKED. Publication remains a separate gate and requires platform-specific evidence.
+
+
+## Owner Decision Record — Caption v1.0 Lock — SDOH-SAGE-REEL-0003 — 2026-10-08
+
+Owner explicitly approved Caption v0.1 unchanged.
+
+- Caption state: **v1.0 APPROVED / LOCKED**
+- Drive document ID: `1lyS0-JGXfr06W-oKeywuxzED_ufy2oEb6Zb_v_wkMXE`
+- Final Master v1 remains **CANONICAL / LOCKED**
+- Final Cover v1 remains **CANONICAL / LOCKED**
+- Publication remains **PLANNED**
+- Instagram Reels and TikTok must use the same exact final video binary; each platform still requires separate publication evidence.
