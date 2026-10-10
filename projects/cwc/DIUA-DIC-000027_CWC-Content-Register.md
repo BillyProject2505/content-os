@@ -11,7 +11,7 @@ status: "CANONICAL / ACTIVE"
 depends_on:
   - id: "DIUA-DIC-000012"
     name: "Coz We Care — Production Bible"
-    version: "2.21"
+    version: "2.22"
     status: "CANONICAL"
   - id: "DIUA-DIC-000017"
     name: "CWC Production Workflow"
@@ -42,7 +42,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Coz We Care |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000027` — ALLOCATED / ACTIVE per [BUS-17](../../system/Content-OS-Universal-Identifier-Registration-Record.md) and [BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md) |
 | Workflow Authority | CWC Production Workflow v1.22 CANONICAL LOCKED — authoritative lifecycle/state semantics, duplicate-gate integration, STG‑03 research-record authority, STG‑06/STG‑07 asset Production Behavior execution contract, and STG‑10 Approved Release Identity / publication-readiness semantics |
-| Depends On | CWC Production Bible v2.21; CWC Production Workflow v1.22; CWC Format Specialization Specification v1.31 |
+| Depends On | CWC Production Bible v2.22; CWC Production Workflow v1.22; CWC Format Specialization Specification v1.31 |
 | Scope | CWC content instances, duplicate-control metadata, adaptation provenance, and publication occurrences |
 
 ---
@@ -727,3 +727,8 @@ No Content ID grammar, duplicate classification, sequence allocation, lifecycle 
 ## v1.26 Allocation Record — CWC-CRSL-0003 — 2026-10-10
 
 Allocated `CWC-CRSL-0003` to [BUS-165](https://linear.app/bussiness-content-os/issue/BUS-165/cwc-carousel-production-prep-harian-vs-event-driven-tidak-semua-metode) after D1 / RELATED CONTENT duplicate screening against `CWC-CRSL-0001`, `CWC-POSTER-0004`, and `CWC-STORY-0002`. The content explains that PrEP regimens are individualized and that event-driven use is not universal; it is distinct from PrEP basics, adherence, and the evergreen core guide. Owner approved the Content ID allocation on 2026-10-10. Lifecycle mirror is `DEFINED`; STG-03 research verification is pending. Next available CRSL identifier: `CWC-CRSL-0004`.
+
+
+### 2026-10-10 — CPB v2.22 Dependency Currency Maintenance
+
+Current normative CWC Production Bible pin synchronized from v2.21 to v2.22 following the Owner-directed caption follow/share closure in CPB §6.6.2. This is a **dependency pointer-only maintenance**; the local document version, workflow states, format geometry, asset behaviors, QA gates, register schema, and existing Content Item history remain unchanged. The two secondary engagement prompts are consumed from CPB at applicable caption-authoring steps, with clinical-action and five-hashtag rules preserved.
