@@ -6,7 +6,7 @@ system: "Content OS → Coz We Care (CWC)"
 owner: "[FORMAL] Billy Fernando Mende — CWC domain Owner, confirmed 2026-09-03 (per Root Documentation Structure §5.1)."
 related_issue: "BUS-18"
 universal_identifier: "DIUA-DIC-000012"
-version: "2.21"
+version: "2.22"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000001"
@@ -31,8 +31,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | Coz We Care — Production Bible |
 | Document Class | Domain Production Bible |
 | System | Content OS → Coz We Care (CWC) |
-| Version | 2.21 |
-| Status | **CANONICAL** — v2.21 under [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout): the [BUS-123](https://linear.app/bussiness-content-os/issue/BUS-123/cwc-format-poster-reference-validated-copy-brand-presenter-layout) reference-validated copy / Brand Presenter composition is now the single cross-format layout invariant for registered CWC mandatory branded frames. Format-local safe areas and presenter-presence applicability remain unchanged. Prior v2.20 Poster-local exception is absorbed into this unified rule. |
+| Version | 2.22 |
+| Status | **CANONICAL** — v2.22 Owner-directed CWC caption follow/share standard (§6.6.2), retaining v2.21 cross-format layout and [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout): the [BUS-123](https://linear.app/bussiness-content-os/issue/BUS-123/cwc-format-poster-reference-validated-copy-brand-presenter-layout) reference-validated copy / Brand Presenter composition is now the single cross-format layout invariant for registered CWC mandatory branded frames. Format-local safe areas and presenter-presence applicability remain unchanged. Prior v2.20 Poster-local exception is absorbed into this unified rule. |
 | Related Issue | [BUS-18](https://linear.app/bussiness-content-os/issue/BUS-18/coz-we-care-production-bible) — Coz We Care — Production Bible |
 | Owner | **\[FORMAL\]** Billy Fernando Mende — CWC domain Owner, confirmed 2026-09-03 (per Root Documentation Structure §5.1). |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Coz We Care |
@@ -333,6 +333,22 @@ Rules:
 Implementation Example: ✔ `#PrEP #PencegahanHIV #KesehatanSeksual #TesHIV #Manado` for a Manado-relevant PrEP education post. ✘ More than five hashtags, or a locality hashtag unrelated to the actual publication context.
 
 Checklist: Exactly 5 hashtags · ≥1 relevant locality hashtag · topical relevance preserved · no unsupported claim introduced.
+
+**6.6.2 Follow & Share CTA in Publication Captions — Owner Directive, 2026-10-10** — Adds consistent, voluntary engagement closure to CWC publication captions without displacing educational, clinical, or service-navigation content.
+
+Principles: CEC-P01 Consistent CWC Identity · CEC-P02 Voluntary Engagement · CEC-P03 Primary CTA Priority · CEC-P04 Platform Truthfulness.
+
+Rules:
+
+* **ES-021G** Every caption-bearing CWC social-media publication (including feed carousel, poster, and Reel captions) SHALL include a brief invitation to **follow** the official CWC account and a brief invitation to **share** the publication with others who may benefit. These are **secondary engagement prompts**, not new competing primary CTAs under ES-029.
+* **ES-021H** Follow/share wording SHOULD appear together at the end of the editorial caption, immediately before the hashtag block. The approved platform-specific account identity SHALL be used; for the CWC Instagram account the verified handle is **`@cozwecare.id`**. Do not invent handles for other platforms.
+* **ES-021I** Follow/share prompts MUST NOT replace or obscure the primary educational, service-navigation, clinical-access, safety, or time-sensitive action. Existing ES-031A–G clinical-boundary and urgent-action precedence remains authoritative. For an actual safety conflict or a surface without a caption, omit/adapt the secondary engagement prompt and record the scoped reason in the Content Item without altering the rule globally.
+* **ES-021J** Prompts SHALL be voluntary, concise, non-stigmatizing, and factually modest. They SHALL NOT introduce unsupported claims, guarantees, rewards, pressure, guilt, or implied clinical service availability.
+* **ES-021K** ES-021A–F still govern the hashtag block: **exactly five hashtags**, including at least one truthful, contextually local/geographic hashtag. Follow/share prompts are natural-language CTA text, not hashtags, and do not add extra hashtags.
+
+Implementation Example (Instagram): ✔ “Ikuti @cozwecare.id untuk edukasi HIV dan PrEP lainnya. Bagikan postingan ini kepada teman yang mungkin membutuhkan informasinya.”, immediately before the same five topical/local hashtags. ✘ Placing “follow and share” ahead of an urgent service-referral action or adding a sixth hashtag.
+
+Checklist: Follow invitation present · Share invitation present · Verified platform identity · Primary/clinical CTA precedence retained · Voluntary wording · No unsupported new claim · Exactly 5 relevant hashtags.
 
 **6.7 Health & Educational Writing Standards** — Defines how health/educational information is communicated; governs editorial expression, not medical knowledge.
 
@@ -663,3 +679,7 @@ Result:
 * no new Workflow Stage, lifecycle state, Quality Gate, asset identity, typography model, or QA mechanism was created.
 
 Current format versions: FORMAT-POSTER v1.6; FORMAT-CAROUSEL v1.4; FORMAT-REEL v1.4; FORMAT-STORY v1.6.
+
+## v2.22 Canonical Amendment Record — CWC Follow & Share Caption CTA (Owner Directive, 2026-10-10)
+
+Owner directed that CWC publication captions consistently include voluntary **follow** and **share** invitations. Rule materialized exclusively in the existing Chapter 6 Writing Standards (§6.6.2), supplementing §6.6.1 exactly-five-hashtag standard and §6.9 single-primary-CTA / service-navigation priority. Applicable to caption-bearing formats; the only bounded deviations concern absent caption surfaces, unverified platform handles, or clinical/safety priority, to be traced at Content Item level. No new workflow stage, lifecycle state, formatting object, asset, research claim, or independent governance document was introduced. Downstream CPB dependency-pinning receives pointer-only maintenance (no additional rule introduced locally). Source content instance: [BUS-165](https://linear.app/bussiness-content-os/issue/BUS-165/cwc-carousel-production-prep-harian-vs-event-driven-tidak-semua-metode); final caption changed after STG-09, so its previous R1 release remains superseded until reapproval.

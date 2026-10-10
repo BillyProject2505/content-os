@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL LOCKED"
   - id: "DIUA-DIC-000012"
     name: "Coz We Care — Production Bible"
-    version: "2.21"
+    version: "2.22"
     status: "CANONICAL"
   - id: "DIUA-DIC-000018"
     name: "CWC Format Specialization Specification"
@@ -55,7 +55,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Related Issue | [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout) — CWC Cross-Format Reference-Validated Copy / Brand Presenter Layout |
 | Structural Classification | Tiered — Domain/Project Tier 2 — Coz We Care |
 | Universal Identifier | `DIUA-DIC-000031` — ALLOCATED / ACTIVE per [BUS-17](../../system/Content-OS-Universal-Identifier-Registration-Record.md) and [BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md) |
-| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CPB v2.21 CANONICAL; CWC-FSS-001 v1.31 CANONICAL; CWC-QA-001 v1.32 CANONICAL; CAB v1.36 CANONICAL; CRS v1.23 CANONICAL |
+| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CPB v2.22 CANONICAL; CWC-FSS-001 v1.31 CANONICAL; CWC-QA-001 v1.32 CANONICAL; CAB v1.36 CANONICAL; CRS v1.23 CANONICAL |
 
 ---
 
@@ -378,3 +378,7 @@ Current Story realization:
 Every-frame AS-002 applicability and [BUS-86](https://linear.app/bussiness-content-os/issue/BUS-86/cwc-916-reserved-area-geometry-reel-and-story) safe-area authority remain unchanged.
 
 **Disposition: REGISTERED / CURRENT AUTHORITATIVE REPRESENTATION.**
+
+### 2026-10-10 — CPB v2.22 Dependency Currency Maintenance
+
+Current normative CWC Production Bible pin synchronized from v2.21 to v2.22 following the Owner-directed caption follow/share closure in CPB §6.6.2. This is a **dependency pointer-only maintenance**; the local document version, workflow states, format geometry, asset behaviors, QA gates, register schema, and existing Content Item history remain unchanged. The two secondary engagement prompts are consumed from CPB at applicable caption-authoring steps, with clinical-action and five-hashtag rules preserved.

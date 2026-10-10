@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL LOCKED"
   - id: "DIUA-DIC-000012"
     name: "Coz We Care — Production Bible"
-    version: "2.21"
+    version: "2.22"
     status: "CANONICAL"
   - id: "DIUA-DIC-000018"
     name: "CWC Format Specialization Specification"
@@ -58,7 +58,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Prior Cross-Format Authority | [BUS-114](https://linear.app/bussiness-content-os/issue/BUS-114/cwc-cross-format-brand-presenter-layout-universal-5050-full-body) — superseded by [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout) for current layout geometry across registered CWC formats; [BUS-123](https://linear.app/bussiness-content-os/issue/BUS-123/cwc-format-poster-reference-validated-copy-brand-presenter-layout) retained as the validated Poster source/reference |
 | Structural Classification | Tiered — Domain/Project Tier 2 — Coz We Care |
 | Universal Identifier | `DIUA-DIC-000028` — same governed FORMAT-POSTER document identity; this revision does not allocate a new identifier |
-| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CWC Production Bible v2.21 CANONICAL; CWC Format Specialization Specification v1.31 CANONICAL; CWC QA Mechanism (CWC-QA-001) v1.32 CANONICAL; CWC Asset Bible v1.36 CANONICAL; CWC Reference Sheet v1.23 CANONICAL |
+| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CWC Production Bible v2.22 CANONICAL; CWC Format Specialization Specification v1.31 CANONICAL; CWC QA Mechanism (CWC-QA-001) v1.32 CANONICAL; CWC Asset Bible v1.36 CANONICAL; CWC Reference Sheet v1.23 CANONICAL |
 
 ---
 
@@ -101,7 +101,7 @@ purpose: implement the BUS-124 cross-format reference-validated composition for 
 
 dependencies:
   - CWC Production Workflow v1.22 CANONICAL LOCKED
-  - CPB v2.21 CANONICAL
+  - CPB v2.22 CANONICAL
   - FSS-001 v1.31 CANONICAL
   - CWC-QA-001 v1.32 CANONICAL
   - CAB v1.36 CANONICAL
@@ -686,3 +686,7 @@ FORMAT-POSTER geometry is unchanged from v1.5. v1.6 updates authority and depend
 [BUS-123](https://linear.app/bussiness-content-os/issue/BUS-123/cwc-format-poster-reference-validated-copy-brand-presenter-layout) remains the visually validated source/reference. [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout) is the current cross-format authority.
 
 **Disposition: REGISTERED / CURRENT AUTHORITATIVE REPRESENTATION.**
+
+### 2026-10-10 — CPB v2.22 Dependency Currency Maintenance
+
+Current normative CWC Production Bible pin synchronized from v2.21 to v2.22 following the Owner-directed caption follow/share closure in CPB §6.6.2. This is a **dependency pointer-only maintenance**; the local document version, workflow states, format geometry, asset behaviors, QA gates, register schema, and existing Content Item history remain unchanged. The two secondary engagement prompts are consumed from CPB at applicable caption-authoring steps, with clinical-action and five-hashtag rules preserved.

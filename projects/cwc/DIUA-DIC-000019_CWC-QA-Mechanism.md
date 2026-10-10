@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL LOCKED"
   - id: "DIUA-DIC-000012"
     name: "Coz We Care — Production Bible"
-    version: "2.21"
+    version: "2.22"
     status: "CANONICAL"
   - id: "DIUA-DIC-000013"
     name: "CWC — Canonical Asset System (CAS)"
@@ -68,7 +68,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 **Universal Identifier (UNIS/DIC):** `DIUA-DIC-000019` — ALLOCATED / ACTIVE, per Content OS — Universal Identifier Registry ([BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md)) and Universal Identifier Registration Record ([BUS-17](<https://linear.app/bussiness-content-os/issue/BUS-17/universal-identifier-registration-record>)).
 
 **Depends On (Primary Architectural Authority):** CWC Production Workflow v1.22, CANONICAL LOCKED `[REV1.22]` — its architecture is treated as LOCKED and is not redesigned, reinterpreted, forked, or replaced by this document. This document supplies the criteria, checks, evidence rules, defect classification, and verdict semantics that STG‑08 already reserves an input slot for `[REV1.0 §6 STG‑08]`; it does not touch STG‑08's Stage, Lifecycle State, transition, or Output Contract mechanics themselves.
-**Depends On (Canonical CWC Production Dependencies):** CPB v2.21 (CANONICAL), CAS v1.17 (CANONICAL), CAR v1.18 (CANONICAL), CAB v1.36 (CANONICAL), CRS v1.23 (CANONICAL), CWC Format Specialization Specification (CWC-FSS-001) v1.31 (CANONICAL).
+**Depends On (Canonical CWC Production Dependencies):** CPB v2.22 (CANONICAL), CAS v1.17 (CANONICAL), CAR v1.18 (CANONICAL), CAB v1.36 (CANONICAL), CRS v1.23 (CANONICAL), CWC Format Specialization Specification (CWC-FSS-001) v1.31 (CANONICAL).
 **Depends On (Content OS Structural / Governance Authorities — distinct from the CWC production dependencies above, per the categorization precedent** `[FSS-001 §0]` **already established):** Content OS — Root Level Architecture v1.11, CANONICAL (Tier 2 / Domain-Project structural classification, `[Root Level Architecture v1.11 §7, §9.2]`); Content OS — Root Documentation Structure v2.5, CANONICAL (mandatory Document Identity field set, Owner-field tag convention, and Registered Document Boundary, `[Root Documentation Structure v2.5 §5, §5.1, §10.1]`); Content OS — Root Governance v1.11, CANONICAL (Ownership Model and the Draft/CANONICAL status vocabulary, `[Root Governance v1.11 §4.1, §6]`; this document does not assume that vocabulary settles Tier 2 status semantics — see §21 OD‑1, carried from FSS‑001 unresolved).
 **Supporting Governance:** Content OS — Evidence Citation Standard (ADOPTED). This document applies that standard's citation structure throughout, using `[CWC-QA-001 §<section>]` for self-references and the canonical-dependency tags above for evidence. Where a claim is architectural inference rather than direct source text, it is tagged `[ARCHITECTURAL INFERENCE]`; where evidence could not be located, `[UNCONFIRMED — SOURCE GAP]`; where the gap is an Owner's to close, `[OWNER DECISION REQUIRED]` — never a section number invented to look sourced (`[Evidence Citation Standard §12]`).
 
@@ -1285,3 +1285,7 @@ Applicability remains format-specific:
 Story criteria are resolved inside the unchanged [BUS-86](https://linear.app/bussiness-content-os/issue/BUS-86/cwc-916-reserved-area-geometry-reel-and-story) primary content field; other formats use their current legal layout field and protected-region rules.
 
 **Result: CONFORMANT.** No QA architecture, Gate, verdict model, routing rule, evidence schema, lifecycle authority, approval authority, or QA Record schema changed.
+
+### 2026-10-10 — CPB v2.22 Dependency Currency Maintenance
+
+Current normative CWC Production Bible pin synchronized from v2.21 to v2.22 following the Owner-directed caption follow/share closure in CPB §6.6.2. This is a **dependency pointer-only maintenance**; the local document version, workflow states, format geometry, asset behaviors, QA gates, register schema, and existing Content Item history remain unchanged. The two secondary engagement prompts are consumed from CPB at applicable caption-authoring steps, with clinical-action and five-hashtag rules preserved.
