@@ -43,9 +43,9 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Related Issue | [BUS-54](https://linear.app/bussiness-content-os/issue/BUS-54/satu-dosis-obat-hati-tiktok-poster-content-registers) — TikTok Poster Content Registers |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Satu Dosis Obat Hati |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000025` — ALLOCATED / ACTIVE, per [BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md) v1.20 and [BUS-17](../../system/Content-OS-Universal-Identifier-Registration-Record.md) v1.18 |
-| Depends On | SDOH Project Architecture v1.13; SDOH Production SOP v1.39; SDOH QA Document v1.31; SDOH Asset Registry v1.28 |
+| Depends On | SDOH Project Architecture v1.13; SDOH Production SOP v1.40; SDOH QA Document v1.31; SDOH Asset Registry v1.28 |
 | Scope | Burgundy TikTok Poster content instances and their publication events |
-| References | [BUS-24](DIUA-DIC-000007_SDOH-Project-Architecture.md) semantics; [BUS-25](DIUA-DIC-000008_SDOH-Production-SOP.md) Production SOP v1.39; [BUS-27](DIUA-DIC-000010_SDOH-QA-Document.md) QA v1.31; [BUS-28](DIUA-DIC-000011_SDOH-Asset-Registry.md) asset identity/provenance; [BUS-52](https://linear.app/bussiness-content-os/issue/BUS-52/satu-dosis-obat-hati-sage-tiktok-poster-production) shared Poster base; [BUS-53](https://linear.app/bussiness-content-os/issue/BUS-53/satu-dosis-obat-hati-burgundy-tiktok-poster-production) Burgundy delta authority |
+| References | [BUS-24](DIUA-DIC-000007_SDOH-Project-Architecture.md) semantics; [BUS-25](DIUA-DIC-000008_SDOH-Production-SOP.md) Production SOP v1.40; [BUS-27](DIUA-DIC-000010_SDOH-QA-Document.md) QA v1.31; [BUS-28](DIUA-DIC-000011_SDOH-Asset-Registry.md) asset identity/provenance; [BUS-52](https://linear.app/bussiness-content-os/issue/BUS-52/satu-dosis-obat-hati-sage-tiktok-poster-production) shared Poster base; [BUS-53](https://linear.app/bussiness-content-os/issue/BUS-53/satu-dosis-obat-hati-burgundy-tiktok-poster-production) Burgundy delta authority |
 | ID konten lokal | `SDOH-BURGUNDY-POSTER-NNNN`; `0001` and `0002` allocated 2026-09-19 for September suicide-prevention campaign; next available `0003` |
 
 ## Purpose
