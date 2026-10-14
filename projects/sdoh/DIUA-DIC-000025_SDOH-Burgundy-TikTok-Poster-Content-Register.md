@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000008"
     name: "Satu Dosis Obat Hati — Production SOP"
-    version: "1.39"
+    version: "1.40"
     status: "CANONICAL"
   - id: "DIUA-DIC-000010"
     name: "Satu Dosis Obat Hati — QA Document"
