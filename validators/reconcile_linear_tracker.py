@@ -99,14 +99,19 @@ def strip_markup(line):
     line = re.sub(r"<issue\b[^>]*>([^<]*)</issue>", r"\1", line, flags=re.I)
     line = re.sub(r"\[([^\]]+)\]\(<[^>]*>\)", r"\1", line)
     line = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", line)
-    line = re.sub(r"[*_]", "", line)
+    # Linear Markdown may escape literal wildcard characters in canonical names
+    # such as "DOC-\\*". Normalize escape sequences before stripping markup.
+    line = re.sub(r"\\([*_`])", r"\1", line)
+    line = re.sub(r"[*_`]", "", line)
     return re.sub(r"<[^>]+>", "", line)
 
 
 def version_near_name(line, doc):
     line = strip_markup(line)
     for alias in aliases(doc):
-        found = re.search(r"(?<![A-Za-z0-9])" + re.escape(alias) + r"(?![A-Za-z0-9])", line, re.I)
+        # Normalize the canonical name exactly like the rendered tracker text.
+        normalized_alias = strip_markup(alias)
+        found = re.search(r"(?<![A-Za-z0-9])" + re.escape(normalized_alias) + r"(?![A-Za-z0-9])", line, re.I)
         if not found:
             continue
         after = re.split(r"[;|\n]", line[found.end():], maxsplit=1)[0][:65]
