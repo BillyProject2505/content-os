@@ -67,6 +67,22 @@ class TestLinearReadOnlyReconciliation(unittest.TestCase):
         )
         self.assertEqual("MATCH", assess(fixture(), issue(description))["status"])
 
+    def test_identifier_exempt_legacy_namespace_with_markdown_escape(self):
+        """The canonical DOC-* title and Linear's DOC-\* rendering must compare."""
+        doc = {
+            "document_id": None,
+            "issue_id": "BUS-23",
+            "title": "Content OS Document ID Registry — Legacy DOC-* Namespace",
+            "version": "2.8",
+            "dependencies": [],
+        }
+        description = (
+            "## Current canonical state — 2026-10-14\n"
+            "Current Content OS Document ID Registry — Legacy DOC-\\* Namespace v2.8 CANONICAL"
+        )
+        result = assess(doc, issue(description, identifier="BUS-23"))
+        self.assertEqual("MATCH", result["status"])
+
     def test_unverified_is_not_pass(self):
         self.assertEqual("NOT_DECLARED", assess(fixture(), issue(
             "The attached Linear document v1.39 is a migrated historical snapshot."))["status"])
