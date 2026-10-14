@@ -50,7 +50,7 @@ ALIASES = {
 
 
 def scalar(text, name):
-    found = re.search(r"^" + re.escape(name) + r":\s*(.+?)\s*$", text, re.M)
+    found = re.search(r"^\s*" + re.escape(name) + r":\s*(.+?)\s*$", text, re.M)
     if not found:
         return None
     value = found.group(1).strip()
@@ -135,19 +135,14 @@ def contexts(description):
 def choose_claim(candidates):
     if not candidates:
         return {"state": "NOT_DECLARED"}
-    dated = [x for x in candidates if x["date"]]
-    if dated:
-        latest_date = max(x["date"] for x in dated)
-        selected = [x for x in dated if x["date"] == latest_date]
-    else:
-        highest = max(x["strength"] for x in candidates)
-        selected = [x for x in candidates if x["strength"] == highest]
-    versions = sorted(set(x["version"] for x in selected))
+    # Legacy issue histories can have dated "current" checkpoints from older
+    # revisions alongside newer undated assertions. Do not guess precedence.
+    versions = sorted(set(x["version"] for x in candidates))
     if len(versions) > 1:
         return {"state": "AMBIGUOUS"}
     return {
         "state": "ASSERTED", "version": versions[0],
-        "evidence": "dated_current_section" if dated else "explicit_current_line",
+        "evidence": "unambiguous_current_assertion",
     }
 
 
