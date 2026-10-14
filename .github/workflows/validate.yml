@@ -24,6 +24,8 @@ jobs:
         run: python validators/validate_documents.py
       - name: Self-test dependency drift validator
         run: python -m unittest discover -s validators -p 'test_dependency_versions.py' -v
+      - name: Self-test read-only Linear tracker reconciliation
+        run: python -m unittest discover -s validators -p 'test_linear_tracker_reconciliation.py' -v
       - name: Validate repository dependency drift
         run: python validators/validate_dependency_versions.py
       - name: Self-test SDOH publication authority gate
