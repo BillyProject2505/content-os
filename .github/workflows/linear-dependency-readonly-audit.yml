@@ -1,0 +1,80 @@
+name: Audit Content OS Linear trackers (read-only)
+
+# This workflow only reads canonical repository metadata and live Linear issues.
+# No Linear mutation, no Meta/Instagram call, no production state transition.
+on:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "Repository governance scope"
+        required: true
+        type: choice
+        default: all
+        options:
+          - all
+          - root
+          - cross-cutting
+          - system
+          - cwc
+          - sdoh
+          - kds
+      strict:
+        description: "Fail when current tracker authority is ambiguous or not declared"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: content-os-linear-readonly-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout canonical main
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Self-test read-only reconciliation
+        run: python -m unittest discover -s validators -p 'test_linear_tracker_reconciliation.py' -v
+
+      - name: Validate repository baseline first
+        run: |
+          python validators/validate_documents.py
+          python validators/validate_dependency_versions.py
+
+      - name: Query live Linear issues and reconcile
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          AUDIT_SCOPE: ${{ inputs.scope }}
+          AUDIT_STRICT: ${{ inputs.strict }}
+          AUDIT_OUTPUT_PATH: ${{ runner.temp }}/linear-dependency-audit.json
+        run: |
+          set -euo pipefail
+          if [ -z "$LINEAR_API_KEY" ]; then
+            echo "::error::LINEAR_API_KEY_MISSING"
+            exit 1
+          fi
+          python validators/reconcile_linear_tracker.py
+
+      - name: Preserve sanitized audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-os-linear-readonly-audit
+          path: ${{ runner.temp }}/linear-dependency-audit.json
+          if-no-files-found: ignore
+          retention-days: 30
