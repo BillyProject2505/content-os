@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-99"
 universal_identifier: "DIUA-DIC-000033"
-version: "1.14"
+version: "1.15"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -44,8 +44,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — Production SOP / Workflow |
 | Document Class | Domain/Project-Level Operational Workflow Document |
 | System | Content OS → KDS Satu Hati Sulawesi Utara |
-| Version | 1.14 |
-| Status | **CANONICAL** — v1.14 makes explicit that this document is the KDS cross-format Production Workflow authority and inherits System-wide connector lifecycle/storage behavior from [BUS-118](../../system/DIUA-DIC-000042_Content-OS-Production-Connector-Lifecycle-Profile.md) and [BUS-109](../../system/DIUA-DIC-000041_Content-OS-Storage-Authority-Profile.md). No production stage count or downstream ownership boundary changed. Previously v1.13. |
+| Version | 1.15 |
+| Status | **CANONICAL** — v1.15 (2026-10-16) contains (a) one **architectural** change approved by the Owner on 2026-10-16: §11 designates the **Ketua KDS Satu Hati Sulawesi Utara** as the Publication Approver for all KDS content formats, with recorded-approval, no-inference and no-auto-approval rules carried into §12–§13; and (b) editorial / current-state corrections: §7 Stage 4 matches Project Architecture §6, §16 replaces a stale dependency snapshot with current upstream pins and unversioned lateral pointers, and §18 cites the correct change-record range. No stage was added or removed and no other gate, ownership boundary or readiness criterion changed. Previously v1.14. |
 | Related Issue | [BUS-99](https://linear.app/bussiness-content-os/issue/BUS-99/kds-satu-hati-sulawesi-utara-production-sop) — KDS Satu Hati Sulawesi Utara — Production SOP |
 | Owner | **\[OPERATIONAL DEFAULT\]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
@@ -203,7 +203,7 @@ The content concept is coherent enough to draft in the selected or proposed form
 
 Choose the format based on the communication need.
 
-Project Architecture currently does **not** declare a canonical active-format set.
+Project Architecture §6 records **KDS Reflection Carousel** as the only active governed KDS format. It does **not** declare a closed canonical active-format set.
 
 Therefore:
 
@@ -321,7 +321,19 @@ A content-level **Publication Approver** must authorize the artefact before exte
 
 **Publication Approver** is an operational content-approval role and is distinct from the governance **Owner** of this SOP or another Content OS document.
 
-This SOP does not assign a permanent person or organizational role to Publication Approver. For each publication path, the authorized approver must be identifiable under the applicable KDS operating authority before approval is relied upon.
+### Designated Publication Approver — Owner decision 2026-10-16
+
+The Publication Approver for **every KDS publication path and every KDS content format** — including KDS Psychology Series and KDS Reflection Carousel — is the **Ketua KDS Satu Hati Sulawesi Utara** (Chair of KDS Satu Hati Sulawesi Utara). The authority belongs to the role; the current office-holder exercises it.
+
+Rules:
+
+* the Ketua KDS holds final approval authority before any external publication;
+* approval exists only when it is **explicitly recorded** in the content-instance production record (for example the Linear production issue), identifying the approver, the date and the exact final artefact approved;
+* approval must **not** be assumed or inferred from QA PASS, from approvals given for other purposes (such as script advancement or document canonicalization), from silence, or from a target publication date;
+* there is **no auto-approval** and no default or time-out approval;
+* approval covers only the exact artefact recorded; a material change after approval requires re-QA under the KDS QA Document and a new recorded approval;
+* the publication Operator (the person or agent executing the publication act) may execute publication only after the approval has been recorded (§13);
+* this designation is not itself approval to publish any specific content.
 
 The Publication Approver may:
 
@@ -334,7 +346,7 @@ This SOP does not require a mandatory approval gate at every earlier production 
 
 Approval of the artefact does not automatically mean publication has occurred.
 
-If no authorized Publication Approver can be identified for an artefact, the artefact is **BLOCKED** from Publication Readiness.
+If the Ketua KDS approval has not been recorded for the exact final artefact, the artefact is **BLOCKED** from Publication Readiness.
 
 ## 12. Stage 9 — Publication Readiness
 
@@ -346,20 +358,21 @@ An artefact may be classified as **Publication Ready** only when all applicable 
 * required format-specific rules have passed;
 * required reusable assets are resolved through applicable authority;
 * privacy/confidentiality issues are cleared;
-* Publication Approver authorization has been recorded;
+* Publication Approver (Ketua KDS) authorization has been recorded for the exact final artefact (§11);
 * no blocking dependency remains.
 
 If a required authority has not yet been authored, readiness fails closed.
 
 ## 13. Stage 10 — Publication Handoff / Logging
 
-Publication is a separate operational act.
+Publication is a separate operational act. The Operator may execute it only after the §11 approval has been recorded; publication itself is not evidence of approval.
 
 This SOP does not define a canonical channel, cadence, posting time, or automation executor.
 
 When publication occurs, the publication action should retain enough traceability to identify:
 
 * the final artefact;
+* the recorded §11 approval it relies on;
 * publication channel;
 * publication date/time;
 * publication status;
@@ -401,14 +414,14 @@ The correct output in these cases is **BLOCKED**, with the blocking reason state
 
 ## 16. Current Dependency State
 
-As of 2026-09-26 (originally recorded at canonicalization v1.0; see §21–§29 Change Records for version history):
+As of 2026-10-16 (originally recorded at canonicalization v1.0; see §21–§35 Change Records for version history). Upstream authorities are version-pinned in the header `Depends On`; lateral and downstream authorities below are intentionally unversioned `current CANONICAL` pointers (§28 lateral-pointer stability rule).
 
-* **Project Architecture:** v1.9 CANONICAL — available.
-* **Research Source List:** v1.6 CANONICAL — available.
+* **Project Architecture:** v1.10 CANONICAL — available (upstream pin).
+* **Research Source List:** v1.7 CANONICAL — available (upstream pin).
 * **QA Document:** **current CANONICAL** — active project-level publication gate; treated as a downstream/lateral authority rather than a formal version-pinned upstream dependency.
 * **Asset Registry:** **current CANONICAL** — reusable-asset identity/provenance authority is available; `KDS-OBJ-000001`–`KDS-OBJ-000010` are ACTIVE and production-authorized within their recorded scopes. This is a lateral authority pointer and is intentionally unversioned.
 * **Format-specific specifications:** **KDS Reflection Carousel Format Specification — current CANONICAL**; applies whenever Reflection Carousel is selected.
-* **Series-specific production authorities:** Psychology Series Production Bible — current CANONICAL; Psychology Series Layout Bible — **v1.1 CANONICAL**; Psychology Series Reference Sheet — **v1.1 CANONICAL, evidence-only**. All apply within their respective scopes whenever the content instance belongs to the KDS Psychology Series. Evidence-readiness remains fail-closed when triggered.
+* **Series-specific production authorities:** Psychology Series Production Bible — current CANONICAL; Psychology Series Layout Bible — **current CANONICAL**; Psychology Series Reference Sheet — **current CANONICAL, evidence-only**. All apply within their respective scopes whenever the content instance belongs to the KDS Psychology Series. Evidence-readiness remains fail-closed when triggered.
 * **Content Register:** deferred.
 * **Publication automation/executor:** deferred.
 
@@ -433,7 +446,7 @@ These require separate evidence or authority.
 
 ## 18. Lifecycle Status
 
-**Current document state:** CANONICAL v1.14 (originally approved as v1.0 on 2026-09-23; see Change Records in §21–§33 for subsequent amendments).
+**Current document state:** CANONICAL v1.15 (originally approved as v1.0 on 2026-09-23; see Change Records in §21–§35 for subsequent amendments).
 
 Canonicalization followed the governance model inherited from KDS Project Architecture §0.
 
@@ -765,3 +778,33 @@ After required inputs are resolved, image generation/editing, pose/expression ch
 No Stage 1–10 sequence, Research ownership, QA ownership, Asset Registry ownership, Publication Approval rule, or Publication Readiness rule changed.
 
 **Version:** 1.13 → 1.14 CANONICAL.
+
+---
+
+## 35. Change Record — v1.15 — 2026-10-16
+
+**Change type:** (a) Architectural — Publication Approver designation (KDS-AUD-F03); (b) Editorial / current-state correction (KDS-AUD-F06, F07).
+
+### (a) Architectural — Publication Approver designation
+
+* **Propose:** the 2026-10-16 audit found no identifiable Publication Approver for any KDS publication path, so §11 made every artefact BLOCKED from Publication Readiness (finding KDS-AUD-F03).
+* **Classify:** architectural — it assigns approval authority in the workflow.
+* **Review:** self-executed under Project Architecture §0 (review-independence note). Checked that QA (§10 / QA Document §3, §10) already separates QA PASS from approval; that Production Bible §11 and Reflection Carousel Specification §6.1 defer Publication Approval to this SOP; and that no Project Architecture scope or organizational-governance boundary is changed — the designation names an existing KDS office as the content approver and does not govern the organization.
+* **Approve:** Owner decision, 2026-10-16: *Publication Approver KDS adalah Ketua KDS Satu Hati Sulawesi Utara* — final approval before publication; Operator may execute after recorded approval; no inference from QA PASS; no auto-approval; applies to all KDS formats including Psychology Series and Reflection Carousel; not an approval of any specific content.
+* **Record:** §11 designation and rules; §11 BLOCKED sentence; §12 readiness bullet; §13 Operator execution and traceability of the approval relied on.
+
+No stage was added or removed. Publication Approver remains distinct from the governance Owner of this document.
+
+### (b) Editorial / current-state correction
+
+**Basis:** KDS Documentation Audit & Remediation — 2026-10-16 (findings KDS-AUD-F06, F07).
+
+**Changes:**
+
+* §7 Stage 4 — removed the stale statement that Project Architecture declares no active-format set; Project Architecture §6 has recorded Reflection Carousel as the active governed format since PA v1.7.
+* §16 — the dated snapshot still showed Project Architecture v1.9, Research Source List v1.6 and Psychology Series Layout Bible v1.1 while the current canonical versions are v1.10, v1.7 and v1.16. Upstream values now match the header pins; Layout Bible and Reference Sheet use unversioned `current CANONICAL` lateral pointers, consistent with the §28 decision, so later Layout Bible amendments no longer make this SOP stale.
+* §18 — change-record range corrected from §21–§33 to §21–§35.
+
+**Unchanged:** stage sequence 1–10, research routing, QA gate, fail-closed rules, connector-lifecycle inheritance ([BUS-118](../../system/DIUA-DIC-000042_Content-OS-Production-Connector-Lifecycle-Profile.md) wording is untouched; any change there is a separate System-level proposal).
+
+**Version:** 1.14 → 1.15.

@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-108"
 universal_identifier: "DIUA-DIC-000040"
-version: "1.1"
+version: "1.2"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000003"
@@ -45,15 +45,15 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project-Level Visual Reference Sheet |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
-| Version | 1.1 |
-| Status | **CANONICAL** — v1.1 records structural migration into the Psychology Series recursive Tier-2 sub-project. Evidence/reference scope and non-normative authority boundary are unchanged. Previously v1.0. |
+| Version | 1.2 |
+| Status | **CANONICAL** — v1.2 (2026-10-16) is an editorial correction of v1.1: storage wording reflects the GitHub-canonical text authority after the 2026-09-28 cutover. Evidence set, checksums and the non-normative authority boundary are unchanged. Previously v1.1. |
 | Related Issue | [BUS-108](https://linear.app/bussiness-content-os/issue/BUS-108/kds-psychology-series-reference-sheet) — KDS Psychology Series — Reference Sheet |
 | Universal Identifier | `DIUA-DIC-000040` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-040 in Universal Identifier Registration Record v1.31 |
 | Normative Consumers / Authorities | The Psychology Series Layout Bible consumes this evidence. Normative production requirements remain owned by the Psychology Series Production Bible, Psychology Series Layout Bible, KDS Asset Registry, KDS Research Source List, and KDS QA Document within their respective scopes. |
 | Lateral Authorities | KDS Psychology Series Production Bible — current CANONICAL; KDS Asset Registry — current CANONICAL |
 | Binary Evidence Folder | Google Drive folder `1bvaYd1VC3LWRcAW5bABthbocy_0349Vb` — image/binary evidence only |
-| Storage Authority | Inherits **Content OS — Storage Authority Profile — current CANONICAL** ([BUS-109](../../system/DIUA-DIC-000041_Content-OS-Storage-Authority-Profile.md)). Local implementation: this text Reference Sheet exists only in Linear; registered visual evidence resides in Google Drive as binary/image evidence. |
+| Storage Authority | Inherits **Content OS — Storage Authority Profile — current CANONICAL** ([BUS-109](../../system/DIUA-DIC-000041_Content-OS-Storage-Authority-Profile.md)). Local implementation: this text Reference Sheet is GitHub-canonical since the 2026-09-28 repository cutover, with Linear retaining the migrated reference representation; registered visual evidence resides in Google Drive as binary/image evidence only. |
 
 ## 1. Purpose
 
@@ -108,7 +108,7 @@ The reference examples demonstrate:
 
 ## 5. Approved Visual Evidence Set
 
-The Google Drive binary evidence folder contains the approved seven-image anime reference subset for Minority Stress. The textual Reference Sheet itself exists only in Linear.
+The Google Drive binary evidence folder contains the approved seven-image anime reference subset for Minority Stress. The textual Reference Sheet itself is governed text (GitHub-canonical; Linear migrated reference), never a Drive document.
 
 The set demonstrates:
 
@@ -151,7 +151,7 @@ Do not use it to infer:
 
 The approved seven-slide anime set is **OWNER-APPROVED VISUAL REFERENCE EVIDENCE**.
 
-Reference Sheet lifecycle is **CANONICAL v1.1** following sub-project structural migration. Evidence integrity and authority-boundary checks remain passed; this document remains evidence/reference authority only.
+Reference Sheet lifecycle is **CANONICAL v1.2** (editorial storage-wording correction of v1.1, which recorded the sub-project structural migration). Evidence integrity and authority-boundary checks remain passed; this document remains evidence/reference authority only.
 
 ---
 
@@ -317,3 +317,17 @@ Canonical status does **not** grant this Reference Sheet independent authority t
 ### v1.1 current-state maintenance — 2026-09-26
 
 Post-migration read-back corrected the §8 lifecycle self-reference from v1.0 to the document's existing v1.1 state. No version increment, evidence mutation, or authority-boundary change is introduced.
+
+---
+
+## 17. Storage-Wording Correction — v1.2 — 2026-10-16
+
+**Change type:** Editorial / corrective. No evidence change.
+
+**Basis:** KDS Documentation Audit & Remediation — 2026-10-16 (finding KDS-AUD-F05).
+
+The Identity *Storage Authority* row and §5 stated that this text Reference Sheet exists only in Linear. Since the 2026-09-28 repository cutover the governed text is GitHub-canonical under the Storage Authority Profile; Linear holds the migrated reference representation. Wording corrected. The dated storage records (§10, §12) are historical and preserved.
+
+The seven Drive evidence files, their IDs, dimensions and SHA-256 values are unchanged.
+
+**Version:** 1.1 → 1.2.

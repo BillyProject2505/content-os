@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-102"
 universal_identifier: "DIUA-DIC-000036"
-version: "1.10"
+version: "1.11"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -34,8 +34,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — Asset Registry |
 | Document Class | Domain/Project-Level Identity Registry Document |
 | System | Content OS → KDS Satu Hati Sulawesi Utara |
-| Version | 1.10 |
-| Status | **CANONICAL** — v1.10 amended 2026-09-26: synchronized Project Architecture v1.10 after Psychology Series became a recursive Tier-2 sub-project. Asset identity, binary, checksum, variant, and object lifecycle state are unchanged. Previously v1.9. |
+| Version | 1.11 |
+| Status | **CANONICAL** — v1.11 (2026-10-16) is an editorial / current-record correction: the `KDS-OBJ-000002` record no longer says ACTIVE promotion is pending, and §4 storage-authority wording reflects the GitHub cutover. Asset identity, binaries, checksums, Drive locators, variants and object lifecycle states are unchanged. Previously v1.10. |
 | Related Issue | [BUS-102](https://linear.app/bussiness-content-os/issue/BUS-102/kds-satu-hati-sulawesi-utara-asset-registry) — KDS Satu Hati Sulawesi Utara — Asset Registry |
 | Owner | **\[OPERATIONAL DEFAULT\]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
@@ -166,7 +166,7 @@ Each reusable object uses its own object folder:
 
 ### Storage authority split
 
-* **Linear / this Asset Registry** owns reusable asset identity, lifecycle, semantic role, canonical checksum, and authoritative Drive locator metadata.
+* **This Asset Registry** (governed text — GitHub-canonical since the 2026-09-28 repository cutover; Linear retains the migrated reference representation and tracker linkage) owns reusable asset identity, lifecycle, semantic role, canonical checksum, and authoritative Drive locator metadata.
 * **Google Drive** is the sole active persistent binary store for KDS reusable production assets.
 * Chat-runtime files, File Library copies, Linear attachments, screenshots, social-media downloads, and generated reconstructions are not production binary authorities.
 
@@ -525,7 +525,7 @@ No glyph geometry, line structure, or approved Inter outline geometry was redesi
 * PNG file ID retained: `1b7J_U7ugOuQ8Sxw7b3rTwPLbDPDrRZCm`
 * prior bytes preserved; filenames explicitly marked `SUPERSEDED_v1.0`.
 
-**Lifecycle:** v1.1 is **OWNER APPROVED / MASTER VERIFIED / ACTIVE PROMOTION PENDING**. The v1.1 master identity is locked; no silent recolor, geometry change, or in-place replacement is permitted.
+**Lifecycle:** v1.1 is the **OWNER APPROVED / MASTER VERIFIED** active source; `KDS-OBJ-000002` was promoted to **ACTIVE** on 2026-09-25 (§53). The v1.1 master identity is locked; no silent recolor, geometry change, or in-place replacement is permitted.
 
 ### KDS-OBJ-000003 — Protection Shield Icon
 
@@ -1150,7 +1150,7 @@ Production requiring a reusable KDS asset must resolve the exact ACTIVE object a
 
 ## 16. Lifecycle Status
 
-**Current document state:** CANONICAL v1.10 (canonicalized as v1.0 on 2026-09-25; see Change Records below for version history).
+**Current document state:** CANONICAL v1.11 (canonicalized as v1.0 on 2026-09-25; see Change Records below for version history).
 
 Canonicalization prerequisites satisfied at v1.0:
 
@@ -2487,3 +2487,18 @@ No binary, Drive file ID, checksum, canonical filename, object ID, identity geom
 * No object ID, binary, checksum, variant, lifecycle, or provenance record changed.
 
 **Version:** 1.9 → 1.10.
+
+---
+
+## Change Record — v1.11 — 2026-10-16
+
+**Change type:** Editorial / current-record correction. No asset-state change.
+
+**Basis:** KDS Documentation Audit & Remediation — 2026-10-16 (findings KDS-AUD-F12, F05).
+
+* §8 `KDS-OBJ-000002` — the current object record still said "ACTIVE PROMOTION PENDING", contradicting the object header, §15 and the §53 promotion. Corrected to reference the recorded 2026-09-25 ACTIVE promotion.
+* §4 — "Linear / this Asset Registry" replaced with wording that reflects the GitHub-canonical text authority after the 2026-09-28 cutover. Google Drive remains the sole active persistent binary store.
+
+No object ID, binary, checksum, Drive file/folder ID, variant, restriction, palette token or lifecycle state changed. Historical records are preserved.
+
+**Version:** 1.10 → 1.11.

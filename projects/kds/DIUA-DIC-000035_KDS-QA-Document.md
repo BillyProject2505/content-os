@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-101"
 universal_identifier: "DIUA-DIC-000035"
-version: "1.11"
+version: "1.12"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
-    version: "1.14"
+    version: "1.15"
     status: "CANONICAL"
   - id: "DIUA-DIC-000034"
     name: "KDS Satu Hati Sulawesi Utara — Research Source List"
@@ -42,13 +42,13 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — QA Document |
 | Document Class | Domain/Project-Level Quality Assurance Document |
 | System | Content OS → KDS Satu Hati Sulawesi Utara |
-| Version | 1.11 |
-| Status | **CANONICAL** — v1.11 amended 2026-09-26: synchronized Project Architecture v1.10, Production SOP v1.13, and Research Source List v1.7 after Psychology Series became a recursive Tier-2 sub-project; Psychology Series Layout/Reference pointers refreshed to v1.1. QA verdict semantics are unchanged. Previously v1.10. |
+| Version | 1.12 |
+| Status | **CANONICAL** — v1.12 (2026-10-16) is an editorial / dependency-state correction only: Production SOP pin synchronized to v1.15 and the §11 dependency snapshot brought current with unversioned lateral pointers for Psychology Series Layout Bible / Reference Sheet. §13 points to the Publication Approver now designated in Production SOP §11. Q1–Q9, verdict model and Publication Approval separation are unchanged. Previously v1.11. |
 | Related Issue | [BUS-101](https://linear.app/bussiness-content-os/issue/BUS-101/kds-satu-hati-sulawesi-utara-qa-document) — KDS Satu Hati Sulawesi Utara — QA Document |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000035` — ALLOCATED — ACTIVE |
-| Depends On | KDS Satu Hati Sulawesi Utara — Project Architecture (v1.10, CANONICAL); KDS Satu Hati Sulawesi Utara — Production SOP / Workflow (v1.14, CANONICAL); KDS Satu Hati Sulawesi Utara — Research Source List (v1.7, CANONICAL); Content OS — Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
+| Depends On | KDS Satu Hati Sulawesi Utara — Project Architecture (v1.10, CANONICAL); KDS Satu Hati Sulawesi Utara — Production SOP / Workflow (v1.15, CANONICAL); KDS Satu Hati Sulawesi Utara — Research Source List (v1.7, CANONICAL); Content OS — Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
 | Allocation Evidence | CONTENT-OS-ALLOC-035 in Universal Identifier Registration Record v1.27 |
 | Structural Reference | [BUS-27](../sdoh/DIUA-DIC-000010_SDOH-QA-Document.md) — Satu Dosis Obat Hati — QA Document; project-level gate structure only |
 
@@ -366,15 +366,15 @@ Publication Approval does not retroactively repair a QA FAIL.
 
 ## 11. Current Dependency State
 
-As of 2026-09-26 (originally recorded at canonicalization v1.0; see §17–§23 Change Records for version history):
+As of 2026-10-16 (originally recorded at canonicalization v1.0; see §17–§28 Change Records for version history). Upstream authorities match the header `Depends On` pins; lateral authorities are intentionally unversioned `current CANONICAL` pointers.
 
-* **Project Architecture:** v1.9 CANONICAL — available.
-* **Production SOP:** v1.12 CANONICAL — available.
-* **Research Source List:** v1.6 CANONICAL — available.
-* **QA Document:** v1.10 CANONICAL — active (this document).
+* **Project Architecture:** v1.10 CANONICAL — available (upstream pin).
+* **Production SOP:** v1.15 CANONICAL — available (upstream pin).
+* **Research Source List:** v1.7 CANONICAL — available (upstream pin).
+* **QA Document:** v1.12 CANONICAL — active (this document).
 * **Asset Registry:** **current CANONICAL** — reusable-asset identity/provenance authority is available; `KDS-OBJ-000001`–`KDS-OBJ-000010` are ACTIVE within their recorded scopes. This is intentionally an unversioned lateral-authority pointer.
 * **Format-specific authorities:** **KDS Reflection Carousel Format Specification — current CANONICAL**; Q7 applies whenever the reviewed artefact is a KDS Reflection Carousel.
-* **Series-specific authorities:** Psychology Series Production Bible — current CANONICAL; Psychology Series Layout Bible — **v1.1 CANONICAL** and consumed by Q7 when applicable; Psychology Series Reference Sheet — **v1.1 CANONICAL, evidence-only**. These do not create a separate series verdict.
+* **Series-specific authorities:** Psychology Series Production Bible — current CANONICAL; Psychology Series Layout Bible — **current CANONICAL** and consumed by Q7 when applicable; Psychology Series Reference Sheet — **current CANONICAL, evidence-only**. These do not create a separate series verdict.
 * **Content Register:** deferred.
 
 Consequences:
@@ -431,14 +431,15 @@ This QA Document intentionally does not yet define:
 * weighted quality scores;
 * severity points or pass percentages;
 * a separate QA database;
-* content performance metrics;
-* Publication Approver identity.
+* content performance metrics.
 
 These require demonstrated production need or separate authority.
 
+**Publication Approver identity** is no longer open: it is designated in Production SOP §11 (Ketua KDS Satu Hati Sulawesi Utara) and is not owned by this QA Document. QA PASS never constitutes or implies Publication Approval (§3, §10).
+
 ## 14. Lifecycle Status
 
-**Current document state:** CANONICAL v1.11 (originally approved as v1.0 on 2026-09-23; see Change Records in §17–§27 for subsequent amendments).
+**Current document state:** CANONICAL v1.12 (originally approved as v1.0 on 2026-09-23; see Change Records in §17–§28 for subsequent amendments).
 
 Canonicalization followed the governance model inherited from KDS Project Architecture §0.
 
@@ -699,3 +700,21 @@ Project QA remains the sole PASS/FAIL authority. No scoring model, separate seri
 * Psychology Series remains governed by this parent KDS QA authority; no sub-project-specific PASS/FAIL system was created.
 
 **Version:** 1.10 → 1.11.
+
+---
+
+## 28. Change Record — v1.12 — 2026-10-16
+
+**Change type:** Editorial / dependency-state correction. No QA-criterion change.
+
+**Basis:** KDS Documentation Audit & Remediation — 2026-10-16 (findings KDS-AUD-F06, F08).
+
+* Production SOP dependency: v1.14 → **v1.15 CANONICAL** (editorial SOP correction; no stage or gate change).
+* Identity Status line no longer reports Production SOP v1.13 while the pin is v1.14/v1.15.
+* §11 — snapshot was dated 2026-09-26 and still showed Project Architecture v1.9, Production SOP v1.12, Research Source List v1.6, this document v1.10 and Psychology Series Layout Bible v1.1. Upstream values now match the header pins; Layout Bible and Reference Sheet use unversioned `current CANONICAL` pointers so Layout Bible amendments do not force QA revisions.
+* §14 — lifecycle self-reference and change-record range synchronized.
+* §13 — removed *Publication Approver identity* from the open-decision list and pointed to Production SOP §11, which now designates the Ketua KDS (Owner decision 2026-10-16, finding KDS-AUD-F03). Pointer only; QA does not own approver identity.
+
+Q1–Q9, PASS/FAIL semantics, N/A rule, re-QA rule and Publication Approval separation are unchanged.
+
+**Version:** 1.11 → 1.12.

@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-106"
 universal_identifier: "DIUA-DIC-000038"
-version: "1.8"
+version: "1.9"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
-    version: "1.14"
+    version: "1.15"
     status: "CANONICAL"
   - id: "DIUA-DIC-000034"
     name: "KDS Satu Hati Sulawesi Utara — Research Source List"
@@ -43,7 +43,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 ---
 # KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible
 
-> **Migration dependency note (2026-09-28):** the source Linear header pinned KDS Production SOP / Workflow at v1.13 CANONICAL, the version current when this document was last edited (2026-09-27). Production SOP has since advanced to v1.14 CANONICAL (migrated to GitHub as `projects/kds/DIUA-DIC-000033_KDS-Production-SOP-Workflow.md`, PR #40) via a System-inheritance/production-runtime clarification that changed no Stage, gate, or ownership boundary (see that document's Change Record v1.14). The frontmatter `depends_on` above is normalized to the current v1.14 to reflect actual GitHub canonical state; the Document Identity table below and all change records preserve the v1.13 pin exactly as recorded in Linear at migration time, as historical provenance. No substantive policy was altered by this normalization.
+> **Migration dependency note (2026-09-28):** the source Linear header pinned KDS Production SOP / Workflow at v1.13 CANONICAL, the version current when this document was last edited (2026-09-27). Production SOP has since advanced to v1.14 CANONICAL (migrated to GitHub as `projects/kds/DIUA-DIC-000033_KDS-Production-SOP-Workflow.md`, PR #40) via a System-inheritance/production-runtime clarification that changed no Stage, gate, or ownership boundary (see that document's Change Record v1.14). The frontmatter `depends_on` above is normalized to the current v1.14 to reflect actual GitHub canonical state; the Document Identity table below and all change records preserve the v1.13 pin exactly as recorded in Linear at migration time, as historical provenance. No substantive policy was altered by this normalization. **Superseded 2026-10-16 (v1.9):** the Document Identity table is now synchronized to the frontmatter pin (Production SOP v1.15); this note is retained as migration provenance.
 
 ## Document Identity
 
@@ -52,14 +52,14 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible |
 | Legacy Name | Production Bible Seri Psikologi KDS v1.0 — LOCKED |
 | Document Class | Domain/Project-Level Series Production Bible |
-| Version | 1.8 |
-| Status | **CANONICAL** — v1.8 remains the active Production Bible. Current layout implementation resolves to Psychology Series Layout Bible **v1.16 CANONICAL**; Reference Sheet remains v1.1 CANONICAL. The 2026-09-27 boundary correction clarifies that the historical split terminology is hierarchical, not a hard two-block visual split. Evidence-readiness policy is unchanged. |
+| Version | 1.9 |
+| Status | **CANONICAL** — v1.9 (2026-10-16) is an editorial / pointer-stability correction of v1.8. Layout implementation resolves to the Psychology Series Layout Bible **current CANONICAL**; visual evidence resolves to the Reference Sheet **current CANONICAL / evidence-only**. §12 QA mapping now matches KDS QA Q7 as defined by the QA Document. The 2026-09-27 boundary correction (hierarchical, not hard two-block split) and evidence-readiness policy are unchanged. |
 | Related Issue | [BUS-106](https://linear.app/bussiness-content-os/issue/BUS-106/kds-satu-hati-sulawesi-utara-psychology-series-production-bible) — KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000038` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-038 in Universal Identifier Registration Record v1.30 |
-| Depends On | KDS Project Architecture (v1.10, CANONICAL); KDS Production SOP (v1.13, CANONICAL); KDS Research Source List (v1.7, CANONICAL); Content OS Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
+| Depends On | KDS Project Architecture (v1.10, CANONICAL); KDS Production SOP (v1.15, CANONICAL); KDS Research Source List (v1.7, CANONICAL); Content OS Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
 | Lateral / Consuming Authorities | KDS QA Document — current CANONICAL; KDS Asset Registry — current CANONICAL |
 
 ## 0. Recovery and Authority Boundary
@@ -222,7 +222,7 @@ Current rules:
 * background, secondary characters, props, architecture, lighting, and environment must belong to the same anime visual world;
 * the historical cast remains provenance only and no longer blocks Psychology Series production.
 
-Detailed layout/storytelling implementation is governed by the **KDS Psychology Series Layout Bible v1.16 CANONICAL**. Visual implementation evidence is governed by the **KDS Psychology Series Reference Sheet v1.1 CANONICAL** within its evidence-only scope.
+Detailed layout/storytelling implementation is governed by the **KDS Psychology Series Layout Bible — current CANONICAL**. Visual implementation evidence is governed by the **KDS Psychology Series Reference Sheet — current CANONICAL** within its evidence-only scope.
 
 **Boundary interpretation:** the historical "Split Editorial Layout" describes editorial-left / narrative-right hierarchy only. It must not be rendered as two hard visual blocks. The current Layout Bible requires a white-to-transparent gradient joining the editorial field to the narrative scene.
 
@@ -364,7 +364,7 @@ Because this Production Bible is CANONICAL, its production rules are verified th
 * **Q3 — Research / Claim Conformance:** factual psychological claims and evidence limitations;
 * **Q5 — Final-Artefact Integrity:** required series elements present in the final render and no production-rule mismatch;
 * **Q6 — Reusable Asset Conformance:** official logo/wordmark/other reusable KDS assets and any future registered Psychology Series cast asset;
-* **Q7 — Format Authority Conformance:** only when a separate canonical format-specific authority also applies to the selected output format.
+* **Q7 — Format / Series Implementation Authority Conformance:** the current canonical Psychology Series Layout Bible (as defined by the KDS QA Document Q7), plus any separate canonical format-specific authority that also applies to the selected output format.
 
 Series-specific checks such as Character Lock, Fashion Consistency, One Scene, Chronological Narrative, Prompt Architecture hierarchy, and episode-specific reference requirements are recorded as **applicable production-authority evidence** in the QA record; they do not create independent Q-number verdicts.
 
@@ -410,7 +410,7 @@ Historical LOCK remains provenance. The rules explicitly adopted by this v1.0 ca
 
 ## 15. Lifecycle
 
-**Current state:** CANONICAL v1.8 — Psychology Series is a recursive Tier-2 sub-project under KDS. Layout Bible v1.16 and Reference Sheet v1.1 are canonical implementation/evidence authorities. Evidence-readiness remains fail-closed; reusable-cast readiness remains resolved.
+**Current state:** CANONICAL v1.9 — Psychology Series is a recursive Tier-2 sub-project under KDS. The Layout Bible and Reference Sheet (current CANONICAL) are the implementation/evidence authorities. Evidence-readiness remains fail-closed; reusable-cast readiness remains resolved.
 
 Canonicalization prerequisites satisfied at v1.0:
 
@@ -751,3 +751,19 @@ Current-state references were synchronized after Layout Bible and Reference Shee
 No authority boundary or production behavior changed.
 
 **Version:** 1.7 → 1.8.
+
+---
+
+## 27. Pointer-Stability & QA-Mapping Correction — v1.9 — 2026-10-16
+
+**Change type:** Editorial / dependency-model correction. No series rule changed.
+
+**Basis:** KDS Documentation Audit & Remediation — 2026-10-16 (findings KDS-AUD-F06, F09, F10).
+
+* **Lateral pointer stability.** Status, §5.1 and §15 pinned the downstream Layout Bible (v1.16) and Reference Sheet (v1.1) by version, while the Layout Bible pins this Production Bible upstream. Every Layout Bible amendment therefore made this document stale (PB ↔ LB prose cycle). Those references now use `current CANONICAL`, matching the lateral-pointer rule already applied in the Production SOP (§28 there) and QA Document (§22 there).
+* **§12 QA mapping.** Q7 was described as applying only when a separate format authority applies. Since QA Document v1.10, Q7 is *Format / Series Implementation Authority Conformance* and is mandatory for Psychology Series via the Layout Bible. §12 now reflects the QA Document; QA remains the sole PASS/FAIL authority.
+* **Dependency.** Production SOP v1.14 → **v1.15 CANONICAL** (editorial SOP correction); the Document Identity table is synchronized with the frontmatter, and the 2026-09-28 migration note is marked superseded rather than deleted.
+
+Historical change records (§16–§26) are preserved unchanged, including version references that reflected the state at their time.
+
+**Version:** 1.8 → 1.9.

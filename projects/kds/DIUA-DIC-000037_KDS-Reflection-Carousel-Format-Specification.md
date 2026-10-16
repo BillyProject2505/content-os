@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-105"
 universal_identifier: "DIUA-DIC-000037"
-version: "1.6"
+version: "1.7"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
-    version: "1.14"
+    version: "1.15"
     status: "CANONICAL"
   - id: "DIUA-DIC-000003"
     name: "Content OS — Root Documentation Structure"
@@ -45,14 +45,14 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | -- | -- |
 | Document Name | KDS Satu Hati Sulawesi Utara — Reflection Carousel Format Specification |
 | Document Class | Domain/Project-Level Format Specification |
-| Version | 1.6 |
-| Status | **CANONICAL** — v1.6 amended 2026-09-27 under [BUS-115](https://linear.app/bussiness-content-os/issue/BUS-115/kds-reflection-carousel-slide-1-brand-presenter-primary-layout-new): introduces a mandatory Slide 1 Brand Presenter Primary Layout (50:50 composition, full-body KDS-OBJ-000010, hand-to-copy direction, deterministic bounds), aligned to the CWC cross-format rule normalized under [BUS-114](https://linear.app/bussiness-content-os/issue/BUS-114/cwc-cross-format-brand-presenter-layout-universal-5050-full-body). Canvas 1080×1350 (4:5) is established as Owner-supplied production evidence for this amendment only. All other OPEN items in §9 (typography, grid/margins beyond §3.1, palette distribution, export settings) remain unresolved. Previously v1.5. |
+| Version | 1.7 |
+| Status | **CANONICAL** — v1.6 amended 2026-09-27 under [BUS-115](https://linear.app/bussiness-content-os/issue/BUS-115/kds-reflection-carousel-slide-1-brand-presenter-primary-layout-new): introduces a mandatory Slide 1 Brand Presenter Primary Layout (50:50 composition, full-body KDS-OBJ-000010, hand-to-copy direction, deterministic bounds), aligned to the CWC cross-format rule normalized under [BUS-114](https://linear.app/bussiness-content-os/issue/BUS-114/cwc-cross-format-brand-presenter-layout-universal-5050-full-body). Canvas 1080×1350 (4:5) is established as Owner-supplied production evidence for this amendment only. All other OPEN items in §9 (typography, grid/margins beyond §3.1, palette distribution, export settings) remain unresolved. v1.7 (2026-10-16) is editorial only: Production SOP pin synchronized to v1.15 and the Slide 1 rule heading numbered §3.1 so existing §3.1 cross-references resolve. Previously v1.6. |
 | Related Issue | [BUS-105](https://linear.app/bussiness-content-os/issue/BUS-105/kds-satu-hati-sulawesi-utara-reflection-carousel-format-specification) — KDS Satu Hati Sulawesi Utara — Reflection Carousel Format Specification |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000037` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-037 in Universal Identifier Registration Record v1.29 |
-| Depends On | KDS Satu Hati Sulawesi Utara — Project Architecture (v1.10, CANONICAL); KDS Satu Hati Sulawesi Utara — Production SOP / Workflow (v1.14, CANONICAL); Content OS — Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
+| Depends On | KDS Satu Hati Sulawesi Utara — Project Architecture (v1.10, CANONICAL); KDS Satu Hati Sulawesi Utara — Production SOP / Workflow (v1.15, CANONICAL); Content OS — Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
 | Lateral / Consuming Authorities | KDS Asset Registry — current CANONICAL; KDS QA Document — current CANONICAL |
 
 ## 0. Governance and Authority
@@ -114,7 +114,7 @@ Primary semantic role:
 * open the emotional or reflective frame for the carousel;
 * avoid carrying the full explanatory burden of the topic.
 
-### Slide 1 — Mandatory Brand Presenter Primary Layout — v1.6
+### 3.1 Slide 1 — Mandatory Brand Presenter Primary Layout — v1.6
 
 By explicit Owner decision under [BUS-115](https://linear.app/bussiness-content-os/issue/BUS-115/kds-reflection-carousel-slide-1-brand-presenter-primary-layout-new), aligned to the CWC cross-format rule normalized under [BUS-114](https://linear.app/bussiness-content-os/issue/BUS-114/cwc-cross-format-brand-presenter-layout-universal-5050-full-body), Slide 1 additionally implements a mandatory Brand Presenter Primary Layout:
 
@@ -263,7 +263,7 @@ These may be added only from repeated production evidence or an explicit Owner d
 
 ## 10. Lifecycle
 
-**Current state:** CANONICAL v1.6 — canonicalized as v1.0 on 2026-09-26; v1.6 introduces the Slide 1 Brand Presenter Primary Layout rule (§3.1/§7.1/§8) under [BUS-115](https://linear.app/bussiness-content-os/issue/BUS-115/kds-reflection-carousel-slide-1-brand-presenter-primary-layout-new), aligned to the CWC universal rule under [BUS-114](https://linear.app/bussiness-content-os/issue/BUS-114/cwc-cross-format-brand-presenter-layout-universal-5050-full-body). All other Reflection Carousel semantics (slide structure, sequence, continuity, caption rule) are unchanged.
+**Current state:** CANONICAL v1.7 (2026-10-16 editorial/dependency correction of v1.6) — canonicalized as v1.0 on 2026-09-26; v1.6 introduces the Slide 1 Brand Presenter Primary Layout rule (§3.1/§7.1/§8) under [BUS-115](https://linear.app/bussiness-content-os/issue/BUS-115/kds-reflection-carousel-slide-1-brand-presenter-primary-layout-new), aligned to the CWC universal rule under [BUS-114](https://linear.app/bussiness-content-os/issue/BUS-114/cwc-cross-format-brand-presenter-layout-universal-5050-full-body). All other Reflection Carousel semantics (slide structure, sequence, continuity, caption rule) are unchanged.
 
 Canonicalization prerequisites were satisfied at v1.0:
 
@@ -489,3 +489,19 @@ Project Architecture advanced to v1.8 and Production SOP to v1.11 during Psychol
 **Version transition:** v1.5 → **v1.6 CANONICAL**.
 
 **Result:** KDS Reflection Carousel v1.6 = **CANONICAL — Slide 1 Brand Presenter Primary Layout RESOLVED; all other §9 items remain OPEN.**
+
+---
+
+## Change Record — v1.7 — 2026-10-16
+
+**Change type:** Editorial / dependency synchronization. No format-rule change.
+
+**Basis:** KDS Documentation Audit & Remediation — 2026-10-16 (findings KDS-AUD-F06, F11).
+
+* Production SOP dependency: v1.14 → **v1.15 CANONICAL** (editorial SOP correction).
+* The Slide 1 Brand Presenter rule was cited as **§3.1** in the Status line, §2.1, §7.1, §9 and the v1.6 change record, but its heading carried no section number. The heading is now numbered **3.1**; its text is unchanged.
+* Provenance note: the Production SOP pin had already moved from v1.13 to v1.14 without a dedicated change record in this document; that pre-existing synchronization is recorded here rather than rewritten into the v1.6 record.
+
+Slide count, sequence, semantic roles, caption rule, Slide 1 geometry, QA contribution and all §9 OPEN items are unchanged.
+
+**Version:** 1.6 → 1.7.

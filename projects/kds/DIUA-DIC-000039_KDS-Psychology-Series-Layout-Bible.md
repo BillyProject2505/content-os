@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-107"
 universal_identifier: "DIUA-DIC-000039"
-version: "1.16"
+version: "1.17"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,11 +15,11 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000038"
     name: "KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible"
-    version: "1.8"
+    version: "1.9"
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
-    version: "1.14"
+    version: "1.15"
     status: "CANONICAL"
   - id: "DIUA-DIC-000003"
     name: "Content OS — Root Documentation Structure"
@@ -61,14 +61,14 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project-Level Series Layout Bible |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
-| Version | 1.16 |
-| Status | **CANONICAL** — v1.16 corrects the Series Badge width after production QA demonstrated that the v1.15 220 px frame could not contain the canonical `SERI PSIKOLOGI N` pattern at the locked Inter 700 / 22 px / +0.06em typography and 14 px horizontal padding. Badge width is now 252 px; all other geometry remains unchanged. Previously v1.15. |
+| Version | 1.17 |
+| Status | **CANONICAL** — v1.17 (2026-10-16) is an editorial correction of v1.16: the §12 QA-conformance checklist still listed the superseded Series Badge width `w=220`; it now matches the canonical §4.1 frame `w=252` locked in v1.16. The Storage Authority row is brought current. No geometry, typography or rendering rule changed. Previously v1.16. |
 | Related Issue | [BUS-107](https://linear.app/bussiness-content-os/issue/BUS-107/kds-psychology-series-layout-bible) — KDS Psychology Series — Layout Bible |
 | Universal Identifier | `DIUA-DIC-000039` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-039 in Universal Identifier Registration Record v1.31 |
 | Depends On | KDS Project Architecture — current CANONICAL; KDS Psychology Series Production Bible — current CANONICAL; KDS Production SOP — current CANONICAL; Root Documentation Structure — current CANONICAL |
 | Lateral / Consuming Authorities | KDS QA Document — current CANONICAL; KDS Asset Registry — current CANONICAL; KDS Psychology Series Reference Sheet — current governed reference |
-| Storage Authority | Inherits **Content OS — Storage Authority Profile — current CANONICAL** ([BUS-109](../../system/DIUA-DIC-000041_Content-OS-Storage-Authority-Profile.md)). Local implementation: this Layout Bible exists only in Linear; referenced visual evidence may reside in Google Drive as binary/image evidence. |
+| Storage Authority | Inherits **Content OS — Storage Authority Profile — current CANONICAL** ([BUS-109](../../system/DIUA-DIC-000041_Content-OS-Storage-Authority-Profile.md)). Local implementation: this governed text is GitHub-canonical since the 2026-09-28 repository cutover; Linear retains the migrated reference representation and tracker linkage; referenced visual evidence resides in Google Drive as binary/image evidence only. |
 
 ## 0. Authority Boundary
 
@@ -670,7 +670,7 @@ Applicable QA evidence should verify:
 * exact gold divider `x=182, y=53, w=2, h=132`;
 * exact wordmark frame `x=204, y=65, w=188, h=109`;
 * series badge/topic hierarchy;
-* Series Badge frame `x=48, y=252, w=220, h=34`, radius `17 px`;
+* Series Badge frame `x=48, y=252, w=252, h=34`, radius `17 px`;
 * Series Badge Burgundy `#96251E` fill, white text, padding `14 px / 4 px`, centered;
 * Horizontal Editorial Bounds: `x=48–390`, usable width `342 px`, with gradient start exactly at `x=390` and no additional text gutter;
 * Vertical Editorial Grid anchors: Badge `y=252`, Topic `y=304`, Headline `y=390`, Body `y=638`, Callout zone `y=878`;
@@ -721,7 +721,7 @@ All previously open numerical categories are now resolved through explicit Owner
 
 ## 14. Lifecycle
 
-**Current state:** CANONICAL v1.16 — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
+**Current state:** CANONICAL v1.17 — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
 
 Before canonicalization:
 
@@ -1213,3 +1213,19 @@ Corrected canonical Series Badge frame:
 All other layout geometry remains unchanged. The correction is based on production QA rather than aesthetic preference.
 
 **Version:** 1.15 → 1.16 CANONICAL.
+
+---
+
+## 37. QA-Checklist Consistency Correction — v1.17 — 2026-10-16
+
+**Change type:** Editorial / corrective. No layout rule changed.
+
+**Basis:** KDS Documentation Audit & Remediation — 2026-10-16 (findings KDS-AUD-F04, F05, F06).
+
+* §12 still listed `Series Badge frame x=48, y=252, w=220, h=34` after v1.16 corrected the canonical frame in §4.1 to `w=252`. A QA executor following §12 would have failed a conformant badge. §12 now reads `w=252`, matching §4.1 and the v1.16 change record.
+* The Document Identity *Storage Authority* row said this Layout Bible "exists only in Linear"; since the 2026-09-28 cutover the governed text is GitHub-canonical under the Storage Authority Profile. Wording corrected; the dated v0.2 storage record (§15) is historical and preserved.
+* Dependencies: Production Bible v1.8 → **v1.9**, Production SOP v1.14 → **v1.15** (both editorial corrections).
+
+Historical change records that cite `w=220` (§29, §33) are preserved as provenance.
+
+**Version:** 1.16 → 1.17.
