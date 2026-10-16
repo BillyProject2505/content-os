@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-99"
 universal_identifier: "DIUA-DIC-000033"
-version: "1.14"
+version: "1.15"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -44,8 +44,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — Production SOP / Workflow |
 | Document Class | Domain/Project-Level Operational Workflow Document |
 | System | Content OS → KDS Satu Hati Sulawesi Utara |
-| Version | 1.14 |
-| Status | **CANONICAL** — v1.14 makes explicit that this document is the KDS cross-format Production Workflow authority and inherits System-wide connector lifecycle/storage behavior from [BUS-118](../../system/DIUA-DIC-000042_Content-OS-Production-Connector-Lifecycle-Profile.md) and [BUS-109](../../system/DIUA-DIC-000041_Content-OS-Storage-Authority-Profile.md). No production stage count or downstream ownership boundary changed. Previously v1.13. |
+| Version | 1.15 |
+| Status | **CANONICAL** — v1.15 (2026-10-16) is an editorial / current-state correction only: §7 Stage 4 now matches Project Architecture §6 (Reflection Carousel is the active governed format), §16 replaces a stale dated dependency snapshot with current upstream pins and unversioned lateral pointers, and §18 cites the correct change-record range. No stage, gate, approval rule, ownership boundary or Publication Readiness criterion changed. Previously v1.14. |
 | Related Issue | [BUS-99](https://linear.app/bussiness-content-os/issue/BUS-99/kds-satu-hati-sulawesi-utara-production-sop) — KDS Satu Hati Sulawesi Utara — Production SOP |
 | Owner | **\[OPERATIONAL DEFAULT\]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
@@ -203,7 +203,7 @@ The content concept is coherent enough to draft in the selected or proposed form
 
 Choose the format based on the communication need.
 
-Project Architecture currently does **not** declare a canonical active-format set.
+Project Architecture §6 records **KDS Reflection Carousel** as the only active governed KDS format. It does **not** declare a closed canonical active-format set.
 
 Therefore:
 
@@ -401,14 +401,14 @@ The correct output in these cases is **BLOCKED**, with the blocking reason state
 
 ## 16. Current Dependency State
 
-As of 2026-09-26 (originally recorded at canonicalization v1.0; see §21–§29 Change Records for version history):
+As of 2026-10-16 (originally recorded at canonicalization v1.0; see §21–§35 Change Records for version history). Upstream authorities are version-pinned in the header `Depends On`; lateral and downstream authorities below are intentionally unversioned `current CANONICAL` pointers (§28 lateral-pointer stability rule).
 
-* **Project Architecture:** v1.9 CANONICAL — available.
-* **Research Source List:** v1.6 CANONICAL — available.
+* **Project Architecture:** v1.10 CANONICAL — available (upstream pin).
+* **Research Source List:** v1.7 CANONICAL — available (upstream pin).
 * **QA Document:** **current CANONICAL** — active project-level publication gate; treated as a downstream/lateral authority rather than a formal version-pinned upstream dependency.
 * **Asset Registry:** **current CANONICAL** — reusable-asset identity/provenance authority is available; `KDS-OBJ-000001`–`KDS-OBJ-000010` are ACTIVE and production-authorized within their recorded scopes. This is a lateral authority pointer and is intentionally unversioned.
 * **Format-specific specifications:** **KDS Reflection Carousel Format Specification — current CANONICAL**; applies whenever Reflection Carousel is selected.
-* **Series-specific production authorities:** Psychology Series Production Bible — current CANONICAL; Psychology Series Layout Bible — **v1.1 CANONICAL**; Psychology Series Reference Sheet — **v1.1 CANONICAL, evidence-only**. All apply within their respective scopes whenever the content instance belongs to the KDS Psychology Series. Evidence-readiness remains fail-closed when triggered.
+* **Series-specific production authorities:** Psychology Series Production Bible — current CANONICAL; Psychology Series Layout Bible — **current CANONICAL**; Psychology Series Reference Sheet — **current CANONICAL, evidence-only**. All apply within their respective scopes whenever the content instance belongs to the KDS Psychology Series. Evidence-readiness remains fail-closed when triggered.
 * **Content Register:** deferred.
 * **Publication automation/executor:** deferred.
 
@@ -433,7 +433,7 @@ These require separate evidence or authority.
 
 ## 18. Lifecycle Status
 
-**Current document state:** CANONICAL v1.14 (originally approved as v1.0 on 2026-09-23; see Change Records in §21–§33 for subsequent amendments).
+**Current document state:** CANONICAL v1.15 (originally approved as v1.0 on 2026-09-23; see Change Records in §21–§35 for subsequent amendments).
 
 Canonicalization followed the governance model inherited from KDS Project Architecture §0.
 
@@ -765,3 +765,21 @@ After required inputs are resolved, image generation/editing, pose/expression ch
 No Stage 1–10 sequence, Research ownership, QA ownership, Asset Registry ownership, Publication Approval rule, or Publication Readiness rule changed.
 
 **Version:** 1.13 → 1.14 CANONICAL.
+
+---
+
+## 35. Change Record — v1.15 — 2026-10-16
+
+**Change type:** Editorial / current-state correction. No workflow-behavior change.
+
+**Basis:** KDS Documentation Audit & Remediation — 2026-10-16 (findings KDS-AUD-F06, F07). Directed by the Owner audit instruction permitting correction of stale pointers, inconsistent terminology and demonstrable documentation errors.
+
+**Changes:**
+
+* §7 Stage 4 — removed the stale statement that Project Architecture declares no active-format set; Project Architecture §6 has recorded Reflection Carousel as the active governed format since PA v1.7.
+* §16 — the dated snapshot still showed Project Architecture v1.9, Research Source List v1.6 and Psychology Series Layout Bible v1.1 while the current canonical versions are v1.10, v1.7 and v1.16. Upstream values now match the header pins; Layout Bible and Reference Sheet use unversioned `current CANONICAL` lateral pointers, consistent with the §28 decision, so later Layout Bible amendments no longer make this SOP stale.
+* §18 — change-record range corrected from §21–§33 to §21–§35.
+
+**Unchanged:** Stages 1–10, research routing, QA gate, Publication Approver rule, Publication Readiness conditions, fail-closed rules, connector-lifecycle inheritance.
+
+**Version:** 1.14 → 1.15.
