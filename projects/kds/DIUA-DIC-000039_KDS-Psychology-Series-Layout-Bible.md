@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-107"
 universal_identifier: "DIUA-DIC-000039"
-version: "1.18"
+version: "1.19"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -61,8 +61,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project-Level Series Layout Bible |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
-| Version | 1.18 |
-| Status | **CANONICAL** — v1.18 (2026-10-16, PROPOSED in draft PR pending explicit Owner review) clarifies aspect-preserving binary placement for Gold Wave and Dot Matrix in fixed §6.5.1 frames. No frame coordinates, master identities, palettes or object lifecycle states change. Previous v1.17 corrected the Series Badge QA checklist and storage wording. |
+| Version | 1.19 |
+| Status | **CANONICAL — v1.19 (Owner-approved design revision; effective upon PR merge).** Slide 1 Gold Wave frame and visual baseline are revised under F15, using the unchanged registered source and aspect-preserving `contain` rule from v1.18. Slides 2–N retain their prior frames. Approval is for geometry only, not for any rendered content or publication. |
 | Related Issue | [BUS-107](https://linear.app/bussiness-content-os/issue/BUS-107/kds-psychology-series-layout-bible) — KDS Psychology Series — Layout Bible |
 | Universal Identifier | `DIUA-DIC-000039` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-039 in Universal Identifier Registration Record v1.31 |
@@ -265,8 +265,8 @@ The canonical production canvas uses the following fixed protection zones:
 | -- | -- | -- |
 | **Editorial essential-content zone** | `x=48–390, y=252–1034` | Essential editorial content only |
 | **Narrative focal-content zone** | `x=560–1010, y=160–1150` | Face and critical narrative focal points |
-| **Lower decorative band** | `y=1118–1200` | Governed lower ornament territory |
-| **Bottom non-critical zone** | `y=1200–1350` | Non-essential content only, except governed page indicator |
+| **Lower decorative band** | `y=1118–1200` | Default governed ornament territory for Slides 2–N; Slide 1 has a Gold Wave-only exception in §6.5.1 |
+| **Bottom non-critical zone** | `y=1200–1350` | No essential content except the governed page indicator; the approved Slide 1 non-essential Gold Wave overlay is permitted at its fixed frame |
 | **Slide 1 page-indicator reserve** | `x=960–1053, y=1270–1322` | Exclusive reserve for Slide 1 indicator |
 | **Slides 2–N page-indicator reserve** | `x=41–123, y=1274–1319` | Exclusive reserve for Slides 2–N indicator |
 
@@ -277,7 +277,7 @@ Canonical rules:
 * `y=1200–1350` must not contain essential information other than the governed page indicator;
 * the header brand system is governed by its own exact geometry in §3 and is explicitly exempt from the editorial essential-content zone;
 * background artwork, bleed, lighting, texture, and non-critical decorative elements may extend outside these zones where permitted by their own contracts;
-* the lower decorative band does not authorize ornament movement beyond the exact frames already locked in §6.5.1;
+* the lower decorative band is the normal ornament territory for Slides 2–N; on Slide 1 only, the approved Gold Wave frame in §6.5.1 may extend through the lower part of the canvas into the bottom non-critical zone, remaining decorative and subordinate to the page indicator;
 * the page-indicator reserves are exclusive to their respective slide roles and may not be occupied by competing copy, ornaments, or critical focal content;
 * governed elements must not be moved, resized, or reflowed merely to work around zone collisions; resolve the conflicting content or scene composition instead.
 
@@ -562,39 +562,41 @@ The lower decorative system uses only registered ACTIVE KDS ornament assets and 
 
 ### 6.5.1 Definitive Lower Ornament Geometry — 1080 × 1350
 
-The canonical lower ornament system uses the following registered assets and frames:
+The canonical lower ornament system uses the following registered assets and **slide-role-specific frames**. A frame refers to the containment box; the source is fitted using the unchanged §6.5.2 `contain` method.
 
-| Ornament | Asset ID | X | Y | Width | Height | Role |
-| -- | -- | -- | -- | -- | -- | -- |
-| **Gold Wave Ornament** | `KDS-OBJ-000004` | **48 px** | **1120 px** | **250 px** | **80 px** | **Default lower ornament** |
-| **Dot Matrix Ornament** | `KDS-OBJ-000005` | **316 px** | **1118 px** | **74 px** | **74 px** | **Optional secondary accent** |
+| Slide role | Ornament | Asset ID | X | Y | Width | Height | Role |
+| -- | -- | -- | -- | -- | -- | -- | -- |
+| **Slide 1 only** | **Gold Wave Ornament** | `KDS-OBJ-000004` | **48 px** | **1165 px** | **460 px** | **157 px** | **Owner-approved enlarged lower ornament** |
+| **Slides 2–N** | **Gold Wave Ornament** | `KDS-OBJ-000004` | **48 px** | **1120 px** | **250 px** | **80 px** | **Default lower ornament** |
+| **Slides 2–N** | **Dot Matrix Ornament** | `KDS-OBJ-000005` | **316 px** | **1118 px** | **74 px** | **74 px** | **Optional secondary accent** |
 
 Canonical rules:
 
-* `KDS-OBJ-000004` Gold Wave is the **default lower ornament** for Psychology Series;
-* `KDS-OBJ-000005` Dot Matrix may be added only as the secondary accent at its fixed frame;
+* `KDS-OBJ-000004` Gold Wave is the **default lower ornament** for Psychology Series, using the Slide 1 frame only on the opening slide and the Slides 2–N frame on all subsequent slides;
+* `KDS-OBJ-000005` Dot Matrix may be used as an optional secondary accent **on Slides 2–N only** at its existing fixed frame; it is **not rendered on Slide 1** because it would collide with the enlarged Gold Wave;
 * both ornaments are decorative only and must never carry essential information;
-* neither ornament may overlap the Callout Box or enter the gradient transition band;
+* neither ornament may overlap the Callout Box or obscure essential text; **Slide 1 Gold Wave only** may extend across the gradient transition region at its fixed lower frame (`x=48–508, y=1165–1322`) as non-essential decoration composited after the unchanged full-height white-to-transparent gradient; the original gradient stops, essential copy, and critical presenter focal zone must not be modified; on Slides 2–N the prior no-transition-intrusion requirement remains;
 * both remain below the main editorial content area;
-* both must preserve safe separation from the Slides 2–N page indicator;
+* all ornaments must preserve separation from their slide-role page-indicator reserve; on Slide 1 the enlarged Gold Wave and the unchanged page indicator (`x=960, y=1270, w=93, h=52`) align on the same **lower frame edge `y=1322`** with no horizontal overlap; this does not require a connecting stroke or common vertical centerline;
 * do not freely move, crop, stretch, recolor, or rescale either registered production asset; only the controlled, aspect-preserving placement transform defined in §6.5.2 is permitted;
 * the Dot Matrix may be omitted when the slide would otherwise become visually crowded;
 * the Gold Wave remains the default, but may be omitted only when a documented narrative/layout reason makes its presence harmful to readability or visual hierarchy;
 * `KDS-OBJ-000006` through `KDS-OBJ-000009` are **not** default lower-system substitutes. Their use requires a separate explicit layout decision rather than spontaneous replacement.
 
-### 6.5.2 Placement Fit for Registered Binary Masters — F16 (Owner Review Candidate)
+### 6.5.2 Placement Fit for Registered Binary Masters — F16 (CANONICAL)
 
-This paragraph resolves the mismatch between the registered master pixel dimensions and the fixed target frames in §6.5.1 **only if approved by the Owner and merged**. It does not change the immutable registered source or the target layout frames.
+This canonical fit contract was approved and merged in GitHub PR #139 (2026-10-16) and remains authoritative. It resolves differences between registered master dimensions and the assigned §6.5.1 frames; the current Slide 1-specific frame was approved separately in the v1.19 design decision. Neither the masters nor their hashes are changed.
 
 * **Fit mode: `contain`.** Scale each full transparent PNG uniformly to fit **inside** its fixed placement frame, preserving native aspect ratio; never crop, cover, stretch, rotate, recolor, or re-render the pixels.
 * **Alignment:** center horizontally and vertically within the fixed frame. Transparent remaining area belongs to that fixed frame; no opaque background, distortion or replacement padding may be introduced.
-* **Gold Wave:** registered PNG `2067×761` (ratio ≈2.716) into frame `x=48, y=1120, w=250, h=80` (ratio 3.125) → expected placed bounding box approximately `217.29×80 px`, centered at approximately `x=64.35, y=1120`.
-* **Dot Matrix:** registered PNG `512×320` (ratio 1.6) into frame `x=316, y=1118, w=74, h=74` → expected placed bounding box `74×46.25 px`, centered at `x=316, y=1131.88`.
+* **Gold Wave, Slide 1:** registered PNG `2067×761` into frame `x=48, y=1165, w=460, h=157` → calculated placed bounding box approximately `426.44×157 px`, centered at `x≈64.78, y=1165`; the containment frame bottom is exactly `y=1322`.
+* **Gold Wave, Slides 2–N:** same registered PNG into frame `x=48, y=1120, w=250, h=80` → approximately `217.29×80 px`, centered at `x≈64.35, y=1120`.
+* **Dot Matrix, Slides 2–N only:** registered PNG `512×320` (ratio 1.6) into frame `x=316, y=1118, w=74, h=74` → expected placed bounding box `74×46.25 px`, centered at `x=316, y≈1131.88`. Omit on Slide 1.
 * Values are **derived rendering outputs**, not independently adjustable geometry. Compute them from the stored source dimension and the unchanged target frame; do not hard-code rounded numbers as new identity masters.
 * Q6 still governs source identity/provenance; Q7 can inspect the placement-frame and no-distortion requirements under the existing QA model. This does not create a new Q6 criterion or a separate QA verdict.
 * If a visually correct placement cannot be achieved without violating legibility or safe zones, omit the optional Dot Matrix, or document the existing Gold Wave readability exception; do not improvise a new fill/crop mode.
 
-**Status in draft branch:** proposed normative clarification; not effective on `main` before Owner approval and merge.
+**Authority:** the F16 `contain` contract is canonical after merged PR #139. The enlarged Slide 1 placement is an Owner-approved v1.19 design revision, becoming canonical only when its PR is merged.
 
 ## 7. Anime Rendering Standard
 
@@ -711,15 +713,15 @@ Applicable QA evidence should verify:
 * Headline: Inter `700 / 52 / 56 / −0.02em`, left, max 4 lines;
 * Body: Inter `400 / 25 / 36 / 0`, left, max 6 lines per block;
 * Callout: Inter `600 / 24 / 32 / 0`, left, max 4 lines;
-* lower ornament frames: Gold Wave `x=48, y=1120, w=250, h=80`; Dot Matrix `x=316, y=1118, w=74, h=74`;
-* Gold Wave default / Dot Matrix optional-secondary behavior;
+* lower ornament frames: **Slide 1** Gold Wave `x=48, y=1165, w=460, h=157` with lower-edge baseline `y=1322`; **Slides 2–N** Gold Wave `x=48, y=1120, w=250, h=80` and optional Dot Matrix `x=316, y=1118, w=74, h=74`;
+* Gold Wave default on all slides with role-specific frames; Dot Matrix optional only on Slides 2–N; the Slide 1 Gold Wave may overlay the lower gradient region after the prescribed full-height fade, without obscuring essential information;
 * no typography shrink/substitution to solve overflow;
 * Burgundy `#96251E` indicator fill with centered white Inter text;
 * Slide 1 indicator radius `12 px`, text `30 px / 700`;
 * Slides 2–N indicator radius `10 px`, text `26 px / 700`;
 * editorial essential-content zone `x=48–390, y=252–1034`;
 * narrative focal-content zone `x=560–1010, y=160–1150`;
-* lower decorative band `y=1118–1200`;
+* lower decorative band `y=1118–1200` for Slides 2–N; Slide 1 Gold Wave-only extension to `y=1322` as permitted by §2.7;
 * bottom non-critical zone `y=1200–1350`;
 * Slide 1 indicator reserve `x=960–1053, y=1270–1322`;
 * Slides 2–N indicator reserve `x=41–123, y=1274–1319`;
@@ -735,7 +737,7 @@ All previously open numerical categories are now resolved through explicit Owner
 
 ## 14. Lifecycle
 
-**Current state:** CANONICAL v1.18 (proposed, pending Owner review and merge) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
+**Current state:** CANONICAL v1.19 (Owner-approved Slide 1 layout geometry; effective when the corresponding GitHub PR merges) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
 
 Before canonicalization:
 
@@ -1258,3 +1260,20 @@ Historical change records that cite `w=220` (§29, §33) are preserved as proven
 **Owner approval:** PENDING — do not merge this PR as canonical until reviewed.
 
 **Version if approved:** 1.17 → 1.18.
+
+
+---
+
+## 39. Slide 1 Gold Wave Lower-Baseline Owner Approval — v1.19 — 2026-10-16
+
+**Decision source:** Owner explicitly responded "setuju" to the measured `BUS-167` v0.2D clean-geometry proof on 2026-10-16, after seeing the before/after framing. Approval is **limited to lower Gold Wave size, position, and alignment with the Slide 1 page indicator**, not the overall scene, presenter pose, content, final QA or publication.
+
+**Approved Slide 1 frame:** `KDS-OBJ-000004`, `x=48, y=1165, w=460, h=157` on `1080×1350`. Unchanged Slide 1 page number: `x=960, y=1270, w=93, h=52`. Both frames **end at `y=1322`**. The Gold Wave uses the canonical aspect-preserving `contain` algorithm, from the unchanged ACTIVE master `2067×761` (no crop/recolor/redraw/hash change); its native-aspect placed raster is approximately `426.44×157`, centered horizontally in the prescribed frame. No connecting line between wave and page indicator is required.
+
+**Necessary, limited exceptions:** the Gold Wave (non-essential decoration) may extend below the legacy `y=1118–1200` ornament band and overlay the **lower** portion of the gradient transition. The full-height gradient remains required with unchanged stops, and the Gold Wave is layered above it. Essential editorial copy ends above `y=1034`; critical narrative focal content remains bounded above `y=1150`. The bottom non-critical zone may contain this approved decorative ornament but no essential information other than the page indicator. On Slide 1, omit `KDS-OBJ-000005` Dot Matrix to avoid frame overlap. All **Slides 2–N retain previous Gold Wave and optional Dot Matrix frames and behavior**.
+
+**QA and authority:** §2.7, §6.5.1, §6.5.2, and §12 were reconciled together. Registered object `KDS-OBJ-000004` remains under Asset Registry identity authority/Q6; the approved placement is Layout Bible implementation authority/Q7. No new QA criterion, source file, presenter variant, or publication permission is created.
+
+**Production gate:** the v0.2D proof establishes geometry only. Environment naturalness, actual Slide 1 rendering, presenter/storyboard compatibility, final Q1–Q9, and explicit Owner Visual Approval remain pending under BUS-167. This document revision must not be mistaken for approval of any media artefact.
+
+**Version:** 1.18 → 1.19 when merged to GitHub `main`.
