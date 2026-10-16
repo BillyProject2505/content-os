@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-107"
 universal_identifier: "DIUA-DIC-000039"
-version: "1.17"
+version: "1.18"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -61,8 +61,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project-Level Series Layout Bible |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
-| Version | 1.17 |
-| Status | **CANONICAL** — v1.17 (2026-10-16) is an editorial correction of v1.16: the §12 QA-conformance checklist still listed the superseded Series Badge width `w=220`; it now matches the canonical §4.1 frame `w=252` locked in v1.16. The Storage Authority row is brought current. No geometry, typography or rendering rule changed. Previously v1.16. |
+| Version | 1.18 |
+| Status | **CANONICAL** — v1.18 (2026-10-16, PROPOSED in draft PR pending explicit Owner review) clarifies aspect-preserving binary placement for Gold Wave and Dot Matrix in fixed §6.5.1 frames. No frame coordinates, master identities, palettes or object lifecycle states change. Previous v1.17 corrected the Series Badge QA checklist and storage wording. |
 | Related Issue | [BUS-107](https://linear.app/bussiness-content-os/issue/BUS-107/kds-psychology-series-layout-bible) — KDS Psychology Series — Layout Bible |
 | Universal Identifier | `DIUA-DIC-000039` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-039 in Universal Identifier Registration Record v1.31 |
@@ -577,10 +577,24 @@ Canonical rules:
 * neither ornament may overlap the Callout Box or enter the gradient transition band;
 * both remain below the main editorial content area;
 * both must preserve safe separation from the Slides 2–N page indicator;
-* do not freely move, crop, stretch, recolor, or rescale either registered production asset;
+* do not freely move, crop, stretch, recolor, or rescale either registered production asset; only the controlled, aspect-preserving placement transform defined in §6.5.2 is permitted;
 * the Dot Matrix may be omitted when the slide would otherwise become visually crowded;
 * the Gold Wave remains the default, but may be omitted only when a documented narrative/layout reason makes its presence harmful to readability or visual hierarchy;
 * `KDS-OBJ-000006` through `KDS-OBJ-000009` are **not** default lower-system substitutes. Their use requires a separate explicit layout decision rather than spontaneous replacement.
+
+### 6.5.2 Placement Fit for Registered Binary Masters — F16 (Owner Review Candidate)
+
+This paragraph resolves the mismatch between the registered master pixel dimensions and the fixed target frames in §6.5.1 **only if approved by the Owner and merged**. It does not change the immutable registered source or the target layout frames.
+
+* **Fit mode: `contain`.** Scale each full transparent PNG uniformly to fit **inside** its fixed placement frame, preserving native aspect ratio; never crop, cover, stretch, rotate, recolor, or re-render the pixels.
+* **Alignment:** center horizontally and vertically within the fixed frame. Transparent remaining area belongs to that fixed frame; no opaque background, distortion or replacement padding may be introduced.
+* **Gold Wave:** registered PNG `2067×761` (ratio ≈2.716) into frame `x=48, y=1120, w=250, h=80` (ratio 3.125) → expected placed bounding box approximately `217.29×80 px`, centered at approximately `x=64.35, y=1120`.
+* **Dot Matrix:** registered PNG `512×320` (ratio 1.6) into frame `x=316, y=1118, w=74, h=74` → expected placed bounding box `74×46.25 px`, centered at `x=316, y=1131.88`.
+* Values are **derived rendering outputs**, not independently adjustable geometry. Compute them from the stored source dimension and the unchanged target frame; do not hard-code rounded numbers as new identity masters.
+* Q6 still governs source identity/provenance; Q7 can inspect the placement-frame and no-distortion requirements under the existing QA model. This does not create a new Q6 criterion or a separate QA verdict.
+* If a visually correct placement cannot be achieved without violating legibility or safe zones, omit the optional Dot Matrix, or document the existing Gold Wave readability exception; do not improvise a new fill/crop mode.
+
+**Status in draft branch:** proposed normative clarification; not effective on `main` before Owner approval and merge.
 
 ## 7. Anime Rendering Standard
 
@@ -721,7 +735,7 @@ All previously open numerical categories are now resolved through explicit Owner
 
 ## 14. Lifecycle
 
-**Current state:** CANONICAL v1.17 — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
+**Current state:** CANONICAL v1.18 (proposed, pending Owner review and merge) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
 
 Before canonicalization:
 
@@ -1229,3 +1243,18 @@ All other layout geometry remains unchanged. The correction is based on producti
 Historical change records that cite `w=220` (§29, §33) are preserved as provenance.
 
 **Version:** 1.16 → 1.17.
+
+
+---
+
+## 38. Ornament Native-Aspect Placement Clarification — v1.18 — 2026-10-16 (OWNER REVIEW CANDIDATE)
+
+**Finding:** KDS-AUD-F16. Registered Gold Wave 2067×761 and Dot Matrix 512×320 are different ratios from their §6.5.1 fixed frames (250×80 and 74×74). An unspecified fit algorithm made correct assembly and QA non-deterministic.
+
+**Proposed resolution:** §6.5.2 defines uniform aspect-preserving `contain` and center alignment with transparent unused frame area. The calculation is derived, not new object identity or independent frame geometry. §6.5.1's prohibition on ad-hoc scaling is clarified to allow only this governed placement transformation.
+
+**Unchanged:** registered binaries, checksum, SVG masters, Drive file IDs, palette, layout frame coordinates, Q6 identity authority, optional Dot Matrix behavior, Gold Wave documented readability exception.
+
+**Owner approval:** PENDING — do not merge this PR as canonical until reviewed.
+
+**Version if approved:** 1.17 → 1.18.
