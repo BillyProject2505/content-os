@@ -146,6 +146,7 @@ def assembly_test(fonts: Path, tmp: Path):
             "callout": "Self-compassion menawarkan cara lain.", "face_xy": [700, 400]}
     img, man, fails = rs.render(spec, assets, fonts, verify_hashes=False, enforce_canonical_font=False)
     ok("synthetic Slide 1 assembles 1080×1350 with F32-resolved preflight PASS", img.size == (1080, 1350) and not fails and man["preflight"] == "PASS", man["preflight"])
+    ok("manifest preserves canonical artwork frame after ornament placement", man["scene_cover"]["frame"] == [390, 0, 690, 1350], str(man["scene_cover"]["frame"]))
     px = img.load()
     ok("scene underlay begins at x=390 beneath canonical gradient", rs.ART[0] == 390 and rs.ART[2] == 690, str(rs.ART))
     spec2 = dict(spec, slide=2, dot_matrix=True,
