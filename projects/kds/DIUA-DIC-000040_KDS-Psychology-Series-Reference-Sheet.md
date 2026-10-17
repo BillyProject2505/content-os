@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-108"
 universal_identifier: "DIUA-DIC-000040"
-version: "1.2"
+version: "1.3"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000003"
@@ -33,7 +33,7 @@ source_representation:
 representation_profile: "DIUA-DIC-000026@1.3"
 ---
 
-> **Migration normalization note (2026-09-28):** per the KDS Psychology Series authority boundary, this Reference Sheet is evidence/reference authority only — it is not an independent normative policy source and is treated as a **lateral**, not a `depends_on`, authority relative to the Production Bible and Layout Bible (both of which it consumes as evidence context; it does not gate their canonical status). Its only hard `depends_on` pins are the Root Documentation Structure and the Universal Identifier Registry, consistent with its non-normative role. `DIUA-DIC-000038` (Production Bible, PR #43) and `DIUA-DIC-000039` (Layout Bible, PR #44) are both open/unmerged at the time this file was authored, so body references to them remain plain text pending their merge — no GitHub canonical path exists for either yet. BUS-109 (Storage Authority Profile) is converted to a repository-relative link to the merged `system/DIUA-DIC-000041` file. No semantic content changed.
+> **Migration normalization note (2026-09-28):** per the KDS Psychology Series authority boundary, this Reference Sheet is evidence/reference authority only — it is not an independent normative policy source and is treated as a **lateral**, not a `depends_on`, authority relative to the Production Bible and Layout Bible (both of which it consumes as evidence context; it does not gate their canonical status). Its only hard `depends_on` pins are the Root Documentation Structure and the Universal Identifier Registry, consistent with its non-normative role. `DIUA-DIC-000038` (Production Bible, PR #43) and `DIUA-DIC-000039` (Layout Bible, PR #44) are both open/unmerged at the time this file was authored, so body references to them remain plain text pending their merge — no GitHub canonical path exists for either yet. BUS-109 (Storage Authority Profile) is converted to a repository-relative link to the merged `system/DIUA-DIC-000041` file. No semantic content changed. **Superseded 2026-10-17 (v1.3):** PR #43 and PR #44 have since merged; the [Production Bible](DIUA-DIC-000038_KDS-Psychology-Series-Production-Bible.md) and [Layout Bible](DIUA-DIC-000039_KDS-Psychology-Series-Layout-Bible.md) are GitHub-canonical. This note is retained as migration provenance.
 
 # KDS Satu Hati Sulawesi Utara — Psychology Series Reference Sheet
 
@@ -45,8 +45,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project-Level Visual Reference Sheet |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
-| Version | 1.2 |
-| Status | **CANONICAL** — v1.2 (2026-10-16) is an editorial correction of v1.1: storage wording reflects the GitHub-canonical text authority after the 2026-09-28 cutover. Evidence set, checksums and the non-normative authority boundary are unchanged. Previously v1.1. |
+| Version | 1.3 |
+| Status | **CANONICAL** — v1.3 (2026-10-17) is an editorial terminology correction: §2 describes the editorial side as a copy *field* within one continuous composition, matching the Layout Bible boundary rule, instead of a "panel". Evidence set, checksums and the evidence-only boundary are unchanged. v1.2 (2026-10-16) was an editorial correction of v1.1: storage wording reflects the GitHub-canonical text authority after the 2026-09-28 cutover. Evidence set, checksums and the non-normative authority boundary are unchanged. Previously v1.1. |
 | Related Issue | [BUS-108](https://linear.app/bussiness-content-os/issue/BUS-108/kds-psychology-series-reference-sheet) — KDS Psychology Series — Reference Sheet |
 | Universal Identifier | `DIUA-DIC-000040` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-040 in Universal Identifier Registration Record v1.31 |
@@ -66,7 +66,7 @@ It is a visual implementation reference, not a replacement for the Layout Bible.
 The approved reference set establishes:
 
 * 4:5 portrait Psychology Series composition;
-* left editorial copy panel;
+* left editorial copy field, joined to the scene in one continuous composition (not a separate panel; see Layout Bible §2.1 and §2.3);
 * right narrative scene;
 * stable KDS header and series hierarchy;
 * headline/body/callout rhythm;
@@ -151,7 +151,7 @@ Do not use it to infer:
 
 The approved seven-slide anime set is **OWNER-APPROVED VISUAL REFERENCE EVIDENCE**.
 
-Reference Sheet lifecycle is **CANONICAL v1.2** (editorial storage-wording correction of v1.1, which recorded the sub-project structural migration). Evidence integrity and authority-boundary checks remain passed; this document remains evidence/reference authority only.
+Reference Sheet lifecycle is **CANONICAL v1.3** (editorial terminology correction of v1.2; v1.2 corrected storage wording; v1.1 recorded the sub-project structural migration). Evidence integrity and authority-boundary checks remain passed; this document remains evidence/reference authority only.
 
 ---
 
@@ -331,3 +331,18 @@ The Identity *Storage Authority* row and §5 stated that this text Reference She
 The seven Drive evidence files, their IDs, dimensions and SHA-256 values are unchanged.
 
 **Version:** 1.1 → 1.2.
+
+---
+
+## 18. Terminology Correction — v1.3 — 2026-10-17
+
+**Change type:** Editorial / terminology. No evidence change.
+
+**Basis:** KDS Full Documentation Audit — 2026-10-17 (findings KDS-AUD-F33, F24).
+
+* §2 described the approved evidence as showing a "left editorial copy **panel**". Since Layout Bible v1.2 (Owner boundary correction, 2026-09-27) the editorial side is a field joined to the scene by the required white-to-transparent gradient, and a hard two-block or panel reading is non-conforming. Because this Reference Sheet is consumed as interpretation evidence, the wording now matches that rule.
+* The 2026-09-28 migration note about unmerged PR #43/#44 is marked superseded with links to the now-canonical documents.
+
+The seven Drive evidence files, IDs, dimensions, SHA-256 values and the evidence-only authority boundary are unchanged.
+
+**Version:** 1.2 → 1.3.

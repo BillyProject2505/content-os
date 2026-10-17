@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-106"
 universal_identifier: "DIUA-DIC-000038"
-version: "1.9"
+version: "1.10"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -52,8 +52,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible |
 | Legacy Name | Production Bible Seri Psikologi KDS v1.0 — LOCKED |
 | Document Class | Domain/Project-Level Series Production Bible |
-| Version | 1.9 |
-| Status | **CANONICAL** — v1.9 (2026-10-16) is an editorial / pointer-stability correction of v1.8. Layout implementation resolves to the Psychology Series Layout Bible **current CANONICAL**; visual evidence resolves to the Reference Sheet **current CANONICAL / evidence-only**. §12 QA mapping now matches KDS QA Q7 as defined by the QA Document. The 2026-09-27 boundary correction (hierarchical, not hard two-block split) and evidence-readiness policy are unchanged. |
+| Version | 1.10 |
+| Status | **CANONICAL** — v1.10 (2026-10-17) is an editorial clarification of v1.9: §5 now states that the recovered legacy visual direction is provenance and that current rendering resolves to the Owner-approved anime rule (§5.1, §20) and the Asset Registry flat-anime lock; §21 carries a superseded note for its pre-cutover Linear storage wording. No series rule changed. v1.9 (2026-10-16) was an editorial / pointer-stability correction of v1.8. Layout implementation resolves to the Psychology Series Layout Bible **current CANONICAL**; visual evidence resolves to the Reference Sheet **current CANONICAL / evidence-only**. §12 QA mapping now matches KDS QA Q7 as defined by the QA Document. The 2026-09-27 boundary correction (hierarchical, not hard two-block split) and evidence-readiness policy are unchanged. |
 | Related Issue | [BUS-106](https://linear.app/bussiness-content-os/issue/BUS-106/kds-satu-hati-sulawesi-utara-psychology-series-production-bible) — KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
@@ -207,6 +207,8 @@ Recovered Psychology Series visual direction:
 This recovered series visual direction applies only to KDS Psychology Series.
 
 It does not modify project-wide KDS visual authority.
+
+**Current rendering precedence (clarification added v1.10):** the bullets above are recovered legacy direction and remain provenance. Where they differ from the current rendering rule — in particular "semi-flat digital illustration", "soft cinematic lighting" and "realistic … human character depiction" — the Owner decision recorded in §5.1 and §20 (anime style consistent with the Brand Presenter across the complete scene) and the KDS Asset Registry `KDS-OBJ-000010` default rendering (*Flat anime style — LOCKED*) prevail, as implemented by Layout Bible §7. This restates the existing precedence; it creates no new rule.
 
 ### 5.1 Current Asset-System boundary
 
@@ -410,7 +412,7 @@ Historical LOCK remains provenance. The rules explicitly adopted by this v1.0 ca
 
 ## 15. Lifecycle
 
-**Current state:** CANONICAL v1.9 — Psychology Series is a recursive Tier-2 sub-project under KDS. The Layout Bible and Reference Sheet (current CANONICAL) are the implementation/evidence authorities. Evidence-readiness remains fail-closed; reusable-cast readiness remains resolved.
+**Current state:** CANONICAL v1.10 — Psychology Series is a recursive Tier-2 sub-project under KDS. The Layout Bible and Reference Sheet (current CANONICAL) are the implementation/evidence authorities. Evidence-readiness remains fail-closed; reusable-cast readiness remains resolved.
 
 Canonicalization prerequisites satisfied at v1.0:
 
@@ -664,6 +666,8 @@ No layout, presenter identity, anime-rendering, research, QA, or evidence-readin
 
 **Version:** 1.2 → 1.3.
 
+**Superseded note (added v1.10, 2026-10-17):** the "Linear is the sole authority surface" wording above was superseded by the 2026-09-28 GitHub repository cutover under the Content OS Storage Authority Profile (v1.1 §2.1, §13). This Production Bible and the Layout Bible and Reference Sheet are GitHub-canonical; Linear holds migrated reference copies and tracker linkage; Google Drive remains binary/visual-evidence storage only. The record above is preserved as history.
+
 ---
 
 ## 22. Reusable Cast State Reconciliation — v1.4 — 2026-09-26
@@ -767,3 +771,18 @@ No authority boundary or production behavior changed.
 Historical change records (§16–§26) are preserved unchanged, including version references that reflected the state at their time.
 
 **Version:** 1.8 → 1.9.
+
+---
+
+## 28. Rendering-Precedence & Storage-Note Clarification — v1.10 — 2026-10-17
+
+**Change type:** Editorial clarification. No series rule changed.
+
+**Basis:** KDS Full Documentation Audit — 2026-10-17 (findings KDS-AUD-F30, F24).
+
+* **§5 rendering precedence (F30).** §5 lists recovered legacy direction ("semi-flat digital illustration", "soft cinematic lighting", "realistic … human character depiction") next to the current Owner-approved anime rule (§5.1, §20). Read alone, §5 can be used as a generation brief that drifts away from the locked flat-anime presenter identity. A precedence sentence now records that the current rule prevails; the legacy bullets are kept as provenance.
+* **§21 storage note (F24).** §21 (v1.3) still read "Linear is the sole authority surface" without a current-state note, although Layout Bible and Reference Sheet already carry corrected storage wording. A superseded note is appended; the record is preserved.
+
+Unchanged: series naming, editorial principles and named standards, Character Lock, Fashion Consistency, One Scene, Chronological Narrative, Prompt Architecture, evidence routing, QA mapping, Asset Registry ownership.
+
+**Version:** 1.9 → 1.10.
