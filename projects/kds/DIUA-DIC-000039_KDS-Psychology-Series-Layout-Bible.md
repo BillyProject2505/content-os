@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-107"
 universal_identifier: "DIUA-DIC-000039"
-version: "1.21"
+version: "1.22"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -61,8 +61,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project-Level Series Layout Bible |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
-| Version | 1.21 |
-| Status | **CANONICAL** — v1.21 (2026-10-17) clarifies that the existing allowed presenter pose/expression variations must follow Owner-approved F26 registered-identity depiction routing, Q6 evidence and artefact-specific approval. All numerical layouts, typography and gradient constraints remain unchanged; unresolved F31/F32 still require independent decisions. Upstream Production Bible v1.11 and SOP v1.16. |
+| Version | 1.22 |
+| Status | **CANONICAL** — v1.22 (2026-10-17) resolves KDS-AUD-F32 by extending the narrative artwork beneath the full canonical gradient from `x=390`, while preserving the editorial safe zone, gradient stops, focal zone, typography, ornaments and presenter rules. F31 remains unresolved. Upstream Production Bible v1.11 and SOP v1.16. |
 | Related Issue | [BUS-107](https://linear.app/bussiness-content-os/issue/BUS-107/kds-psychology-series-layout-bible) — KDS Psychology Series — Layout Bible |
 | Universal Identifier | `DIUA-DIC-000039` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-039 in Universal Identifier Registration Record v1.31 |
@@ -164,7 +164,7 @@ For the canonical **1080 × 1350 px** production canvas:
 
 * **Editorial essential-copy safe zone:** essential editorial copy uses the exact horizontal range **x = 48–390 px**, providing a fixed **342 px usable editorial width**. Essential text must not extend beyond `x = 390 px`.
 * **Transition band:** exactly **x = 390–475 px** is reserved for the canonical **white-to-transparent gradient profile** defined in §2.3.1. Essential text must not depend on this band for readability.
-* **Narrative-scene zone:** the narrative artwork frame begins exactly at **x = 430 px**, extends to **x = 1080 px**, and spans **y = 0–1350 px**; it may continue beneath the gradient transition band but must not obscure essential copy.
+* **Narrative-scene zone:** the narrative artwork frame begins exactly at **x = 390 px**, extends to **x = 1080 px**, and spans **y = 0–1350 px**; it therefore continues beneath the full canonical gradient transition band `x=390–475`. Essential copy remains protected at `x=48–390`, and the gradient remains 100% white at the shared `x=390` boundary.
 * **Primary visual focal point:** the Brand Presenter face and other critical narrative focal points must remain inside the governed focal zone **x = 560–1010 px, y = 160–1150 px**. Critical focal points must not enter the gradient transition band.
 * **Page indicator anchor:** deterministic by slide role. **Slide 1 / opening slide = bottom-right**; **slides 2–N = bottom-left/editorial region**. No free repositioning is permitted.
 
@@ -217,7 +217,7 @@ The editorial field uses the following exact horizontal contract:
 | Editorial usable width | **342 px** |
 | Gradient start | **390 px** |
 | Gradient end | **475 px** |
-| Narrative artwork start | **430 px** |
+| Narrative artwork start | **390 px** |
 
 Canonical rules:
 
@@ -236,9 +236,9 @@ The narrative artwork uses the following fixed production frame:
 
 | Property | Canonical value |
 | -- | -- |
-| Artwork X | **430 px** |
+| Artwork X | **390 px** |
 | Artwork Y | **0 px** |
-| Artwork width | **650 px** |
+| Artwork width | **690 px** |
 | Artwork height | **1350 px** |
 | Artwork right edge | **1080 px** |
 | Critical focal zone X | **560–1010 px** |
@@ -249,7 +249,7 @@ The narrative artwork uses the following fixed production frame:
 #### Narrative bounds rules
 
 * narrative artwork bleeds fully to the **top, right, and bottom** canvas edges;
-* artwork may extend beneath the gradient across `x = 430–475 px`;
+* artwork extends beneath the gradient across the full transition band `x = 390–475 px`;
 * the Brand Presenter face and other critical focal points must not be placed inside the gradient transition band;
 * face/critical focal points must begin at `x ≥ 560 px` and remain at least `70 px` from the right canvas edge;
 * the governed critical focal zone is `x = 560–1010 px`, `y = 160–1150 px`;
@@ -698,7 +698,7 @@ Applicable QA evidence should verify:
 * Callout fill Beige `#F9EBD1`, no stroke, padding `20 px / 16 px`, text left/top;
 * anime rendering across scene elements;
 * official Brand Presenter identity;
-* narrative artwork frame `x=430, y=0, w=650, h=1350` with bleed to top/right/bottom;
+* narrative artwork frame `x=390, y=0, w=690, h=1350` with bleed to top/right/bottom and full underlay beneath the gradient;
 * critical focal zone `x=560–1010, y=160–1150`;
 * minimum `70 px` right safe distance for face/critical focal points;
 * face/critical focal point at `x ≥ 560` and never inside the gradient transition band;
@@ -739,7 +739,7 @@ All previously open numerical categories are now resolved through explicit Owner
 
 ## 14. Lifecycle
 
-**Current state:** CANONICAL v1.21 (F26 scoped identity-depiction routing added after the v1.20 editorial correction of v1.19; the Owner-approved v1.19 Slide 1 layout geometry has been canonical since PR #140 merged on 2026-10-16) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
+**Current state:** CANONICAL v1.22 (F32 artwork-under-gradient resolution added after v1.21 F26 identity-routing clarification; the Owner-approved v1.19 Slide 1 lower-ornament geometry remains unchanged) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
 
 Before canonicalization:
 
@@ -1310,3 +1310,52 @@ Historical change records that cite `w=220` (§29, §33) are preserved as proven
 **All numerical implementation remains unchanged:** canvas, editorial gradient, artwork frame, font size/tracking/baseline, Gold Wave/Dot Matrix and page counter frames, callout box and content safe zones. KDS-AUD-F31/F32 remain open and cannot be waived by this F26 decision. F25 corrupted glyph baseline continues to require re-render and Q5/Q7 validation before publication approval.
 
 **Version:** 1.20 → 1.21.
+
+
+---
+
+## 42. Owner F32 Gradient–Artwork Seam Resolution — v1.22 — 2026-10-17
+
+**Owner decision:** APPROVED through the controlled `next` instruction after review of KDS-AUD-F32 evidence.
+
+### Problem
+
+The v1.21 document simultaneously required:
+
+* a continuous white-to-transparent gradient from `x=390–475` with **no hard vertical seam**; and
+* a narrative artwork frame beginning at `x=430`.
+
+Production evidence in PR #142 demonstrated that leaving `x=390–429` without underlying artwork produces a visible vertical edge when the scene begins at `x=430`. That result conflicts with §2.3's unified-composition rule even though the previous §2.6 numeric frame was followed.
+
+### Canonical resolution
+
+For the 1080 × 1350 Psychology Series canvas:
+
+* **Narrative artwork frame:** `x=390, y=0, w=690, h=1350`;
+* **Gradient:** unchanged at `x=390 / 420 / 450 / 475` with White opacity `100% / 80% / 35% / 0%`;
+* the scene therefore exists **beneath the entire gradient band** `x=390–475`;
+* **Editorial essential-copy safe zone remains unchanged:** `x=48–390`;
+* **Critical focal zone remains unchanged:** `x=560–1010, y=160–1150`;
+* no face/critical focal content may move into the gradient band;
+* typography, header, badge, callout, page indicators, lower ornaments, presenter identity and all other geometry remain unchanged.
+
+At `x=390`, the overlay is still 100% white, so extending scene pixels beneath that boundary does not reduce essential-copy readability. The change removes the seam without moving the editorial field or changing the fade profile.
+
+### Supersession boundary
+
+The historical v1.12 Narrative Visual Bounds Lock remains valid provenance for the original `x=430 / w=650` decision. **Only its artwork X/width values are superseded by v1.22.** Its bleed, focal-zone, crop and scene-recomposition requirements remain in force.
+
+### QA / renderer implication
+
+A production renderer is conformant only when it:
+
+1. begins narrative artwork at `x=390`;
+2. applies the existing full-height white gradient above it;
+3. preserves the unchanged focal zone and editorial safe zone;
+4. does not report the former `x=430` frame as current Q7-conformant geometry.
+
+This resolves **KDS-AUD-F32**. **F31 remains open** and is not affected.
+
+**Change classification:** narrow numerical layout correction based on production evidence; no new subsystem, asset identity, QA criterion, research rule, publication authority or workflow stage.
+
+**Version:** 1.21 → 1.22 CANONICAL upon merge.
