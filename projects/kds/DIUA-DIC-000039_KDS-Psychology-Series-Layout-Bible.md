@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-107"
 universal_identifier: "DIUA-DIC-000039"
-version: "1.19"
+version: "1.20"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000038"
     name: "KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible"
-    version: "1.9"
+    version: "1.10"
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
@@ -45,7 +45,7 @@ source_representation:
 representation_profile: "DIUA-DIC-000026@1.3"
 ---
 
-> **Migration normalization note (2026-09-28):** the Linear source's own Document Identity table declares its dependencies as unversioned "current CANONICAL" pointers (KDS Project Architecture, KDS Psychology Series Production Bible, KDS Production SOP, Root Documentation Structure) rather than hard version pins, and that lateral/floating characterization is preserved verbatim in the Document Identity table below per migration policy (do not convert lateral/current-canonical references into hard version pins in governed text unless the source requires it). The structured `depends_on` frontmatter above resolves each to its live-verified version at migration time (Project Architecture v1.10, Production Bible v1.8, Production SOP v1.14, Root Documentation Structure v2.5) for repository dependency-graph tooling only, consistent with the schema used across all prior KDS migration units; this is a metadata-layer resolution, not a semantic change to the governed text. KDS Psychology Series Production Bible (`DIUA-DIC-000038`) has an open, validated, CI-passing migration PR (#43) not yet merged at the time this file was authored; no GitHub canonical path exists for it yet, so body references to it remain plain text without a repository-relative link pending its merge.
+> **Migration normalization note (2026-09-28):** the Linear source's own Document Identity table declares its dependencies as unversioned "current CANONICAL" pointers (KDS Project Architecture, KDS Psychology Series Production Bible, KDS Production SOP, Root Documentation Structure) rather than hard version pins, and that lateral/floating characterization is preserved verbatim in the Document Identity table below per migration policy (do not convert lateral/current-canonical references into hard version pins in governed text unless the source requires it). The structured `depends_on` frontmatter above resolves each to its live-verified version at migration time (Project Architecture v1.10, Production Bible v1.8, Production SOP v1.14, Root Documentation Structure v2.5) for repository dependency-graph tooling only, consistent with the schema used across all prior KDS migration units; this is a metadata-layer resolution, not a semantic change to the governed text. KDS Psychology Series Production Bible (`DIUA-DIC-000038`) has an open, validated, CI-passing migration PR (#43) not yet merged at the time this file was authored; no GitHub canonical path exists for it yet, so body references to it remain plain text without a repository-relative link pending its merge. **Superseded 2026-10-17 (v1.20):** PR #43 has since merged; the Production Bible is GitHub-canonical at [`DIUA-DIC-000038`](DIUA-DIC-000038_KDS-Psychology-Series-Production-Bible.md). This note is retained as migration provenance.
 
 ## Named Layout Rule
 
@@ -61,8 +61,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project-Level Series Layout Bible |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
-| Version | 1.19 |
-| Status | **CANONICAL — v1.19 (Owner-approved design revision; effective upon PR merge).** Slide 1 Gold Wave frame and visual baseline are revised under F15, using the unchanged registered source and aspect-preserving `contain` rule from v1.18. Slides 2–N retain their prior frames. Approval is for geometry only, not for any rendered content or publication. |
+| Version | 1.20 |
+| Status | **CANONICAL — v1.20 (2026-10-17) is an editorial / current-state correction of v1.19.** The v1.19 Owner-approved Slide 1 Gold Wave frame and visual baseline (F15) have been canonical since GitHub PR #140 merged on 2026-10-16 (merge commit `36094b9`); conditional "effective upon PR merge" wording is replaced with that merge record. No layout number, frame, typography value, gradient stop or QA checklist item changed. Approval of geometry is not approval of any rendered content or publication. Previously v1.19. |
 | Related Issue | [BUS-107](https://linear.app/bussiness-content-os/issue/BUS-107/kds-psychology-series-layout-bible) — KDS Psychology Series — Layout Bible |
 | Universal Identifier | `DIUA-DIC-000039` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-039 in Universal Identifier Registration Record v1.31 |
@@ -596,7 +596,7 @@ This canonical fit contract was approved and merged in GitHub PR #139 (2026-10-1
 * Q6 still governs source identity/provenance; Q7 can inspect the placement-frame and no-distortion requirements under the existing QA model. This does not create a new Q6 criterion or a separate QA verdict.
 * If a visually correct placement cannot be achieved without violating legibility or safe zones, omit the optional Dot Matrix, or document the existing Gold Wave readability exception; do not improvise a new fill/crop mode.
 
-**Authority:** the F16 `contain` contract is canonical after merged PR #139. The enlarged Slide 1 placement is an Owner-approved v1.19 design revision, becoming canonical only when its PR is merged.
+**Authority:** the F16 `contain` contract is canonical after merged PR #139. The enlarged Slide 1 placement is the Owner-approved v1.19 design revision, canonical since PR #140 merged on 2026-10-16.
 
 ## 7. Anime Rendering Standard
 
@@ -737,7 +737,7 @@ All previously open numerical categories are now resolved through explicit Owner
 
 ## 14. Lifecycle
 
-**Current state:** CANONICAL v1.19 (Owner-approved Slide 1 layout geometry; effective when the corresponding GitHub PR merges) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
+**Current state:** CANONICAL v1.20 (editorial correction of v1.19; the Owner-approved v1.19 Slide 1 layout geometry has been canonical since PR #140 merged on 2026-10-16) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
 
 Before canonicalization:
 
@@ -1261,6 +1261,8 @@ Historical change records that cite `w=220` (§29, §33) are preserved as proven
 
 **Version if approved:** 1.17 → 1.18.
 
+**Resolution note (added v1.20, 2026-10-17):** this candidate was approved and merged to `main` through GitHub PR #139 on 2026-10-16. The "PENDING" line above is historical and is preserved as provenance.
+
 
 ---
 
@@ -1277,3 +1279,19 @@ Historical change records that cite `w=220` (§29, §33) are preserved as proven
 **Production gate:** the v0.2D proof establishes geometry only. Environment naturalness, actual Slide 1 rendering, presenter/storyboard compatibility, final Q1–Q9, and explicit Owner Visual Approval remain pending under BUS-167. This document revision must not be mistaken for approval of any media artefact.
 
 **Version:** 1.18 → 1.19 when merged to GitHub `main`.
+
+**Resolution note (added v1.20, 2026-10-17):** merged through GitHub PR #140 on 2026-10-16T02:44:32Z (merge commit `36094b98d288c695df80fbcda8f9383d9e42fb1c`); v1.19 geometry has been canonical since that merge.
+
+---
+
+## 40. Current-State Correction — v1.20 — 2026-10-17
+
+**Change type:** Editorial / current-state correction. No layout rule, number, frame, typography value, gradient stop, protection zone, asset reference or QA checklist item changed.
+
+**Basis:** KDS Full Documentation Audit — 2026-10-17 (finding KDS-AUD-F24).
+
+* **Stale conditional authority (F24).** The Status row, §6.5.2 *Authority* line and §14 still described v1.19 as "effective upon PR merge" although PR #140 merged on 2026-10-16; §38 still read "Owner approval: PENDING" after PR #139 merged. Current-state lines now cite the merges; §38/§39 receive resolution notes and their original text is preserved.
+* **Migration note.** The 2026-09-28 note about unmerged PR #43 is marked superseded with a link to the now-canonical Production Bible.
+* **Dependency.** Production Bible v1.9 → **v1.10 CANONICAL** (editorial correction).
+
+**Version:** 1.19 → 1.20.
