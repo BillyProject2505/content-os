@@ -250,7 +250,7 @@ A complete draft exists for visual/production execution and review.
 
 The **KDS Asset Registry (CANONICAL)** owns reusable asset identity, lifecycle, provenance, canonical-source records, and object-state authority.
 
-Asset routing distinguishes two cases:
+Asset routing distinguishes three cases:
 
 * **Reusable KDS asset** — an asset intended to function repeatedly as project identity, brand, character, ornament, template input, or other reusable production authority. It must be resolved through the KDS Asset Registry once such authority is required.
 * **Content-local asset** — an image, photo, illustration, or other input used for one specific content instance and not asserted as canonical/reusable KDS identity. It does not require Asset Registry registration solely because it appears in a publication, but its use must still satisfy applicable rights/consent, privacy, factual-integrity, format, and QA requirements.
