@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-102"
 universal_identifier: "DIUA-DIC-000036"
-version: "1.11"
+version: "1.12"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -34,8 +34,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — Asset Registry |
 | Document Class | Domain/Project-Level Identity Registry Document |
 | System | Content OS → KDS Satu Hati Sulawesi Utara |
-| Version | 1.11 |
-| Status | **CANONICAL** — v1.11 (2026-10-16) is an editorial / current-record correction: the `KDS-OBJ-000002` record no longer says ACTIVE promotion is pending, and §4 storage-authority wording reflects the GitHub cutover. Asset identity, binaries, checksums, Drive locators, variants and object lifecycle states are unchanged. Previously v1.10. |
+| Version | 1.12 |
+| Status | **CANONICAL** — v1.12 (Owner-approved F26, 2026-10-17). Clarifies the content-instance depiction of the existing ACTIVE presenter identity without creating any registered object, reusable variant, altered source binary, Drive locator, checksum or lifecycle change. Q6 and identity locks remain mandatory. |
 | Related Issue | [BUS-102](https://linear.app/bussiness-content-os/issue/BUS-102/kds-satu-hati-sulawesi-utara-asset-registry) — KDS Satu Hati Sulawesi Utara — Asset Registry |
 | Owner | **\[OPERATIONAL DEFAULT\]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
@@ -1032,6 +1032,20 @@ Earlier clinic, bus, home, café, and promenade scene renders remain historical 
 
 No scene crop supersedes the approved reference master or registered transparent variants.
 
+#### Content-instance depiction of an ACTIVE presenter identity — F26
+
+**Owner decision — 2026-10-17:** A generated or edited scene-specific pose, expression, gesture or angle may represent the SAME ACTIVE KDS-OBJ-000010 identity **for one precisely identified content instance**, without automatically registering or activating a new reusable VAR.
+
+Prerequisites:
+
+* Resolve the ACTIVE Reference Master and applicable authorized wardrobe/reference variant from this Registry.
+* Compare face/hair/body identity, stable male presentation, flat-anime style and authorized wardrobe continuity; reject materially different identity or style.
+* Record reproducible scene origin, visual comparison evidence, exact reviewed final output locator/file ID, dimensions/size and SHA-256.
+* Obtain explicit **Owner identity approval for that exact output and scoped content instance**. No transfer to other slides, formats or episodes.
+* Submit the depiction to project QA **Q6**, not an unrelated content-local exemption. Missing identity proof, provenance or approval fails closed.
+
+The generated scene is **not byte-identical** to an ACTIVE reference or VAR binary, must never be labeled as such, and is not a new ACTIVE reusable asset. Reusable promotion is a separately reviewed variant registration with canonical binary/source provenance and its own Owner decision. Registered official logo, wordmark and ornaments still require exact ACTIVE binaries; this provision is specific to presenter depictions. Stage 7 whole-artefact QA and Stage 8 Publication Approval remain separate.
+
 ### Observed but not allocated
 
 The following remain deliberately **unallocated** pending stronger evidence or a separate design-system decision:
@@ -1061,6 +1075,7 @@ Production SOP Stage 6 routes reusable assets to this registry.
 
 * If an artefact uses only content-local assets, registry resolution is not required solely because an image exists.
 * If an artefact requires a reusable canonical KDS asset, the relevant object must be ACTIVE and resolvable.
+* A content-instance portrayal of ACTIVE KDS-OBJ-000010 still resolves the registered identity and follows the F26 depiction requirements above and Q6; its generated scene pixels are not a new canonical VAR binary.
 * Missing reusable identity or unresolved binary produces BLOCKED at the applicable production/QA gate.
 
 This registry does not determine when a format must display an asset.
@@ -1077,7 +1092,7 @@ QA may verify:
 * checksum/provenance;
 * applicable registered restrictions.
 
-QA must not invent a missing object, choose a substitute binary, or promote a CANDIDATE object.
+QA must not invent a missing object, choose a substitute binary, or promote a CANDIDATE object. Under the narrowly scoped F26 route, QA may inspect a separately approved content-instance depiction of the same ACTIVE presenter identity without treating scene pixels as a registered VAR binary.
 
 ## 12. Registry Record Schema
 
@@ -1150,7 +1165,7 @@ Production requiring a reusable KDS asset must resolve the exact ACTIVE object a
 
 ## 16. Lifecycle Status
 
-**Current document state:** CANONICAL v1.11 (canonicalized as v1.0 on 2026-09-25; see Change Records below for version history).
+**Current document state:** CANONICAL v1.12 (canonicalized as v1.0 on 2026-09-25; see Change Records below for version history).
 
 Canonicalization prerequisites satisfied at v1.0:
 
@@ -2502,3 +2517,16 @@ No binary, Drive file ID, checksum, canonical filename, object ID, identity geom
 No object ID, binary, checksum, Drive file/folder ID, variant, restriction, palette token or lifecycle state changed. Historical records are preserved.
 
 **Version:** 1.10 → 1.11.
+
+
+---
+
+## Change Record — v1.12 — 2026-10-17
+
+**Change type:** Owner-approved normative portrayal routing (KDS-AUD-F26); no lifecycle mutation.
+
+The ACTIVE presenter KDS-OBJ-000010 identity section now distinguishes one-off Owner-approved scene-specific depictions from separately registered reusable variants. Identity source locks, male/flat-anime style, wardrobe continuity, origin/comparison evidence, exact output provenance and per-image approval remain mandatory under Q6. No newly generated face is treated as an exact registered VAR binary or automatically reusable. §10 and §11 clarify routing.
+
+**Unchanged:** all object IDs, active assets, VAR-001–VAR-005, reference master, Google Drive file IDs, checksums, exact-binary brand assets, palette, layouts and publication permission.
+
+**Version:** 1.11 → 1.12.
