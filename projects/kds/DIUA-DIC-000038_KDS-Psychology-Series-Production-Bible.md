@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-106"
 universal_identifier: "DIUA-DIC-000038"
-version: "1.10"
+version: "1.11"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
-    version: "1.15"
+    version: "1.16"
     status: "CANONICAL"
   - id: "DIUA-DIC-000034"
     name: "KDS Satu Hati Sulawesi Utara — Research Source List"
@@ -52,14 +52,14 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible |
 | Legacy Name | Production Bible Seri Psikologi KDS v1.0 — LOCKED |
 | Document Class | Domain/Project-Level Series Production Bible |
-| Version | 1.10 |
-| Status | **CANONICAL** — v1.10 (2026-10-17) is an editorial clarification of v1.9: §5 now states that the recovered legacy visual direction is provenance and that current rendering resolves to the Owner-approved anime rule (§5.1, §20) and the Asset Registry flat-anime lock; §21 carries a superseded note for its pre-cutover Linear storage wording. No series rule changed. v1.9 (2026-10-16) was an editorial / pointer-stability correction of v1.8. Layout implementation resolves to the Psychology Series Layout Bible **current CANONICAL**; visual evidence resolves to the Reference Sheet **current CANONICAL / evidence-only**. §12 QA mapping now matches KDS QA Q7 as defined by the QA Document. The 2026-09-27 boundary correction (hierarchical, not hard two-block split) and evidence-readiness policy are unchanged. |
+| Version | 1.11 |
+| Status | **CANONICAL** — v1.11 (2026-10-17) maps Owner-approved F26 registered-presenter content-instance depiction to parent SOP, Registry and QA Q6 without granting a reusable variant or waiving Character Lock, Q5/Q7 or episode continuity. SOP dependency v1.16. Prior v1.10 rendering-precedence and storage-editorial changes remain historical. |
 | Related Issue | [BUS-106](https://linear.app/bussiness-content-os/issue/BUS-106/kds-satu-hati-sulawesi-utara-psychology-series-production-bible) — KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000038` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-038 in Universal Identifier Registration Record v1.30 |
-| Depends On | KDS Project Architecture (v1.10, CANONICAL); KDS Production SOP (v1.15, CANONICAL); KDS Research Source List (v1.7, CANONICAL); Content OS Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
+| Depends On | KDS Project Architecture (v1.10, CANONICAL); KDS Production SOP (v1.16, CANONICAL); KDS Research Source List (v1.7, CANONICAL); Content OS Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
 | Lateral / Consuming Authorities | KDS QA Document — current CANONICAL; KDS Asset Registry — current CANONICAL |
 
 ## 0. Recovery and Authority Boundary
@@ -223,6 +223,8 @@ Current rules:
 * default Psychology Series scene rendering is **anime style** consistent with the Brand Presenter;
 * background, secondary characters, props, architecture, lighting, and environment must belong to the same anime visual world;
 * the historical cast remains provenance only and no longer blocks Psychology Series production.
+
+**F26 content-instance presenter depiction pointer (2026-10-17):** A scene-specific generated pose/expression/gesture may portray the SAME ACTIVE KDS-OBJ-000010 character for **one explicitly approved artefact**, subject to the parent Production SOP Stage 6, KDS Asset Registry identity restrictions and KDS QA Q6 evidence and Owner-per-artefact approval requirements. A depiction is not a reusable registered VAR, cannot replace canonical branding binaries, and cannot bypass Character Lock, Fashion Consistency, one-scene narrative, anime world consistency, technical typography, Q5/Q7 or whole-carousel publication gates.
 
 Detailed layout/storytelling implementation is governed by the **KDS Psychology Series Layout Bible — current CANONICAL**. Visual implementation evidence is governed by the **KDS Psychology Series Reference Sheet — current CANONICAL** within its evidence-only scope.
 
@@ -412,7 +414,7 @@ Historical LOCK remains provenance. The rules explicitly adopted by this v1.0 ca
 
 ## 15. Lifecycle
 
-**Current state:** CANONICAL v1.10 — Psychology Series is a recursive Tier-2 sub-project under KDS. The Layout Bible and Reference Sheet (current CANONICAL) are the implementation/evidence authorities. Evidence-readiness remains fail-closed; reusable-cast readiness remains resolved.
+**Current state:** CANONICAL v1.11 — Psychology Series is a recursive Tier-2 sub-project under KDS. The Layout Bible and Reference Sheet (current CANONICAL) are the implementation/evidence authorities. Evidence-readiness remains fail-closed; reusable-cast readiness remains resolved.
 
 Canonicalization prerequisites satisfied at v1.0:
 
@@ -786,3 +788,16 @@ Historical change records (§16–§26) are preserved unchanged, including versi
 Unchanged: series naming, editorial principles and named standards, Character Lock, Fashion Consistency, One Scene, Chronological Narrative, Prompt Architecture, evidence routing, QA mapping, Asset Registry ownership.
 
 **Version:** 1.9 → 1.10.
+
+
+---
+
+## 29. Registered Presenter Content-Instance Depiction Routing — v1.11 — 2026-10-17
+
+**Change type:** Owner-approved normative KDS-AUD-F26 dependency routing and Production SOP dependency sync.
+
+§5.1 now refers generated scene-specific presenter depictions to the parent SOP, Asset Registry and QA Q6. The existing ACTIVE identity, male/flat-anime locks and per-artefact affirmative Owner approval remain required; this creates no new reusable VAR, layout exception or implicit series approval. Production SOP v1.15 → **v1.16**. Prior v1.10 editorial changes are unchanged.
+
+**No automatic clearance:** F25 headline rendering defect in BUS-167 v0.3A still requires re-render and independent Q5/Q7/full episode QA, and Stage 8 remains downstream.
+
+**Version:** 1.10 → 1.11.
