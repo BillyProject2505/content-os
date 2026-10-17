@@ -78,3 +78,9 @@ jobs:
         run: node projects/sdoh/runtime/automated-content-production/scripts/remediation-hint-self-test.mjs
       - name: Self-test SDOH approved-copy Production Path
         run: node projects/sdoh/runtime/automated-content-production/scripts/approved-copy-production-self-test.mjs
+      - name: Install Pillow and Inter for KDS renderer self-test
+        run: |
+          python -m pip install --quiet pillow
+          sudo apt-get install -y --no-install-recommends fonts-inter >/dev/null 2>&1 || echo "fonts-inter unavailable; self-test falls back to DejaVu"
+      - name: Self-test KDS Psychology Series deterministic renderer (shared-baseline typography, Layout Bible geometry)
+        run: python projects/kds/runtime/psychology-series-renderer/selftest.py
