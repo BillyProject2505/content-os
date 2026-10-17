@@ -29,8 +29,8 @@ RUN
   python3 render_slide.py --spec slide.json --assets <dir with registered PNGs> \
       --fonts /usr/share/fonts/opentype/inter --out slide.png
   -> slide.png + slide.png.manifest.json (input hashes, line breaks, checks, verdict)
-  Exit code 0 only for preflight PASS. While F32 remains unresolved, production returns
-  BLOCKED_BY_GOVERNANCE_F32 (non-zero) even if all other technical checks pass.
+  Exit code 0 only for preflight PASS. Layout Bible v1.22 resolves F32 by starting artwork
+  at x=390 beneath the full x=390–475 gradient. Any non-canonical artwork_x fails closed.
   Exact canonical Inter is required for production; synthetic self-tests may exercise logic
   with a substitute font but that is never typography-conformance evidence.
   Preflight PASS is technical evidence for QA Q5/Q7;
@@ -41,9 +41,8 @@ RUN
   face_xy [x, y] (optional focal-zone check), artwork_x (leave unset; see F32).
 
 KNOWN OPEN POINTS (Owner decisions, not fixed here)
-  F32  Artwork frame x=430 (§2.6) under the gradient leaves a hard vertical edge that §2.3
-       forbids. Until Owner resolves the authoritative artwork-start rule, all production
-       renders are fail-closed as BLOCKED_BY_GOVERNANCE_F32; no Q7-eligible technical PASS.
+  F32  RESOLVED in Layout Bible v1.22: artwork x=390, width=690, beneath the unchanged
+       x=390–475 gradient. Renderer follows that canonical geometry.
   F31  A 4-line callout (4 x 32 px) exceeds the 124 px inner height of the 156 px box
        with 16 px padding. Reported as WARN, not enforced.
 
