@@ -2,7 +2,7 @@
 """KDS Psychology Series deterministic slide assembler (reference implementation).
 
 Implements the fixed 1080x1350 geometry of the KDS Psychology Series Layout Bible
-(DIUA-DIC-000039; current canonical v1.21 at this revision) for the parts of a slide that must NOT
+(DIUA-DIC-000039 v1.22 CANONICAL) for the parts of a slide that must NOT
 come from an image model: white editorial field and gradient, header logo/divider/wordmark,
 series badge, topic, headline, body, callout box, Gold Wave / Dot Matrix ornaments and the
 page indicator.  The narrative scene is an input layer produced elsewhere.
@@ -30,7 +30,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-LAYOUT_AUTHORITY = "DIUA-DIC-000039 (Psychology Series Layout Bible) current CANONICAL; v1.21 at this revision"
+LAYOUT_AUTHORITY = "DIUA-DIC-000039 (Psychology Series Layout Bible) v1.22 CANONICAL"
 
 W, H = 1080, 1350
 
@@ -58,7 +58,7 @@ LOGO = (3, 34, 188, 188)                         # §3.2
 DIVIDER = (182, 53, 2, 132)                      # §3.2
 WORDMARK = (204, 65, 188, 109)                   # §3.2
 GRADIENT_STOPS = ((390, 1.0), (420, 0.8), (450, 0.35), (475, 0.0))  # §2.3.1
-ART = (430, 0, 650, 1350)                        # §2.6
+ART = (390, 0, 690, 1350)                        # §2.6 / F32 v1.22
 EDITORIAL_X0, EDITORIAL_X1 = 48, 390             # §2.5.1
 BADGE = (48, 252, 252, 34)                       # §4.1, radius 17
 TOPIC_Y, HEADLINE_Y, BODY_Y = 304, 390, 638      # §2.5
@@ -155,7 +155,6 @@ def first_baseline(font, top: float, line_height: float) -> float:
 
 def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True, enforce_canonical_font: bool = True):
     checks, fails = [], []
-    governance_blockers = []
 
     def check(name, ok, detail=""):
         checks.append({"check": name, "result": "PASS" if ok else "FAIL", "detail": detail})
@@ -184,19 +183,13 @@ def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True, en
     scene = Image.open(scene_path).convert("RGB")
 
     canvas = Image.new("RGBA", (W, H), WHITE + (255,))
-    # Layout Bible §2.6 fixes the artwork frame at x=430. Under the §2.3.1 gradient (about 65%
-    # white at x=430) that start produces a visible vertical edge, which §2.3 forbids
-    # (audit finding KDS-AUD-F32, Owner decision pending). The default follows the canonical
-    # §2.6 number; "artwork_x" exists only so an Owner-decided value can be applied without
-    # code changes. Any other value is reported as a deviation, never silently accepted.
+    # Layout Bible v1.22 / KDS-AUD-F32: the narrative artwork begins at x=390 and
+    # continues beneath the entire canonical x=390–475 white-to-transparent gradient.
     art_x = int(spec.get("artwork_x", ART[0]))
+    check("artwork frame starts at canonical x=390", art_x == ART[0], f"artwork_x={art_x}")
     frame = (art_x, 0, W - art_x, H)
     art, scale, left, top = cover(scene, frame, spec.get("scene_focus_x", 0.5), spec.get("scene_focus_y", 0.5))
     canvas.paste(art.convert("RGBA"), (frame[0], frame[1]))
-    checks.append({"check": "artwork / gradient authority conflict F32",
-                   "result": "BLOCKED_BY_GOVERNANCE_F32",
-                   "detail": f"artwork_x={art_x}; Layout Bible v1.21 retains the unresolved F32 contradiction. Production preflight is not Q7-eligible until Owner resolves the authoritative artwork-start rule."})
-    governance_blockers.append("F32 artwork/gradient authority conflict unresolved")
 
     # §2.3.1 full-height horizontal white overlay
     overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -305,10 +298,7 @@ def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True, en
         "scene_cover": {"scale": scale, "crop_left": left, "crop_top": top, "frame": frame},
         "text_lines": out,
         "checks": checks,
-        "preflight": ("FAIL" if fails else
-                      "BLOCKED_BY_GOVERNANCE_F32" if governance_blockers else
-                      "PASS"),
-        "governance_blockers": governance_blockers,
+        "preflight": "FAIL" if fails else "PASS",
         "approval": "NOT_GRANTED — technical preflight only; not QA PASS, not Owner or Publication approval",
     }
     return img, manifest, fails
