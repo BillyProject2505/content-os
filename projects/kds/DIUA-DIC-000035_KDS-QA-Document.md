@@ -451,7 +451,7 @@ These require demonstrated production need or separate authority.
 
 ## 14. Lifecycle Status
 
-**Current document state:** CANONICAL v1.13 (originally approved as v1.0 on 2026-09-23; see Change Records in §17–§28 for subsequent amendments).
+**Current document state:** CANONICAL v1.13 (originally approved as v1.0 on 2026-09-23; see Change Records in §17–§29 for subsequent amendments).
 
 Canonicalization followed the governance model inherited from KDS Project Architecture §0.
 
