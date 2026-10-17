@@ -1284,7 +1284,7 @@ Historical change records that cite `w=220` (§29, §33) are preserved as proven
 
 ---
 
-## 40. Current-State & Cross-Reference Correction — v1.20 — 2026-10-17
+## 40. Current-State Correction — v1.20 — 2026-10-17
 
 **Change type:** Editorial / current-state correction. No layout rule, number, frame, typography value, gradient stop, protection zone, asset reference or QA checklist item changed.
 
