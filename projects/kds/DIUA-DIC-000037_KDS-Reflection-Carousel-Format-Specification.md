@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-105"
 universal_identifier: "DIUA-DIC-000037"
-version: "1.7"
+version: "1.8"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
-    version: "1.15"
+    version: "1.16"
     status: "CANONICAL"
   - id: "DIUA-DIC-000003"
     name: "Content OS — Root Documentation Structure"
@@ -45,14 +45,14 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | -- | -- |
 | Document Name | KDS Satu Hati Sulawesi Utara — Reflection Carousel Format Specification |
 | Document Class | Domain/Project-Level Format Specification |
-| Version | 1.7 |
-| Status | **CANONICAL** — v1.6 amended 2026-09-27 under [BUS-115](https://linear.app/bussiness-content-os/issue/BUS-115/kds-reflection-carousel-slide-1-brand-presenter-primary-layout-new): introduces a mandatory Slide 1 Brand Presenter Primary Layout (50:50 composition, full-body KDS-OBJ-000010, hand-to-copy direction, deterministic bounds), aligned to the CWC cross-format rule normalized under [BUS-114](https://linear.app/bussiness-content-os/issue/BUS-114/cwc-cross-format-brand-presenter-layout-universal-5050-full-body). Canvas 1080×1350 (4:5) is established as Owner-supplied production evidence for this amendment only. All other OPEN items in §9 (typography, grid/margins beyond §3.1, palette distribution, export settings) remain unresolved. v1.7 (2026-10-16) is editorial only: Production SOP pin synchronized to v1.15 and the Slide 1 rule heading numbered §3.1 so existing §3.1 cross-references resolve. Previously v1.6. |
+| Version | 1.8 |
+| Status | **CANONICAL** — v1.8 (2026-10-17) synchronizes the upstream Production SOP pin from v1.15 to v1.16 following the Owner-approved F26 registered presenter depiction route. No Reflection Carousel format, Slide 1 50:50 geometry, Slide 2–3 requirement, typography, footer, palette, Q7 or OPEN decision in §9 changes. Prior v1.7 history remains in the change record. |
 | Related Issue | [BUS-105](https://linear.app/bussiness-content-os/issue/BUS-105/kds-satu-hati-sulawesi-utara-reflection-carousel-format-specification) — KDS Satu Hati Sulawesi Utara — Reflection Carousel Format Specification |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000037` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-037 in Universal Identifier Registration Record v1.29 |
-| Depends On | KDS Satu Hati Sulawesi Utara — Project Architecture (v1.10, CANONICAL); KDS Satu Hati Sulawesi Utara — Production SOP / Workflow (v1.15, CANONICAL); Content OS — Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
+| Depends On | KDS Satu Hati Sulawesi Utara — Project Architecture (v1.10, CANONICAL); KDS Satu Hati Sulawesi Utara — Production SOP / Workflow (v1.16, CANONICAL); Content OS — Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
 | Lateral / Consuming Authorities | KDS Asset Registry — current CANONICAL; KDS QA Document — current CANONICAL |
 
 ## 0. Governance and Authority
@@ -505,3 +505,16 @@ Project Architecture advanced to v1.8 and Production SOP to v1.11 during Psychol
 Slide count, sequence, semantic roles, caption rule, Slide 1 geometry, QA contribution and all §9 OPEN items are unchanged.
 
 **Version:** 1.6 → 1.7.
+
+
+---
+
+## Change Record — v1.8 — 2026-10-17
+
+**Change type:** Upstream dependency synchronization only following Owner-approved F26.
+
+Production SOP dependency v1.15 → **v1.16 CANONICAL**. The F26 scene-specific presenter depiction procedure, if applicable to any Reflection Carousel in the future, is owned by parent SOP, Asset Registry and QA Q6. This Format Specification does not add a separate variant or waive the mandatory existing Slide 1 presenter geometry, nor does it close any §9 OPEN parameter.
+
+**Unchanged:** exact 3-slide Quote–Reflection–Question sequence, Slide 1 1080×1350 / 50:50 presenter geometry, caption invitation, all OPEN typography/footer/export parameters, reusable KDS asset ownership, project QA and Stage 8 approval.
+
+**Version:** 1.7 → 1.8.

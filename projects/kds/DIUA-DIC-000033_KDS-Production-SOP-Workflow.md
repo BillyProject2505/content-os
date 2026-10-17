@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-99"
 universal_identifier: "DIUA-DIC-000033"
-version: "1.15"
+version: "1.16"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -44,8 +44,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — Production SOP / Workflow |
 | Document Class | Domain/Project-Level Operational Workflow Document |
 | System | Content OS → KDS Satu Hati Sulawesi Utara |
-| Version | 1.15 |
-| Status | **CANONICAL** — v1.15 (2026-10-16) contains (a) one **architectural** change approved by the Owner on 2026-10-16: §11 designates the **Ketua KDS Satu Hati Sulawesi Utara** as the Publication Approver for all KDS content formats, with recorded-approval, no-inference and no-auto-approval rules carried into §12–§13; and (b) editorial / current-state corrections: §7 Stage 4 matches Project Architecture §6, §16 replaces a stale dependency snapshot with current upstream pins and unversioned lateral pointers, and §18 cites the correct change-record range. No stage was added or removed and no other gate, ownership boundary or readiness criterion changed. Previously v1.14. |
+| Version | 1.16 |
+| Status | **CANONICAL** — v1.16 (Owner-approved F26 normative clarification, 2026-10-17). Stage 6 distinguishes unrelated content-local inputs from a scene-specific depiction of an ACTIVE registered KDS presenter, with explicit exact-artefact Owner identity approval and mandatory Q6. No registered master/variant, Stage 8 authority, or workflow stage changes. Previous status remains in historical change records. |
 | Related Issue | [BUS-99](https://linear.app/bussiness-content-os/issue/BUS-99/kds-satu-hati-sulawesi-utara-production-sop) — KDS Satu Hati Sulawesi Utara — Production SOP |
 | Owner | **\[OPERATIONAL DEFAULT\]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
@@ -250,10 +250,11 @@ A complete draft exists for visual/production execution and review.
 
 The **KDS Asset Registry (CANONICAL)** owns reusable asset identity, lifecycle, provenance, canonical-source records, and object-state authority.
 
-Asset routing distinguishes two cases:
+Asset routing distinguishes three cases:
 
 * **Reusable KDS asset** — an asset intended to function repeatedly as project identity, brand, character, ornament, template input, or other reusable production authority. It must be resolved through the KDS Asset Registry once such authority is required.
 * **Content-local asset** — an image, photo, illustration, or other input used for one specific content instance and not asserted as canonical/reusable KDS identity. It does not require Asset Registry registration solely because it appears in a publication, but its use must still satisfy applicable rights/consent, privacy, factual-integrity, format, and QA requirements.
+* **Content-instance depiction of an ACTIVE registered presenter identity** — a scene-specific generated/edited pose, expression, hand gesture or camera angle depicting the same KDS-OBJ-000010 identity for one identified artefact. Because it portrays registered identity, this is **not** an unrelated content-local asset, is **not exempt from Registry/Q6**, and is **not** a new reusable VAR unless separately registered and approved.
 
 Because the KDS Asset Registry is CANONICAL:
 
@@ -261,6 +262,8 @@ Because the KDS Asset Registry is CANONICAL:
 * registry canonicalization does not itself make a registered object ACTIVE;
 * when production requires ACTIVE reusable authority, a CANDIDATE object is insufficient until an explicit object-level ACTIVE promotion is recorded;
 * content-local inputs may still be used through the production flow when their use is otherwise authorized and they are not asserted as reusable/canonical KDS identity;
+* a content-instance depiction of the ACTIVE KDS presenter must resolve the registered Reference Master/authorized wardrobe, verify face/hair/body identity, male and flat-anime restrictions, preserve source and output provenance (exact final file/Drive locator, size and SHA-256), and have **explicit Owner identity approval for that exact artefact and scope** recorded before Q6 may PASS. Missing evidence, material identity drift or absent approval = BLOCKED. The route does not allow regenerated look-alike registered logos, wordmarks or ornaments, and approval cannot be inherited by other slides;
+* depiction identity approval does not grant final-artefact Q5/Q7 PASS or Stage 8 Publication Approval. For a carousel, publication approval covers the final complete carousel and its caption only after all required QA has passed;
 * any artefact that requires an ACTIVE reusable KDS asset that cannot be resolved to an ACTIVE object must be **BLOCKED** at the relevant gate.
 
 ### Format execution
@@ -808,3 +811,16 @@ No stage was added or removed. Publication Approver remains distinct from the go
 **Unchanged:** stage sequence 1–10, research routing, QA gate, fail-closed rules, connector-lifecycle inheritance ([BUS-118](../../system/DIUA-DIC-000042_Content-OS-Production-Connector-Lifecycle-Profile.md) wording is untouched; any change there is a separate System-level proposal).
 
 **Version:** 1.14 → 1.15.
+
+
+---
+
+## 36. Change Record — v1.16 — 2026-10-17
+
+**Change type:** Owner-approved normative F26 clarification.
+
+Stage 6 distinguishes content-instance portrayals of registered presenter identity from unrelated content-local inputs. The existing ACTIVE identity, its locked restrictions, exact source/output provenance and Owner per-artefact identity approval are required for the Q6 route. One-off approval does not create ACTIVE reusable VAR, new object ID, asset-substitute privilege, Q5/Q7 waiver or Stage 8 authority.
+
+**No change:** Stage 1–10 order, QA verdict ownership, Publication Approver, BUS-118 LOCKED content, canonical master binaries/checksums or project/series boundaries.
+
+**Version:** 1.15 → 1.16.

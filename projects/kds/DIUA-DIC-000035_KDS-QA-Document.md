@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-101"
 universal_identifier: "DIUA-DIC-000035"
-version: "1.12"
+version: "1.13"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
-    version: "1.15"
+    version: "1.16"
     status: "CANONICAL"
   - id: "DIUA-DIC-000034"
     name: "KDS Satu Hati Sulawesi Utara — Research Source List"
@@ -42,13 +42,13 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | KDS Satu Hati Sulawesi Utara — QA Document |
 | Document Class | Domain/Project-Level Quality Assurance Document |
 | System | Content OS → KDS Satu Hati Sulawesi Utara |
-| Version | 1.12 |
-| Status | **CANONICAL** — v1.12 (2026-10-16) is an editorial / dependency-state correction only: Production SOP pin synchronized to v1.15 and the §11 dependency snapshot brought current with unversioned lateral pointers for Psychology Series Layout Bible / Reference Sheet. §13 points to the Publication Approver now designated in Production SOP §11. Q1–Q9, verdict model and Publication Approval separation are unchanged. Previously v1.11. |
+| Version | 1.13 |
+| Status | **CANONICAL** — v1.13 (Owner-approved KDS-AUD-F26, 2026-10-17). Q6 adds explicit per-artefact registered-presenter depiction criteria while retaining exact registered-binary rules and fail-closed semantics; SOP dependency now v1.16. Q5/Q7, other QA criteria and Publication Approval remain independent. |
 | Related Issue | [BUS-101](https://linear.app/bussiness-content-os/issue/BUS-101/kds-satu-hati-sulawesi-utara-qa-document) — KDS Satu Hati Sulawesi Utara — QA Document |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — KDS Satu Hati Sulawesi Utara |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000035` — ALLOCATED — ACTIVE |
-| Depends On | KDS Satu Hati Sulawesi Utara — Project Architecture (v1.10, CANONICAL); KDS Satu Hati Sulawesi Utara — Production SOP / Workflow (v1.15, CANONICAL); KDS Satu Hati Sulawesi Utara — Research Source List (v1.7, CANONICAL); Content OS — Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
+| Depends On | KDS Satu Hati Sulawesi Utara — Project Architecture (v1.10, CANONICAL); KDS Satu Hati Sulawesi Utara — Production SOP / Workflow (v1.16, CANONICAL); KDS Satu Hati Sulawesi Utara — Research Source List (v1.7, CANONICAL); Content OS — Root Documentation Structure (v2.5, CANONICAL); Universal Identifier Registry (current CANONICAL) |
 | Allocation Evidence | CONTENT-OS-ALLOC-035 in Universal Identifier Registration Record v1.27 |
 | Structural Reference | [BUS-27](../sdoh/DIUA-DIC-000010_SDOH-QA-Document.md) — Satu Dosis Obat Hati — QA Document; project-level gate structure only |
 
@@ -215,17 +215,29 @@ Conditional criteria apply only when their triggering authority or content eleme
 
 ### Q6 — Reusable Asset Conformance
 
-**Trigger:** the artefact uses or asserts a reusable/canonical KDS asset.
+**Trigger:** the artefact uses or asserts a reusable/canonical KDS asset **or depicts the identity of an existing registered KDS presenter**, including in a newly generated content-instance scene.
 
 Verify:
 
 * asset identity is resolvable through the KDS Asset Registry (CANONICAL);
-* the artefact uses the currently authorized asset rather than an inferred, redrawn, regenerated, or look-alike substitute where canonical identity is required;
+* where an exact registered binary is required (including official logo, wordmark, ornaments and any explicitly claimed registered VAR binary), the artefact uses the authorized source rather than an inferred, redrawn, regenerated, or look-alike substitute; only the limited content-instance presenter depiction path below may use newly drawn presenter pixels;
 * any asset-specific restriction defined by the responsible authority is respected.
 
 Content-local assets do not require Asset Registry registration solely because they appear in one artefact, but their rights/privacy/factual-integrity requirements remain subject to other applicable checks.
 
 Registry canonicalization alone does not make a registered object ACTIVE. When an artefact requires ACTIVE reusable KDS authority, Q6 cannot PASS unless the referenced object resolves to an explicitly ACTIVE object; a CANDIDATE object remains insufficient for that assertion.
+
+#### Q6 — Content-instance depiction of a registered presenter (Owner F26)
+
+A single-instance scene illustration representing the existing KDS Brand Presenter identity **still triggers Q6**, even when its specific pose or expression is generated only for one slide. It is not an unrelated content-local asset and must satisfy **all** conditions below:
+
+1. **ACTIVE identity reference:** Resolve ACTIVE KDS-OBJ-000010 in the Asset Registry and its approved Reference Master and authorized episode wardrobe/registered reference variant. Preserve the reference locator and do not claim the generated scene is byte-identical to the registered VAR source.
+2. **Identity and style comparison:** Visually compare face, hair, body proportions/silhouette, male presentation, wardrobe consistency and locked flat-anime rendering against the approved identity evidence. Material identity drift or unauthorized style/wardrobe change = FAIL.
+3. **Exact provenance:** Record the source/scene production lineage, comparison evidence, and an immutable reviewed final output (durable file ID/locator, dimensions, byte size and SHA-256); a prompt, screenshot or unverifiable render claim is insufficient.
+4. **Affirmative Owner identity approval:** Record explicit Owner approval for that exact reviewed image and **its specified content instance** (e.g., BUS-167 Slide 1), referencing the exact output. No inference from similarity, prior consent for other images, silence, or QA.
+5. **No reuse by implication:** The content-specific illustration is not a newly ACTIVE reusable VAR. Any intention to reuse it requires separate registered variant provenance, lifecycle and Owner approval.
+
+If any condition is unmet, Q6 = **FAIL / BLOCKED**. This route never waives exact ACTIVE binary requirements for logo, wordmark or ornaments, and never changes the existing presenter master. Q6 cannot cure technical typography, visual scene/layout failures or missing script compliance: Q5 and Q7 must PASS independently. A presenter identity decision is **not** Stage 8 Publication Approval.
 
 ### Q7 — Format / Series Implementation Authority Conformance
 
@@ -439,7 +451,7 @@ These require demonstrated production need or separate authority.
 
 ## 14. Lifecycle Status
 
-**Current document state:** CANONICAL v1.12 (originally approved as v1.0 on 2026-09-23; see Change Records in §17–§28 for subsequent amendments).
+**Current document state:** CANONICAL v1.13 (originally approved as v1.0 on 2026-09-23; see Change Records in §17–§29 for subsequent amendments).
 
 Canonicalization followed the governance model inherited from KDS Project Architecture §0.
 
@@ -718,3 +730,16 @@ Project QA remains the sole PASS/FAIL authority. No scoring model, separate seri
 Q1–Q9, PASS/FAIL semantics, N/A rule, re-QA rule and Publication Approval separation are unchanged.
 
 **Version:** 1.11 → 1.12.
+
+
+---
+
+## 29. Change Record — v1.13 — 2026-10-17
+
+**Change type:** Owner-approved normative QA Q6 clarification (KDS-AUD-F26) and upstream dependency synchronization.
+
+The Q6 trigger now covers exact registered binary assets and one-off portrayal of ACTIVE KDS-OBJ-000010, with separate and measurable identity comparison, provenance and Owner per-artefact approval requirements. A depiction is not a new reusable VAR, nor an exemption from Registry identity locks or exact branding sources. Missing evidence remains FAIL/BLOCKED. SOP upstream dependency v1.15 → **v1.16**. No change to Q1–Q5, Q7–Q9, applicability of other criteria, QA verdict model, Publication Approver or final publication scope.
+
+Historical BUS-167 S01 v0.3A Q5/Q7 PASS was invalidated by F25's actual baseline rendering defect; this Q6 rule does not retroactively repair that image. Re-render and full re-QA are mandatory.
+
+**Version:** 1.12 → 1.13.

@@ -6,7 +6,7 @@ system: "Content OS → KDS Satu Hati Sulawesi Utara → Psychology Series"
 owner: "[OPERATIONAL DEFAULT] Document creator under KDS Project Architecture §0 until formally reassigned"
 related_issue: "BUS-107"
 universal_identifier: "DIUA-DIC-000039"
-version: "1.20"
+version: "1.21"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000032"
@@ -15,11 +15,11 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000038"
     name: "KDS Satu Hati Sulawesi Utara — Psychology Series Production Bible"
-    version: "1.10"
+    version: "1.11"
     status: "CANONICAL"
   - id: "DIUA-DIC-000033"
     name: "KDS Satu Hati Sulawesi Utara — Production SOP / Workflow"
-    version: "1.15"
+    version: "1.16"
     status: "CANONICAL"
   - id: "DIUA-DIC-000003"
     name: "Content OS — Root Documentation Structure"
@@ -61,8 +61,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project-Level Series Layout Bible |
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
-| Version | 1.20 |
-| Status | **CANONICAL — v1.20 (2026-10-17) is an editorial / current-state correction of v1.19.** The v1.19 Owner-approved Slide 1 Gold Wave frame and visual baseline (F15) have been canonical since GitHub PR #140 merged on 2026-10-16 (merge commit `36094b9`); conditional "effective upon PR merge" wording is replaced with that merge record. No layout number, frame, typography value, gradient stop or QA checklist item changed. Approval of geometry is not approval of any rendered content or publication. Previously v1.19. |
+| Version | 1.21 |
+| Status | **CANONICAL** — v1.21 (2026-10-17) clarifies that the existing allowed presenter pose/expression variations must follow Owner-approved F26 registered-identity depiction routing, Q6 evidence and artefact-specific approval. All numerical layouts, typography and gradient constraints remain unchanged; unresolved F31/F32 still require independent decisions. Upstream Production Bible v1.11 and SOP v1.16. |
 | Related Issue | [BUS-107](https://linear.app/bussiness-content-os/issue/BUS-107/kds-psychology-series-layout-bible) — KDS Psychology Series — Layout Bible |
 | Universal Identifier | `DIUA-DIC-000039` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-039 in Universal Identifier Registration Record v1.31 |
@@ -632,6 +632,8 @@ Required:
 * anime-style identity remains stable;
 * no replacement by a new protagonist without explicit authority.
 
+**F26 scope-limited presenter depiction (no geometry change):** A new scene-specific generated pose/expression/gesture portraying the same ACTIVE KDS-OBJ-000010 identity is permitted only through the parent Production SOP Stage 6 / Asset Registry and QA Q6 content-instance pathway, with locked identity/wardrobe/anime style, exact reviewed output evidence and explicit Owner identity approval tied to one artefact. The scene is not an ACTIVE reusable VAR, cannot replace registered brand binaries and does not waive any Layout Bible Q7 rule, one-scene chronology, fixed typography, graphic frames or white-gradient requirements.
+
 ## 9. Narrative Continuity
 
 ### 9.1 Every Slide Tells
@@ -737,7 +739,7 @@ All previously open numerical categories are now resolved through explicit Owner
 
 ## 14. Lifecycle
 
-**Current state:** CANONICAL v1.20 (editorial correction of v1.19; the Owner-approved v1.19 Slide 1 layout geometry has been canonical since PR #140 merged on 2026-10-16) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
+**Current state:** CANONICAL v1.21 (F26 scoped identity-depiction routing added after the v1.20 editorial correction of v1.19; the Owner-approved v1.19 Slide 1 layout geometry has been canonical since PR #140 merged on 2026-10-16) — ACTIVE / Psychology Series recursive Tier-2 sub-project. The Minimum Spatial Contract, exact Horizontal Editorial Bounds, fixed Vertical Editorial Grid, deterministic Series Badge and Callout Box geometry, deterministic white-to-transparent Gradient Profile, deterministic Narrative Visual Bounds and focal-zone protection, deterministic Lower Ornament Geometry, definitive Layout Protection Zones, deterministic logo/wordmark header geometry, complete role-based page-indicator contract, Inter content typeface, and complete core editorial typography hierarchy are authoritative for Psychology Series production. Series Badge width is corrected to 252 px following production QA. No current numerical layout constants remain OPEN. Storage authority is inherited from the System profile.
 
 Before canonicalization:
 
@@ -1295,3 +1297,16 @@ Historical change records that cite `w=220` (§29, §33) are preserved as proven
 * **Dependency.** Production Bible v1.9 → **v1.10 CANONICAL** (editorial correction).
 
 **Version:** 1.19 → 1.20.
+
+
+---
+
+## 41. Presenter Content-Instance Depiction Routing — v1.21 — 2026-10-17
+
+**Change type:** Owner-approved KDS-AUD-F26 identity-routing clarification with upstream dependency synchronization.
+
+§8 now links permitted generated presenter pose/expression variations to the parent SOP/Registry/QA Q6 exact per-artefact identity approval route. No new registered VAR, no approval transfer to other slides, and no downgrade of male/flat-anime/wardrobe locks. Dependency pins: Production SOP v1.15 → **v1.16** and Production Bible v1.10 → **v1.11**; body lateral references remain unversioned current-CANONICAL.
+
+**All numerical implementation remains unchanged:** canvas, editorial gradient, artwork frame, font size/tracking/baseline, Gold Wave/Dot Matrix and page counter frames, callout box and content safe zones. KDS-AUD-F31/F32 remain open and cannot be waived by this F26 decision. F25 corrupted glyph baseline continues to require re-render and Q5/Q7 validation before publication approval.
+
+**Version:** 1.20 → 1.21.
