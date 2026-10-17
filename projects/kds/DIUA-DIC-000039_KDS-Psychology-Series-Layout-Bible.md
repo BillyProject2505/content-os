@@ -62,7 +62,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Structural Classification | Tiered — Domain/Project (Tier 2, recursive sub-project) — **Psychology Series**; Parent Project: KDS Satu Hati Sulawesi Utara |
 | Owner | **[OPERATIONAL DEFAULT]** Document creator under KDS Project Architecture §0 until formally reassigned |
 | Version | 1.20 |
-| Status | **CANONICAL — v1.20 (2026-10-17) is an editorial / current-state correction of v1.19.** The v1.19 Owner-approved Slide 1 Gold Wave frame and visual baseline (F15) have been canonical since GitHub PR #140 merged on 2026-10-16 (merge commit `36094b9`); conditional "effective upon PR merge" wording is replaced with that merge record, and §2.2/§2.4 now cross-reference the §2.6 artwork frame. No layout number, frame, typography value, gradient stop or QA checklist item changed. Approval of geometry is not approval of any rendered content or publication. Previously v1.19. |
+| Status | **CANONICAL — v1.20 (2026-10-17) is an editorial / current-state correction of v1.19.** The v1.19 Owner-approved Slide 1 Gold Wave frame and visual baseline (F15) have been canonical since GitHub PR #140 merged on 2026-10-16 (merge commit `36094b9`); conditional "effective upon PR merge" wording is replaced with that merge record. No layout number, frame, typography value, gradient stop or QA checklist item changed. Approval of geometry is not approval of any rendered content or publication. Previously v1.19. |
 | Related Issue | [BUS-107](https://linear.app/bussiness-content-os/issue/BUS-107/kds-psychology-series-layout-bible) — KDS Psychology Series — Layout Bible |
 | Universal Identifier | `DIUA-DIC-000039` — ALLOCATED — ACTIVE |
 | Allocation Evidence | CONTENT-OS-ALLOC-039 in Universal Identifier Registration Record v1.31 |
@@ -112,7 +112,7 @@ The editorial field must remain readable first on mobile and must not be visuall
 
 ### 2.2 Right Narrative Visual Zone
 
-The right narrative zone is a **scene**, not decorative fill. Within the narrative artwork frame defined in §2.6 (`x ≥ 430 px`), the scene may extend beneath the transition area so that it visually merges with the editorial field.
+The right narrative zone is a **scene**, not decorative fill. The scene may extend beneath the transition area so that it visually merges with the editorial field.
 
 It must:
 
@@ -164,7 +164,7 @@ For the canonical **1080 × 1350 px** production canvas:
 
 * **Editorial essential-copy safe zone:** essential editorial copy uses the exact horizontal range **x = 48–390 px**, providing a fixed **342 px usable editorial width**. Essential text must not extend beyond `x = 390 px`.
 * **Transition band:** exactly **x = 390–475 px** is reserved for the canonical **white-to-transparent gradient profile** defined in §2.3.1. Essential text must not depend on this band for readability.
-* **Narrative-scene zone:** the narrative artwork frame begins exactly at **x = 430 px**, extends to **x = 1080 px**, and spans **y = 0–1350 px**; it may continue beneath the gradient transition band only within that frame (`x = 430–475 px`, §2.6) and must not obscure essential copy.
+* **Narrative-scene zone:** the narrative artwork frame begins exactly at **x = 430 px**, extends to **x = 1080 px**, and spans **y = 0–1350 px**; it may continue beneath the gradient transition band but must not obscure essential copy.
 * **Primary visual focal point:** the Brand Presenter face and other critical narrative focal points must remain inside the governed focal zone **x = 560–1010 px, y = 160–1150 px**. Critical focal points must not enter the gradient transition band.
 * **Page indicator anchor:** deterministic by slide role. **Slide 1 / opening slide = bottom-right**; **slides 2–N = bottom-left/editorial region**. No free repositioning is permitted.
 
@@ -1288,10 +1288,9 @@ Historical change records that cite `w=220` (§29, §33) are preserved as proven
 
 **Change type:** Editorial / current-state correction. No layout rule, number, frame, typography value, gradient stop, protection zone, asset reference or QA checklist item changed.
 
-**Basis:** KDS Full Documentation Audit — 2026-10-17 (findings KDS-AUD-F24, F32).
+**Basis:** KDS Full Documentation Audit — 2026-10-17 (finding KDS-AUD-F24).
 
 * **Stale conditional authority (F24).** The Status row, §6.5.2 *Authority* line and §14 still described v1.19 as "effective upon PR merge" although PR #140 merged on 2026-10-16; §38 still read "Owner approval: PENDING" after PR #139 merged. Current-state lines now cite the merges; §38/§39 receive resolution notes and their original text is preserved.
-* **Artwork-frame cross-reference (F32).** §2.2 and §2.4 said the scene "may extend beneath the transition area/band" without the bound already fixed by §2.6 (artwork frame starts at `x = 430 px`; extension beneath the gradient only across `x = 430–475 px`). Both sentences now point to §2.6. The §2.6 values are unchanged; the more specific Owner-locked rule (v1.12) already governed.
 * **Migration note.** The 2026-09-28 note about unmerged PR #43 is marked superseded with a link to the now-canonical Production Bible.
 * **Dependency.** Production Bible v1.9 → **v1.10 CANONICAL** (editorial correction).
 
