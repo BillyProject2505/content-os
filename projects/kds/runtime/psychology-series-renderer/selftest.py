@@ -5,8 +5,8 @@
    proving the test detects the per-glyph ink-box alignment defect seen in BUS-167 S01 v0.3A
    and S02 v0.1A.
 2. Layout Bible numbers: gradient stops, §6.5.2 `contain` results, Slide 1 / Slides 2-N frames.
-3. End-to-end assembly with synthetic placeholder assets (hash check disabled): preflight PASS
-   for fitting copy, FAIL for overflowing copy (no shrink).
+3. End-to-end assembly with synthetic placeholder assets (hash check disabled): verifies
+   F32 blocks production preflight, and overflowing copy still fails closed (no shrink).
 """
 import shutil
 import sys
@@ -144,14 +144,14 @@ def assembly_test(fonts: Path, tmp: Path):
             "headline": "Kenapa kita sering keras pada diri sendiri?",
             "body": "Saat salah, gagal, atau sedang lelah, suara di kepala bisa berubah menjadi hakim.",
             "callout": "Self-compassion menawarkan cara lain.", "face_xy": [700, 400]}
-    img, man, fails = rs.render(spec, assets, fonts, verify_hashes=False)
-    ok("synthetic Slide 1 assembles 1080×1350 with preflight PASS", img.size == (1080, 1350) and not fails, str(fails))
+    img, man, fails = rs.render(spec, assets, fonts, verify_hashes=False, enforce_canonical_font=False)
+    ok("synthetic Slide 1 assembles 1080×1350 but is governance-blocked by F32", img.size == (1080, 1350) and not fails and man["preflight"] == "BLOCKED_BY_GOVERNANCE_F32", man["preflight"])
     px = img.load()
     ok("no scene pixels left of artwork frame x=430 (white at x=391..429)",
        all(px[x, y] == (255, 255, 255) for x in range(391, 430) for y in range(260, 1100, 20)))
     spec2 = dict(spec, slide=2, dot_matrix=True,
                  headline="Kalimat judul yang sengaja dibuat terlalu panjang agar melewati batas empat baris yang ditetapkan")
-    _, man2, fails2 = rs.render(spec2, assets, fonts, verify_hashes=False)
+    _, man2, fails2 = rs.render(spec2, assets, fonts, verify_hashes=False, enforce_canonical_font=False)
     ok("overflowing headline fails closed (no font shrink)", "headline <= 4 lines" in fails2, str(fails2))
 
 
