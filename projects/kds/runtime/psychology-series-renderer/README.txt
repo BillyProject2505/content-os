@@ -29,7 +29,11 @@ RUN
   python3 render_slide.py --spec slide.json --assets <dir with registered PNGs> \
       --fonts /usr/share/fonts/opentype/inter --out slide.png
   -> slide.png + slide.png.manifest.json (input hashes, line breaks, checks, verdict)
-  Exit code 0 only for preflight PASS. Preflight PASS is technical evidence for QA Q5/Q7;
+  Exit code 0 only for preflight PASS. While F32 remains unresolved, production returns
+  BLOCKED_BY_GOVERNANCE_F32 (non-zero) even if all other technical checks pass.
+  Exact canonical Inter is required for production; synthetic self-tests may exercise logic
+  with a substitute font but that is never typography-conformance evidence.
+  Preflight PASS is technical evidence for QA Q5/Q7;
   it is NOT a QA verdict, Owner Visual Approval or Publication Approval.
 
   slide.json keys: slide, total, scene, scene_focus_x, scene_focus_y, badge, topic,
@@ -38,7 +42,8 @@ RUN
 
 KNOWN OPEN POINTS (Owner decisions, not fixed here)
   F32  Artwork frame x=430 (§2.6) under the gradient leaves a hard vertical edge that §2.3
-       forbids. Default follows §2.6; any other artwork_x is reported as DEVIATION.
+       forbids. Until Owner resolves the authoritative artwork-start rule, all production
+       renders are fail-closed as BLOCKED_BY_GOVERNANCE_F32; no Q7-eligible technical PASS.
   F31  A 4-line callout (4 x 32 px) exceeds the 124 px inner height of the 156 px box
        with 16 px padding. Reported as WARN, not enforced.
 
