@@ -295,7 +295,7 @@ def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True, en
         "layout_authority": LAYOUT_AUTHORITY,
         "slide": slide, "total": total,
         "inputs_sha256": inputs,
-        "scene_cover": {"scale": scale, "crop_left": left, "crop_top": top, "frame": frame},
+        "scene_cover": {"scale": scale, "crop_left": left, "crop_top": top, "frame": [art_x, 0, W - art_x, H]},
         "text_lines": out,
         "checks": checks,
         "preflight": "FAIL" if fails else "PASS",
