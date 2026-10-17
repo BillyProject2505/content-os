@@ -2,7 +2,7 @@
 """KDS Psychology Series deterministic slide assembler (reference implementation).
 
 Implements the fixed 1080x1350 geometry of the KDS Psychology Series Layout Bible
-(DIUA-DIC-000039 v1.19 values; unchanged in v1.20) for the parts of a slide that must NOT
+(DIUA-DIC-000039; current canonical v1.21 at this revision) for the parts of a slide that must NOT
 come from an image model: white editorial field and gradient, header logo/divider/wordmark,
 series badge, topic, headline, body, callout box, Gold Wave / Dot Matrix ornaments and the
 page indicator.  The narrative scene is an input layer produced elsewhere.
@@ -30,11 +30,11 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-LAYOUT_AUTHORITY = "DIUA-DIC-000039 (Psychology Series Layout Bible) geometry as of v1.19/v1.20"
+LAYOUT_AUTHORITY = "DIUA-DIC-000039 (Psychology Series Layout Bible) current CANONICAL; v1.21 at this revision"
 
 W, H = 1080, 1350
 
-# --- Asset Registry DIUA-DIC-000036 v1.11: exact ACTIVE production binaries ---------------
+# --- Asset Registry DIUA-DIC-000036 v1.12: exact ACTIVE production binaries ---------------
 ASSETS = {
     "logo": ("KDS-OBJ-000001_Official-Logo_v1.0.png",
              "261f24c65d44a01cfe669706ecfdbf7b5a240bc30f5a6ddec954e1cef593f554"),
@@ -153,8 +153,9 @@ def first_baseline(font, top: float, line_height: float) -> float:
     return top + (line_height - (asc + desc)) / 2 + asc
 
 
-def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True):
+def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True, enforce_canonical_font: bool = True):
     checks, fails = [], []
+    governance_blockers = []
 
     def check(name, ok, detail=""):
         checks.append({"check": name, "result": "PASS" if ok else "FAIL", "detail": detail})
@@ -192,9 +193,10 @@ def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True):
     frame = (art_x, 0, W - art_x, H)
     art, scale, left, top = cover(scene, frame, spec.get("scene_focus_x", 0.5), spec.get("scene_focus_y", 0.5))
     canvas.paste(art.convert("RGBA"), (frame[0], frame[1]))
-    checks.append({"check": "artwork frame per Layout Bible §2.6 (x=430)",
-                   "result": "PASS" if art_x == ART[0] else "DEVIATION (F32 Owner decision required)",
-                   "detail": f"artwork_x={art_x}; seam at x=430 is a known open contradiction (F32)"})
+    checks.append({"check": "artwork / gradient authority conflict F32",
+                   "result": "BLOCKED_BY_GOVERNANCE_F32",
+                   "detail": f"artwork_x={art_x}; Layout Bible v1.21 retains the unresolved F32 contradiction. Production preflight is not Q7-eligible until Owner resolves the authoritative artwork-start rule."})
+    governance_blockers.append("F32 artwork/gradient authority conflict unresolved")
 
     # §2.3.1 full-height horizontal white overlay
     overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -230,7 +232,19 @@ def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True):
 
     def font(role, size=None):
         f, s, *_ = ROLES[role]
-        return ImageFont.truetype(str(fonts / f), size or s)
+        p = fonts / f
+        try:
+            loaded = ImageFont.truetype(str(p), size or s)
+        except OSError as exc:
+            check(f"canonical font present: {f}", False, str(exc))
+            raise
+        family = (loaded.getname()[0] or "").lower()
+        if enforce_canonical_font:
+            check(f"canonical Inter font identity: {f}", "inter" in family, f"reported family={loaded.getname()[0]}")
+        else:
+            checks.append({"check": f"font identity (self-test only): {f}", "result": "INFO",
+                           "detail": f"reported family={loaded.getname()[0]}; canonical typography conformance intentionally disabled for synthetic self-test"})
+        return loaded
 
     # §4 badge
     bx, by, bw, bh = BADGE
@@ -291,8 +305,10 @@ def render(spec: dict, assets: Path, fonts: Path, verify_hashes: bool = True):
         "scene_cover": {"scale": scale, "crop_left": left, "crop_top": top, "frame": frame},
         "text_lines": out,
         "checks": checks,
-        "preflight": "FAIL" if fails else ("DEVIATION — not conformant to current Layout Bible"
-                                             if art_x != ART[0] else "PASS"),
+        "preflight": ("FAIL" if fails else
+                      "BLOCKED_BY_GOVERNANCE_F32" if governance_blockers else
+                      "PASS"),
+        "governance_blockers": governance_blockers,
         "approval": "NOT_GRANTED — technical preflight only; not QA PASS, not Owner or Publication approval",
     }
     return img, manifest, fails
@@ -306,7 +322,7 @@ def main(argv=None):
     ap.add_argument("--out", required=True)
     a = ap.parse_args(argv)
     spec = json.loads(Path(a.spec).read_text(encoding="utf-8"))
-    img, manifest, fails = render(spec, Path(a.assets), Path(a.fonts))
+    img, manifest, fails = render(spec, Path(a.assets), Path(a.fonts), enforce_canonical_font=True)
     img.save(a.out, optimize=True)
     manifest["output_sha256"] = sha256(Path(a.out))
     Path(a.out + ".manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
