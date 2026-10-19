@@ -15,11 +15,11 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000008"
     name: "Satu Dosis Obat Hati — Production SOP"
-    version: "1.40"
+    version: "1.41"
     status: "CANONICAL"
   - id: "DIUA-DIC-000010"
     name: "Satu Dosis Obat Hati — QA Document"
-    version: "1.31"
+    version: "1.32"
     status: "CANONICAL"
   - id: "DIUA-DIC-000011"
     name: "Satu Dosis Obat Hati — Asset Registry"
@@ -43,7 +43,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Related Issue | [BUS-51](<https://linear.app/bussiness-content-os/issue/BUS-51>) |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Satu Dosis Obat Hati |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000022` — ALLOCATED / ACTIVE, per [BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md) v1.20 and [BUS-17](../../system/Content-OS-Universal-Identifier-Registration-Record.md) v1.18 |
-| Depends On | SDOH Project Architecture v1.13; SDOH Production SOP v1.40; SDOH QA Document v1.31; SDOH Asset Registry v1.28 |
+| Depends On | SDOH Project Architecture v1.13; SDOH Production SOP v1.41; SDOH QA Document v1.32; SDOH Asset Registry v1.28 |
 | Scope | Instance konten Sage Reels dan kejadian publikasinya |
 | References | [BUS-45](<https://linear.app/bussiness-content-os/issue/BUS-45>) eksekusi; [BUS-24](<https://linear.app/bussiness-content-os/issue/BUS-24>) semantik; [BUS-25](<https://linear.app/bussiness-content-os/issue/BUS-25>) SOP; [BUS-26](<https://linear.app/bussiness-content-os/issue/BUS-26>) riset; [BUS-27](<https://linear.app/bussiness-content-os/issue/BUS-27>) QA; [BUS-28](<https://linear.app/bussiness-content-os/issue/BUS-28>) aset |
 | Aturan pencatatan | [BUS-51](<https://linear.app/bussiness-content-os/issue/BUS-51>) — Aturan pencatatan bersama v0.1 |
