@@ -15,11 +15,11 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000008"
     name: "Satu Dosis Obat Hati — Production SOP"
-    version: "1.40"
+    version: "1.41"
     status: "CANONICAL"
   - id: "DIUA-DIC-000010"
     name: "Satu Dosis Obat Hati — QA Document"
-    version: "1.31"
+    version: "1.32"
     status: "CANONICAL"
   - id: "DIUA-DIC-000011"
     name: "Satu Dosis Obat Hati — Asset Registry"
@@ -43,9 +43,9 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Related Issue | [BUS-54](https://linear.app/bussiness-content-os/issue/BUS-54/satu-dosis-obat-hati-tiktok-poster-content-registers) — TikTok Poster Content Registers |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Satu Dosis Obat Hati |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000024` — ALLOCATED / ACTIVE, per [BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md) v1.20 and [BUS-17](../../system/Content-OS-Universal-Identifier-Registration-Record.md) v1.18 |
-| Depends On | SDOH Project Architecture v1.13; SDOH Production SOP v1.40; SDOH QA Document v1.31; SDOH Asset Registry v1.28 |
+| Depends On | SDOH Project Architecture v1.13; SDOH Production SOP v1.41; SDOH QA Document v1.32; SDOH Asset Registry v1.28 |
 | Scope | Sage TikTok Poster content instances and their publication events |
-| References | [BUS-24](DIUA-DIC-000007_SDOH-Project-Architecture.md) semantics; [BUS-25](DIUA-DIC-000008_SDOH-Production-SOP.md) Production SOP v1.40; [BUS-27](DIUA-DIC-000010_SDOH-QA-Document.md) QA v1.31; [BUS-28](DIUA-DIC-000011_SDOH-Asset-Registry.md) asset identity/provenance; [BUS-52](https://linear.app/bussiness-content-os/issue/BUS-52/satu-dosis-obat-hati-sage-tiktok-poster-production) Sage Poster production authority |
+| References | [BUS-24](DIUA-DIC-000007_SDOH-Project-Architecture.md) semantics; [BUS-25](DIUA-DIC-000008_SDOH-Production-SOP.md) Production SOP v1.41; [BUS-27](DIUA-DIC-000010_SDOH-QA-Document.md) QA v1.32; [BUS-28](DIUA-DIC-000011_SDOH-Asset-Registry.md) asset identity/provenance; [BUS-52](https://linear.app/bussiness-content-os/issue/BUS-52/satu-dosis-obat-hati-sage-tiktok-poster-production) Sage Poster production authority |
 | ID konten lokal | `SDOH-SAGE-POSTER-NNNN`; `0001` allocated; `0002` and `0003` allocated 2026-09-19 for September suicide-prevention campaign; next available `0004` |
 
 ## Purpose
@@ -55,8 +55,8 @@ Operational register for Sage TikTok Poster content instances. This document rec
 ## Authority boundary
 
 * [BUS-24](DIUA-DIC-000007_SDOH-Project-Architecture.md) owns project identity and Sage / Seri Peluk semantics.
-* [BUS-25](DIUA-DIC-000008_SDOH-Production-SOP.md) v1.31 CANONICAL owns cross-format workflow and caption baseline.
-* [BUS-27](DIUA-DIC-000010_SDOH-QA-Document.md) v1.28 CANONICAL owns project-level QA.
+* [BUS-25](DIUA-DIC-000008_SDOH-Production-SOP.md) v1.41 CANONICAL owns cross-format workflow and caption baseline.
+* [BUS-27](DIUA-DIC-000010_SDOH-QA-Document.md) v1.32 CANONICAL owns project-level QA.
 * [BUS-28](DIUA-DIC-000011_SDOH-Asset-Registry.md) owns reusable asset identity/provenance.
 * [BUS-52](https://linear.app/bussiness-content-os/issue/BUS-52/satu-dosis-obat-hati-sage-tiktok-poster-production) owns Sage TikTok Poster production mechanics and locked Poster principles.
 * [BUS-54](https://linear.app/bussiness-content-os/issue/BUS-54/satu-dosis-obat-hati-tiktok-poster-content-registers) owns content-instance registration structure only.
