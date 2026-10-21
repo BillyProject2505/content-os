@@ -1,0 +1,92 @@
+name: SDOH Drive asset SHA-256 verification
+
+# Read-only verification of canonical SDOH production binaries on Google Drive.
+# Implements the Owner-locked rule in SDOH QA Document:
+#   Linear registry -> exact Google Drive file ID -> raw-byte SHA-256 -> production; otherwise FAIL CLOSED.
+# Results are published as job annotations (readable via the Checks API), not only in logs.
+# No bytes are stored or uploaded; the downloaded file is deleted after hashing.
+
+on:
+  workflow_dispatch:
+    inputs:
+      assets_json:
+        description: 'JSON array of {"name","drive_file_id","expected_sha256"}. Values must come from the active SDOH Asset Registry.'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Validate required repository variables
+        shell: bash
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+        run: |
+          set -euo pipefail
+          test -n "$GCP_PROJECT_ID"
+          test -n "$GCP_WORKLOAD_IDENTITY_PROVIDER"
+          test -n "$GCP_SERVICE_ACCOUNT"
+
+      - id: auth
+        name: Authenticate to Google Cloud with WIF
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 900s
+
+      - name: Fetch raw bytes and verify SHA-256 (fail closed)
+        shell: bash
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          ASSETS_JSON: ${{ inputs.assets_json }}
+        run: |
+          set -uo pipefail
+          failures=0
+          count="$(jq 'length' <<<"$ASSETS_JSON")"
+          if [ "$count" -lt 1 ]; then
+            echo "::error::assets_json is empty"
+            exit 1
+          fi
+          for i in $(seq 0 $((count - 1))); do
+            name="$(jq -r ".[$i].name" <<<"$ASSETS_JSON")"
+            id="$(jq -r ".[$i].drive_file_id" <<<"$ASSETS_JSON")"
+            expected="$(jq -r ".[$i].expected_sha256" <<<"$ASSETS_JSON" | tr 'A-F' 'a-f')"
+            out="$RUNNER_TEMP/asset-$i.bin"
+            status="$(curl --silent --show-error --location --output "$out" --write-out '%{http_code}' \
+              --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN" \
+              "https://www.googleapis.com/drive/v3/files/$id?alt=media" || echo 000)"
+            if [ "$status" != "200" ] || [ ! -s "$out" ]; then
+              echo "::error title=FAIL-CLOSED $name::Drive fetch failed (HTTP $status) for file ID $id"
+              failures=$((failures + 1))
+              rm -f "$out"
+              continue
+            fi
+            actual="$(sha256sum "$out" | cut -d' ' -f1)"
+            bytes="$(wc -c < "$out" | tr -d ' ')"
+            rm -f "$out"
+            if [ "$actual" = "$expected" ]; then
+              echo "::notice title=MATCH $name::id=$id bytes=$bytes sha256=$actual"
+            else
+              echo "::error title=MISMATCH $name::id=$id bytes=$bytes expected=$expected actual=$actual"
+              failures=$((failures + 1))
+            fi
+          done
+          if [ "$failures" -gt 0 ]; then
+            echo "::error::$failures of $count assets failed verification"
+            exit 1
+          fi
+          echo "::notice::All $count assets MATCH"
