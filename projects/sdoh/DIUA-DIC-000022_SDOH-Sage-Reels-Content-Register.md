@@ -6,7 +6,7 @@ system: "Content OS → Satu Dosis Obat Hati (SDOH)"
 owner: "Billy Fernando Mende"
 related_issue: "BUS-51"
 universal_identifier: "DIUA-DIC-000022"
-version: "1.6"
+version: "1.7"
 status: "CANONICAL / LOCKED"
 depends_on:
   - id: "DIUA-DIC-000007"
@@ -37,8 +37,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | Satu Dosis Obat Hati — Sage Reels Content Register |
 | Document Class | Domain/Project Operational Content Register |
 | System | Content OS → Satu Dosis Obat Hati (SDOH) |
-| Version | 1.6 |
-| Status | **CANONICAL / LOCKED** — v1.6 reconciliation (2026-10-21): synchronized dependencies to Production SOP v1.42 and QA Document v1.33; reconciled Linear instance `SDOH-SAGE-REEL-0003` into the canonical register; advanced next available Sage Reel ID to `SDOH-SAGE-REEL-0004`; and recorded BUS-45 §3.5 Continuous Illustrated Storytelling v1.0 as the governing visual-execution default for future Sage Reels. Existing locked Sage Reels 0001–0003 remain grandfathered. Prior state: v1.5 CANONICAL / LOCKED. |
+| Version | 1.7 |
+| Status | **CANONICAL / LOCKED** — v1.7 allocation/cover-lock sync (2026-10-22): allocated `SDOH-SAGE-REEL-0004` through Linear BUS-169, recorded its deterministic Final Cover v1 as CANONICAL / LOCKED with Google Drive binary + SHA-256 evidence, and advanced the next available Sage Reel ID to `SDOH-SAGE-REEL-0005`. Body micro-scenes, audiovisual Final Master, caption, scheduling, and publication remain separate unresolved gates. Prior state: v1.6 CANONICAL / LOCKED. |
 | Owner | Billy Fernando Mende |
 | Related Issue | [BUS-51](<https://linear.app/bussiness-content-os/issue/BUS-51>) |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Satu Dosis Obat Hati |
@@ -47,7 +47,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Scope | Instance konten Sage Reels dan kejadian publikasinya |
 | References | [BUS-45](<https://linear.app/bussiness-content-os/issue/BUS-45>) eksekusi; [BUS-24](<https://linear.app/bussiness-content-os/issue/BUS-24>) semantik; [BUS-25](<https://linear.app/bussiness-content-os/issue/BUS-25>) SOP; [BUS-26](<https://linear.app/bussiness-content-os/issue/BUS-26>) riset; [BUS-27](<https://linear.app/bussiness-content-os/issue/BUS-27>) QA; [BUS-28](<https://linear.app/bussiness-content-os/issue/BUS-28>) aset |
 | Aturan pencatatan | [BUS-51](<https://linear.app/bussiness-content-os/issue/BUS-51>) — Aturan pencatatan bersama v0.1 |
-| ID konten lokal | SDOH-SAGE-REEL-NNNN; 0001 allocated/published; 0002 allocated/published; 0003 allocated/READY with publication evidence still unverified; **nomor berikutnya 0004** |
+| ID konten lokal | SDOH-SAGE-REEL-NNNN; 0001 allocated/published; 0002 allocated/published; 0003 allocated/READY with publication evidence still unverified; 0004 allocated/IN PRODUCTION with Final Cover v1 locked; **nomor berikutnya 0005** |
 
 ## Fokus tema
 
@@ -64,7 +64,7 @@ Satu Final Master terkonfirmasi telah dimigrasikan dari [BUS-45](https://linear.
 | SDOH-SAGE-REEL-0001 | Perasaan yang belum punya nama — validasi kondisi tanpa memaksa penjelasan; judul deskriptif register | Hook: Ada hari ketika kita tidak sedang sedih. Transkripsi on-screen dan beat map tersedia di rincian entri; Caption v1.0 APPROVED / LOCKED tersedia di bagian akhir; QA editorial PASS dan Owner lock tercatat 2026-09-12 | READY — master CANONICAL / LOCKED menurut [BUS-45](https://linear.app/bussiness-content-os/issue/BUS-45/satu-dosis-obat-hati-sage-reels-production); publication event pertama tercatat PUBLISHED pada 2026-09-15 | Teks visual bersifat reflektif, tanpa diagnosis, statistik atau janji terapi; narasi dan caption belum ditinjau sebagai transkripsi lengkap | Marcel Take 2 cocok secara sinyal; Library identity dan checksum tercatat di rincian. Lima frame produksi 1080×1920, audio source, timing map, assembly script, checksum manifest, canonical master, dan verification rebuild kini dipersistenkan dalam Reproduction Package v1 di Google Drive | Master pada [BUS-45](https://linear.app/bussiness-content-os/issue/BUS-45/satu-dosis-obat-hati-sage-reels-production); QA dan lock ditelusuri ke komentar spesifik di rincian | Migrasi historis; pemeriksaan duplikasi akun/antrean belum dilakukan; jangan menganggap Prototype 02 bertema berhenti sebentar sebagai naskah final ini |
 
 | SDOH-SAGE-REEL-0002 | Suicide prevention — Start the Conversation / membuka ruang percakapan | Five locked visual beats: F1 `kadang kita bingung / harus mulai dari mana`; F2 `coba mulai sederhana: / “akhir-akhir ini kamu gimana?”`; F3 `lalu beri ruang / untuk jawaban yang jujur`; F4 `dengarkan tanpa / buru-buru memperbaiki`; F5 `satu percakapan / bisa membuka jalan / menuju dukungan`. Narration locked and expanded beyond the visual anchors. | **READY — Final Master v1 CANONICAL / LOCKED**, Owner approved 2026-09-26. Publication remains a separate gate and is still PLANNED. | WHO WSPD 2026; IASP WSPD 2026; WHO responsible media guidance 2023. | Marcel / ElevenLabs Take 2 selected. F1–F5 locked static masters; final waveform-derived timing: 0.000–6.506 / 6.506–14.079 / 14.079–18.837 / 18.837–24.154 / 24.154–32.300 s. | [Final Master v1](<https://drive.google.com/file/d/16dpIT4G1_eHTcqqssaVGpKZYEEM4p9Cl/view?usp=drivesdk>) — 1080×1920, H.264/AAC, 30 fps, 32.300 s, SHA-256 `75c497db2ca35e16e425367ef3658cc1e4fa6827777247d4a80e604f54c55fe6`; QA PASS; loudness −17.58 LUFS, true peak −1.63 dBTP; final hold \~0.797 s. | 2026-09-19 cross-format campaign check found no direct duplicate of the conversation-opening angle. |
-| SDOH-SAGE-REEL-0003 | Pengalamanmu punya tempat dalam percakapan — World Mental Health Day 2026 / lived experience / meaningful listening | Narration v1.0 APPROVED / LOCKED: pengalaman yang sulit diceritakan tetap nyata dan layak didengar; final visual direction uses five environment-backed animated scenes progressing from private interior → reflection → spatial opening → conversation space. | **READY — Final Master v1 CANONICAL / LOCKED; Final Cover v1 CANONICAL / LOCKED; Caption v1.0 APPROVED / LOCKED.** Publication remains **PLANNED / UNVERIFIED** because no live Instagram/TikTok evidence has been recorded in the canonical register. | WHO World Mental Health Day 2026 — “Lived experiences heard: real voices, real change”; WHO 2026 webinar on meaningful engagement of people with lived experience. | Marcel / ElevenLabs Take 2 selected; final waveform-derived timing: F1 0.000–3.733 / F2 3.733–11.233 / F3 11.233–17.600 / F4 17.600–24.300 / F5 24.300–30.600 s. Creative Rebuild v2 approved. | [Final Master v1](<https://drive.google.com/file/d/12WYyPlmOkCw06kN6iGample4Fnm0O-Gl/view?usp=drivesdk>) — 1080×1920, H.264/AAC, 30 fps, 30.600 s, SHA-256 `467bf2551031225092abaffbbf5af5b2186368907a3b8ed8f0f1d0b56f92b0f7`; Final Cover v1 Drive ID `1VaeAoUqD6adLk_37xNumTdHIYFEsZ4AV`, SHA-256 `ad27ce8078bb7e86dc870604f5fdd81f01aeb91c344636db8d44c6ec29a1e047`; Caption v1.0 Drive doc ID `1lyS0-JGXfr06W-oKeywuxzED_ufy2oEb6Zb_v_wkMXE`. | Cross-register comparison required before 0004 production. 0003 is related to 0001 through emotional recognition and to 0002 through conversation/listening, but its core angle is distinct: lived experience must have space in mental-health conversation. |
+| SDOH-SAGE-REEL-0003 | Pengalamanmu punya tempat dalam percakapan — World Mental Health Day 2026 / lived experience / meaningful listening | Narration v1.0 APPROVED / LOCKED: pengalaman yang sulit diceritakan tetap nyata dan layak didengar; final visual direction uses five environment-backed animated scenes progressing from private interior → reflection → spatial opening → conversation space. | **READY — Final Master v1 CANONICAL / LOCKED; Final Cover v1 CANONICAL / LOCKED; Caption v1.0 APPROVED / LOCKED.** Publication remains **PLANNED / UNVERIFIED** because no live Instagram/TikTok evidence has been recorded in the canonical register. | WHO World Mental Health Day 2026 — “Lived experiences heard: real voices, real change”; WHO 2026 webinar on meaningful engagement of people with lived experience. | Marcel / ElevenLabs Take 2 selected; final waveform-derived timing: F1 0.000–3.733 / F2 3.733–11.233 / F3 11.233–17.600 / F4 17.600–24.300 / F5 24.300–30.600 s. Creative Rebuild v2 approved. | [Final Master v1](<https://drive.google.com/file/d/12WYyPlmOkCw06kN6iGample4Fnm0O-Gl/view?usp=drivesdk>) — 1080×1920, H.264/AAC, 30 fps, 30.600 s, SHA-256 `467bf2551031225092abaffbbf5af5b2186368907a3b8ed8f0f1d0b56f92b0f7`; Final Cover v1 Drive ID `1VaeAoUqD6adLk_37xNumTdHIYFEsZ4AV`, SHA-256 `ad27ce8078bb7e86dc870604f5fdd81f01aeb91c344636db8d44c6ec29a1e047`; Caption v1.0 Drive doc ID `1lyS0-JGXfr06W-oKeywuxzED_ufy2oEb6Zb_v_wkMXE`. | Cross-register comparison required before 0004 production. 0003 is related to 0001 through emotional recognition and to 0002 through conversation/listening, but its core angle is distinct: lived experience must have space in mental-health conversation. || SDOH-SAGE-REEL-0004 | Continuous Illustrated Storytelling — working angle represented by cover copy `nggak harus / sekarang`; final topic/narration remains governed by BUS-169 production record | Continuous Illustrated Storytelling v1.0; character-led / no on-screen text; production plan uses 10 micro-scenes. Body scenes remain subject to scene-level QA / Owner approval. | **IN PRODUCTION — Final Cover v1 CANONICAL / LOCKED.** Final Master, caption, schedule and publication are not approved. | No research-sensitive public claim is introduced by the approved cover copy itself. Any narration/content claims must be sourced separately before Final Master approval. | Body plan M01–M10; canonical stickman pose/reference constraints. Cover uses deterministic P06 + Sun emblem + Caveat Medium under Shared Reels Cover Layout Model. | Final Cover v1 Drive ID `1zGj3AM8xV-mWz1057ZSh_BgA6jbKvJlO`, SHA-256 `0f0fcd0b4603531be8f6f383392ec48cfc39877414eeaab67e3b00f71486dd18`; QA report Drive ID `1ltGzEei5SDEiQtTLuLAHHOW6I-NCu8DE`; working folder `19PwPs2X6WJXWLFPsoiIEHdhIGX3ilC_p`; Owner lock recorded in Linear [BUS-169](https://linear.app/bussiness-content-os/issue/BUS-169/sdoh-sage-reel-0004-continuous-illustrated-storytelling). | Allocation follows v1.6 next-ID state. Cross-format duplicate check remains required before READY; allocation/cover approval alone does not satisfy duplication or publication gates. |
 
 
 ### Provenance SDOH-SAGE-REEL-0001
@@ -493,3 +493,25 @@ For **future Sage Reels beginning with the next unallocated instance**, BUS-45 �
 - canonical stickman identity, Sage/Burgundy palette, hand-drawn restraint, asset provenance, Owner Visual Approval, cover, caption, and publication gates remain in force.
 
 `SDOH-SAGE-REEL-0001`–`0003` remain grandfathered historical/locked instances and are not reopened by this change.
+
+## SDOH-SAGE-REEL-0004 Allocation + Final Cover Lock — 2026-10-22
+
+The next available ID from v1.6 was allocated as `SDOH-SAGE-REEL-0004`.
+
+Authority/evidence:
+- Linear execution record: [BUS-169](https://linear.app/bussiness-content-os/issue/BUS-169/sdoh-sage-reel-0004-continuous-illustrated-storytelling)
+- Material state: **IN PRODUCTION**
+- Final Cover v1: **CANONICAL / LOCKED**
+- Cover copy: `nggak harus / sekarang`
+- Cover canvas: 1080×1920; active 4:5 workspace Y 285–1635
+- Character: canonical `SDOH-OBJ-000006-P06`
+- Theme emblem: canonical `SDOH-OBJ-000012-E01` Sun
+- Drive Final Cover ID: `1zGj3AM8xV-mWz1057ZSh_BgA6jbKvJlO`
+- Final Cover SHA-256: `0f0fcd0b4603531be8f6f383392ec48cfc39877414eeaab67e3b00f71486dd18`
+- Drive QA report ID: `1ltGzEei5SDEiQtTLuLAHHOW6I-NCu8DE`
+- Drive working folder ID: `19PwPs2X6WJXWLFPsoiIEHdhIGX3ilC_p`
+- Cover production path: deterministic Shared Reels Cover Layout Model / BUS-49-derived; no generative cover.
+
+This lock applies **only to the Final Cover v1**. Body micro-scenes, narration/audio, audiovisual Final Master, caption, schedule, and publication remain separate gates.
+
+Next available Sage Reel ID after this allocation: **`SDOH-SAGE-REEL-0005`**.
