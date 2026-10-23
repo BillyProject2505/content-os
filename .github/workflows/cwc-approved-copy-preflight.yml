@@ -1,0 +1,78 @@
+name: CWC approved-copy preflight (BUS-170)
+
+# Non-authoritative pilot: NO render, approval, scheduling, Meta API or publication.
+on:
+  pull_request:
+    paths:
+      - "projects/cwc/runtime/approved-copy/**"
+      - ".github/workflows/cwc-approved-copy-preflight.yml"
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: Already allocated CWC Carousel Content ID
+        required: true
+        type: string
+      expected_copy_fingerprint:
+        description: Independently pinned approved-copy SHA-256
+        required: true
+        type: string
+      confirmation:
+        description: Must equal COPY_PREFLIGHT_ONLY
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Contract regressions
+        run: node --test projects/cwc/runtime/approved-copy/preflight.test.mjs
+
+  preflight:
+    needs: tests
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Manual preflight only (fail closed)
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          EXPECTED_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || { echo "::error::Preflight only allowed on main"; exit 1; }
+          [[ "$CONFIRMATION" == "COPY_PREFLIGHT_ONLY" ]] || { echo "::error::Explicit preflight confirmation required"; exit 1; }
+          [[ "$CONTENT_ID" =~ ^CWC-CRSL-[0-9]{4}$ ]] || { echo "::error::Invalid content ID"; exit 1; }
+          [[ "$EXPECTED_FINGERPRINT" =~ ^[a-f0-9]{64}$ ]] || { echo "::error::Expected SHA-256 required"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/cwc-preflight"
+          node projects/cwc/runtime/approved-copy/preflight.mjs \
+            --content-id "$CONTENT_ID" \
+            --expected-copy-fingerprint "$EXPECTED_FINGERPRINT" \
+            --out "$RUNNER_TEMP/cwc-preflight/evidence.json"
+          {
+            echo "## CWC approved-copy preflight"
+            echo "Syntactic/integrity preflight PASS for $CONTENT_ID"
+            echo "Human approval, register state, clinical claims, rendering and publication NOT verified."
+            echo "NO render/approval/schedule/Meta write performed."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload non-publishable evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: cwc-approved-copy-preflight-evidence
+          path: ${{ runner.temp }}/cwc-preflight/evidence.json
+          if-no-files-found: error
+          retention-days: 14
