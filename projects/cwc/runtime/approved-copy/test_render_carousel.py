@@ -148,5 +148,38 @@ class RenderSafetyTests(unittest.TestCase):
         with self.assertRaises(mod.RenderRejected):
             mod.position_presenter(source, {**core, "height": 300}, gesture, copy)
 
+    def test_end_to_end_synthetic_composition_smoke(self):
+        """Exercises actual SVG/PNG compositing without touching Drive or CWC content."""
+        p, pins = fixture()
+        p["composition"]["slide_1"]["presenter_core_box"] = {
+            "x": 670, "y": 310, "width": 345, "height": 900
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            presenter = root / "presenter.png"
+            image = Image.new("RGBA", (1122, 1402), (0, 0, 0, 0))
+            ImageDraw.Draw(image).rectangle((151, 19, 887, 1383),
+                                            fill=(255, 255, 255, 255))
+            image.save(presenter)
+            logo = root / "logo.svg"
+            footer = root / "footer.svg"
+            logo.write_text('<svg xmlns="http://www.w3.org/2000/svg" '
+                            'width="360" height="110"><rect width="360" '
+                            'height="110" fill="yellow"/></svg>', "utf8")
+            footer.write_text('<svg xmlns="http://www.w3.org/2000/svg" '
+                              'width="1070" height="64"><rect width="1070" '
+                              'height="64" fill="white"/></svg>', "utf8")
+            fixture_font = Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
+            assets = {"presenter": presenter, "logo": logo, "footer": footer,
+                      "montserrat_bold": fixture_font, "montserrat_medium": fixture_font}
+            result = mod.compose(p, assets, root / "rendered")
+            self.assertEqual(len(result["slides"]), 2)
+            self.assertEqual(result["slides"][0]["presenter_placement"]["visible_bounds_px"][0], 572)
+            self.assertEqual(result["slides"][0]["size_px"], [1080, 1350])
+            self.assertIsNone(result["slides"][1]["presenter_placement"])
+            self.assertEqual((root / "rendered" / "contact-sheet.jpg").exists(), True)
+            with Image.open(root / "rendered" / "slide-01.png") as im:
+                self.assertEqual(im.size, (1080, 1350))
+
 if __name__ == "__main__":
     unittest.main()
