@@ -62,12 +62,24 @@ jobs:
             echo "::error::Explicit read-only probe confirmation required"
             exit 1
           }
+      - name: Enforce CWC-only Drive identity before requesting a token
+        shell: bash
+        env:
+          CWC_SERVICE_ACCOUNT: ${{ vars.CWC_GCP_SERVICE_ACCOUNT }}
+        run: |
+          set -euo pipefail
+          # A separate CWC reader must be configured in GitHub repo variables.
+          # The shared OIDC *provider* can be reused, not the SDOH service account.
+          [[ "$CWC_SERVICE_ACCOUNT" =~ ^cwc-[a-z0-9-]+@[a-z0-9-]+[.]iam[.]gserviceaccount[.]com$ ]] || {
+            echo "::error::CWC_GCP_SERVICE_ACCOUNT missing/invalid. Configure dedicated cwc-* Google service account; never reuse GCP_SERVICE_ACCOUNT for SDOH."
+            exit 1
+          }
       - name: Obtain scoped Drive read-only identity via existing WIF
         id: auth
         uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          service_account: ${{ vars.CWC_GCP_SERVICE_ACCOUNT }}
           token_format: access_token
           access_token_scopes: https://www.googleapis.com/auth/drive.readonly
           access_token_lifetime: 3600s
