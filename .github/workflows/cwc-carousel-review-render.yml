@@ -32,6 +32,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13.5"
+      - name: Verify reusable read-only Drive asset probe contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n projects/cwc/runtime/approved-copy/check-drive-assets.sh
+          jq -e '.schema=="cwc-render-asset-pins-v1" and
+                 (.assets|keys|length)==7' projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json >/dev/null
       - name: Install pinned renderer dependencies
         run: python -m pip install --disable-pip-version-check Pillow==12.3.0 CairoSVG==2.8.2
       - name: CWC copy and geometry regressions
