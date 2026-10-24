@@ -180,6 +180,8 @@ class RenderSafetyTests(unittest.TestCase):
             self.assertEqual((root / "rendered" / "contact-sheet.jpg").exists(), True)
             with Image.open(root / "rendered" / "slide-01.png") as im:
                 self.assertEqual(im.size, (1080, 1350))
+                self.assertEqual(im.getpixel((10, 1300)), (255, 255, 255))
+                self.assertEqual(im.getpixel((10, 1255)), (11, 61, 158))
 
 if __name__ == "__main__":
     unittest.main()
