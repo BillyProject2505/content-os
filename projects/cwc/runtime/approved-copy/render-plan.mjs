@@ -174,6 +174,7 @@ function main() {
   const source=path.join("projects/cwc/content/carousel",id+".json");
   check(fs.existsSync(source),"COPY_NOT_FOUND","approved copy file not present; nothing to render");
   const copy=JSON.parse(fs.readFileSync(source,"utf8"));
+  check(copy.content_id===id,"CONTENT_ID_MISMATCH","source file Content ID differs from dispatched ID");
   verifyFormatSource();
   const plan=buildCarouselRenderPlan(copy,{
     expectedFingerprint:o["--expected-copy-fingerprint"],
