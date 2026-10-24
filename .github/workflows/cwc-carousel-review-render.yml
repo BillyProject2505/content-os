@@ -1,0 +1,149 @@
+name: CWC Carousel review render (BUS-170 B2)
+on:
+  pull_request:
+    paths:
+      - "projects/cwc/runtime/approved-copy/**"
+      - ".github/workflows/cwc-carousel-review-render.yml"
+  workflow_dispatch:
+    inputs:
+      content_id:
+        type: string
+        required: true
+      expected_copy_fingerprint:
+        type: string
+        required: true
+      expected_layout_fingerprint:
+        type: string
+        required: true
+      confirmation:
+        type: string
+        required: true
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13.5"
+      - name: Install pinned renderer dependencies
+        run: python -m pip install --disable-pip-version-check Pillow==12.3.0 CairoSVG==2.8.2
+      - name: CWC copy and geometry regressions
+        run: node --test projects/cwc/runtime/approved-copy/*.test.mjs
+      - name: Render contract regressions
+        run: python -m unittest discover -s projects/cwc/runtime/approved-copy -p 'test_render_carousel.py' -v
+  review_candidate:
+    needs: tests
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13.5"
+      - name: Build checksum-bound CWC render plan
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -euo pipefail
+          [[ "$CONFIRMATION" == "RENDER_UNAPPROVED_CWC_REVIEW_PACKAGE" ]] || { echo "::error::Confirmation missing"; exit 1; }
+          [[ "$CONTENT_ID" =~ ^CWC-CRSL-[0-9]{4}$ ]] || { echo "::error::Bad Content ID"; exit 1; }
+          [[ "$FINGERPRINT" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::Independent approved copy fingerprint required"; exit 1; }
+          test -f "projects/cwc/content/carousel/$CONTENT_ID.json" || { echo "::error::Approved-copy file not found"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/cwc-review"
+          node projects/cwc/runtime/approved-copy/render-plan.mjs \
+            --content-id "$CONTENT_ID" \
+            --expected-copy-fingerprint "$FINGERPRINT" \
+            --surface BLUE_DARK \
+            --presenter-variant WHITE_POINT_LEFT \
+            --copy-box '{"x":72,"y":450,"width":479,"height":440}' \
+            --presenter-box '{"x":670,"y":310,"width":345,"height":900}' \
+            --gesture-box '{"x":572,"y":440,"width":22,"height":120}' \
+            --out "$RUNNER_TEMP/cwc-review/render-plan.json"
+      - name: Bind independent CWC semantic typography layout
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          LAYOUT_FP: ${{ inputs.expected_layout_fingerprint }}
+        run: |
+          set -euo pipefail
+          [[ "$LAYOUT_FP" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::Independent layout SHA-256 required"; exit 1; }
+          layout="projects/cwc/content/carousel/$CONTENT_ID.layout.json"
+          test -f "$layout" || { echo "::error::Human-reviewed layout file absent"; exit 1; }
+          node projects/cwc/runtime/approved-copy/typography-layout.mjs \
+            --plan "$RUNNER_TEMP/cwc-review/render-plan-typed.json" \
+            --layout "$layout" \
+            --expected-layout-fingerprint "$LAYOUT_FP" \
+            --out "$RUNNER_TEMP/cwc-review/render-plan-typed.json"
+      - name: Drive read-only authentication
+        id: auth
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+      - name: Download exact CWC assets and enforce SHA-256
+        shell: bash
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: |
+          set -euo pipefail
+          pins="projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json"
+          target="$RUNNER_TEMP/cwc-assets"
+          mkdir -p "$target"
+          for role in presenter logo footer montserrat_bold montserrat_medium montserrat_semibold montserrat_extrabold; do
+            file_id="$(jq -r --arg k "$role" '.assets[$k].drive_file_id // empty' "$pins")"
+            name="$(jq -r --arg k "$role" '.assets[$k].file_name // empty' "$pins")"
+            sha="$(jq -r --arg k "$role" '.assets[$k].sha256 // empty' "$pins")"
+            [[ -n "$file_id" && -n "$name" && "$sha" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::Invalid asset pin $role"; exit 1; }
+            [[ "$name" != *"/"* ]] || { echo "::error::Unsafe asset name"; exit 1; }
+            status="$(curl --silent --show-error --location --output "$target/$name" --write-out '%{http_code}' \
+              --header "Authorization: Bearer $ACCESS_TOKEN" \
+              "https://www.googleapis.com/drive/v3/files/$file_id?alt=media")"
+            [[ "$status" == "200" && -s "$target/$name" ]] || { echo "::error::Drive asset unavailable: $role HTTP $status"; exit 1; }
+            actual="$(sha256sum "$target/$name" | awk '{print $1}')"
+            [[ "$actual" == "$sha" ]] || { echo "::error::SHA-256 mismatch for $role"; exit 1; }
+            echo "$role checksum PASS"
+          done
+      - name: Install pinned renderer dependencies
+        run: python -m pip install --disable-pip-version-check Pillow==12.3.0 CairoSVG==2.8.2
+      - name: Render nonpublishable review candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python projects/cwc/runtime/approved-copy/render-carousel.py \
+            --plan "$RUNNER_TEMP/cwc-review/render-plan.json" \
+            --pins projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json \
+            --assets "$RUNNER_TEMP/cwc-assets" \
+            --out "$RUNNER_TEMP/cwc-review/rendered"
+      - name: Fail-closed review boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -e '.state=="RENDERED_CANDIDATE_UNAPPROVED" and .asset_hash_verification=="PASS" and .technical_qa=="NOT_COMPLETE" and .visual_owner_review=="NOT_GRANTED" and .approved_release_identity==null and .publication_authorized==false and (.artifacts.slides|length)>0' "$RUNNER_TEMP/cwc-review/rendered/render-report.json" >/dev/null
+          echo "CWC review candidate only: no STG-08/09/10 approval, schedule or publish" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload unapproved review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cwc-carousel-unapproved-review-candidate
+          path: ${{ runner.temp }}/cwc-review/
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,49 @@
+{
+  "schema": "cwc-render-asset-pins-v1",
+  "authority": {
+    "presenter": "BUS-94",
+    "asset_registry": "DIUA-DIC-000014@1.18",
+    "reference_sheet": "DIUA-DIC-000016@1.23",
+    "format": "DIUA-DIC-000029@1.4"
+  },
+  "surface": "BLUE_DARK",
+  "presenter_variant": "WHITE_POINT_LEFT",
+  "assets": {
+    "presenter": {
+      "file_name": "CWC_AS002_Kaz_White-Jacket_Point-Left_FullBody_REUSABLE_v1.0.png",
+      "drive_file_id": "1Vlh1cORMn5jMBQFmkXh5d9faYYuJaDjF",
+      "sha256": "e0fbb96e5261b7849420df7db8359d9b80d7f1184f32c1cbfce0ceaccc50cf80"
+    },
+    "logo": {
+      "file_name": "CWC_Master.svg",
+      "drive_file_id": "1If3wZTeAs-HrRHn982H1J6-qPwpt28bC",
+      "sha256": "04f7f7f46f6fc58c5e244b8c8f07e38d30b5f7faaf8179d5696aa55fd366da3a"
+    },
+    "footer": {
+      "file_name": "CWC-CRS-AS-004_Footer-White_CANONICAL.svg",
+      "drive_file_id": "1KHhReT_dIUR0d33Lm7mfDr2Ct_2LDYPm",
+      "sha256": "f38b7e4f07df5c13275fb01e08952db4d7fc45b783cf23f052d4ce8eb64ad4d0"
+    },
+    "montserrat_bold": {
+      "file_name": "Montserrat-Bold.ttf",
+      "drive_file_id": "1pCnWdFCFqVsaR-NkkY3gpQZ9-hOnnzCs",
+      "sha256": "7fa93d7daa5c2f881a6727229c211782de6b76008fbd6346b3d7664e8fc83f43"
+    },
+    "montserrat_medium": {
+      "file_name": "Montserrat-Medium.ttf",
+      "drive_file_id": "1alSik5bCTzY0tltI0QaiOYz53ob5k3Xl",
+      "sha256": "cd161cba3a3cdcf68ad721920fcd164c87e7b7cc9e6bad510278c3fa378d91d2"
+    },
+    "montserrat_semibold": {
+      "file_name": "Montserrat-SemiBold.ttf",
+      "drive_file_id": "1er6J5U7zLpbyDwAeet_Z5vy6bed1R_oe",
+      "sha256": "9c4db3814875410e7d64fdc8e69676c3b84968bb15bf3ace8b3944c59fbc56b6"
+    },
+    "montserrat_extrabold": {
+      "file_name": "Montserrat-ExtraBold.ttf",
+      "drive_file_id": "1XVxPr0R5eH-ZzZRqrhE7ctagEgZRKi87",
+      "sha256": "5cf0a23133ccce35f9e115b8dbbf90434201827bc2465d12f9d91bbf02cf9466"
+    }
+  },
+  "remarks": "This is a reviewed checksum-pinned pilot snapshot; revalidate against current CAR/CAB/CRS/BUS-94 and Drive before production. No automatic promotion of governance authority."
+}
