@@ -21,7 +21,8 @@ CANVAS = (1080, 1350)
 BLUE = "#0B3D9E"
 WHITE = "#FFFFFF"
 HIV_RED = "#E31C23"
-FOOTER_TOP = 1248
+FOOTER_TOP = 1248  # protected region begins before the actual footer SVG
+FOOTER_RENDER_Y = 1280  # approved release frame: intrinsic 1070x64 SVG at x=5
 LOGO_X, LOGO_Y, LOGO_WIDTH = 72, 64, 260
 ROLE_FONTS = {
     "cover": {"size": 72, "leading": 82, "min_size": 64},
@@ -219,8 +220,8 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
     if presenter.size != (1122, 1402):
         reject("PRESENTER_SIZE_MISMATCH", "reusable source PNG dimensions changed")
     logo = rasterize_svg(assets["logo"], LOGO_WIDTH)
-    footer = rasterize_svg(assets["footer"], 950)
-    if logo.width != LOGO_WIDTH or footer.width != 950:
+    footer = rasterize_svg(assets["footer"], 1070)
+    if logo.width != LOGO_WIDTH or footer.size != (1070, 64):
         reject("SVG_SIZE_INVALID", "cannot rasterize canonical SVG")
     # Loading font from verified Drive bytes avoids system-dependent substitutions.
     cover_style, body_style = ROLE_FONTS["cover"], ROLE_FONTS["body"]
@@ -232,7 +233,7 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
     for i, slide in enumerate(plan["slides"]):
         canvas = Image.new("RGBA", CANVAS, BLUE)
         canvas.alpha_composite(logo, (LOGO_X, LOGO_Y))
-        canvas.alpha_composite(footer, ((CANVAS[0] - footer.width) // 2, FOOTER_TOP))
+        canvas.alpha_composite(footer, ((CANVAS[0] - footer.width) // 2, FOOTER_RENDER_Y))
         if i == 0:
             box = plan["composition"]["slide_1"]
             scaled, position, presenter_meta = position_presenter(
