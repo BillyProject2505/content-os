@@ -129,5 +129,24 @@ class RenderSafetyTests(unittest.TestCase):
         self.assertIn((227, 28, 35), list(im.getdata()))
 
 
+    def test_actual_visible_alpha_presenter_placement(self):
+        # Synthetic mask approximates the BUS-94 derivative's visible occupancy;
+        # CI never ships test raster/fonts as a substitute canonical asset.
+        source = Image.new("RGBA", (1122, 1402), (0, 0, 0, 0))
+        ImageDraw.Draw(source).rectangle((151, 19, 887, 1383), fill=(255, 255, 255, 255))
+        core = {"x": 670, "y": 310, "width": 345, "height": 900}
+        gesture = {"x": 572, "y": 440, "width": 22, "height": 120}
+        copy = {"x": 72, "y": 250, "width": 479, "height": 440}
+        resized, destination, evidence = mod.position_presenter(source, core, gesture, copy)
+        self.assertGreater(resized.height, 900)
+        self.assertEqual(evidence["visible_bounds_px"][0], 572)
+        self.assertGreaterEqual(evidence["visible_height_px"], 750)
+        self.assertLessEqual(evidence["visible_bounds_px"][2], 1080)
+        self.assertLess(evidence["visible_bounds_px"][3], mod.FOOTER_TOP)
+        with self.assertRaises(mod.RenderRejected):
+            mod.position_presenter(source, core, {"x": 540}, copy)
+        with self.assertRaises(mod.RenderRejected):
+            mod.position_presenter(source, {**core, "height": 300}, gesture, copy)
+
 if __name__ == "__main__":
     unittest.main()
