@@ -166,6 +166,53 @@ def paint_text(img: Image.Image, text: str, rect: dict, font: ImageFont.FreeType
     return {"line_count": len(lines), "measured_height": total_height, "font_px": font.size}
 
 
+def position_presenter(presenter: Image.Image, body: dict, gesture: dict, copy: dict) -> tuple[Image.Image, tuple[int, int], dict]:
+    """Place BUS-94 full-body PNG by *visible alpha bounds*, not transparent file width.
+
+    Pilot-local composition QA: minimum 750 px visible height. The registered
+    body region is a core-zone check, NOT an instruction to squeeze the entire
+    1122 px transparent source into 345 px. Resizing is uniform; no source pixels
+    or geometry are rewritten or regenerated.
+    """
+    if gesture is None:
+        reject("GESTURE_REQUIRED", "POINT_LEFT presenter needs a measured gesture anchor")
+    alpha = presenter.getchannel("A").point(lambda a: 255 if a >= 16 else 0)
+    visible = alpha.getbbox()
+    if not visible:
+        reject("PRESENTER_TRANSPARENT", "selected source has no useful alpha")
+    visible_width = visible[2] - visible[0]
+    visible_height = visible[3] - visible[1]
+    scale = body["height"] / visible_height
+    if scale <= 0:
+        reject("PRESENTER_SCALE_INVALID", "visible-bounds scale cannot be zero")
+    result = presenter.resize(
+        (round(presenter.width * scale), round(presenter.height * scale)),
+        Image.Resampling.LANCZOS,
+    )
+    rendered_bbox = result.getchannel("A").point(lambda a: 255 if a >= 16 else 0).getbbox()
+    if not rendered_bbox:
+        reject("PRESENTER_TRANSPARENT", "resampling produced no usable alpha")
+    # Leftmost visible pixel is the hand of the approved POINT_LEFT derivative.
+    dest_x = gesture["x"] - rendered_bbox[0]
+    dest_y = body["y"] - rendered_bbox[1]
+    x0 = dest_x + rendered_bbox[0]
+    x1 = dest_x + rendered_bbox[2]
+    y0 = dest_y + rendered_bbox[1]
+    y1 = dest_y + rendered_bbox[3]
+    if x0 < 572 or x0 > 594 or x0 <= copy["x"] + copy["width"] or x1 > CANVAS[0]:
+        reject("PRESENTER_COPY_COLLISION", "actual opaque pixels violate copy/gesture/canvas bounds")
+    if y0 < 250 or y1 >= FOOTER_TOP:
+        reject("PRESENTER_PROTECTED_COLLISION", "visible presenter overlaps header/footer envelope")
+    if y1 - y0 < 750:
+        reject("PRESENTER_TOO_SMALL", "reviewer-validated cover requires adequate visual presence")
+    return result, (dest_x, dest_y), {
+        "visible_bounds_px": [x0, y0, x1, y1],
+        "visible_height_px": y1 - y0,
+        "scale": round(scale, 6),
+        "layout_qa": "PRELIMINARY_ONLY_REQUIRES_STG08_VISUAL_CHECK",
+    }
+
+
 def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
     output.mkdir(parents=True, exist_ok=True)
     presenter = Image.open(assets["presenter"]).convert("RGBA")
@@ -187,14 +234,11 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
         canvas.alpha_composite(logo, (LOGO_X, LOGO_Y))
         canvas.alpha_composite(footer, ((CANVAS[0] - footer.width) // 2, FOOTER_TOP))
         if i == 0:
-            # Exact pixel assets are uniformly scaled; never re-generated or warped.
-            bbox = plan["composition"]["slide_1"]["presenter_core_box"]
-            scale = min(bbox["width"] / presenter.width, bbox["height"] / presenter.height)
-            scaled = presenter.resize((round(presenter.width * scale), round(presenter.height * scale)),
-                                      resample=Image.Resampling.LANCZOS)
-            dest_x = bbox["x"] + (bbox["width"] - scaled.width) // 2
-            dest_y = bbox["y"] + bbox["height"] - scaled.height
-            canvas.alpha_composite(scaled, (dest_x, dest_y))
+            box = plan["composition"]["slide_1"]
+            scaled, position, presenter_meta = position_presenter(
+                presenter, box["presenter_core_box"], box.get("gesture_box"), box["copy_box"]
+            )
+            canvas.alpha_composite(scaled, position)
             text_meta = paint_text(canvas, slide["copy"],
                                    plan["composition"]["slide_1"]["copy_box"],
                                    cover_font, cover_style["leading"], WHITE)
@@ -205,7 +249,8 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
         path = output / f"slide-{i+1:02d}.png"
         canvas.convert("RGB").save(path, format="PNG", optimize=False)
         renders.append({"slide": i + 1, "filename": path.name, "sha256": sha256_file(path),
-                        "size_px": [1080, 1350], "typography_measurement": text_meta})
+                        "size_px": [1080, 1350], "typography_measurement": text_meta,
+                        "presenter_placement": presenter_meta if i == 0 else None})
     # Contact sheet is review aid, not publishable binary.
     cols, preview_w = 2, 324
     preview_h = round(preview_w * CANVAS[1] / CANVAS[0])
