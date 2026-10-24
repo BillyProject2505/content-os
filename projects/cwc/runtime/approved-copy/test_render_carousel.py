@@ -33,6 +33,23 @@ def fixture():
             "presenter": {"drive_id": "PRESENTER", "expected_sha256": "A" * 64}
         },
         "slides": [{"slide": 1, "copy": "Apa itu PrEP?"}, {"slide": 2, "copy": "Jaga kesehatanmu dengan informasi tepercaya."}],
+        "typography_layout": {
+            "schema": "cwc-carousel-typography-layout-v1",
+            "fingerprint": "f" * 64,
+            "source_approval_verified": False,
+            "slides": [
+                {"slide": 1, "blocks": [{
+                    "role": "headline", "text": "Apa itu PrEP?", "tone": "WHITE",
+                    "rect": {"x": 72, "y": 450, "width": 479, "height": 200}
+                }], "accents": [{"type": "line", "tone": "YELLOW",
+                                 "rect": {"x": 72, "y": 397, "width": 121, "height": 6}}]},
+                {"slide": 2, "blocks": [{
+                    "role": "body", "text": "Jaga kesehatanmu dengan informasi tepercaya.",
+                    "tone": "WHITE",
+                    "rect": {"x": 72, "y": 310, "width": 936, "height": 250}
+                }], "accents": []}
+            ]
+        },
         "gates": {"owner_final_visual_approval_granted": False,
                   "approved_release_identity_issued": False,
                   "publication_authorized": False}
@@ -96,7 +113,7 @@ class RenderSafetyTests(unittest.TestCase):
     def test_asset_checksum_rejects_corrupted_bytes(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            roles = ("logo", "footer", "presenter", "montserrat_bold", "montserrat_medium")
+            roles = ("logo", "footer", "presenter", "montserrat_bold", "montserrat_medium", "montserrat_semibold", "montserrat_extrabold")
             records = {}
             for role in roles:
                 p = root / (role + ".bin")
@@ -171,7 +188,8 @@ class RenderSafetyTests(unittest.TestCase):
                               'height="64" fill="white"/></svg>', "utf8")
             fixture_font = Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
             assets = {"presenter": presenter, "logo": logo, "footer": footer,
-                      "montserrat_bold": fixture_font, "montserrat_medium": fixture_font}
+                      "montserrat_bold": fixture_font, "montserrat_medium": fixture_font,
+                      "montserrat_semibold": fixture_font, "montserrat_extrabold": fixture_font}
             result = mod.compose(p, assets, root / "rendered")
             self.assertEqual(len(result["slides"]), 2)
             self.assertEqual(result["slides"][0]["presenter_placement"]["visible_bounds_px"][0], 572)
@@ -182,6 +200,30 @@ class RenderSafetyTests(unittest.TestCase):
                 self.assertEqual(im.size, (1080, 1350))
                 self.assertEqual(im.getpixel((10, 1300)), (255, 255, 255))
                 self.assertEqual(im.getpixel((10, 1255)), (11, 61, 158))
+
+    def test_reject_typography_copy_drift(self):
+        p, pins = fixture()
+        p["typography_layout"]["slides"][0]["blocks"][0]["text"] = "Changed message"
+        with self.assertRaises(mod.RenderRejected):
+            mod.validate_plan(p, pins)
+
+    def test_reject_invalid_typography_role(self):
+        p, pins = fixture()
+        p["typography_layout"]["slides"][0]["blocks"][0]["role"] = "shrunken"
+        with self.assertRaises(mod.RenderRejected):
+            mod.validate_plan(p, pins)
+
+    def test_reject_unauthorized_layout_approval(self):
+        p, pins = fixture()
+        p["typography_layout"]["source_approval_verified"] = True
+        with self.assertRaises(mod.RenderRejected):
+            mod.validate_plan(p, pins)
+
+    def test_reject_accent_overlapping_headline(self):
+        p, pins = fixture()
+        p["typography_layout"]["slides"][0]["accents"][0]["rect"]["y"] = 500
+        with self.assertRaises(mod.RenderRejected):
+            mod.validate_plan(p, pins)
 
 if __name__ == "__main__":
     unittest.main()
