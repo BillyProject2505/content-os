@@ -12,6 +12,9 @@ on:
       expected_copy_fingerprint:
         type: string
         required: true
+      expected_layout_fingerprint:
+        type: string
+        required: true
       confirmation:
         type: string
         required: true
@@ -73,6 +76,21 @@ jobs:
             --presenter-box '{"x":670,"y":310,"width":345,"height":900}' \
             --gesture-box '{"x":572,"y":440,"width":22,"height":120}' \
             --out "$RUNNER_TEMP/cwc-review/render-plan.json"
+      - name: Bind independent CWC semantic typography layout
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          LAYOUT_FP: ${{ inputs.expected_layout_fingerprint }}
+        run: |
+          set -euo pipefail
+          [[ "$LAYOUT_FP" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::Independent layout SHA-256 required"; exit 1; }
+          layout="projects/cwc/content/carousel/$CONTENT_ID.layout.json"
+          test -f "$layout" || { echo "::error::Human-reviewed layout file absent"; exit 1; }
+          node projects/cwc/runtime/approved-copy/typography-layout.mjs \
+            --plan "$RUNNER_TEMP/cwc-review/render-plan-typed.json" \
+            --layout "$layout" \
+            --expected-layout-fingerprint "$LAYOUT_FP" \
+            --out "$RUNNER_TEMP/cwc-review/render-plan-typed.json"
       - name: Drive read-only authentication
         id: auth
         uses: google-github-actions/auth@v3
@@ -91,7 +109,7 @@ jobs:
           pins="projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json"
           target="$RUNNER_TEMP/cwc-assets"
           mkdir -p "$target"
-          for role in presenter logo footer montserrat_bold montserrat_medium; do
+          for role in presenter logo footer montserrat_bold montserrat_medium montserrat_semibold montserrat_extrabold; do
             file_id="$(jq -r --arg k "$role" '.assets[$k].drive_file_id // empty' "$pins")"
             name="$(jq -r --arg k "$role" '.assets[$k].file_name // empty' "$pins")"
             sha="$(jq -r --arg k "$role" '.assets[$k].sha256 // empty' "$pins")"
