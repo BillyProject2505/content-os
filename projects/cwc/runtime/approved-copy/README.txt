@@ -89,3 +89,38 @@ The above rectangles are CANDIDATE composition placements, not approval of text 
 **The plan never retrieves Drive assets, independently verifies their current authority status, checks their actual bytes, downloads fonts, performs SVG/PNG compositing, verifies logo/footer reserved regions, judges text wrapping, passes Technical QA, grants Owner approval, schedules or publishes.** Every such evidence field is false. Current canonical files remain unchanged; code const tables are temporary pilot snapshots, not new registry authority.
 
 The B1 test workflow is PR-only until merged; current phase implementation is stacked as an independent review PR against Phase A. Production activation remains forbidden.
+
+
+## Phase B2 — Blue/Dark actual candidate renderer (stacked PR)
+
+A separate reviewed commit introduces an initial **Blue/Dark / White Jacket Point Left only**
+candidate renderer, not an activated full production workflow. It adds:
+- SHA-256 snapshot pinning for the exact BUS-94 presenter, CRS logo/footer, and two Montserrat
+  font files fetched from Google Drive. The checksums were measured from actual Drive bytes
+  on 2026-10-24.
+- A manual-only review workflow using a read-only Google Drive access token via WIF;
+  the workflow runs on main after merge, not on PRs.
+- A Python Pillow/CairoSVG compositor that loads the pinned original bytes and produces
+  ordered 1080x1350 PNG candidate slides plus contact sheet and SHA-256 report.
+- Strict single-role headline/body typography. Copy that cannot fit at registered sizes
+  fails closed. No auto-edit, auto-wrap outside width, or sub-floor scaling.
+- Selected "HIV" words appear in mandatory red #E31C23.
+
+The pilot is deliberately restrictive; it does not yet support all CWC layouts, multiple
+text-role typography on one slide, Story/Reel/Poster, alternate presenters or both surfaces.
+The image scaling is uniform but its visual quality and identity continuity still need
+human STG-08 QA; **metadata preflight cannot detect all alpha-pixel collisions or font
+rasterization differences**. The font-loaded SVG footer must also be visually inspected
+for fidelity. Such limitations prohibit an automatic Technical QA PASS.
+
+The renderer emits state RENDERED_CANDIDATE_UNAPPROVED, technical_qa NOT_COMPLETE,
+visual_owner_review NOT_GRANTED and publication_authorized false. There is no
+STG-09 approval/writeback, approved release identity, Meta interaction, scheduler,
+publication or notification to Instagram in this workflow.
+
+The workflow will fail if the WIF service account lacks reader access to CWC Drive assets;
+this access has not yet been tested. Do not relax security by embedding an OAuth token
+or replacing the real CWC assets with unapproved third-party downloads.
+
+This B2 PR is stacked on B1 and must not merge directly into main until the earlier
+contracts pass review. No current content or previously scheduled date is ever replayed.
