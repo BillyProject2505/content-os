@@ -84,7 +84,8 @@ export function buildCarouselRenderPlan(copy, {
   gestureRect=null, authorityFile,
 }={}) {
   if(authorityFile) verifyFormatSource(authorityFile);
-  const checked=validateCopy(copy,{contentId:copy?.content_id,expectedFingerprint});
+  validateCopy(copy,{contentId:copy?.content_id,expectedFingerprint});
+  const checked=copy; // validateCopy returns evidence, not the normalized input.
   check(Object.hasOwn(FIXED_ASSETS,surface),"SURFACE_INVALID","only currently mapped CWC surface treatments accepted");
   check(Object.hasOwn(PRESENTER_VARIANTS,presenterVariant),"PRESENTER_INVALID","must select reusable BUS-94 derivative");
   const variant=PRESENTER_VARIANTS[presenterVariant];
