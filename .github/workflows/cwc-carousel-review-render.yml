@@ -32,6 +32,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13.5"
+      - name: Verify reusable read-only Drive asset probe contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n projects/cwc/runtime/approved-copy/check-drive-assets.sh
+          jq -e '.schema=="cwc-render-asset-pins-v1" and
+                 (.assets|keys|length)==7' projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json >/dev/null
       - name: Install pinned renderer dependencies
         run: python -m pip install --disable-pip-version-check Pillow==12.3.0 CairoSVG==2.8.2
       - name: CWC copy and geometry regressions
@@ -100,29 +107,12 @@ jobs:
           token_format: access_token
           access_token_scopes: https://www.googleapis.com/auth/drive.readonly
           access_token_lifetime: 3600s
-      - name: Download exact CWC assets and enforce SHA-256
+      - name: Download checksum-locked CWC Drive assets (no redirects)
         shell: bash
         env:
           ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
-        run: |
-          set -euo pipefail
-          pins="projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json"
-          target="$RUNNER_TEMP/cwc-assets"
-          mkdir -p "$target"
-          for role in presenter logo footer montserrat_bold montserrat_medium montserrat_semibold montserrat_extrabold; do
-            file_id="$(jq -r --arg k "$role" '.assets[$k].drive_file_id // empty' "$pins")"
-            name="$(jq -r --arg k "$role" '.assets[$k].file_name // empty' "$pins")"
-            sha="$(jq -r --arg k "$role" '.assets[$k].sha256 // empty' "$pins")"
-            [[ -n "$file_id" && -n "$name" && "$sha" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::Invalid asset pin $role"; exit 1; }
-            [[ "$name" != *"/"* ]] || { echo "::error::Unsafe asset name"; exit 1; }
-            status="$(curl --silent --show-error --location --output "$target/$name" --write-out '%{http_code}' \
-              --header "Authorization: Bearer $ACCESS_TOKEN" \
-              "https://www.googleapis.com/drive/v3/files/$file_id?alt=media")"
-            [[ "$status" == "200" && -s "$target/$name" ]] || { echo "::error::Drive asset unavailable: $role HTTP $status"; exit 1; }
-            actual="$(sha256sum "$target/$name" | awk '{print $1}')"
-            [[ "$actual" == "$sha" ]] || { echo "::error::SHA-256 mismatch for $role"; exit 1; }
-            echo "$role checksum PASS"
-          done
+          CWC_ASSET_DIR: ${{ runner.temp }}/cwc-assets
+        run: bash projects/cwc/runtime/approved-copy/check-drive-assets.sh
       - name: Install pinned renderer dependencies
         run: python -m pip install --disable-pip-version-check Pillow==12.3.0 CairoSVG==2.8.2
       - name: Render nonpublishable review candidate

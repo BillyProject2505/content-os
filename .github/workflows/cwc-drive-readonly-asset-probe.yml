@@ -1,0 +1,91 @@
+name: CWC Drive READONLY Asset Probe (BUS-170)
+
+# Validates binary byte-read permission separately from content production.
+# NO content ID, approval, Meta access, publication, schedule or writeback.
+on:
+  pull_request:
+    paths:
+      - "projects/cwc/runtime/approved-copy/check-drive-assets.sh"
+      - "projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json"
+      - ".github/workflows/cwc-drive-readonly-asset-probe.yml"
+      - ".github/workflows/cwc-carousel-review-render.yml"
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        type: string
+        required: true
+        description: Enter VERIFY_CWC_DRIVE_READONLY to check existing asset bytes only
+
+permissions:
+  contents: read
+
+jobs:
+  probe_static_tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify read-only probe syntax and seven pinned asset roles
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n projects/cwc/runtime/approved-copy/check-drive-assets.sh
+          jq -e '
+            .schema=="cwc-render-asset-pins-v1" and
+            .surface=="BLUE_DARK" and
+            .presenter_variant=="WHITE_POINT_LEFT" and
+            ((.assets|keys) == ([
+              "presenter","logo","footer",
+              "montserrat_bold","montserrat_medium",
+              "montserrat_semibold","montserrat_extrabold"
+            ]|sort)) and
+            ([.assets[].sha256|test("^[0-9a-f]{64}$")]|all)
+          ' projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json >/dev/null
+          echo "CWC probe STATIC_CONTRACT_PASS — never accesses Google Drive on PR"
+  read_only_drive_probe:
+    needs: probe_static_tests
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - name: Require explicit read-only probe confirmation
+        shell: bash
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -euo pipefail
+          [[ "$CONFIRMATION" == "VERIFY_CWC_DRIVE_READONLY" ]] || {
+            echo "::error::Explicit read-only probe confirmation required"
+            exit 1
+          }
+      - name: Obtain scoped Drive read-only identity via existing WIF
+        id: auth
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+      - name: Verify all seven CWC Drive files against exact source byte hashes
+        shell: bash
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          CWC_ASSET_DIR: ${{ runner.temp }}/cwc-drive-probe-assets
+        run: |
+          set -euo pipefail
+          bash projects/cwc/runtime/approved-copy/check-drive-assets.sh
+          echo "CWC Drive bytes matched all seven pinned hashes." >> "$GITHUB_STEP_SUMMARY"
+          echo "This result does NOT grant STG-08 QA, Owner approval, publication or schedule authority." >> "$GITHUB_STEP_SUMMARY"
+      - name: Delete fetched bytes after verification
+        if: always()
+        shell: bash
+        env:
+          CWC_ASSET_DIR: ${{ runner.temp }}/cwc-drive-probe-assets
+        run: |
+          set -euo pipefail
+          if [[ -d "$CWC_ASSET_DIR" ]]; then rm -rf -- "$CWC_ASSET_DIR"; fi
