@@ -33,6 +33,16 @@
       "file_name": "Montserrat-Medium.ttf",
       "drive_file_id": "1alSik5bCTzY0tltI0QaiOYz53ob5k3Xl",
       "sha256": "cd161cba3a3cdcf68ad721920fcd164c87e7b7cc9e6bad510278c3fa378d91d2"
+    },
+    "montserrat_semibold": {
+      "file_name": "Montserrat-SemiBold.ttf",
+      "drive_file_id": "1er6J5U7zLpbyDwAeet_Z5vy6bed1R_oe",
+      "sha256": "9c4db3814875410e7d64fdc8e69676c3b84968bb15bf3ace8b3944c59fbc56b6"
+    },
+    "montserrat_extrabold": {
+      "file_name": "Montserrat-ExtraBold.ttf",
+      "drive_file_id": "1XVxPr0R5eH-ZzZRqrhE7ctagEgZRKi87",
+      "sha256": "5cf0a23133ccce35f9e115b8dbbf90434201827bc2465d12f9d91bbf02cf9466"
     }
   },
   "remarks": "This is a reviewed checksum-pinned pilot snapshot; revalidate against current CAR/CAB/CRS/BUS-94 and Drive before production. No automatic promotion of governance authority."
