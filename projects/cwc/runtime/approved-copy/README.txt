@@ -124,3 +124,38 @@ or replacing the real CWC assets with unapproved third-party downloads.
 
 This B2 PR is stacked on B1 and must not merge directly into main until the earlier
 contracts pass review. No current content or previously scheduled date is ever replayed.
+
+
+## Phase B2 typography closure candidate (not an Owner approval)
+
+A separate, explicit per-slide layout JSON file now binds semantic typography to the
+frozen approved copy. The manual render job requires two independent fingerprints:
+(1) approved-copy payload SHA-256, and (2) structured-layout JSON SHA-256. The
+two files must match the same newly allocated \`CWC-CRSL-NNNN\` and the ordered
+concatenation of layout components must exactly equal the frozen slide text
+(no paraphrase, no silently inserted line break, no clinical meaning edits).
+
+Layout JSON path: \`projects/cwc/content/carousel/<content-id>.layout.json\`.
+Schema \`cwc-carousel-typography-layout-v1\`, fields:
+- \`content_id\` and \`slides\`; each slide has \`slide\`, ordered \`blocks\`, \`accents\`.
+- Each block: \`role\` (hero, headline, subheadline, kicker, body, supporting, cta),
+  \`text\` (literal substring of the approved slide), \`rect\` integer x/y/width/height,
+  and \`tone\` (WHITE, or YELLOW only for kicker).
+- Accent: \`type:line\`, \`tone:YELLOW\`, bounded copy-safe \`rect\`.
+- Blocks must not overlap protected layout regions, and the same frozen slide
+  text must be recovered by joining block texts with exactly one ASCII space.
+
+Registered typography matrix from FORMAT-CAROUSEL v1.4 remains the sole
+authority: hero 88/92 ExtraBold, headline 72/82 Bold, subheadline 52/64 Bold,
+kicker 28/34 SemiBold, body 38/52 Medium, supporting 34/46 Medium,
+CTA 38/44 Bold. All 4 Montserrat files are SHA-pinned to verified CWC Drive
+bytes. Text overflow triggers rejection, never text rewriting or below-floor
+font shrinking. The word HIV is red by default in live text. The yellow
+line is editorial decoration only, not part of copied source text.
+
+This is a **pilot layout contract**, not a newly canonical typography policy.
+No layout-file generation, approval or publication is automated. There is
+currently NO allocated content layout file in this repository for the pilot;
+the manual job must fail closed until an authorized copy and reviewed layout
+exist. Exact visual parity with the previous R2 release and independent
+STG-08 / STG-09 remain unverified.
