@@ -75,7 +75,7 @@ jobs:
         shell: bash
         env:
           ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
-          CWC_${{ runner.temp }}/cwc-drive-probe-assets: ${{ runner.temp }}/cwc-drive-probe-assets
+          CWC_ASSET_DIR: ${{ runner.temp }}/cwc-drive-probe-assets
         run: |
           set -euo pipefail
           bash projects/cwc/runtime/approved-copy/check-drive-assets.sh
@@ -85,7 +85,7 @@ jobs:
         if: always()
         shell: bash
         env:
-          CWC_${{ runner.temp }}/cwc-drive-probe-assets: ${{ runner.temp }}/cwc-drive-probe-assets
+          CWC_ASSET_DIR: ${{ runner.temp }}/cwc-drive-probe-assets
         run: |
           set -euo pipefail
-          if [[ -d "$CWC_${{ runner.temp }}/cwc-drive-probe-assets" ]]; then rm -rf -- "$CWC_${{ runner.temp }}/cwc-drive-probe-assets"; fi
+          if [[ -d "$CWC_ASSET_DIR" ]]; then rm -rf -- "$CWC_ASSET_DIR"; fi
