@@ -1,0 +1,50 @@
+{
+  "schema": "cwc-approved-copy-v1",
+  "content_id": "CWC-CRSL-0004",
+  "format": "CRSL",
+  "status": "COPY_APPROVED",
+  "approval_record_url": "https://linear.app/bussiness-content-os/issue/BUS-171/cwc-carousel-pilot-kontrol-dan-tes-hiv-rutin-saat-memakai-prep-27-okt",
+  "sensitive_claim": true,
+  "source_evidence": [
+    {
+      "claim": "Panduan PrEP oral Indonesia 2023: tes HIV awal dan ulang tiga bulanan dalam pemantauan PrEP oral; kunjungan ulang dan dukungan tenaga kesehatan. Berlaku sebagai sumber pedoman terbitan 2023, belum menggantikan verifikasi implementasi layanan 2026.",
+      "source_url": "https://repository.kemkes.go.id/book/862",
+      "checked_at": "2026-10-24"
+    },
+    {
+      "claim": "Pedoman PrEP oral Indonesia 2023: skrining IMS dianjurkan dan pemeriksaan kreatinin disesuaikan kriteria klinis, bukan syarat wajib universal untuk memulai PrEP oral.",
+      "source_url": "https://cdn.who.int/media/docs/default-source/searo/indonesia/non-who-publications/2023-guidelines-for-oral-pre-expose-prophylaxis-%28prep%29-program-for-people-at-high-risk-of-hiv-infection-in-indonesia.pdf",
+      "checked_at": "2026-10-24"
+    },
+    {
+      "claim": "CDC 2026 memberikan pembanding untuk pemantauan PrEP oral dan asesmen HIV berkala; konteks klinis Amerika Serikat tidak otomatis berlaku sebagai aturan operasional Indonesia.",
+      "source_url": "https://www.cdc.gov/hivnexus/hcp/prep/",
+      "checked_at": "2026-10-24"
+    }
+  ],
+  "slides": [
+    {
+      "slide": 1,
+      "text": "Pakai PrEP? Tes HIV tetap perlu."
+    },
+    {
+      "slide": 2,
+      "text": "Kenapa perlu tes ulang? Tes HIV berkala membantu memastikan status HIV sebelum PrEP dilanjutkan."
+    },
+    {
+      "slide": 3,
+      "text": "Tes HIV setiap 3 bulan Dalam pedoman PrEP oral Indonesia, tes HIV dilakukan saat memulai PrEP dan diulang setiap 3 bulan. Jadwal kunjungan diatur bersama petugas layanan."
+    },
+    {
+      "slide": 4,
+      "text": "Tes lain? Tergantung kebutuhan. Skrining IMS dianjurkan. Pemeriksaan fungsi ginjal dilakukan sesuai kondisi klinis dan bukan syarat wajib untuk memulai PrEP."
+    },
+    {
+      "slide": 5,
+      "text": "Kontrol itu bentuk perawatan. Saat kontrol, kamu bisa membahas efek samping, penggunaan PrEP, dan jadwal tes berikutnya. Butuh info layanan di Manado? Kirim DM ke CWC."
+    }
+  ],
+  "caption": "Pakai PrEP? Tes HIV berkala dan kunjungan ulang tetap penting. Dalam petunjuk teknis PrEP oral Indonesia (2023), tes HIV dilakukan saat memulai PrEP dan diulang setiap tiga bulan. Skrining IMS dianjurkan; pemeriksaan kreatinin berdasarkan kriteria klinis bukan persyaratan universal untuk memulai PrEP. Jadwal dan pemeriksaanmu dibicarakan bersama petugas layanan, tanpa menghakimi. Untuk informasi akses layanan PrEP di Manado, kirim DM ke CWC. Ikuti @cozwecare.id dan bagikan informasi ini kepada teman yang membutuhkan.\n\n#PrEP #TesHIV #PencegahanHIV #KesehatanSeksual #Manado",
+  "local_hashtag": "#Manado",
+  "copy_fingerprint": "27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60"
+}
