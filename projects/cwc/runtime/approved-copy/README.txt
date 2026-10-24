@@ -58,3 +58,34 @@ Use GitHub Actions "CWC approved-copy preflight (BUS-170)" with exact confirmati
 A later, separately reviewed PR must verify current CWC register, STG-03 provenance and STG-09 approval against the live source of truth, resolve Drive assets with checksums, implement a CWC-specific deterministic renderer and visual/technical QA, and stop at the visual Owner Review. Publication is a further separate, default-disabled milestone requiring a locked Approved Release Identity and verified Meta writeback. Do not reuse SDOH BUS-140's live executor or global switches.
 
 Tracking: https://linear.app/bussiness-content-os/issue/BUS-170/cwc-approved-copy-automation-pilot-sdoh-pattern-adoption
+
+
+## Phase B1 render-plan candidate (stacked on Phase A, NOT production renderer)
+
+run:
+  node --test projects/cwc/runtime/approved-copy/*.test.mjs
+
+Phase B1 adds render-plan.mjs and synthetic tests. It uses the currently registered FORMAT-CAROUSEL v1.4:
+- 1080x1350 canvas; Slide 1 copy x=72..551, gutter x=551..605;
+- presenter core x=670..1015; intentional gesture may enter x=572..594;
+- later slides do not acquire a new mandatory presenter requirement.
+The pilot uses approved BUS-94 production derivatives and their existing checksums.
+Logo and footer Drive IDs are taken from CRS v1.23; surface Blue/dark uses CWC_Master.svg plus white Footer; Light/white uses the approved light-surface logo plus blue Footer.
+
+The CLI example below is illustrative. It will FAIL CLOSED until a legitimately allocated,
+approved CWC copy file exists, with pinned fingerprint:
+  node projects/cwc/runtime/approved-copy/render-plan.mjs \
+    --content-id CWC-CRSL-000X \
+    --expected-copy-fingerprint <independently-pinned-sha256> \
+    --surface BLUE_DARK \
+    --presenter-variant WHITE_POINT_LEFT \
+    --copy-box '{"x":72,"y":250,"width":479,"height":440}' \
+    --presenter-box '{"x":670,"y":260,"width":345,"height":780}' \
+    --gesture-box '{"x":572,"y":500,"width":22,"height":120}' \
+    --out /tmp/cwc-render-plan.json
+
+The above rectangles are CANDIDATE composition placements, not approval of text wrapping or image clipping. Inputs that would exceed registered x boundaries fail. Plan output preserves the exact approved copy and independently pinned fingerprint. The presenter core box is NOT a full silhouette/alpha-pixel bound; physical asset placement and gesture transparency must still be checked after actual render.
+
+**The plan never retrieves Drive assets, independently verifies their current authority status, checks their actual bytes, downloads fonts, performs SVG/PNG compositing, verifies logo/footer reserved regions, judges text wrapping, passes Technical QA, grants Owner approval, schedules or publishes.** Every such evidence field is false. Current canonical files remain unchanged; code const tables are temporary pilot snapshots, not new registry authority.
+
+The B1 test workflow is PR-only until merged; current phase implementation is stacked as an independent review PR against Phase A. Production activation remains forbidden.

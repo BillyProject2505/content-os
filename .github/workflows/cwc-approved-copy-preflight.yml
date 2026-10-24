@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: "22"
       - name: Contract regressions
-        run: node --test projects/cwc/runtime/approved-copy/preflight.test.mjs
+        run: node --test projects/cwc/runtime/approved-copy/*.test.mjs
 
   preflight:
     needs: tests
