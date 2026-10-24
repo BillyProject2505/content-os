@@ -51,7 +51,8 @@ def verify_assets(asset_dir: Path, pins: dict) -> dict[str, Path]:
         reject("PINS_SCHEMA_INVALID", "unrecognized pin contract")
     if pins.get("surface") != "BLUE_DARK" or pins.get("presenter_variant") != "WHITE_POINT_LEFT":
         reject("PINS_SCOPE_INVALID", "pilot only authorizes exact selected surface and presenter")
-    required = {"presenter", "logo", "footer", "montserrat_bold", "montserrat_medium"}
+    required = {"presenter", "logo", "footer", "montserrat_bold", "montserrat_medium",
+                "montserrat_semibold", "montserrat_extrabold"}
     if set(pins.get("assets", {})) != required:
         reject("PINS_INVALID", "missing or extra asset role")
     result = {}
@@ -112,6 +113,95 @@ def validate_plan(plan: dict, pins: dict) -> None:
         reject("SLIDES_INVALID", "ordered frozen copy required")
     if not re.fullmatch(r"CWC-CRSL-\d{4}", plan.get("content_id", "")):
         reject("CONTENT_ID_INVALID", "registered CWC Carousel grammar required")
+    validate_typography_layout(plan)
+
+
+# Registered FORMAT-CAROUSEL v1.4 baseline role sizes/leading.
+# Do not silently shrink/switch fonts to make copy fit.
+SEMANTIC_ROLES = {
+    "hero": {"font": "montserrat_extrabold", "size": 88, "leading": 92, "floor": 80},
+    "headline": {"font": "montserrat_bold", "size": 72, "leading": 82, "floor": 64},
+    "subheadline": {"font": "montserrat_bold", "size": 52, "leading": 64, "floor": 46},
+    "kicker": {"font": "montserrat_semibold", "size": 28, "leading": 34, "floor": 26},
+    "body": {"font": "montserrat_medium", "size": 38, "leading": 52, "floor": 36},
+    "supporting": {"font": "montserrat_medium", "size": 34, "leading": 46, "floor": 32},
+    "cta": {"font": "montserrat_bold", "size": 38, "leading": 44, "floor": 36},
+}
+
+
+def validate_typography_layout(plan: dict) -> None:
+    layout = plan.get("typography_layout")
+    if not isinstance(layout, dict) or layout.get("schema") != "cwc-carousel-typography-layout-v1":
+        reject("TYPOGRAPHY_LAYOUT_MISSING", "an independently hashed structured typography layout is mandatory")
+    if not re.fullmatch(r"[a-f0-9]{64}", layout.get("fingerprint", "")):
+        reject("LAYOUT_FINGERPRINT_INVALID", "structured layout fingerprint required")
+    if layout.get("source_approval_verified") is not False:
+        reject("LAYOUT_APPROVAL_BOUNDARY", "layout cannot claim human approval")
+    layouts = layout.get("slides")
+    if not isinstance(layouts, list) or len(layouts) != len(plan["slides"]):
+        reject("LAYOUT_SLIDE_COUNT", "one structured layout per frozen slide required")
+    for i, (ls, frozen) in enumerate(zip(layouts, plan["slides"])):
+        if ls.get("slide") != i+1:
+            reject("LAYOUT_SLIDE_ORDER", "layout ordering changed")
+        blocks = ls.get("blocks")
+        if not isinstance(blocks, list) or not (1 <= len(blocks) <= 8):
+            reject("TYPOGRAPHY_BLOCKS_INVALID", "one to eight typed copy regions required")
+        if " ".join(b.get("text", "") for b in blocks) != frozen["copy"]:
+            reject("APPROVED_COPY_DRIFT", "styled text must exactly reproduce frozen copy")
+        prev_bottom=0
+        for b in blocks:
+            role=b.get("role")
+            if role not in SEMANTIC_ROLES:
+                reject("TYPOGRAPHY_ROLE_INVALID", "role not registered in FORMAT-CAROUSEL")
+            if b.get("tone") not in (["WHITE", "YELLOW"] if role=="kicker" else ["WHITE"]):
+                reject("TYPOGRAPHY_TONE_INVALID", "noncanonical CWC live text tone")
+            r=b.get("rect", {})
+            if any(not isinstance(r.get(k), int) or isinstance(r.get(k), bool)
+                   for k in ("x", "y", "width", "height")):
+                reject("TEXT_RECT_INVALID", "rect must contain integer coords")
+            right=551 if i==0 else 1008
+            if (r["x"]<72 or r["y"]<230 or r["width"]<=0 or r["height"]<=0 or
+                r["x"]+r["width"]>right or r["y"]+r["height"]>FOOTER_TOP or
+                r["y"]<prev_bottom):
+                reject("TEXT_PROTECTED_REGION", "approved typography enters illegal region")
+            prev_bottom=r["y"]+r["height"]
+        for accent in ls.get("accents", []):
+            if accent.get("type") != "line" or accent.get("tone") != "YELLOW":
+                reject("ACCENT_INVALID", "only canonical yellow line accent supported")
+            r=accent.get("rect", {})
+            if any(not isinstance(r.get(k), int) or isinstance(r.get(k), bool)
+                   for k in ("x", "y", "width", "height")):
+                reject("ACCENT_INVALID", "accent rect values invalid")
+            right=551 if i==0 else 1008
+            if (r["x"]<72 or r["y"]<230 or r["width"]<40 or r["width"]>220 or
+                not 2<=r["height"]<=8 or r["x"]+r["width"]>right or
+                r["y"]+r["height"]>FOOTER_TOP):
+                reject("ACCENT_INVALID", "accent outside allowed region")
+            if any(r["x"]<b["rect"]["x"]+b["rect"]["width"] and
+                   b["rect"]["x"]<r["x"]+r["width"] and
+                   r["y"]<b["rect"]["y"]+b["rect"]["height"] and
+                   b["rect"]["y"]<r["y"]+r["height"] for b in blocks):
+                reject("ACCENT_COLLISION", "accent overlaps live text")
+
+
+def render_semantic_blocks(img: Image.Image, slide: dict, assets: dict[str, Path]) -> list[dict]:
+    measurements = []
+    for a in slide.get("accents", []):
+        r = a["rect"]
+        ImageDraw.Draw(img).rectangle(
+            (r["x"], r["y"], r["x"]+r["width"]-1, r["y"]+r["height"]-1),
+            fill="#FDCF00",
+        )
+    for block in slide["blocks"]:
+        role = block["role"]
+        style=SEMANTIC_ROLES[role]
+        font=ImageFont.truetype(str(assets[style["font"]]), style["size"])
+        if font.size < style["floor"]:
+            reject("TYPOGRAPHY_FLOOR", "registered type size dropped below floor")
+        color="#FDCF00" if block["tone"]=="YELLOW" else WHITE
+        metrics=paint_text(img, block["text"], block["rect"], font, style["leading"], color)
+        measurements.append({"role":role, **metrics})
+    return measurements
 
 
 def rasterize_svg(file: Path, out_width: int) -> Image.Image:
@@ -223,12 +313,7 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
     footer = rasterize_svg(assets["footer"], 1070)
     if logo.width != LOGO_WIDTH or footer.size != (1070, 64):
         reject("SVG_SIZE_INVALID", "cannot rasterize canonical SVG")
-    # Loading font from verified Drive bytes avoids system-dependent substitutions.
-    cover_style, body_style = ROLE_FONTS["cover"], ROLE_FONTS["body"]
-    cover_font = ImageFont.truetype(str(assets["montserrat_bold"]), cover_style["size"])
-    body_font = ImageFont.truetype(str(assets["montserrat_medium"]), body_style["size"])
-    if cover_font.size < cover_style["min_size"] or body_font.size < body_style["min_size"]:
-        reject("TYPOGRAPHY_FLOOR", "font size below canonical floor")
+    # Fonts are loaded only from checksum-locked Drive assets by semantic role.
     renders = []
     for i, slide in enumerate(plan["slides"]):
         canvas = Image.new("RGBA", CANVAS, BLUE)
@@ -240,13 +325,13 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
                 presenter, box["presenter_core_box"], box.get("gesture_box"), box["copy_box"]
             )
             canvas.alpha_composite(scaled, position)
-            text_meta = paint_text(canvas, slide["copy"],
-                                   plan["composition"]["slide_1"]["copy_box"],
-                                   cover_font, cover_style["leading"], WHITE)
+            text_meta = render_semantic_blocks(
+                canvas, plan["typography_layout"]["slides"][i], assets
+            )
         else:
-            text_meta = paint_text(canvas, slide["copy"],
-                                   {"x": 72, "y": 310, "width": 936, "height": 790},
-                                   body_font, body_style["leading"], WHITE)
+            text_meta = render_semantic_blocks(
+                canvas, plan["typography_layout"]["slides"][i], assets
+            )
         path = output / f"slide-{i+1:02d}.png"
         canvas.convert("RGB").save(path, format="PNG", optimize=False)
         renders.append({"slide": i + 1, "filename": path.name, "sha256": sha256_file(path),
