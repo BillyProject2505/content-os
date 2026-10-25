@@ -212,25 +212,48 @@ def rasterize_svg(file: Path, out_width: int) -> Image.Image:
     return Image.open(io.BytesIO(data)).convert("RGBA")
 
 
+def line_token_positions(draw: ImageDraw.ImageDraw, tokens: list[str],
+                         font: ImageFont.FreeTypeFont, content_id: str | None) -> list[tuple[str, float, float, bool]]:
+    """Measure visible token advances with the same chip reservation used for painting.
+
+    For the approved BUS-171 pilot, the white underlay must never encroach on
+    adjacent glyphs. All layout width checks use these same exact advances.
+    """
+    space = draw.textlength(" ", font=font)
+    xx = 0.0
+    positions = []
+    for token in tokens:
+        chip = content_id == HIV_CHIP_CONTENT_ID and bool(re.fullmatch(r"(?i)HIV[\\.,;:!?]?", token))
+        if chip:
+            xx += HIV_CHIP_PADDING_X
+        width = draw.textlength(token, font=font)
+        positions.append((token, xx, width, chip))
+        xx += width + space + (HIV_CHIP_PADDING_X if chip else 0)
+    return positions
+
+
 def words_and_lines(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTypeFont,
-                    width: int) -> list[list[str]]:
-    if "\n" in text or "\t" in text:
+                    width: int, content_id: str | None = None) -> list[list[str]]:
+    if "\\n" in text or "\\t" in text:
         reject("TEXT_SHAPE_UNSUPPORTED", "multiline control characters in approved copy")
     words = text.strip().split(" ")
     if not words or any(not word for word in words):
         reject("TEXT_SHAPE_UNSUPPORTED", "empty token in approved copy")
     lines, current = [], []
     for word in words:
-        candidate = " ".join(current + [word])
-        if draw.textlength(candidate, font=font) > width:
+        candidate = current + [word]
+        proposed = line_token_positions(draw, candidate, font, content_id)
+        measured = proposed[-1][1] + proposed[-1][2] + (HIV_CHIP_PADDING_X if proposed[-1][3] else 0)
+        if measured > width:
             if not current:
                 reject("TEXT_OVERFLOW", "single word exceeds allowed copy width")
             lines.append(current)
             current = [word]
-            if draw.textlength(word, font=font) > width:
+            test = line_token_positions(draw, current, font, content_id)
+            if test[-1][1] + test[-1][2] + (HIV_CHIP_PADDING_X if test[-1][3] else 0) > width:
                 reject("TEXT_OVERFLOW", "single word exceeds allowed copy width")
         else:
-            current.append(word)
+            current = candidate
     if current:
         lines.append(current)
     return lines
@@ -238,26 +261,22 @@ def words_and_lines(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTy
 
 def draw_line_tokens(draw: ImageDraw.ImageDraw, tokens: list[str], x: int, y: int,
                      font: ImageFont.FreeTypeFont, base_color: str, content_id: str | None = None) -> None:
-    space = draw.textlength(" ", font=font)
-    xx = float(x)
-    for token in tokens:
-        # The actual word HIV must use CWC's mandatory HIV red.
-        color = HIV_RED if re.fullmatch(r"(?i)HIV[\.,;:!?]?", token) else base_color
-        if content_id == HIV_CHIP_CONTENT_ID and color == HIV_RED:
-            token_width = draw.textlength(token, font=font)
-            if xx - HIV_CHIP_PADDING_X < 0 or xx + token_width + HIV_CHIP_PADDING_X > CANVAS[0]:
+    for token, dx, token_width, chip in line_token_positions(draw, tokens, font, content_id):
+        xx = x + dx
+        color = HIV_RED if re.fullmatch(r"(?i)HIV[\\.,;:!?]?", token) else base_color
+        if chip:
+            left = round(xx) - HIV_CHIP_PADDING_X
+            right = round(xx + token_width) + HIV_CHIP_PADDING_X
+            if left < 0 or right > CANVAS[0]:
                 reject("HIV_CHIP_OUT_OF_BOUNDS", "white chip exceeds canvas")
-            draw.rectangle((round(xx) - HIV_CHIP_PADDING_X, y,
-                            round(xx + token_width) + HIV_CHIP_PADDING_X,
-                            y + font.size + 4), fill=WHITE)
+            draw.rectangle((left, y, right, y + font.size + 4), fill=WHITE)
         draw.text((round(xx), y), token, font=font, fill=color, anchor="lt")
-        xx += draw.textlength(token, font=font) + space
 
 
 def paint_text(img: Image.Image, text: str, rect: dict, font: ImageFont.FreeTypeFont,
                leading: int, color: str, content_id: str | None = None) -> dict:
     draw = ImageDraw.Draw(img)
-    lines = words_and_lines(draw, text, font, rect["width"])
+    lines = words_and_lines(draw, text, font, rect["width"], content_id)
     total_height = len(lines) * leading
     if total_height > rect["height"]:
         reject("TEXT_OVERFLOW", "approved text exceeds permitted vertical field; editorial revision required")
