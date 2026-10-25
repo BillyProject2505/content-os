@@ -21,6 +21,8 @@ CANVAS = (1080, 1350)
 BLUE = "#0B3D9E"
 WHITE = "#FFFFFF"
 HIV_RED = "#E31C23"
+HIV_CHIP_CONTENT_ID = "CWC-CRSL-0004"  # BUS-171 Owner-approved visual direction
+HIV_CHIP_PADDING_X = 8
 FOOTER_TOP = 1248  # protected region begins before the actual footer SVG
 FOOTER_RENDER_Y = 1280  # approved release frame: intrinsic 1070x64 SVG at x=5
 LOGO_X, LOGO_Y, LOGO_WIDTH = 72, 64, 260
@@ -184,7 +186,7 @@ def validate_typography_layout(plan: dict) -> None:
                 reject("ACCENT_COLLISION", "accent overlaps live text")
 
 
-def render_semantic_blocks(img: Image.Image, slide: dict, assets: dict[str, Path]) -> list[dict]:
+def render_semantic_blocks(img: Image.Image, slide: dict, assets: dict[str, Path], content_id: str | None = None) -> list[dict]:
     measurements = []
     for a in slide.get("accents", []):
         r = a["rect"]
@@ -199,7 +201,7 @@ def render_semantic_blocks(img: Image.Image, slide: dict, assets: dict[str, Path
         if font.size < style["floor"]:
             reject("TYPOGRAPHY_FLOOR", "registered type size dropped below floor")
         color="#FDCF00" if block["tone"]=="YELLOW" else WHITE
-        metrics=paint_text(img, block["text"], block["rect"], font, style["leading"], color)
+        metrics=paint_text(img, block["text"], block["rect"], font, style["leading"], color, content_id)
         measurements.append({"role":role, **metrics})
     return measurements
 
@@ -235,25 +237,32 @@ def words_and_lines(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTy
 
 
 def draw_line_tokens(draw: ImageDraw.ImageDraw, tokens: list[str], x: int, y: int,
-                     font: ImageFont.FreeTypeFont, base_color: str) -> None:
+                     font: ImageFont.FreeTypeFont, base_color: str, content_id: str | None = None) -> None:
     space = draw.textlength(" ", font=font)
     xx = float(x)
     for token in tokens:
         # The actual word HIV must use CWC's mandatory HIV red.
         color = HIV_RED if re.fullmatch(r"(?i)HIV[\.,;:!?]?", token) else base_color
+        if content_id == HIV_CHIP_CONTENT_ID and color == HIV_RED:
+            token_width = draw.textlength(token, font=font)
+            if xx - HIV_CHIP_PADDING_X < 0 or xx + token_width + HIV_CHIP_PADDING_X > CANVAS[0]:
+                reject("HIV_CHIP_OUT_OF_BOUNDS", "white chip exceeds canvas")
+            draw.rectangle((round(xx) - HIV_CHIP_PADDING_X, y,
+                            round(xx + token_width) + HIV_CHIP_PADDING_X,
+                            y + font.size + 4), fill=WHITE)
         draw.text((round(xx), y), token, font=font, fill=color, anchor="lt")
         xx += draw.textlength(token, font=font) + space
 
 
 def paint_text(img: Image.Image, text: str, rect: dict, font: ImageFont.FreeTypeFont,
-               leading: int, color: str) -> dict:
+               leading: int, color: str, content_id: str | None = None) -> dict:
     draw = ImageDraw.Draw(img)
     lines = words_and_lines(draw, text, font, rect["width"])
     total_height = len(lines) * leading
     if total_height > rect["height"]:
         reject("TEXT_OVERFLOW", "approved text exceeds permitted vertical field; editorial revision required")
     for i, line in enumerate(lines):
-        draw_line_tokens(draw, line, rect["x"], rect["y"] + i * leading, font, color)
+        draw_line_tokens(draw, line, rect["x"], rect["y"] + i * leading, font, color, content_id)
     return {"line_count": len(lines), "measured_height": total_height, "font_px": font.size}
 
 
@@ -326,11 +335,11 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
             )
             canvas.alpha_composite(scaled, position)
             text_meta = render_semantic_blocks(
-                canvas, plan["typography_layout"]["slides"][i], assets
+                canvas, plan["typography_layout"]["slides"][i], assets, plan["content_id"]
             )
         else:
             text_meta = render_semantic_blocks(
-                canvas, plan["typography_layout"]["slides"][i], assets
+                canvas, plan["typography_layout"]["slides"][i], assets, plan["content_id"]
             )
         path = output / f"slide-{i+1:02d}.png"
         canvas.convert("RGB").save(path, format="PNG", optimize=False)
