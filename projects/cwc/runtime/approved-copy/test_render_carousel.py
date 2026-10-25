@@ -160,6 +160,37 @@ class RenderSafetyTests(unittest.TestCase):
         self.assertNotIn((255, 255, 255), list(other.crop((16, 18, 25, 36)).getdata()))
         self.assertIn((227, 28, 35), list(other.getdata()))
 
+    def test_hiv_chip_padding_is_counted_in_line_width(self):
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 48)
+        draw = ImageDraw.Draw(Image.new("RGB", (1080, 150), mod.BLUE))
+        tokens = ["Tes", "HIV", "rutin"]
+        unscoped = mod.line_token_positions(draw, tokens, font, "CWC-CRSL-9999")
+        scoped = mod.line_token_positions(draw, tokens, font, "CWC-CRSL-0004")
+        self.assertGreater(scoped[2][1], unscoped[2][1])
+        self.assertGreaterEqual(scoped[2][1] - unscoped[2][1], 2 * mod.HIV_CHIP_PADDING_X)
+        # A width that fits plain text but not the underlay must wrap.
+        plain_right = unscoped[-1][1] + unscoped[-1][2]
+        scoped_right = scoped[-1][1] + scoped[-1][2]
+        limited = int((plain_right + scoped_right) / 2)
+        self.assertEqual(len(mod.words_and_lines(draw, "Tes HIV rutin", font, limited, "CWC-CRSL-9999")), 1)
+        self.assertGreater(len(mod.words_and_lines(draw, "Tes HIV rutin", font, limited, "CWC-CRSL-0004")), 1)
+
+    def test_hiv_chip_does_not_paint_over_neighboring_letters(self):
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 48)
+        im = Image.new("RGB", (1080, 180), mod.BLUE)
+        draw = ImageDraw.Draw(im)
+        tokens = ["Tes", "HIV", "rutin"]
+        positions = mod.line_token_positions(draw, tokens, font, "CWC-CRSL-0004")
+        mod.draw_line_tokens(draw, tokens, 72, 25, font, mod.WHITE, "CWC-CRSL-0004")
+        left = round(72 + positions[1][1]) - mod.HIV_CHIP_PADDING_X
+        prev_right = round(72 + positions[0][1] + positions[0][2])
+        next_left = round(72 + positions[2][1])
+        chip_right = round(72 + positions[1][1] + positions[1][2]) + mod.HIV_CHIP_PADDING_X
+        self.assertGreater(left, prev_right)
+        self.assertLess(chip_right, next_left)
+        self.assertEqual(im.getpixel((left, 25)), (255, 255, 255))
+        self.assertEqual(im.getpixel((left - 2, 25)), (11, 61, 158))
+
     def test_actual_visible_alpha_presenter_placement(self):
         # Synthetic mask approximates the BUS-94 derivative's visible occupancy;
         # CI never ships test raster/fonts as a substitute canonical asset.
