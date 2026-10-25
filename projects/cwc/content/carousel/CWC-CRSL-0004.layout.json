@@ -1,0 +1,201 @@
+{
+  "schema": "cwc-carousel-typography-layout-v1",
+  "content_id": "CWC-CRSL-0004",
+  "slides": [
+    {
+      "slide": 1,
+      "blocks": [
+        {
+          "role": "headline",
+          "text": "Pakai PrEP?",
+          "rect": {
+            "x": 72,
+            "y": 450,
+            "width": 479,
+            "height": 150
+          },
+          "tone": "WHITE"
+        },
+        {
+          "role": "subheadline",
+          "text": "Tes HIV tetap perlu.",
+          "rect": {
+            "x": 72,
+            "y": 660,
+            "width": 479,
+            "height": 190
+          },
+          "tone": "WHITE"
+        }
+      ],
+      "accents": [
+        {
+          "type": "line",
+          "tone": "YELLOW",
+          "rect": {
+            "x": 72,
+            "y": 1030,
+            "width": 148,
+            "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "slide": 2,
+      "blocks": [
+        {
+          "role": "subheadline",
+          "text": "Kenapa perlu tes ulang?",
+          "rect": {
+            "x": 72,
+            "y": 300,
+            "width": 930,
+            "height": 170
+          },
+          "tone": "WHITE"
+        },
+        {
+          "role": "body",
+          "text": "Tes HIV berkala membantu memastikan status HIV sebelum PrEP dilanjutkan.",
+          "rect": {
+            "x": 72,
+            "y": 540,
+            "width": 920,
+            "height": 280
+          },
+          "tone": "WHITE"
+        }
+      ],
+      "accents": [
+        {
+          "type": "line",
+          "tone": "YELLOW",
+          "rect": {
+            "x": 72,
+            "y": 1030,
+            "width": 205,
+            "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "slide": 3,
+      "blocks": [
+        {
+          "role": "headline",
+          "text": "Tes HIV setiap 3 bulan",
+          "rect": {
+            "x": 72,
+            "y": 300,
+            "width": 930,
+            "height": 190
+          },
+          "tone": "WHITE"
+        },
+        {
+          "role": "body",
+          "text": "Dalam pedoman PrEP oral Indonesia, tes HIV dilakukan saat memulai PrEP dan diulang setiap 3 bulan. Jadwal kunjungan diatur bersama petugas layanan.",
+          "rect": {
+            "x": 72,
+            "y": 560,
+            "width": 920,
+            "height": 350
+          },
+          "tone": "WHITE"
+        }
+      ],
+      "accents": [
+        {
+          "type": "line",
+          "tone": "YELLOW",
+          "rect": {
+            "x": 72,
+            "y": 1030,
+            "width": 148,
+            "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "slide": 4,
+      "blocks": [
+        {
+          "role": "subheadline",
+          "text": "Tes lain? Tergantung kebutuhan.",
+          "rect": {
+            "x": 72,
+            "y": 300,
+            "width": 920,
+            "height": 170
+          },
+          "tone": "WHITE"
+        },
+        {
+          "role": "body",
+          "text": "Skrining IMS dianjurkan. Pemeriksaan fungsi ginjal dilakukan sesuai kondisi klinis dan bukan syarat wajib untuk memulai PrEP.",
+          "rect": {
+            "x": 72,
+            "y": 540,
+            "width": 920,
+            "height": 330
+          },
+          "tone": "WHITE"
+        }
+      ],
+      "accents": [
+        {
+          "type": "line",
+          "tone": "YELLOW",
+          "rect": {
+            "x": 72,
+            "y": 1030,
+            "width": 205,
+            "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "slide": 5,
+      "blocks": [
+        {
+          "role": "subheadline",
+          "text": "Kontrol itu bentuk perawatan.",
+          "rect": {
+            "x": 72,
+            "y": 300,
+            "width": 920,
+            "height": 180
+          },
+          "tone": "WHITE"
+        },
+        {
+          "role": "body",
+          "text": "Saat kontrol, kamu bisa membahas efek samping, penggunaan PrEP, dan jadwal tes berikutnya. Butuh info layanan di Manado? Kirim DM ke CWC.",
+          "rect": {
+            "x": 72,
+            "y": 560,
+            "width": 920,
+            "height": 370
+          },
+          "tone": "WHITE"
+        }
+      ],
+      "accents": [
+        {
+          "type": "line",
+          "tone": "YELLOW",
+          "rect": {
+            "x": 72,
+            "y": 1030,
+            "width": 148,
+            "height": 6
+          }
+        }
+      ]
+    }
+  ]
+}
