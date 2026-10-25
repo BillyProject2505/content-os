@@ -146,6 +146,20 @@ class RenderSafetyTests(unittest.TestCase):
         self.assertIn((227, 28, 35), list(im.getdata()))
 
 
+    def test_hiv_chip_scoped_to_owner_approved_content_id(self):
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 48)
+        approved = Image.new("RGB", (500, 130), mod.BLUE)
+        mod.draw_line_tokens(ImageDraw.Draw(approved), ["HIV", "rutin"], 24, 18,
+                             font, mod.WHITE, "CWC-CRSL-0004")
+        pixels = list(approved.getdata())
+        self.assertIn((255, 255, 255), pixels)
+        self.assertIn((227, 28, 35), pixels)
+        other = Image.new("RGB", (500, 130), mod.BLUE)
+        mod.draw_line_tokens(ImageDraw.Draw(other), ["HIV", "rutin"], 24, 18,
+                             font, mod.WHITE, "CWC-CRSL-9999")
+        self.assertNotIn((255, 255, 255), list(other.crop((16, 18, 25, 36)).getdata()))
+        self.assertIn((227, 28, 35), list(other.getdata()))
+
     def test_actual_visible_alpha_presenter_placement(self):
         # Synthetic mask approximates the BUS-94 derivative's visible occupancy;
         # CI never ships test raster/fonts as a substitute canonical asset.
