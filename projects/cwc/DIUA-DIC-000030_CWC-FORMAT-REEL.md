@@ -27,11 +27,11 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000015"
     name: "Coz We Care — Canonical Asset Bible (CAB)"
-    version: "1.36"
+    version: "1.37"
     status: "CANONICAL"
   - id: "DIUA-DIC-000016"
     name: "Coz We Care — Reference Sheet (CRS)"
-    version: "1.23"
+    version: "1.24"
     status: "CANONICAL"
 source_representation:
   platform: "Linear"
@@ -55,7 +55,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Related Issue | [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout) — CWC Cross-Format Reference-Validated Copy / Brand Presenter Layout |
 | Structural Classification | Tiered — Domain/Project Tier 2 — Coz We Care |
 | Universal Identifier | `DIUA-DIC-000030` — ALLOCATED / ACTIVE via CONTENT-OS-ALLOC-030 |
-| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CPB v2.22 CANONICAL; CWC-FSS-001 v1.31 CANONICAL; CWC-QA-001 v1.32 CANONICAL; CAB v1.36 CANONICAL; CRS v1.23 CANONICAL |
+| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CPB v2.22 CANONICAL; CWC-FSS-001 v1.31 CANONICAL; CWC-QA-001 v1.32 CANONICAL; CAB v1.37 CANONICAL; CRS v1.24 CANONICAL |
 
 ---
 
