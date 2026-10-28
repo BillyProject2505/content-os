@@ -27,11 +27,11 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000015"
     name: "Coz We Care — Canonical Asset Bible (CAB)"
-    version: "1.36"
+    version: "1.37"
     status: "CANONICAL"
   - id: "DIUA-DIC-000016"
     name: "Coz We Care — Reference Sheet (CRS)"
-    version: "1.23"
+    version: "1.24"
     status: "CANONICAL"
   - id: "DIUA-DIC-000001"
     name: "Content OS — Root Level Architecture"
@@ -64,7 +64,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 **Universal Identifier (UNIS/DIC):** `DIUA-DIC-000018` — ALLOCATED / ACTIVE, per Content OS — Universal Identifier Registry ([BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md)) and Universal Identifier Registration Record ([BUS-17](<https://linear.app/bussiness-content-os/issue/BUS-17/universal-identifier-registration-record>)).
 
 **Depends On (Primary Architectural Authority):** CWC Production Workflow v1.22, CANONICAL LOCKED — its architecture is treated as LOCKED and is not redesigned, reinterpreted, forked, or replaced by this document.
-**Depends On (Canonical CWC Production Dependencies):** CPB v2.22 (CANONICAL), CAS v1.17 (CANONICAL), CAR v1.18 (CANONICAL), CAB v1.36 (CANONICAL), CRS v1.23 (CANONICAL).
+**Depends On (Canonical CWC Production Dependencies):** CPB v2.22 (CANONICAL), CAS v1.17 (CANONICAL), CAR v1.18 (CANONICAL), CAB v1.37 (CANONICAL), CRS v1.24 (CANONICAL).
 **Depends On (Content OS Structural / Governance Authorities — distinct from the CWC production dependencies above):** Content OS — Root Level Architecture v1.11, CANONICAL (relied on for the Tier 2 / Domain-Project structural classification and hierarchy, `[Root Level Architecture v1.11 §7, §9.2]`); Content OS — Root Documentation Structure v2.5, CANONICAL (relied on for the mandatory Document Identity field set, Owner-field tag convention, and Registered Document Boundary, `[Root Documentation Structure v2.5 §5, §5.1, §10.1]`); Content OS — Root Governance v1.11, CANONICAL (relied on for the general Ownership Model, and for the Draft/CANONICAL status-vocabulary definition that §4.1 explicitly scopes to root-level documents' Status field — cited here precisely because that scoping is the evidence that this vocabulary is *not* established for Tier 2 Format Specialization Objects, `[Root Governance v1.11 §2.2, §4, §4.1]`; see §18 OD‑1). These three govern Content OS document-identity and governance mechanics; they are not CWC domain production dependencies and are kept in a distinct category from the row above, per the correction requirement not to classify them as such.
 **Supporting Governance:** Content OS — Evidence Citation Standard (ADOPTED). Citation tags in this document use `[FSS-001 §<section>]` for self-references and `[REV<n> §<section>]` / `[CPB v<n> §<section>]` / `[CAS v<n> §<section>]` / `[CAR v<n> §<field>]` / `[CAB v<n> §<field>]` / `[CRS v<n> §<field>]` / `[Root Level Architecture v<n> §<section>]` / `[Root Documentation Structure v<n> §<section>]` / `[Root Governance v<n> §<section>]` for canonical-dependency evidence. **Each such tag records the version actually inspected when that clause was written and is retrieval-time provenance, not a claim about the current state of the cited document.** The authoritative statement of current dependency versions is the `Depends On` block above; where a tag and that block disagree, the `Depends On` block governs. (Corrected 2026-09-19: this paragraph previously presented a fixed set of version-pinned tags — CPB v2.11 / CAS v1.13 / CAR v1.11 / CAB v1.12 / CRS v1.7 / Root Documentation Structure v2.4 — as *current* dependency evidence, contradicting this document's own `Depends On` declarations.) Historical retrieval and audit citations retain the versions actually inspected at the time. Where a claim is architectural inference rather than direct source text, it is tagged `[ARCHITECTURAL INFERENCE]`; where evidence could not be precisely located, this document uses `[SECTION NOT VERIFIED]` rather than inventing a section reference, per `[Evidence Citation Standard §12]`.
 
