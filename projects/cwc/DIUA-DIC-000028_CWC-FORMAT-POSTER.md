@@ -27,11 +27,11 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000015"
     name: "Coz We Care — Canonical Asset Bible (CAB)"
-    version: "1.36"
+    version: "1.37"
     status: "CANONICAL"
   - id: "DIUA-DIC-000016"
     name: "Coz We Care — Reference Sheet (CRS)"
-    version: "1.23"
+    version: "1.24"
     status: "CANONICAL"
 source_representation:
   platform: "Linear"
@@ -104,8 +104,8 @@ dependencies:
   - CPB v2.22 CANONICAL
   - FSS-001 v1.31 CANONICAL
   - CWC-QA-001 v1.32 CANONICAL
-  - CAB v1.36 CANONICAL
-  - CRS v1.23 CANONICAL
+  - CAB v1.37 CANONICAL
+  - CRS v1.24 CANONICAL
 
 stage_attachments:
   PLANNING:

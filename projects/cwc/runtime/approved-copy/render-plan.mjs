@@ -14,7 +14,7 @@ export const FORMAT_AUTHORITY = Object.freeze({
 });
 const PILOT_PROVENANCE = Object.freeze({
   presenter_inventory: "BUS-94",
-  logo_footer: "DIUA-DIC-000016@1.23",
+  logo_footer: "DIUA-DIC-000016@1.24",
   asset_registry: "DIUA-DIC-000014@1.18",
 });
 
