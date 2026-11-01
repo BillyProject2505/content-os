@@ -1,0 +1,96 @@
+{
+  "schema": "cwc-stg09-owner-approval-v1",
+  "approval_id": "CWC-CRSL-0004-STG09-20261101",
+  "content_item_id": "CWC-CRSL-0004",
+  "stage": "STG-09",
+  "decision": "APPROVED",
+  "decision_date": "2026-11-01",
+  "approver": {
+    "role": "CWC Domain Owner / authorized human STG-09 decision-maker",
+    "name": "Billy Fernando Mende",
+    "authority": "CWC Production Workflow v1.22 STG-09 and §18; CWC-QA-001 v1.32 §17.1"
+  },
+  "explicit_human_decision": {
+    "verbatim": "stg-09 saya approve",
+    "decision_channel": "Current ChatGPT conversation, user message on 2026-11-01",
+    "linear_evidence_issue": "BUS-171",
+    "linear_decision_record_comment_id": "9e885772-804d-4175-8eb9-b7e13ca69a70",
+    "distinct_prior_visual_preview_acceptance_comment_id": "c774a81a-28bb-494c-8598-c37caace0977"
+  },
+  "sensitive_claim_signoff": {
+    "classification": "YES",
+    "explicit_owner_signoff": "APPROVED",
+    "approval_scope": "HIV testing/PrEP oral follow-up, STI screening, conditional creatinine assessment, and medical language in exactly the approved five slides and caption",
+    "clinical_license_or_physician_signoff_claimed": false,
+    "does_not_certify": "Operational 2026 Manado local clinic SOP"
+  },
+  "approved_package": {
+    "scope": "One five-slide Instagram carousel in exact slide order 1–5, plus the already frozen v0.2 caption. No edits, substitutions or new claims.",
+    "approved_copy_path": "projects/cwc/content/carousel/CWC-CRSL-0004.json",
+    "approved_copy_blob_sha": "d8dcb70545b8e6b715ce0ceddcb04ce1f7b51c70",
+    "approved_copy_fingerprint": "27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60",
+    "editorial_freeze_path": "projects/cwc/content/carousel/CWC-CRSL-0004.editorial-freeze.json",
+    "editorial_freeze_blob_sha": "7595fa987c076f9fd7b4bf7a28247a1f0bc7fb2b",
+    "typed_layout_path": "projects/cwc/content/carousel/CWC-CRSL-0004.layout.json",
+    "typed_layout_blob_sha": "3e27217f49b2d8666b9156d43e9a8e440074b440",
+    "slide_count": 5,
+    "slides": [
+      {
+        "sequence": 1,
+        "filename": "slide-01.png",
+        "sha256": "db0e1d6db90ee0e7d81eb88ec98b7df43ed23d1d1b35aa93df7947afcc2184bd"
+      },
+      {
+        "sequence": 2,
+        "filename": "slide-02.png",
+        "sha256": "c688bcc570e2b29be9b16b93b4d5abbbf0e4c87c2d42ed462f606e3e4b98e218"
+      },
+      {
+        "sequence": 3,
+        "filename": "slide-03.png",
+        "sha256": "fccec5a75e1f7efc141c2971ab577f703e697411cef70e7b489cfe7c281bfd32"
+      },
+      {
+        "sequence": 4,
+        "filename": "slide-04.png",
+        "sha256": "272ed6c52c086810d1c3a78a7a236fdc57449bdb1dd0930901f56b90c0974204"
+      },
+      {
+        "sequence": 5,
+        "filename": "slide-05.png",
+        "sha256": "789de1782f4723a4d53fe6b9bcc193417740229d9e8638c0f4b0a3c2fac7d0c1"
+      }
+    ],
+    "visual_artifact": {
+      "source_workflow_run": "https://github.com/BillyProject2505/content-os/actions/runs/41309209112",
+      "artifact_id": 13084282669,
+      "archive_sha256": "3b4d78637c30bda4bd75724917eb1e195f7180ee2b0181292f7eea14",
+      "expires_at": "2026-11-15T13:01:45Z",
+      "historical_render_report_state": "RENDERED_CANDIDATE_UNAPPROVED",
+      "interpretation": "Historic STG-07 review-source label is preserved; Owner approval is evidenced separately by this STG-09 record"
+    }
+  },
+  "prerequisites": {
+    "qa_record_path": "projects/cwc/content/qa/CWC-CRSL-0004.stg08-qa.json",
+    "qa_record_blob_sha": "30da34828919efa9d4ca82a2f50831e5f5b66032",
+    "qa_verdict": "PASS",
+    "qa_criteria_passed": 20,
+    "preapproval_lifecycle": "READY_FOR_APPROVAL",
+    "preapproval_register_version": "1.34",
+    "duplication_disposition": "D1 RELATED CONTENT → ALLOW",
+    "previous_owner_visual_preview_acceptance": true
+  },
+  "owner_approval_boundaries": {
+    "approved_content_and_sensitive_claims": true,
+    "stg09_owner_decision_recorded": true,
+    "approval_invalidated_if_any_bound_artifact_or_caption_changes": true,
+    "stg10_approved_release_identity_issued": false,
+    "stg10_release_readiness_verified": false,
+    "publishing_executed": false,
+    "publishing_scheduled": false,
+    "publication_url": null,
+    "historic_2026_10_27_slot_reused": false
+  },
+  "next_lifecycle_transition": "READY_FOR_APPROVAL → APPROVED (after reviewed documentation PR, CI and main readback)",
+  "next_stage": "STG-10 RELEASE IDENTITY AND PUBLICATION READINESS, separately; never automatic schedule or publish"
+}
