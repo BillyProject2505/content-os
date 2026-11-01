@@ -21,7 +21,7 @@
           "text": "Tes HIV tetap perlu.",
           "rect": {
             "x": 72,
-            "y": 660,
+            "y": 640,
             "width": 479,
             "height": 190
           },
@@ -34,7 +34,7 @@
           "tone": "YELLOW",
           "rect": {
             "x": 72,
-            "y": 1030,
+            "y": 960,
             "width": 148,
             "height": 6
           }
@@ -49,9 +49,9 @@
           "text": "Kenapa perlu tes ulang?",
           "rect": {
             "x": 72,
-            "y": 300,
+            "y": 340,
             "width": 930,
-            "height": 170
+            "height": 120
           },
           "tone": "WHITE"
         },
@@ -60,7 +60,7 @@
           "text": "Tes HIV berkala membantu memastikan status HIV sebelum PrEP dilanjutkan.",
           "rect": {
             "x": 72,
-            "y": 540,
+            "y": 490,
             "width": 920,
             "height": 280
           },
@@ -73,7 +73,7 @@
           "tone": "YELLOW",
           "rect": {
             "x": 72,
-            "y": 1030,
+            "y": 775,
             "width": 205,
             "height": 6
           }
@@ -88,7 +88,7 @@
           "text": "Tes HIV setiap 3 bulan",
           "rect": {
             "x": 72,
-            "y": 300,
+            "y": 310,
             "width": 930,
             "height": 190
           },
@@ -99,7 +99,7 @@
           "text": "Dalam pedoman PrEP oral Indonesia, tes HIV dilakukan saat memulai PrEP dan diulang setiap 3 bulan. Jadwal kunjungan diatur bersama petugas layanan.",
           "rect": {
             "x": 72,
-            "y": 560,
+            "y": 515,
             "width": 920,
             "height": 350
           },
@@ -112,7 +112,7 @@
           "tone": "YELLOW",
           "rect": {
             "x": 72,
-            "y": 1030,
+            "y": 880,
             "width": 148,
             "height": 6
           }
@@ -127,9 +127,9 @@
           "text": "Tes lain? Tergantung kebutuhan.",
           "rect": {
             "x": 72,
-            "y": 300,
+            "y": 350,
             "width": 920,
-            "height": 170
+            "height": 140
           },
           "tone": "WHITE"
         },
@@ -138,7 +138,7 @@
           "text": "Skrining IMS dianjurkan. Pemeriksaan fungsi ginjal dilakukan sesuai kondisi klinis dan bukan syarat wajib untuk memulai PrEP.",
           "rect": {
             "x": 72,
-            "y": 540,
+            "y": 510,
             "width": 920,
             "height": 330
           },
@@ -151,7 +151,7 @@
           "tone": "YELLOW",
           "rect": {
             "x": 72,
-            "y": 1030,
+            "y": 820,
             "width": 205,
             "height": 6
           }
@@ -166,7 +166,7 @@
           "text": "Kontrol itu bentuk perawatan.",
           "rect": {
             "x": 72,
-            "y": 300,
+            "y": 320,
             "width": 920,
             "height": 180
           },
@@ -177,7 +177,7 @@
           "text": "Saat kontrol, kamu bisa membahas efek samping, penggunaan PrEP, dan jadwal tes berikutnya. Butuh info layanan di Manado? Kirim DM ke CWC.",
           "rect": {
             "x": 72,
-            "y": 560,
+            "y": 510,
             "width": 920,
             "height": 370
           },
@@ -190,7 +190,7 @@
           "tone": "YELLOW",
           "rect": {
             "x": 72,
-            "y": 1030,
+            "y": 900,
             "width": 148,
             "height": 6
           }
