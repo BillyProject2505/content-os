@@ -1,0 +1,87 @@
+{
+  "schema": "cwc-stg10-human-publication-authorization-v1",
+  "content_item_id": "CWC-CRSL-0004",
+  "date_of_owner_authorization": "2026-11-01",
+  "stage": "STG-10 — PUBLICATION",
+  "previous_lifecycle": "APPROVED",
+  "current_lifecycle_after_controlled_merge": "READY_FOR_PUBLICATION",
+  "exception_status_after_controlled_merge": "BLOCKED",
+  "human_authorization": {
+    "authorized": true,
+    "approver_role": "CWC Domain Owner (human)",
+    "deciding_authority": "CWC Production Workflow v1.22 §18: Publication authorization at STG-10 entry",
+    "exact_owner_declaration": "saya otorisasi untuk tayang besok 19.00",
+    "decision_context": "Owner's user message on Sunday 2026-11-01 local WITA, following STG-09 APPROVED and STG-10 identity preparation",
+    "authorization_scope": "One Instagram carousel CWC-CRSL-0004; exact five approved ordered PNGs and approved caption v0.2; post at the target time, no content substitutions",
+    "authorization_is_separate_from_stg09": true,
+    "destination_platform": "Instagram",
+    "destination_account": "@cozwecare.id",
+    "reuse_historical_slot": false
+  },
+  "requested_publication": {
+    "local_datetime": "2026-11-02T19:00:00+08:00",
+    "timezone": "Asia/Makassar",
+    "utc_datetime": "2026-11-02T11:00:00Z",
+    "day": "Monday",
+    "source_relative_date": "besok (tomorrow relative to 2026-11-01)",
+    "timing_status": "OWNER_AUTHORIZED_TARGET_ONLY",
+    "platform_queued": false,
+    "scheduled_job_id": null,
+    "scheduled_job_provider": null,
+    "publication_confirmation": null
+  },
+  "approved_release": {
+    "release_identity": "sha256:6b3695d3e100dbb6abd8696d0e786ef935ce1e6a7ab169c377828a8362e3cb5f",
+    "release_preparation_record_path": "projects/cwc/content/release/CWC-CRSL-0004.stg10-release-preparation.json",
+    "release_preparation_blob_sha": "358327826bb3cb6342fb9916852c90f8c81d27d0",
+    "stg09_approval_record_path": "projects/cwc/content/approval/CWC-CRSL-0004.stg09-approval.json",
+    "stg09_approval_blob_sha": "e42abd3d585d7a03a05fb11594ff94f3e12572ff",
+    "stg08_qa_record_path": "projects/cwc/content/qa/CWC-CRSL-0004.stg08-qa.json",
+    "copy_blob_sha": "d8dcb70545b8e6b715ce0ceddcb04ce1f7b51c70",
+    "copy_fingerprint": "27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60",
+    "caption_sha256": "8f9f66615d3a25b697075bbc8ad3a56ba0c256b97d181df87b5132127ce67bb3",
+    "ordered_png_sha256": [
+      "db0e1d6db90ee0e7d81eb88ec98b7df43ed23d1d1b35aa93df7947afcc2184bd",
+      "c688bcc570e2b29be9b16b93b4d5abbbf0e4c87c2d42ed462f606e3e4b98e218",
+      "fccec5a75e1f7efc141c2971ab577f703e697411cef70e7b489cfe7c281bfd32",
+      "272ed6c52c086810d1c3a78a7a236fdc57449bdb1dd0930901f56b90c0974204",
+      "789de1782f4723a4d53fe6b9bcc193417740229d9e8638c0f4b0a3c2fac7d0c1"
+    ],
+    "durable_source_archive": {
+      "drive_file_id": "11tt6HqI2Bd7B9xwf9fE1Uy8VpQ6Ta_22",
+      "sha256": "3b4d78637c30bda4bd75724917eb1e195f7180ee2b0181292f7eea14",
+      "file_name": "CWC-CRSL-0004_APPROVED-SOURCE-B2_20261101.zip"
+    }
+  },
+  "execution_capability_audit": {
+    "audit_date": "2026-11-01",
+    "github_workflow_dir": ".github/workflows",
+    "actual_cwc_workflows": [
+      "cwc-approved-copy-preflight.yml",
+      "cwc-carousel-review-render.yml",
+      "cwc-drive-readonly-asset-probe.yml",
+      "cwc-phase1-review-preparation.yml"
+    ],
+    "cwc_instagram_publish_workflow_exists": false,
+    "cross_project_sdoh_workflows_not_authorized_for_cwc": true,
+    "chat_connected_instagram_scheduler": false,
+    "optional_metricool_plugin_available_but_unconnected": true,
+    "failure_classification": "EXTERNAL_PUBLICATION_EXECUTOR_MISSING",
+    "conditional_exception_status": "BLOCKED",
+    "expected_missing_input": "Connected Instagram publisher with supported carousel upload/schedule, credential and a returned platform schedule ID"
+  },
+  "state_and_safety": {
+    "publication_authorization_recorded": true,
+    "approved_release_identity_locked": true,
+    "ready_for_publication_internal_gate": "PASS",
+    "platform_schedule_created": false,
+    "auto_publish_enabled": false,
+    "platform_post_live": false,
+    "publish_status_claim": "NOT_SCHEDULED_ON_INSTAGRAM",
+    "stage10_exit": "NOT_COMPLETE",
+    "no_schedule_is_not_platform_confirmation": true,
+    "no_stale_2026_10_27_slot_replay": true,
+    "exception_resolution_condition": "Connect a supported Instagram scheduling/publishing provider; schedule exact release for authorized time and record remote schedule ID, then clear BLOCKED. Any changed package or new target time requires human reauthorization.",
+    "publication_confirmation_condition": "Do not transition PUBLISHED until Instagram platform confirms a live post and release identity is reconciled."
+  }
+}
