@@ -141,7 +141,7 @@ class RenderSafetyTests(unittest.TestCase):
     def test_reject_embedded_newline_and_tab_after_token_simplification(self):
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 40)
         draw = ImageDraw.Draw(Image.new("RGB", (900, 160), mod.BLUE))
-        for text in ("Tes HIV\\nberkala", "Tes HIV\\tberkala"):
+        for text in ("Tes HIV\nberkala", "Tes HIV\tberkala"):
             with self.assertRaises(mod.RenderRejected):
                 mod.words_and_lines(draw, text, font, 700, "CWC-CRSL-0004")
 
