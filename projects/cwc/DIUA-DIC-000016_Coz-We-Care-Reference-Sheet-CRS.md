@@ -456,7 +456,7 @@ Current tracked state as of 2026-09-16:
 
 ---
 
-*End of Document — Coz We Care — Reference Sheet (CRS) v1.23 (CANONICAL — Linear-authoritative)*
+*End of Document — Coz We Care — Reference Sheet (CRS) v1.23 (CANONICAL — GitHub-authoritative after repository cutover)*
 
 ---
 
