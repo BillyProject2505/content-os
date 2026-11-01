@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
 import {validateCopy} from "./preflight.mjs";
+import {validateResearch} from "./research-gate.mjs";
 import {buildCarouselRenderPlan, FORMAT_AUTHORITY} from "./render-plan.mjs";
 import {attachLayout} from "./typography-layout.mjs";
 
@@ -28,6 +29,8 @@ export function prepareReview(copy, layout, {contentId,copyFingerprint,layoutFin
   ensure(typeof layoutFingerprint==="string" && HASH.test(layoutFingerprint), "independent layout SHA-256 required");
   ensure(copy?.content_id===contentId && layout?.content_id===contentId, "source Content IDs differ");
   const preflight=validateCopy(copy,{contentId,expectedFingerprint:copyFingerprint});
+  const research=JSON.parse(fs.readFileSync(path.join("projects/cwc/content/research",contentId+".research.json"),"utf8"));
+  const researchEvidence=validateResearch(copy,research);
   const plan=buildCarouselRenderPlan(copy,{
     expectedFingerprint:copyFingerprint,
     surface:"BLUE_DARK",
@@ -44,11 +47,13 @@ export function prepareReview(copy, layout, {contentId,copyFingerprint,layoutFin
     content_id:contentId,
     copy_fingerprint:copyFingerprint,
     layout_fingerprint:layoutFingerprint,
+    research_fingerprint:researchEvidence.research_sha256,
     slide_count:typed.slides.length,
     evidence:{
       copy_integrity:"PASS",
       layout_integrity:"PASS",
       registered_geometry:"PASS",
+      research_evidence_structure:"PASS",
       live_owner_approval_verified:false,
       content_register_live_verified:false,
       clinical_claims_verified:false,
@@ -59,10 +64,10 @@ export function prepareReview(copy, layout, {contentId,copyFingerprint,layoutFin
       stg10_release_identity_issued:false,
       publication_authorized:false
     },
-    artifacts:["copy-preflight.json","render-plan.json","render-plan-typed.json"],
+    artifacts:["copy-preflight.json","research-evidence.json","render-plan.json","render-plan-typed.json"],
     next_action:"Verify live governance/clinical evidence and produce actual renderer candidate before STG-08"
   };
-  return {preflight,plan,typed,manifest};
+  return {preflight,researchEvidence,plan,typed,manifest};
 }
 function parseArgs(argv) {
   const keys=new Set(["--content-id","--copy-fingerprint","--layout-fingerprint","--out"]);
@@ -89,6 +94,7 @@ function main(){
   fs.mkdirSync(dest,{recursive:true});
   for(const [name,data] of [
     ["copy-preflight.json",prepared.preflight],
+    ["research-evidence.json",prepared.researchEvidence],
     ["render-plan.json",prepared.plan],
     ["render-plan-typed.json",prepared.typed],
     ["phase1-manifest.json",prepared.manifest]
