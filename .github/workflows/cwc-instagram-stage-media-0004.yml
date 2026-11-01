@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: ${{ inputs.mode == 'stage_approved' && 'write' || 'read' }}
+      contents: write
       actions: read
     env:
       GH_TOKEN: ${{ github.token }}
