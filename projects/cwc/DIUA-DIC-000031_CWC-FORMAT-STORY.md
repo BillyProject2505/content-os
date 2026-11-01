@@ -55,7 +55,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Related Issue | [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout) — CWC Cross-Format Reference-Validated Copy / Brand Presenter Layout |
 | Structural Classification | Tiered — Domain/Project Tier 2 — Coz We Care |
 | Universal Identifier | `DIUA-DIC-000031` — ALLOCATED / ACTIVE per [BUS-17](../../system/Content-OS-Universal-Identifier-Registration-Record.md) and [BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md) |
-| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CPB v2.22 CANONICAL; CWC-FSS-001 v1.31 CANONICAL; CWC-QA-001 v1.32 CANONICAL; CAB v1.36 CANONICAL; CRS v1.23 CANONICAL |
+| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CPB v2.23 CANONICAL; CWC-FSS-001 v1.31 CANONICAL; CWC-QA-001 v1.32 CANONICAL; CAB v1.36 CANONICAL; CRS v1.23 CANONICAL |
 
 ---
 
