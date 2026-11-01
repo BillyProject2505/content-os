@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {attachLayout,layoutFingerprint,ROLE_STYLE} from "./typography-layout.mjs";
@@ -54,4 +55,21 @@ test("layout unchanged copy fingerprint remains exactly original",()=>{
  const out=attachLayout(plan,layout,layoutFingerprint(layout));
  assert.equal(out.source_copy_sha256,plan.source_copy_sha256);
  assert.deepEqual(out.slides,plan.slides);
+});
+
+test("BUS-171 actual approved carousel typed layout binds cleanly",()=>{
+ const id="CWC-CRSL-0004";
+ const dir="projects/cwc/content/carousel/";
+ const approved=JSON.parse(fs.readFileSync(dir+id+".json","utf8"));
+ const layout=JSON.parse(fs.readFileSync(dir+id+".layout.json","utf8"));
+ const plan={schema:"cwc-carousel-render-plan-v1",status:"RENDER_PLAN_CANDIDATE",
+   content_id:id,slides:approved.slides.map(s=>({slide:s.slide,copy:s.text}))};
+ const expected="a159704d5880edf2952d906b612c268e8d2190471caa671b5ae8ceac5e4e1124";
+ assert.equal(layoutFingerprint(layout),expected);
+ const bound=attachLayout(plan,layout,expected);
+ assert.equal(bound.typography_layout.slides.length,5);
+ assert.equal(bound.typography_layout.source_approval_verified,false);
+ const negative=structuredClone(layout);
+ negative.slides[3].blocks[1].rect.height=330;
+ assert.throws(()=>attachLayout(plan,negative,layoutFingerprint(negative)),e=>e.code==="ACCENT_COLLISION");
 });
