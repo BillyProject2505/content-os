@@ -1,0 +1,91 @@
+name: CWC Instagram media preparation (PNG to JPEG, never publish)
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/cwc-instagram-stage-media-0004.yml"
+      - "projects/cwc/runtime/instagram-publication/**"
+      - "projects/cwc/content/instagram-media/**"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "prepare produces JPG review artifact; stage_approved hosts approved JPG on a dedicated public Git ref"
+        type: choice
+        required: true
+        default: prepare
+        options:
+          - prepare
+          - stage_approved
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  media:
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.15"
+      - name: Fetch official immutable B2 source artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/cwc-original"
+          gh run download 41309209112 -n cwc-carousel-unapproved-review-candidate -D "$RUNNER_TEMP/cwc-original"
+          test -f "$RUNNER_TEMP/cwc-original/rendered/render-report.json"
+          test -f "$RUNNER_TEMP/cwc-original/rendered/slide-01.png"
+      - name: Install deterministic image encoder
+        run: python -m pip install --disable-pip-version-check Pillow==12.3.0
+      - name: Re-verify exact five Owner-approved source PNGs and generate JPEG review set
+        shell: bash
+        env:
+          CWC_SOURCE_DIR: ${{ runner.temp }}/cwc-original
+          CWC_OUTPUT_DIR: ${{ runner.temp }}/cwc-ig-media
+        run: python projects/cwc/runtime/instagram-publication/prepare-jpeg.py
+      - name: Upload five-image adaptation for Owner review
+        uses: actions/upload-artifact@v4
+        with:
+          name: cwc-crsl-0004-jpeg-media-review-not-approved
+          path: ${{ runner.temp }}/cwc-ig-media/
+          if-no-files-found: error
+          retention-days: 14
+      - name: For stage_approved, require separate explicit JPEG Owner approval
+        if: inputs.mode == 'stage_approved'
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -e '.candidate_owner_approved == true and (.approval_evidence | type=="string" and length>10)' projects/cwc/content/instagram-media/CWC-CRSL-0004.media-adaptation.json >/dev/null
+          echo "Owner JPEG adaptation approval evidence PASS"
+      - name: For stage_approved, host EXACT JPEG bytes on public immutable Git commit
+        if: inputs.mode == 'stage_approved'
+        shell: bash
+        env:
+          CWC_OUTPUT_DIR: ${{ runner.temp }}/cwc-ig-media
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin cwc-release-media >/dev/null 2>&1; then
+            echo "::error::Release media ref already exists. Stop; no overwrite or automatic restaging."
+            exit 1
+          fi
+          git config user.name "CWC controlled publisher"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c cwc-release-media
+          target="projects/cwc/content/instagram-media/CWC-CRSL-0004"
+          mkdir -p "$target"
+          cp "$CWC_OUTPUT_DIR"/slide-0{1,2,3,4,5}.jpg "$target/"
+          git add "$target"
+          git commit -m "media(cwc): stage exact Owner-approved JPEG delivery adaptation"
+          git push origin HEAD:refs/heads/cwc-release-media
+          sha="$(git rev-parse HEAD)"
+          echo "Public immutable media commit: $sha" >> "$GITHUB_STEP_SUMMARY"
+          echo "Next: record public_media_git_sha=$sha in governed media adaptation manifest via PR."

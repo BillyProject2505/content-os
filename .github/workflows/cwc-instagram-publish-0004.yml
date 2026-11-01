@@ -1,0 +1,81 @@
+name: CWC Instagram one-shot carousel (CWC-CRSL-0004)
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/cwc-instagram-publish-0004.yml"
+      - "projects/cwc/runtime/instagram-publication/**"
+      - "projects/cwc/content/instagram-media/**"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "preflight is read-only; publish requires all STG-10 and Meta gates"
+        type: choice
+        required: true
+        default: preflight
+        options:
+          - preflight
+          - publish
+      confirmation:
+        description: "For manual live publish only: PUBLISH_CWC_CRSL_0004"
+        type: string
+        required: false
+        default: ""
+  schedule:
+    # Only 2026-11-02 11:00 UTC (19:00 WITA) is authorized.
+    # Rechecks every 5 min guard against delayed scheduler; hard deadline 11:20 UTC.
+    # GitHub cron can be delayed or dropped; this is best effort, not exact-time SLA.
+    - cron: "0,5,10,15 11 2 11 *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cwc-crsl-0004-single-instagram-publication
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'preflight')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify exact release, Owner authorization, and fail-closed contracts
+        run: |
+          node projects/cwc/runtime/instagram-publication/publish-once.mjs --self-test
+          node projects/cwc/runtime/instagram-publication/publish-once.mjs --preflight
+      - name: Confirm this is not a publication run
+        run: echo "No Meta call, media upload, scheduler job or publish performed." >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'publish' && inputs.confirmation == 'PUBLISH_CWC_CRSL_0004'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    permissions:
+      contents: write
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      CWC_INSTAGRAM_PUBLISH_ENABLED: ${{ vars.CWC_INSTAGRAM_PUBLISH_ENABLED }}
+      CWC_META_IG_USER_ID: ${{ vars.CWC_META_IG_USER_ID }}
+      CWC_META_ACCESS_TOKEN: ${{ secrets.CWC_META_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Enforce exact-release scope and perform one-shot Meta carousel publish
+        run: node projects/cwc/runtime/instagram-publication/publish-once.mjs --publish
+      - name: Upload verified live result for controlled GitHub and Linear reconciliation
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cwc-crsl-0004-instagram-live-proof
+          path: ${{ runner.temp }}/cwc-instagram-live-proof.json
+          retention-days: 30
+          if-no-files-found: error
