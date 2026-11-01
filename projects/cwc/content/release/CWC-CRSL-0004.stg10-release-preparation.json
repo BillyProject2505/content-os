@@ -1,0 +1,123 @@
+{
+  "schema": "cwc-stg10-release-preparation-v1",
+  "authority": "CWC Production Workflow v1.22 §6 STG-10 and §18 Publication authorization; CWC Content Register v1.35",
+  "content_item_id": "CWC-CRSL-0004",
+  "preparation_date": "2026-11-01",
+  "checkpoint_status": "PREPARED_PENDING_EXPLICIT_PUBLICATION_AUTHORIZATION",
+  "canonical_lifecycle_unchanged": "APPROVED",
+  "approved_release_identity": "sha256:6b3695d3e100dbb6abd8696d0e786ef935ce1e6a7ab169c377828a8362e3cb5f",
+  "identity_algorithm": "SHA-256(UTF-8 canonical JSON: identity_material keys sorted recursively, compact separators, Unicode preserved, no terminating LF)",
+  "identity_material": {
+    "schema": "cwc-approved-release-identity-material-v1",
+    "content_id": "CWC-CRSL-0004",
+    "stg09_approval_id": "CWC-CRSL-0004-STG09-20261101",
+    "approved_copy_fingerprint": "27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60",
+    "approved_copy_blob_sha": "d8dcb70545b8e6b715ce0ceddcb04ce1f7b51c70",
+    "caption_sha256": "8f9f66615d3a25b697075bbc8ad3a56ba0c256b97d181df87b5132127ce67bb3",
+    "ordered_slide_sha256": [
+      "db0e1d6db90ee0e7d81eb88ec98b7df43ed23d1d1b35aa93df7947afcc2184bd",
+      "c688bcc570e2b29be9b16b93b4d5abbbf0e4c87c2d42ed462f606e3e4b98e218",
+      "fccec5a75e1f7efc141c2971ab577f703e697411cef70e7b489cfe7c281bfd32",
+      "272ed6c52c086810d1c3a78a7a236fdc57449bdb1dd0930901f56b90c0974204",
+      "789de1782f4723a4d53fe6b9bcc193417740229d9e8638c0f4b0a3c2fac7d0c1"
+    ]
+  },
+  "source_approval": {
+    "record_path": "projects/cwc/content/approval/CWC-CRSL-0004.stg09-approval.json",
+    "approval_git_blob_sha": "e42abd3d585d7a03a05fb11594ff94f3e12572ff",
+    "decision": "APPROVED",
+    "owner_sensitive_claim_signoff": "YES_APPROVED",
+    "owner_evidence_issue": "BUS-171",
+    "owner_evidence_comment": "9e885772-804d-4175-8eb9-b7e13ca69a70"
+  },
+  "publishable_artifacts": {
+    "platform": "Instagram",
+    "format": "CWC-FORMAT-CAROUSEL v1.4",
+    "slide_count": 5,
+    "slide_canvas": [
+      1080,
+      1350
+    ],
+    "ordered_files": [
+      {
+        "order": 1,
+        "name": "slide-01.png",
+        "sha256": "db0e1d6db90ee0e7d81eb88ec98b7df43ed23d1d1b35aa93df7947afcc2184bd"
+      },
+      {
+        "order": 2,
+        "name": "slide-02.png",
+        "sha256": "c688bcc570e2b29be9b16b93b4d5abbbf0e4c87c2d42ed462f606e3e4b98e218"
+      },
+      {
+        "order": 3,
+        "name": "slide-03.png",
+        "sha256": "fccec5a75e1f7efc141c2971ab577f703e697411cef70e7b489cfe7c281bfd32"
+      },
+      {
+        "order": 4,
+        "name": "slide-04.png",
+        "sha256": "272ed6c52c086810d1c3a78a7a236fdc57449bdb1dd0930901f56b90c0974204"
+      },
+      {
+        "order": 5,
+        "name": "slide-05.png",
+        "sha256": "789de1782f4723a4d53fe6b9bcc193417740229d9e8638c0f4b0a3c2fac7d0c1"
+      }
+    ],
+    "caption": {
+      "source_path": "projects/cwc/content/carousel/CWC-CRSL-0004.json",
+      "source_git_blob_sha": "d8dcb70545b8e6b715ce0ceddcb04ce1f7b51c70",
+      "source_copy_fingerprint": "27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60",
+      "utf8_sha256": "8f9f66615d3a25b697075bbc8ad3a56ba0c256b97d181df87b5132127ce67bb3",
+      "length_characters": 578,
+      "hashtags": 5
+    },
+    "source_storage": {
+      "provider": "Google Drive — CWC folder",
+      "file_id": "11tt6HqI2Bd7B9xwf9fE1Uy8VpQ6Ta_22",
+      "file_name": "CWC-CRSL-0004_APPROVED-SOURCE-B2_20261101.zip",
+      "content_type": "application/zip",
+      "byte_size": 705300,
+      "sha256": "3b4d78637c30bda4bd75724917eb1e195f7180ee2b0181292f7eea14",
+      "retrieval_roundtrip": "DOWNLOADED_FROM_GOOGLE_DRIVE_AND_SHA256_MATCHED_ORIGINAL",
+      "url": "https://drive.google.com/file/d/11tt6HqI2Bd7B9xwf9fE1Uy8VpQ6Ta_22/view?usp=drivesdk"
+    },
+    "historical_source": {
+      "github_actions_run_id": 41309209112,
+      "github_artifact_id": 13084282669,
+      "artifact_expires_at": "2026-11-15T13:01:45Z",
+      "render_report_state": "RENDERED_CANDIDATE_UNAPPROVED",
+      "explanation": "Historical render-stage candidate report left untouched; STG-08 QA PASS and STG-09 human approval are separate authoritative records."
+    }
+  },
+  "readiness_validation": {
+    "source_archive_sha256_verified": true,
+    "drive_roundtrip_binary_equal": true,
+    "all_five_png_sha256_match_stg09": true,
+    "all_five_approved_source_dimensions_match": true,
+    "ordered_files_match_stg09": true,
+    "copy_blob_and_fingerprint_match": true,
+    "caption_exact_against_current_github_source": true,
+    "caption_utf8_sha256_verified": true,
+    "source_archive_contains_report_and_asset_provenance": true,
+    "owner_approval_is_on_the_exact_current_package": true,
+    "release_identity_deterministically_bound_to_approved_package": true,
+    "platform_publication_authorization_recorded": false,
+    "verdict": "IDENTITY_AND_SOURCE_BYTES_VERIFIED__STG10_ENTRY_NOT_AUTHORIZED"
+  },
+  "publication_boundary": {
+    "needs_new_human_publication_authorization": true,
+    "publication_authorization_recorded": false,
+    "owner_visual_and_sensitive_claim_signoff_from_stg09_is_not_a_separate_stg10_publish_instruction": true,
+    "approved_release_identity_prepared_not_yet_activated": true,
+    "release_readiness_status_promotion_authorized": false,
+    "scheduled_at": null,
+    "platform_post_id": null,
+    "platform_url": null,
+    "platform_live_confirmation": false,
+    "published": false,
+    "old_2026_10_27_editorial_slot_reusable": false
+  },
+  "next_action": "Acquire explicit human STG-10 publication authorization, then reverify current hashes/content and promote APPROVED → READY_FOR_PUBLICATION through governed register change. Actual platform publishing is a separate external action requiring authorized timing and a live identity check."
+}
