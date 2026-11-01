@@ -14,6 +14,18 @@
       "point_of_use_reliability": "HIGH for published 2023 Indonesian oral-PrEP recommendations; NOT independently verified as 2026 local SOP"
     },
     {
+      "id": "ID_KEMENKES_CATALOG_2023",
+      "url": "https://repository.kemkes.go.id/book/862",
+      "sections": "Official catalogue record: title, Kementerian Kesehatan publisher, publication year 2023, 73 pages",
+      "point_of_use_reliability": "HIGH for official provenance and publication metadata only; landing page does NOT establish testing intervals or current 2026 clinic SOP"
+    },
+    {
+      "id": "US_CDC_PREP_2026",
+      "url": "https://www.cdc.gov/hivnexus/hcp/prep/",
+      "sections": "Clinical Guidance for PrEP (April 30, 2026), oral PrEP required HIV testing and at-least-three-month ongoing assessments",
+      "point_of_use_reliability": "HIGH for current US PrEP clinical guidance; US testing and baseline renal protocol do NOT supersede or certify the Indonesian 2023 programme or 2026 local procedures"
+    },
+    {
       "id": "WHO_PREP_PROVIDER_2024",
       "url": "https://www.who.int/publications/i/item/9789240097230/",
       "sections": "Oral PrEP follow-up and risk-based kidney monitoring",
@@ -38,7 +50,8 @@
         "caption"
       ],
       "source_ids": [
-        "ID_JUKNIS_2023"
+        "ID_JUKNIS_2023",
+        "US_CDC_PREP_2026"
       ],
       "applicability_limit": "Oral PrEP only; a negative result may not exclude very recent infection"
     },
@@ -51,7 +64,8 @@
         "caption"
       ],
       "source_ids": [
-        "ID_JUKNIS_2023"
+        "ID_JUKNIS_2023",
+        "ID_KEMENKES_CATALOG_2023"
       ],
       "applicability_limit": "A separate month-one clinical follow-up exists; not universal schedule for injectable PrEP"
     },
