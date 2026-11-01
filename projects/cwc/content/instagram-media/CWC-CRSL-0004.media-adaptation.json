@@ -20,7 +20,7 @@
   },
   "candidate_owner_approved": true,
   "approval_evidence": "BUS-171 Owner JPEG approval comment 202b2559-35f8-49af-af29-22d26c4b6fc7 — \"setuju\" to exactly five derived slide-01.jpg through slide-05.jpg on 2026-11-01",
-  "public_media_git_sha": null,
+  "public_media_git_sha": "7bcc15e10947d35c733cec94051432524a337406",
   "media_dir": "projects/cwc/content/instagram-media/CWC-CRSL-0004",
   "files": [
     {
@@ -59,11 +59,12 @@
     "owner_approved_png": true,
     "jpeg_candidate_not_approved": false,
     "instagram_credentials_unverified": true,
-    "public_media_host_absent": true,
+    "public_media_host_absent": false,
     "publishing_attempted": false,
     "schedule_utc": "2026-11-02T11:00:00Z",
     "not_scheduled_on_platform": true,
-    "jpeg_adaptation_owner_approved": true
+    "jpeg_adaptation_owner_approved": true,
+    "public_media_git_commit_verified": true
   },
   "owner_decision": {
     "verbatim": "setuju",
@@ -71,5 +72,20 @@
     "scope": "The five exact 1080×1350 JPEG delivery adaptation files and their pinned ordered SHA-256 checksums only; approved original PNGs and caption unchanged",
     "evidence_issue": "BUS-171",
     "evidence_comment_id": "202b2559-35f8-49af-af29-22d26c4b6fc7"
+  },
+  "media_hosting_evidence": {
+    "github_actions_run": "https://github.com/BillyProject2505/content-os/actions/runs/41317099501",
+    "owner_approved_media_branch": "cwc-release-media",
+    "immutable_media_commit_sha": "7bcc15e10947d35c733cec94051432524a337406",
+    "repository_visibility": "public",
+    "remote_git_blob_shas": {
+      "slide-01.jpg": "796c6d89a6592cf85a44c1823e190beedf318fb0",
+      "slide-02.jpg": "d64a1834127c419188f545ef185733d744f80a7f",
+      "slide-03.jpg": "e3aa9fcdf09cd51a62740af242966210fd22120d",
+      "slide-04.jpg": "87490a8ad71a2e3a0f0c384500e6f9e989ea7a2e",
+      "slide-05.jpg": "54cdd34ae258efac6d79204333f7b73da2c19caa"
+    },
+    "verification": "5/5 actual remote Git blob IDs equal locally computed Git blob SHA-1 of the five source-verified JPEG files; 5/5 SHA-256 equal approved manifest. Public raw-image HTTP fetch by Instagram still requires runtime check before platform operations.",
+    "verified_at_date": "2026-11-01"
   }
 }
