@@ -6,6 +6,11 @@ on:
       - ".github/workflows/cwc-instagram-publish-0004.yml"
       - "projects/cwc/runtime/instagram-publication/**"
       - "projects/cwc/content/instagram-media/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "projects/cwc/content/instagram-media/CWC-CRSL-0004.media-adaptation.json"
   workflow_dispatch:
     inputs:
       mode:
@@ -36,7 +41,7 @@ concurrency:
 
 jobs:
   preflight:
-    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'preflight')
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'preflight')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -50,6 +55,54 @@ jobs:
           node projects/cwc/runtime/instagram-publication/publish-once.mjs --preflight
       - name: Confirm this is not a publication run
         run: echo "No Meta call, media upload, scheduler job or publish performed." >> "$GITHUB_STEP_SUMMARY"
+
+  credential_probe:
+    needs: preflight
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'preflight'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    env:
+      CWC_INSTAGRAM_PUBLISH_ENABLED: ${{ vars.CWC_INSTAGRAM_PUBLISH_ENABLED }}
+      CWC_META_IG_USER_ID: ${{ vars.CWC_META_IG_USER_ID }}
+      CWC_META_ACCESS_TOKEN: ${{ secrets.CWC_META_ACCESS_TOKEN }}
+    steps:
+      - name: Read-only CWC Meta credential/account readiness (no publishing)
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          if [ "$CWC_INSTAGRAM_PUBLISH_ENABLED" != "true" ]; then
+            echo "BLOCKER: CWC_INSTAGRAM_PUBLISH_ENABLED is not true" >> "$GITHUB_STEP_SUMMARY"
+            missing=1
+          fi
+          if ! [[ "$CWC_META_IG_USER_ID" =~ ^[0-9]{5,30}$ ]]; then
+            echo "BLOCKER: CWC_META_IG_USER_ID is absent or invalid" >> "$GITHUB_STEP_SUMMARY"
+            missing=1
+          fi
+          if [ -z "$CWC_META_ACCESS_TOKEN" ]; then
+            echo "BLOCKER: CWC_META_ACCESS_TOKEN secret is not configured" >> "$GITHUB_STEP_SUMMARY"
+            missing=1
+          fi
+          if [ "$missing" -ne 0 ]; then
+            echo "CWC_META_READINESS=BLOCKED; no Meta API request performed"
+            exit 0
+          fi
+          response_file="$(mktemp)"
+          trap 'rm -f "$response_file"' EXIT
+          http_status="$(curl --silent --show-error --connect-timeout 10 --max-time 25 \
+            --output "$response_file" --write-out '%{http_code}' \
+            --header "Authorization: Bearer $CWC_META_ACCESS_TOKEN" \
+            "https://graph.facebook.com/v25.0/$CWC_META_IG_USER_ID?fields=id,username" || true)"
+          if [ "$http_status" = "200" ] && jq -e --arg id "$CWC_META_IG_USER_ID" \
+            '.id == $id and .username == "cozwecare.id"' "$response_file" >/dev/null; then
+            echo "CWC Meta CWC account identity verified read-only" >> "$GITHUB_STEP_SUMMARY"
+            echo "CWC_META_READINESS=ACCOUNT_VERIFIED; existing register BLOCKED exception must still be governed"
+          else
+            echo "BLOCKER: CWC Meta identity/token read-only verification not confirmed (HTTP $http_status)" >> "$GITHUB_STEP_SUMMARY"
+            echo "CWC_META_READINESS=BLOCKED"
+          fi
 
   publish:
     if: >-
