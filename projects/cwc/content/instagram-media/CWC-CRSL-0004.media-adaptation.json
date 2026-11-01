@@ -18,8 +18,8 @@
     "optimize": true,
     "progressive": false
   },
-  "candidate_owner_approved": false,
-  "approval_evidence": null,
+  "candidate_owner_approved": true,
+  "approval_evidence": "BUS-171 Owner JPEG approval comment 202b2559-35f8-49af-af29-22d26c4b6fc7 — \"setuju\" to exactly five derived slide-01.jpg through slide-05.jpg on 2026-11-01",
   "public_media_git_sha": null,
   "media_dir": "projects/cwc/content/instagram-media/CWC-CRSL-0004",
   "files": [
@@ -57,11 +57,19 @@
   "execution": {
     "state": "BLOCKED",
     "owner_approved_png": true,
-    "jpeg_candidate_not_approved": true,
+    "jpeg_candidate_not_approved": false,
     "instagram_credentials_unverified": true,
     "public_media_host_absent": true,
     "publishing_attempted": false,
     "schedule_utc": "2026-11-02T11:00:00Z",
-    "not_scheduled_on_platform": true
+    "not_scheduled_on_platform": true,
+    "jpeg_adaptation_owner_approved": true
+  },
+  "owner_decision": {
+    "verbatim": "setuju",
+    "date": "2026-11-01",
+    "scope": "The five exact 1080×1350 JPEG delivery adaptation files and their pinned ordered SHA-256 checksums only; approved original PNGs and caption unchanged",
+    "evidence_issue": "BUS-171",
+    "evidence_comment_id": "202b2559-35f8-49af-af29-22d26c4b6fc7"
   }
 }

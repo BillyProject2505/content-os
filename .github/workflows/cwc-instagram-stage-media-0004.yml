@@ -6,6 +6,11 @@ on:
       - ".github/workflows/cwc-instagram-stage-media-0004.yml"
       - "projects/cwc/runtime/instagram-publication/**"
       - "projects/cwc/content/instagram-media/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "projects/cwc/content/instagram-media/CWC-CRSL-0004.media-adaptation.json"
   workflow_dispatch:
     inputs:
       mode:
@@ -59,15 +64,15 @@ jobs:
           path: ${{ runner.temp }}/cwc-ig-media/
           if-no-files-found: error
           retention-days: 14
-      - name: For stage_approved, require separate explicit JPEG Owner approval
-        if: inputs.mode == 'stage_approved'
+      - name: For controlled push or stage_approved, require separate explicit JPEG Owner approval
+        if: github.ref == 'refs/heads/main' && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && inputs.mode == 'stage_approved'))
         shell: bash
         run: |
           set -euo pipefail
           jq -e '.candidate_owner_approved == true and (.approval_evidence | type=="string" and length>10)' projects/cwc/content/instagram-media/CWC-CRSL-0004.media-adaptation.json >/dev/null
           echo "Owner JPEG adaptation approval evidence PASS"
-      - name: For stage_approved, host EXACT JPEG bytes on public immutable Git commit
-        if: inputs.mode == 'stage_approved'
+      - name: For controlled push or stage_approved, host EXACT JPEG bytes on public immutable Git commit
+        if: github.ref == 'refs/heads/main' && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && inputs.mode == 'stage_approved'))
         shell: bash
         env:
           CWC_OUTPUT_DIR: ${{ runner.temp }}/cwc-ig-media
