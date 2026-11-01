@@ -1,6 +1,11 @@
 name: CWC Instagram media preparation (PNG to JPEG, never publish)
 
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/cwc-instagram-stage-media-0004.yml"
+      - "projects/cwc/runtime/instagram-publication/**"
+      - "projects/cwc/content/instagram-media/**"
   workflow_dispatch:
     inputs:
       mode:
@@ -18,7 +23,7 @@ permissions:
 
 jobs:
   media:
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
