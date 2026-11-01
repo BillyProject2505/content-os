@@ -131,7 +131,7 @@ This rule governs recurring production use of the CWC Official Brand Logo (AS-00
 5. If the canonical asset cannot be retrieved or directly placed for a technical reason, Production AI must not fabricate a replacement. It must preserve/reserve the required placement area and route the asset to controlled manual placement as a fallback.
 6. Google Drive is the current operational **binary-storage binding** only. Moving the same approved binary asset files to another authorized binary storage location in the future does not create a new asset identity or change this rule's semantics.
 
-The approved binary file names and storage-specific identifiers are maintained in CRS. CAB owns the specification rule; CRS owns the current visual-reference and binary file-mapping detail. Governed text authority for both documents is Linear.
+The approved binary file names and storage-specific identifiers are maintained in CRS. CAB owns the specification rule; CRS owns the current visual-reference and binary file-mapping detail. Governed text authority for both documents is GitHub after the explicit CWC repository cutover; Linear retains execution tracking and migrated reference representations.
 
 ## Asset 005 — PrEP Bottle Illustration Specification
 
