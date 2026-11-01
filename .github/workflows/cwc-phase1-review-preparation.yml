@@ -1,0 +1,83 @@
+name: CWC Phase 1 review preparation (BUS-170)
+# Deliberately no Drive, OIDC, write token, image rendering, Meta or publication.
+on:
+  pull_request:
+    paths:
+      - "projects/cwc/runtime/approved-copy/**"
+      - "projects/cwc/content/carousel/**"
+      - ".github/workflows/cwc-phase1-review-preparation.yml"
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: Existing registered CWC Carousel ID
+        required: true
+        type: string
+      expected_copy_fingerprint:
+        description: Independently verified approved-copy fingerprint
+        required: true
+        type: string
+      expected_layout_fingerprint:
+        description: Independently verified typed-layout fingerprint
+        required: true
+        type: string
+      confirmation:
+        description: Must equal PREPARE_UNAPPROVED_CWC_REVIEW
+        required: true
+        type: string
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Copy and layout regression suite
+        run: node --test projects/cwc/runtime/approved-copy/*.test.mjs
+
+  prepare:
+    needs: tests
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Prepare NON-PUBLISHABLE review evidence
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FP: ${{ inputs.expected_copy_fingerprint }}
+          LAYOUT_FP: ${{ inputs.expected_layout_fingerprint }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || { echo "::error::Main-only preparation"; exit 1; }
+          [[ "$CONFIRMATION" == "PREPARE_UNAPPROVED_CWC_REVIEW" ]] || { echo "::error::Confirmation mismatch"; exit 1; }
+          [[ "$CONTENT_ID" =~ ^CWC-CRSL-[0-9]{4}$ ]] || { echo "::error::Invalid content ID"; exit 1; }
+          [[ "$COPY_FP" =~ ^[0-9a-f]{64}$ && "$LAYOUT_FP" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::Two independent fingerprints required"; exit 1; }
+          node projects/cwc/runtime/approved-copy/prepare-review.mjs \
+            --content-id "$CONTENT_ID" \
+            --copy-fingerprint "$COPY_FP" \
+            --layout-fingerprint "$LAYOUT_FP" \
+            --out "$RUNNER_TEMP/cwc-phase1"
+          jq -e '.state=="PHASE1_VALIDATED_UNAPPROVED" and
+            .evidence.publication_authorized==false and
+            .evidence.stg08_technical_qa_passed==false and
+            .evidence.stg09_final_owner_approval_granted==false and
+            .evidence.deterministic_render_performed==false' "$RUNNER_TEMP/cwc-phase1/phase1-manifest.json" >/dev/null
+          echo "### CWC Phase 1: copy and typed layout PASS for $CONTENT_ID" >> "$GITHUB_STEP_SUMMARY"
+          echo "Review preparation only: NO assets fetched, render, medical QA, Owner release, schedule or publication." >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload 4 non-publishable JSON evidence files
+        uses: actions/upload-artifact@v4
+        with:
+          name: cwc-phase1-unapproved-review-preparation
+          path: ${{ runner.temp }}/cwc-phase1/*.json
+          if-no-files-found: error
+          retention-days: 14
