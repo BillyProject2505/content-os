@@ -1,0 +1,308 @@
+{
+  "schema": "cwc-qa-record-v1",
+  "authority": "DIUA-DIC-000019 CWC-QA-001 v1.32, §13, §17.1; DIUA-DIC-000017 Production Workflow v1.22 §STG-08",
+  "content_item_id": "CWC-CRSL-0004",
+  "qa_pass_date": "2026-11-01",
+  "execution": {
+    "actor": "ChatGPT GPT-6 — stage-scoped independent AI reviewer (not human clinician)",
+    "method": "AI"
+  },
+  "approved_copy_fingerprint": "27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60",
+  "artifact": {
+    "workflow_run": "https://github.com/BillyProject2505/content-os/actions/runs/41309209112",
+    "id": 13084282669,
+    "zip_sha256": "3b4d78637c30bda4bd75724917eb1e195f7180ee2b0181292f7eea14",
+    "slide_count": 5,
+    "canvas_px": [
+      1080,
+      1350
+    ],
+    "all_png_sha256_verified": true,
+    "footer_color_violations_each_slide": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "render_report_state": "RENDERED_CANDIDATE_UNAPPROVED"
+  },
+  "applicable_criteria": [
+    {
+      "criterion_id": "CORE-QA-00",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-01",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-02",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-03",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-04",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-05",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-06",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-07",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-08",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-09",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "ASSET-QA-01",
+      "source": "ASSET"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-slide1-copy",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-gutter",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-presenter-core",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-gesture",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-protected-copy",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-attention",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-framing",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-logo-footer",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-type-hierarchy",
+      "source": "FORMAT"
+    }
+  ],
+  "checks": [
+    {
+      "criterion_id": "CORE-QA-00",
+      "what_was_checked": "Verdict record structure",
+      "evidence": "CWC-QA-001 v1.32 §§9–10,13,19; this QA Record",
+      "expected_result": "One PASS/FAIL verdict; every applicable criterion checked; findings classified only on FAIL",
+      "actual_result": "This JSON has execution provenance, 20 resolved checks, PASS verdict and no FAIL findings",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-01",
+      "what_was_checked": "Purpose and production intent",
+      "evidence": "CWC-QA-001 v1.32 §7.1/§9; CWC-CRSL-0004 STG-02/04 Brief & Content Register v1.33 (https://linear.app/bussiness-content-os/issue/BUS-171/cwc-carousel-production-cwc-crsl-0004-kontrol-dan-tes-hiv-rutin-saat)",
+      "expected_result": "Five-slide output serves STG-02 objective to teach routine oral-PrEP HIV retesting and provider follow-up",
+      "actual_result": "Slides 1–5 preserve single prevention/monitoring objective, without expanding into unrelated regimens",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-02",
+      "what_was_checked": "Audience fit",
+      "evidence": "STG-04 Brief v1.1 BUS-171 comment 8416edf0-0e4a-49c9-9b3d-049989adeace; inspected slides 1–5",
+      "expected_result": "Plain Indonesian, relevant to persons using or considering oral PrEP",
+      "actual_result": "Person-centered 'kamu', practical repeat-testing guidance and clear provider/DM navigation; no diagnosis",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-03",
+      "what_was_checked": "Medical accuracy across C1–C5",
+      "evidence": "projects/cwc/content/research/CWC-CRSL-0004.research.json: claims C1–C5; https://cdn.who.int/media/docs/default-source/searo/indonesia/non-who-publications/2023-guidelines-for-oral-pre-expose-prophylaxis-%28prep%29-program-for-people-at-high-risk-of-hiv-infection-in-indonesia.pdf: Kunjungan Ulang §§21–22, Tes Laboratorium/Tabel 3.4 & 3.6 §§24–26; https://www.cdc.gov/hivnexus/hcp/prep/: oral PrEP follow-up 2026",
+      "expected_result": "Every medical claim has EXPLICIT_EVIDENCE, source provenance and point-of-use qualification",
+      "actual_result": "C1 HIV retesting and initiation; C2 3-month follow-up HIV tests in Indonesian oral-PrEP guidance 2023; C3 recommended STI screening; C4 conditional creatinine not universal pre-start barrier under the 2023 Indonesian guide; C5 follow-up adverse effects/adherence all supported. No unsupported local clinic availability assertion; US CDC applies only as cross-jurisdictional comparator",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-04",
+      "what_was_checked": "Educational integrity and jurisdictional meaning",
+      "evidence": "Approved copy v0.2 & caption; https://cdn.who.int/media/docs/default-source/searo/indonesia/non-who-publications/2023-guidelines-for-oral-pre-expose-prophylaxis-%28prep%29-program-for-people-at-high-risk-of-hiv-infection-in-indonesia.pdf; https://jdih.kemkes.go.id/documents/peraturan-menteri-kesehatan-nomor-3-tahun-2026; projects/cwc/content/research/CWC-CRSL-0004.research.json point_of_use_reliability",
+      "expected_result": "Simplification does not distort the dated primary guidance or claim current 2026 clinic-specific SOP",
+      "actual_result": "Slide 3 qualifies oral PrEP Indonesia guideline, caption explicitly says Juknis (2023); slide 4's pre-start kidney and STI language accurately reflects 2023 Indonesian programme. Separate month-1 visit is not denied; no injectable testing schedule is asserted. Permenkes 3/2026 currency is noted as unresolved for local SOP applicability, rather than falsely declaring the 2023 Juknis revoked",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-05",
+      "what_was_checked": "Nonstigmatizing expression",
+      "evidence": "Inspected five actual PNGs and approved caption; CWC-CRSL-0004.json v0.2",
+      "expected_result": "No moralizing, coercion or stigmatizing HIV/PrEP language",
+      "actual_result": "Re-testing framed as routine care ('Kontrol itu bentuk perawatan'); respectful 'petugas layanan' and voluntary outreach CTA",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-06",
+      "what_was_checked": "Brand identity",
+      "evidence": "STG-06 BUS-171 comment e3334b4c-66c3-4243-8b76-ea59c53c4a6a; https://github.com/BillyProject2505/content-os/actions/runs/41309209112 artifact #13084282669; independent image inspection",
+      "expected_result": "Canonical-logo/footer/color and approved presenter variant as recorded in STG-06, no added brand assets",
+      "actual_result": "5/5 identical logo/footer protected regions; 0 off-palette footer pixels; slide-1 BUS-94 White Jacket/Point Left derivative in approved placement; unchanged assets",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-07",
+      "what_was_checked": "Legibility, structure, accessibility",
+      "evidence": "FORMAT-CAROUSEL v1.4 §§4–6; independent PNG inspection and render-report.json https://github.com/BillyProject2505/content-os/actions/runs/41309209112",
+      "expected_result": "White-on-Blue visual contrast, semantic hierarchy and registered role floors",
+      "actual_result": "Five full-resolution PNGs visibly readable and unclipped; 72px headline/52px subhead/38px body measurements above format floors; yellow accent is decorative only",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-08",
+      "what_was_checked": "Prior stage contract conformance",
+      "evidence": "Content Register v1.33 in GitHub main; BUS-171 STG-04/05/06/07 evidence and merged PRs #171–#177",
+      "expected_result": "STG-02 through STG-07 Output Contracts have recorded valid exits",
+      "actual_result": "STG-03 PR #171, STG-04 PR #172, STG-05 PR #173, STG-06 PR #174, STG-07 PR #177; STG-02 objective/duplicate disposition in Content Register; no skipped production stage",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-09",
+      "what_was_checked": "Source/asset/output lineage",
+      "evidence": "projects/cwc/content/research/CWC-CRSL-0004.research.json; STG-06 BUS-171 e3334b4c-66c3-4243-8b76-ea59c53c4a6a; https://github.com/BillyProject2505/content-os/actions/runs/41309209112 artifact #13084282669",
+      "expected_result": "Medical and substantive claims mapped to STG-03, authoritative assets CAR identified, artifact exact bytes reproducible",
+      "actual_result": "6/6 source classifications cover five slides and caption; 3/3 approved-copy external URLs in research; 7/7 source SHA pins from STG-06; output zip digest and five raster hashes verified",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "ASSET-QA-01",
+      "what_was_checked": "STG-06 recorded canonical asset conformance",
+      "evidence": "CAR v1.18 / CAB v1.36 / CRS v1.23 / CAS v1.17; BUS-171 comment e3334b4c-66c3-4243-8b76-ea59c53c4a6a",
+      "expected_result": "Valid CAR identity/lifecycle and CAB/CRS mode evidence exists for every used canonical asset",
+      "actual_result": "AS-001/002/003/004 CAR identity eligible; AS-002 GENREF parent / BUS-94 approved derivative; 7/7 source assets+font hashes; no AS-005 demanded",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-slide1-copy",
+      "what_was_checked": "slide1-copy",
+      "evidence": "FORMAT-CAROUSEL v1.4 §VISUAL_PRODUCTION, §QA; CWC-CRSL-0004.layout.json; slide-01.png",
+      "expected_result": "Slide 1 copy anchored at x=72 and ends no further than x≈551",
+      "actual_result": "Typed layout x=72 width=479; text glyphs within left zone",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-gutter",
+      "what_was_checked": "gutter",
+      "evidence": "FORMAT-CAROUSEL v1.4 §3.1; slide-01.png inspection",
+      "expected_result": "Slide 1 protected x≈551–605 gutter not used as text column",
+      "actual_result": "No live copy within protected gutter; pointing gesture comes from right side",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-presenter-core",
+      "what_was_checked": "presenter-core",
+      "evidence": "BUS-94 and FORMAT-CAROUSEL v1.4; render-report.json presenter placement; slide-01.png",
+      "expected_result": "AS-002 body right anchored x≈670–1015",
+      "actual_result": "Visible presenter bounds [572,310,1058,1210] include authorized arm/gesture; core body remains right within registered plan",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-gesture",
+      "what_was_checked": "gesture",
+      "evidence": "FORMAT-CAROUSEL v1.4 §3.1; slide-01.png",
+      "expected_result": "Cross-gutter gesture (if any) intentional near x≈572–594",
+      "actual_result": "Point-left pose directs attention toward copy with hand not obscuring copy; allowed hand at x≈572, no underlaid copy",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-protected-copy",
+      "what_was_checked": "protected-copy",
+      "evidence": "FORMAT-CAROUSEL v1.4 §QA; slide-01.png",
+      "expected_result": "No gesture obscures headline/CTA/logo/footer",
+      "actual_result": "Manual full-resolution review found no overlap of essential elements",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-attention",
+      "what_was_checked": "attention",
+      "evidence": "BUS-94; slide-01.png inspected",
+      "expected_result": "Presenter gestures toward content",
+      "actual_result": "Point-left accepted derivative clearly oriented to the copy region",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-framing",
+      "what_was_checked": "framing",
+      "evidence": "BUS-94 asset and FORMAT-CAROUSEL v1.4; slide-01.png",
+      "expected_result": "Full body default or approved crop within same right-side placement",
+      "actual_result": "Full-body approved derivative with no visible clipping above footer; no anatomical deformation detected",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-logo-footer",
+      "what_was_checked": "logo-footer",
+      "evidence": "CWC CAB/CRS §AS-001/004; artifact #13084282669; STG-07 record f54d9d67-c2d7-468c-954d-b8c609c60c2c",
+      "expected_result": "Canonical logo/footer structure, placement and behavior unchanged",
+      "actual_result": "Identical logo and White SVG footer regions across all five; footer color corridor violations = 0 per slide, hashes of source binaries unchanged",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-type-hierarchy",
+      "what_was_checked": "type-hierarchy",
+      "evidence": "FORMAT-CAROUSEL v1.4 §4–§6; render-report.json measurements; five PNGs",
+      "expected_result": "Five-slide consistent typography hierarchy with readability floors",
+      "actual_result": "Headline 72px, subhead 52px, body 38px; five slide images show no glyph truncation or under-floor auto shrink",
+      "determination": "PASS"
+    }
+  ],
+  "sensitive_claim_support_check": {
+    "criterion_id": "SENSITIVE-CLAIM-01",
+    "source": "CWC-QA-001 v1.32 §17.1; BUS-39",
+    "classification": "YES",
+    "determination": "PASS",
+    "evidence": "Approved-copy v0.2 metadata sensitive_claim=true; HIV diagnostic monitoring, PrEP continuation, renal/IMS screening statements in slides 1–5 and caption; C1–C5 STG-03 matrix",
+    "carry_forward_to_stg09": true,
+    "human_signoff_obtained": false
+  },
+  "verdict": "PASS",
+  "qa_verdict_scope": "QA criteria and published-source accuracy for an oral-PrEP educational carousel; not a certification of current 2026 Manado facility SOP and not a physician or owner release approval",
+  "findings": [],
+  "release_caveats": [
+    "2023 Indonesian oral-PrEP Juknis says month-1 follow-up visit also exists; three-month HIV testing is not a claim that all visits are at month 3.",
+    "2026 Permenkes 3/2026 is in force; do not represent the published 2023 Juknis as a certified current 2026 local clinic SOP without new evidence.",
+    "US CDC 2026 baseline renal assessment rules differ from Indonesia's published 2023 guideline; do not blend US and Indonesia jurisdictional instructions.",
+    "Any current Manado clinic-specific schedule, availability, clinician-patient suitability or testing algorithm requires the facility or clinician to verify; neither slide nor caption promises these.",
+    "Medical sensitive-claim flag YES requires explicit authorized human signoff at STG-09; owner has accepted visual preview only."
+  ],
+  "lifecycle_recommendation": "READY_FOR_QA -> IN_QA -> READY_FOR_APPROVAL only after canonical QA record + merged validation PR",
+  "gates": {
+    "stg08_passed": true,
+    "stg09_owner_sensitive_claim_signoff": false,
+    "stg10_approved_release_identity": false,
+    "publication_authorized": false,
+    "auto_schedule_authorized": false
+  },
+  "source_refs": [
+    "https://cdn.who.int/media/docs/default-source/searo/indonesia/non-who-publications/2023-guidelines-for-oral-pre-expose-prophylaxis-%28prep%29-program-for-people-at-high-risk-of-hiv-infection-in-indonesia.pdf",
+    "https://www.cdc.gov/hivnexus/hcp/prep/",
+    "https://repository.kemkes.go.id/book/862",
+    "https://www.who.int/publications/i/item/9789240097230/",
+    "https://jdih.kemkes.go.id/documents/peraturan-menteri-kesehatan-nomor-3-tahun-2026"
+  ]
+}
