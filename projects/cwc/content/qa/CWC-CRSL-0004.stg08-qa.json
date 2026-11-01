@@ -282,7 +282,6 @@
   },
   "verdict": "PASS",
   "qa_verdict_scope": "QA criteria and published-source accuracy for an oral-PrEP educational carousel; not a certification of current 2026 Manado facility SOP and not a physician or owner release approval",
-  "findings": [],
   "release_caveats": [
     "2023 Indonesian oral-PrEP Juknis says month-1 follow-up visit also exists; three-month HIV testing is not a claim that all visits are at month 3.",
     "2026 Permenkes 3/2026 is in force; do not represent the published 2023 Juknis as a certified current 2026 local clinic SOP without new evidence.",
