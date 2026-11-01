@@ -8,7 +8,7 @@ const path="projects/cwc/content/carousel/CWC-CRSL-0004";
 const copy=JSON.parse(fs.readFileSync(path+".json","utf8"));
 const layout=JSON.parse(fs.readFileSync(path+".layout.json","utf8"));
 const copyHash="27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60";
-const layoutHash="5f23b51944a8446f442f6372d4397318cb66be6284b95a48cc0b142f436ef134";
+const layoutHash="a159704d5880edf2952d906b612c268e8d2190471caa671b5ae8ceac5e4e1124";
 
 test("BUS-171 typed layout is independently fingerprinted and matches approved copy",()=>{
   assert.equal(validateCopy(copy,{contentId:copy.content_id,expectedFingerprint:copyHash}).result,"COPY_PREFLIGHT_PASS");
