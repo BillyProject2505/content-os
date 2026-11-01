@@ -1,0 +1,67 @@
+{
+  "schema": "cwc-instagram-carousel-adaptation-v1",
+  "content_id": "CWC-CRSL-0004",
+  "source_approval_id": "CWC-CRSL-0004-STG09-20261101",
+  "source_approved_release_identity": "sha256:6b3695d3e100dbb6abd8696d0e786ef935ce1e6a7ab169c377828a8362e3cb5f",
+  "source_png_zip_sha256": "3b4d78637c30bda4bd75724917eb1e195f7180ee2b0181292f7eea14",
+  "source_png_drive_file_id": "11tt6HqI2Bd7B9xwf9fE1Uy8VpQ6Ta_22",
+  "destination": "instagram:@cozwecare.id",
+  "target_utc": "2026-11-02T11:00:00Z",
+  "target_timezone": "Asia/Makassar",
+  "transcoding": {
+    "source_format": "PNG",
+    "delivery_format": "JPEG",
+    "reason": "Meta Instagram Graph API requires publicly reachable JPEG for carousel images",
+    "encoder": "Pillow",
+    "quality": 98,
+    "subsampling": 0,
+    "optimize": true,
+    "progressive": false
+  },
+  "candidate_owner_approved": false,
+  "approval_evidence": null,
+  "public_media_git_sha": null,
+  "media_dir": "projects/cwc/content/instagram-media/CWC-CRSL-0004",
+  "files": [
+    {
+      "name": "slide-01.jpg",
+      "source_png_sha256": "db0e1d6db90ee0e7d81eb88ec98b7df43ed23d1d1b35aa93df7947afcc2184bd",
+      "sha256": "bc3334e58a53a83f7699bb519b0b9236d8423f7d90f3d27d84e4843e5d161a20",
+      "bytes": 273089
+    },
+    {
+      "name": "slide-02.jpg",
+      "source_png_sha256": "c688bcc570e2b29be9b16b93b4d5abbbf0e4c87c2d42ed462f606e3e4b98e218",
+      "sha256": "b4b2d931b20559617c8cb38ce5cd4c4772d4a55c5194465392721673d64506a4",
+      "bytes": 188169
+    },
+    {
+      "name": "slide-03.jpg",
+      "source_png_sha256": "fccec5a75e1f7efc141c2971ab577f703e697411cef70e7b489cfe7c281bfd32",
+      "sha256": "56ca391d62fb597097b2945d6a03c58c2aca20372ab9f50effbea4544c43ae75",
+      "bytes": 252934
+    },
+    {
+      "name": "slide-04.jpg",
+      "source_png_sha256": "272ed6c52c086810d1c3a78a7a236fdc57449bdb1dd0930901f56b90c0974204",
+      "sha256": "479628d1856bc09f33c4cc6537f1b7a53b11a8e762ed04540416881b110e58bd",
+      "bytes": 245595
+    },
+    {
+      "name": "slide-05.jpg",
+      "source_png_sha256": "789de1782f4723a4d53fe6b9bcc193417740229d9e8638c0f4b0a3c2fac7d0c1",
+      "sha256": "5bcf8ef706160a0c2e5fdbbb762474d2ac3f8a15c20a77573f45e4b69330f07a",
+      "bytes": 257551
+    }
+  ],
+  "execution": {
+    "state": "BLOCKED",
+    "owner_approved_png": true,
+    "jpeg_candidate_not_approved": true,
+    "instagram_credentials_unverified": true,
+    "public_media_host_absent": true,
+    "publishing_attempted": false,
+    "schedule_utc": "2026-11-02T11:00:00Z",
+    "not_scheduled_on_platform": true
+  }
+}
