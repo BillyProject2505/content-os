@@ -203,31 +203,21 @@ class RenderSafetyTests(unittest.TestCase):
         with self.assertRaises(mod.RenderRejected):
             mod.position_presenter(source, {**core, "height": 300}, gesture, copy)
 
-    def test_footer_direct_blue_rasterization_is_opaque_and_palette_safe(self):
-        """Unchanged White SVG is rendered onto its final CAB Blue surface."""
-        with tempfile.TemporaryDirectory() as tmp:
-            file = Path(tmp) / "footer.svg"
-            file.write_text(
-                '<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="64">'
-                '<rect x="15" y="8" width="1040" height="48" '
-                'stroke="#FFFFFF" fill="none" stroke-width="2"/>'
-                '<text x="120" y="39" fill="#FFFFFF" '
-                'font-family="sans-serif" font-size="18">@cozwecare.id</text>'
-                '</svg>',
-                "utf8",
-            )
-            original_sha = mod.sha256_file(file)
-            direct = mod.rasterize_svg(file, 1070, background_color=mod.BLUE)
-            self.assertEqual(direct.size, (1070, 64))
-            self.assertEqual(direct.getextrema()[-1], (255, 255))
-            self.assertEqual(direct.getpixel((5, 5)), (11, 61, 158, 255))
-            canvas = Image.new("RGBA", mod.CANVAS, mod.BLUE)
-            canvas.alpha_composite(direct, (5, mod.FOOTER_RENDER_Y))
-            mod.validate_white_footer_composite(canvas)
-            self.assertEqual(mod.sha256_file(file), original_sha)
+    def test_footer_white_alpha_restoration_preserves_coverage(self):
+        """Reject the 2026-11-01 native RGB text fringe without altering alpha."""
+        corrupted = Image.new("RGBA", (4, 2), (0, 0, 0, 0))
+        corrupted.putpixel((0, 0), (3, 250, 188, 255))
+        corrupted.putpixel((1, 0), (189, 250, 6, 128))
+        corrupted.putpixel((2, 0), (30, 40, 50, 0))
+        repaired = mod.restore_canonical_white_from_alpha(corrupted)
+        self.assertEqual(repaired.getchannel("A").tobytes(),
+                         corrupted.getchannel("A").tobytes())
+        self.assertEqual(repaired.getpixel((0, 0)), (255, 255, 255, 255))
+        self.assertEqual(repaired.getpixel((1, 0)), (255, 255, 255, 128))
+        self.assertEqual(repaired.getpixel((2, 0))[3], 0)
 
-    def test_footer_blue_raster_matches_transparent_reference_within_one_byte(self):
-        """Target-surface raster must preserve direct placement appearance."""
+    def test_white_footer_svg_shape_unchanged_after_alpha_restoration(self):
+        """The exact SVG remains authoritative for glyph/path alpha coverage."""
         with tempfile.TemporaryDirectory() as tmp:
             file = Path(tmp) / "footer.svg"
             file.write_text(
@@ -239,13 +229,16 @@ class RenderSafetyTests(unittest.TestCase):
                 '</svg>',
                 "utf8",
             )
-            plain = mod.rasterize_svg(file, 1070)
-            old_method = Image.new("RGBA", (1070, 64), mod.BLUE)
-            old_method.alpha_composite(plain)
-            direct = mod.rasterize_svg(file, 1070, background_color=mod.BLUE)
-            baseline = old_method.convert("RGB").tobytes()
-            current = direct.convert("RGB").tobytes()
-            self.assertLessEqual(max(abs(a - b) for a, b in zip(baseline, current)), 2)
+            original_sha = mod.sha256_file(file)
+            raw = mod.rasterize_svg(file, 1070)
+            fixed = mod.restore_canonical_white_from_alpha(raw)
+            self.assertEqual(fixed.getchannel("A").tobytes(),
+                             raw.getchannel("A").tobytes())
+            self.assertEqual(fixed.getpixel((0, 0))[3], 0)
+            canvas = Image.new("RGBA", mod.CANVAS, mod.BLUE)
+            canvas.alpha_composite(fixed, (5, mod.FOOTER_RENDER_Y))
+            mod.validate_white_footer_composite(canvas)
+            self.assertEqual(mod.sha256_file(file), original_sha)
 
     def test_white_footer_fidelity_accepts_canonical_alpha_blend(self):
         """White glyphs on transparent SVG over blue preserve the brand palette."""
