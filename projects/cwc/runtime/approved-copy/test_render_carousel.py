@@ -138,6 +138,13 @@ class RenderSafetyTests(unittest.TestCase):
             mod.paint_text(im, "Satu dua tiga empat lima enam tujuh delapan sembilan sepuluh",
                            {"x": 72, "y": 250, "width": 250, "height": 10}, font, 82, "#111111")
 
+    def test_reject_embedded_newline_and_tab_after_token_simplification(self):
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 40)
+        draw = ImageDraw.Draw(Image.new("RGB", (900, 160), mod.BLUE))
+        for text in ("Tes HIV\\nberkala", "Tes HIV\\tberkala"):
+            with self.assertRaises(mod.RenderRejected):
+                mod.words_and_lines(draw, text, font, 700, "CWC-CRSL-0004")
+
     def test_hiv_inherits_white_body_role_without_chip_for_any_content(self):
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 48)
         text = ["Tes", "HIV", "rutin"]
