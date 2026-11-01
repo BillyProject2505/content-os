@@ -1,0 +1,115 @@
+{
+  "schema": "cwc-research-evidence-v1",
+  "content_id": "CWC-CRSL-0004",
+  "copy_fingerprint": "27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60",
+  "status": "STG03_RESEARCH_EVIDENCE_RECORDED",
+  "review_date": "2026-11-01",
+  "review_scope": "Published Indonesian 2023 oral-PrEP guidance; NOT verified as the operating protocol at every 2026 facility",
+  "source_review_record": "https://linear.app/bussiness-content-os/issue/BUS-171/cwc-carousel-production-cwc-crsl-0004-kontrol-dan-tes-hiv-rutin-saat",
+  "sources": [
+    {
+      "id": "ID_JUKNIS_2023",
+      "url": "https://cdn.who.int/media/docs/default-source/searo/indonesia/non-who-publications/2023-guidelines-for-oral-pre-expose-prophylaxis-%28prep%29-program-for-people-at-high-risk-of-hiv-infection-in-indonesia.pdf",
+      "sections": "Kunjungan Ulang; Tes Laboratorium; Tabel 3.4 dan 3.6",
+      "point_of_use_reliability": "HIGH for published 2023 Indonesian oral-PrEP recommendations; NOT independently verified as 2026 local SOP"
+    },
+    {
+      "id": "WHO_PREP_PROVIDER_2024",
+      "url": "https://www.who.int/publications/i/item/9789240097230/",
+      "sections": "Oral PrEP follow-up and risk-based kidney monitoring",
+      "point_of_use_reliability": "HIGH for WHO recommendation context; national implementation may differ"
+    },
+    {
+      "id": "OWNER_EDITORIAL",
+      "url": "https://linear.app/bussiness-content-os/issue/BUS-171/cwc-carousel-production-cwc-crsl-0004-kontrol-dan-tes-hiv-rutin-saat",
+      "sections": "Owner-approved CWC outreach navigation CTA and copy v0.2",
+      "point_of_use_reliability": "Owner editorial record only, not proof of operational availability of services"
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "Repeat HIV assessment is essential for safe oral-PrEP use",
+      "coverage": "EXPLICIT_EVIDENCE",
+      "locations": [
+        "slide-1",
+        "slide-2",
+        "slide-3",
+        "caption"
+      ],
+      "source_ids": [
+        "ID_JUKNIS_2023"
+      ],
+      "applicability_limit": "Oral PrEP only; a negative result may not exclude very recent infection"
+    },
+    {
+      "id": "C2",
+      "claim": "Published 2023 Indonesian oral-PrEP guidance repeats HIV tests at month three and then every three months",
+      "coverage": "EXPLICIT_EVIDENCE",
+      "locations": [
+        "slide-3",
+        "caption"
+      ],
+      "source_ids": [
+        "ID_JUKNIS_2023"
+      ],
+      "applicability_limit": "A separate month-one clinical follow-up exists; not universal schedule for injectable PrEP"
+    },
+    {
+      "id": "C3",
+      "claim": "STI screening is encouraged in oral-PrEP care",
+      "coverage": "EXPLICIT_EVIDENCE",
+      "locations": [
+        "slide-4",
+        "caption"
+      ],
+      "source_ids": [
+        "ID_JUKNIS_2023"
+      ],
+      "applicability_limit": "Recommended, not universally required to begin PrEP"
+    },
+    {
+      "id": "C4",
+      "claim": "Creatinine tests are conditional, not a universal prerequisite to initiating oral PrEP",
+      "coverage": "EXPLICIT_EVIDENCE",
+      "locations": [
+        "slide-4",
+        "caption"
+      ],
+      "source_ids": [
+        "ID_JUKNIS_2023",
+        "WHO_PREP_PROVIDER_2024"
+      ],
+      "applicability_limit": "Does not imply that renal testing is never indicated; age, renal disease and comorbidities matter"
+    },
+    {
+      "id": "C5",
+      "claim": "Routine follow-up supports discussions of adverse effects, adherence and next tests",
+      "coverage": "EXPLICIT_EVIDENCE",
+      "locations": [
+        "slide-5"
+      ],
+      "source_ids": [
+        "ID_JUKNIS_2023"
+      ],
+      "applicability_limit": "Clinical decisions must be individualized by qualified providers"
+    },
+    {
+      "id": "C6",
+      "claim": "CWC offers DM-based information/navigation for people in Manado",
+      "coverage": "EDITORIAL_NO_EXTERNAL_CLAIM",
+      "locations": [
+        "slide-5",
+        "caption"
+      ],
+      "source_ids": [
+        "OWNER_EDITORIAL"
+      ],
+      "applicability_limit": "Navigation only; no named clinic, medicine stock, service availability, price, booking or clinical outcome guaranteed"
+    }
+  ],
+  "human_clinical_signoff": false,
+  "stg08_qa_passed": false,
+  "stg09_owner_release_approved": false,
+  "publication_authorized": false
+}
