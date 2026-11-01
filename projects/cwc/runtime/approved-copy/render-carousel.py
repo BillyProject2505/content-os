@@ -209,6 +209,32 @@ def rasterize_svg(file: Path, out_width: int) -> Image.Image:
     return Image.open(io.BytesIO(data)).convert("RGBA")
 
 
+def validate_white_footer_composite(canvas: Image.Image) -> None:
+    """Fail closed when the Blue/dark SVG footer produces noncanonical colors.
+
+    The canonical White footer (CRS AS-004) contains only white strokes/glyphs
+    over a transparent SVG background. Once composited on CAB Blue, every
+    footer pixel must lie on the Blue-to-White alpha-blend line. This detects
+    chromatic text-glyph contamination that SVG source hashes and layout-only
+    preflight cannot detect. It never repaints or changes the source SVG.
+    """
+    if canvas.size != CANVAS:
+        reject("FOOTER_CANVAS_INVALID", "cannot verify footer treatment on another canvas")
+    blue = (11, 61, 158)  # CAB AS-003 canonical #0B3D9E
+    footer_region = canvas.convert("RGB").crop(
+        (5, FOOTER_RENDER_Y, CANVAS[0] - 5, FOOTER_RENDER_Y + 64)
+    )
+    for red, green, channel_blue in footer_region.getdata():
+        coverage = (red - blue[0]) / (255 - blue[0])
+        expected_green = blue[1] + (255 - blue[1]) * coverage
+        expected_blue = blue[2] + (255 - blue[2]) * coverage
+        if (coverage < -0.025 or coverage > 1.025
+                or abs(green - expected_green) > 8
+                or abs(channel_blue - expected_blue) > 8):
+            reject("FOOTER_TREATMENT_DRIFT",
+                   "footer contains colors beyond approved White-on-Blue alpha compositing")
+
+
 def line_token_positions(draw: ImageDraw.ImageDraw, tokens: list[str],
                          font: ImageFont.FreeTypeFont, content_id: str | None = None
                          ) -> list[tuple[str, float, float]]:
@@ -347,6 +373,7 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
             text_meta = render_semantic_blocks(
                 canvas, plan["typography_layout"]["slides"][i], assets, plan["content_id"]
             )
+        validate_white_footer_composite(canvas)
         path = output / f"slide-{i+1:02d}.png"
         canvas.convert("RGB").save(path, format="PNG", optimize=False)
         renders.append({"slide": i + 1, "filename": path.name, "sha256": sha256_file(path),
