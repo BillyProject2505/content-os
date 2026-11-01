@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "projects/cwc/runtime/approved-copy/**"
+      - "projects/cwc/content/research/**"
       - ".github/workflows/cwc-approved-copy-preflight.yml"
   workflow_dispatch:
     inputs:
