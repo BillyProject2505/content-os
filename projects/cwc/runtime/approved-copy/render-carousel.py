@@ -11,7 +11,6 @@ import argparse
 import hashlib
 import io
 import json
-import re
 from pathlib import Path
 
 import cairosvg
@@ -20,9 +19,6 @@ from PIL import Image, ImageDraw, ImageFont
 CANVAS = (1080, 1350)
 BLUE = "#0B3D9E"
 WHITE = "#FFFFFF"
-HIV_RED = "#E31C23"
-HIV_CHIP_CONTENT_ID = "CWC-CRSL-0004"  # BUS-171 Owner-approved visual direction
-HIV_CHIP_PADDING_X = 8
 FOOTER_TOP = 1248  # protected region begins before the actual footer SVG
 FOOTER_RENDER_Y = 1280  # approved release frame: intrinsic 1070x64 SVG at x=5
 LOGO_X, LOGO_Y, LOGO_WIDTH = 72, 64, 260
@@ -213,22 +209,19 @@ def rasterize_svg(file: Path, out_width: int) -> Image.Image:
 
 
 def line_token_positions(draw: ImageDraw.ImageDraw, tokens: list[str],
-                         font: ImageFont.FreeTypeFont, content_id: str | None) -> list[tuple[str, float, float, bool]]:
-    """Measure visible token advances with the same chip reservation used for painting.
+                         font: ImageFont.FreeTypeFont, content_id: str | None = None
+                         ) -> list[tuple[str, float, float]]:
+    """Ordinary token advances; word spelling never changes color or spacing.
 
-    For the approved BUS-171 pilot, the white underlay must never encroach on
-    adjacent glyphs. All layout width checks use these same exact advances.
+    The content_id argument remains for compatibility with existing plan callers.
     """
     space = draw.textlength(" ", font=font)
     xx = 0.0
     positions = []
     for token in tokens:
-        chip = content_id == HIV_CHIP_CONTENT_ID and bool(re.fullmatch(r"(?i)HIV[\\.,;:!?]?", token))
-        if chip:
-            xx += HIV_CHIP_PADDING_X
         width = draw.textlength(token, font=font)
-        positions.append((token, xx, width, chip))
-        xx += width + space + (HIV_CHIP_PADDING_X if chip else 0)
+        positions.append((token, xx, width))
+        xx += width + space
     return positions
 
 
@@ -243,14 +236,14 @@ def words_and_lines(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTy
     for word in words:
         candidate = current + [word]
         proposed = line_token_positions(draw, candidate, font, content_id)
-        measured = proposed[-1][1] + proposed[-1][2] + (HIV_CHIP_PADDING_X if proposed[-1][3] else 0)
+        measured = proposed[-1][1] + proposed[-1][2]
         if measured > width:
             if not current:
                 reject("TEXT_OVERFLOW", "single word exceeds allowed copy width")
             lines.append(current)
             current = [word]
             test = line_token_positions(draw, current, font, content_id)
-            if test[-1][1] + test[-1][2] + (HIV_CHIP_PADDING_X if test[-1][3] else 0) > width:
+            if test[-1][1] + test[-1][2] > width:
                 reject("TEXT_OVERFLOW", "single word exceeds allowed copy width")
         else:
             current = candidate
@@ -261,16 +254,9 @@ def words_and_lines(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTy
 
 def draw_line_tokens(draw: ImageDraw.ImageDraw, tokens: list[str], x: int, y: int,
                      font: ImageFont.FreeTypeFont, base_color: str, content_id: str | None = None) -> None:
-    for token, dx, token_width, chip in line_token_positions(draw, tokens, font, content_id):
-        xx = x + dx
-        color = HIV_RED if re.fullmatch(r"(?i)HIV[\\.,;:!?]?", token) else base_color
-        if chip:
-            left = round(xx) - HIV_CHIP_PADDING_X
-            right = round(xx + token_width) + HIV_CHIP_PADDING_X
-            if left < 0 or right > CANVAS[0]:
-                reject("HIV_CHIP_OUT_OF_BOUNDS", "white chip exceeds canvas")
-            draw.rectangle((left, y, right, y + font.size + 4), fill=WHITE)
-        draw.text((round(xx), y), token, font=font, fill=color, anchor="lt")
+    # CPB §7.4.4: HIV and every other word inherit the enclosing text role color.
+    for token, dx, _width in line_token_positions(draw, tokens, font, content_id):
+        draw.text((round(x + dx), y), token, font=font, fill=base_color, anchor="lt")
 
 
 def paint_text(img: Image.Image, text: str, rect: dict, font: ImageFont.FreeTypeFont,
