@@ -228,7 +228,7 @@ def line_token_positions(draw: ImageDraw.ImageDraw, tokens: list[str],
 
 def words_and_lines(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTypeFont,
                     width: int, content_id: str | None = None) -> list[list[str]]:
-    if "\\n" in text or "\\t" in text:
+    if "\n" in text or "\t" in text:
         reject("TEXT_SHAPE_UNSUPPORTED", "multiline control characters in approved copy")
     words = text.strip().split(" ")
     if not words or any(not word for word in words):
