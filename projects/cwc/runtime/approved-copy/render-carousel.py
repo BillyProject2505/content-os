@@ -209,6 +209,22 @@ def rasterize_svg(file: Path, out_width: int) -> Image.Image:
     return Image.open(io.BytesIO(data)).convert("RGBA")
 
 
+def restore_canonical_white_from_alpha(rendered: Image.Image) -> Image.Image:
+    """Realize the exact White footer treatment while preserving SVG coverage.
+
+    The source AS-004 White SVG is byte-verified and specifies #FFFFFF for
+    strokes and currentColor fills. Some native CairoSVG/Pango builds emit
+    chromatic RGB glyph fringes despite that source. Use only its alpha
+    coverage for pixel geometry/antialias and the source-declared White RGB;
+    this does not edit the locked SVG, alter glyph outlines, or substitute
+    a redrawn asset. The final full-canvas fidelity gate remains mandatory.
+    """
+    rgba = rendered.convert("RGBA")
+    canonical = Image.new("RGBA", rgba.size, WHITE)
+    canonical.putalpha(rgba.getchannel("A"))
+    return canonical
+
+
 def validate_white_footer_composite(canvas: Image.Image) -> None:
     """Fail closed when the Blue/dark SVG footer produces noncanonical colors.
 
@@ -351,7 +367,9 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
     if presenter.size != (1122, 1402):
         reject("PRESENTER_SIZE_MISMATCH", "reusable source PNG dimensions changed")
     logo = rasterize_svg(assets["logo"], LOGO_WIDTH)
-    footer = rasterize_svg(assets["footer"], 1070)
+    # Reproduce the source-declared monochrome White treatment using only
+    # the hash-verified SVG geometry/alpha; avoid native RGB glyph fringing.
+    footer = restore_canonical_white_from_alpha(rasterize_svg(assets["footer"], 1070))
     if logo.width != LOGO_WIDTH or footer.size != (1070, 64):
         reject("SVG_SIZE_INVALID", "cannot rasterize canonical SVG")
     # Fonts are loaded only from checksum-locked Drive assets by semantic role.

@@ -203,6 +203,43 @@ class RenderSafetyTests(unittest.TestCase):
         with self.assertRaises(mod.RenderRejected):
             mod.position_presenter(source, {**core, "height": 300}, gesture, copy)
 
+    def test_footer_white_alpha_restoration_preserves_coverage(self):
+        """Reject the 2026-11-01 native RGB text fringe without altering alpha."""
+        corrupted = Image.new("RGBA", (4, 2), (0, 0, 0, 0))
+        corrupted.putpixel((0, 0), (3, 250, 188, 255))
+        corrupted.putpixel((1, 0), (189, 250, 6, 128))
+        corrupted.putpixel((2, 0), (30, 40, 50, 0))
+        repaired = mod.restore_canonical_white_from_alpha(corrupted)
+        self.assertEqual(repaired.getchannel("A").tobytes(),
+                         corrupted.getchannel("A").tobytes())
+        self.assertEqual(repaired.getpixel((0, 0)), (255, 255, 255, 255))
+        self.assertEqual(repaired.getpixel((1, 0)), (255, 255, 255, 128))
+        self.assertEqual(repaired.getpixel((2, 0))[3], 0)
+
+    def test_white_footer_svg_shape_unchanged_after_alpha_restoration(self):
+        """The exact SVG remains authoritative for glyph/path alpha coverage."""
+        with tempfile.TemporaryDirectory() as tmp:
+            file = Path(tmp) / "footer.svg"
+            file.write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="64">'
+                '<rect x="5" y="5" width="1060" height="54" rx="25" '
+                'fill="none" stroke="#FFFFFF" stroke-width="2"/>'
+                '<text x="60" y="37" fill="#FFFFFF" '
+                'font-family="sans-serif" font-size="18">@cozwecare.id</text>'
+                '</svg>',
+                "utf8",
+            )
+            original_sha = mod.sha256_file(file)
+            raw = mod.rasterize_svg(file, 1070)
+            fixed = mod.restore_canonical_white_from_alpha(raw)
+            self.assertEqual(fixed.getchannel("A").tobytes(),
+                             raw.getchannel("A").tobytes())
+            self.assertEqual(fixed.getpixel((0, 0))[3], 0)
+            canvas = Image.new("RGBA", mod.CANVAS, mod.BLUE)
+            canvas.alpha_composite(fixed, (5, mod.FOOTER_RENDER_Y))
+            mod.validate_white_footer_composite(canvas)
+            self.assertEqual(mod.sha256_file(file), original_sha)
+
     def test_white_footer_fidelity_accepts_canonical_alpha_blend(self):
         """White glyphs on transparent SVG over blue preserve the brand palette."""
         canvas = Image.new("RGBA", mod.CANVAS, mod.BLUE)
