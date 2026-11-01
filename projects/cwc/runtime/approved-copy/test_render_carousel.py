@@ -203,6 +203,34 @@ class RenderSafetyTests(unittest.TestCase):
         with self.assertRaises(mod.RenderRejected):
             mod.position_presenter(source, {**core, "height": 300}, gesture, copy)
 
+    def test_white_footer_fidelity_accepts_canonical_alpha_blend(self):
+        """White glyphs on transparent SVG over blue preserve the brand palette."""
+        canvas = Image.new("RGBA", mod.CANVAS, mod.BLUE)
+        footer = Image.new("RGBA", (1070, 64), (0, 0, 0, 0))
+        ink = ImageDraw.Draw(footer)
+        ink.rectangle((20, 9, 330, 46), fill=(255, 255, 255, 120))
+        ink.line((350, 25, 990, 25), fill=(255, 255, 255, 255), width=2)
+        canvas.alpha_composite(footer, (5, mod.FOOTER_RENDER_Y))
+        mod.validate_white_footer_composite(canvas)
+
+    def test_white_footer_fidelity_rejects_chromatic_glyph_pixels(self):
+        """The 2026-11-01 B2 review artifact showed cyan/green glyph corruption."""
+        canvas = Image.new("RGBA", mod.CANVAS, mod.BLUE)
+        ink = ImageDraw.Draw(canvas)
+        ink.point((205, mod.FOOTER_RENDER_Y + 31), fill=(3, 250, 188, 255))
+        with self.assertRaisesRegex(mod.RenderRejected, "FOOTER_TREATMENT_DRIFT"):
+            mod.validate_white_footer_composite(canvas)
+
+    def test_white_footer_fidelity_rejects_unapproved_variant(self):
+        """A blue or yellow footer on a blue surface is not a White-variant pass."""
+        canvas = Image.new("RGBA", mod.CANVAS, mod.BLUE)
+        ImageDraw.Draw(canvas).rectangle(
+            (20, mod.FOOTER_RENDER_Y + 19, 350, mod.FOOTER_RENDER_Y + 33),
+            fill="#FDCF00",
+        )
+        with self.assertRaisesRegex(mod.RenderRejected, "FOOTER_TREATMENT_DRIFT"):
+            mod.validate_white_footer_composite(canvas)
+
     def test_end_to_end_synthetic_composition_smoke(self):
         """Exercises actual SVG/PNG compositing without touching Drive or CWC content."""
         p, pins = fixture()
