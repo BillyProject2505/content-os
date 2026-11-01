@@ -1,6 +1,12 @@
 # CWC approved-copy preflight — BUS-170 (pilot only)
 
-This is a **non-authoritative operational prototype** implementing the first reusable SDOH pattern: integrity-locked approved copy. It has **no renderer, production-writeback, scheduling, Meta credentials or publication path**. It does not amend the canonical CWC lifecycle or allocate a Content ID.
+This is a **non-authoritative operational prototype** implementing the first reusable SDOH pattern: integrity-locked approved copy. It includes preflight and a review-only renderer; it has **no production-writeback, scheduling or publication authorization**. It does not amend the canonical CWC lifecycle or allocate a Content ID.
+
+## Current execution snapshot — 2026-11-01
+
+WIF Drive readonly succeeded in run 41273452129; official review render succeeded in run 41273768672 on an earlier commit. WIF integration is no longer the remaining blocker. The research-enabled contract now uses five JSON inputs; research validation checks structure/coverage, not clinical approval. Latest inspected B2 run 41292969183 failed; comments identify a Phase 1 confirmation value supplied to B2. B2 requires `RENDER_UNAPPROVED_CWC_REVIEW_PACKAGE`. Earlier success does not establish end-to-end success of the updated research-enabled path. Creative/clinical approval and publication authorization remain separate.
+
+Older phase-specific sections below retain their historical scope and are not the current integration status.
 
 ## Current authorities (read latest revision at use)
 - CWC Production Workflow: projects/cwc/DIUA-DIC-000017_CWC-Production-Workflow.md (STG-03 evidence, STG-09 approval, STG-10 Approved Release Identity).
