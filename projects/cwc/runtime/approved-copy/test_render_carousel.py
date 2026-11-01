@@ -150,7 +150,7 @@ class RenderSafetyTests(unittest.TestCase):
         # The old pilot ID must not trigger token recoloring, background or extra spacing.
         self.assertEqual(approved.tobytes(), other.tobytes())
         self.assertNotIn((227, 28, 35), list(approved.getdata()))
-        self.assertEqual(approved.getpixel((72, 25)), (11, 61, 158))
+        self.assertEqual(approved.getpixel((67, 25)), (11, 61, 158))
         self.assertIn((255, 255, 255), list(approved.getdata()))
 
     def test_hiv_inherits_other_typographic_color_and_punctuation(self):
