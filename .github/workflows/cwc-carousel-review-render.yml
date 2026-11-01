@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - "projects/cwc/runtime/approved-copy/**"
+      - "projects/cwc/content/research/**"
       - ".github/workflows/cwc-carousel-review-render.yml"
   workflow_dispatch:
     inputs:
@@ -61,6 +62,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.15"
+      - name: Validate STG-03 research evidence before render preparation
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+        run: |
+          set -euo pipefail
+          node projects/cwc/runtime/approved-copy/research-gate.mjs \
+            --content-id "$CONTENT_ID" \
+            --out "$RUNNER_TEMP/cwc-research-evidence.json"
+          mkdir -p "$RUNNER_TEMP/cwc-review"
+          cp "$RUNNER_TEMP/cwc-research-evidence.json" "$RUNNER_TEMP/cwc-review/research-evidence.json"
       - name: Build checksum-bound CWC render plan
         shell: bash
         env:
