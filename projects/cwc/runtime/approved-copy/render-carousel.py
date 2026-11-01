@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import io
 import json
+import re
 from pathlib import Path
 
 import cairosvg
