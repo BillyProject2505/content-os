@@ -152,7 +152,7 @@ def validate(root: Path) -> tuple[list[str], int, int, int]:
                 checked += 1
                 if pin != target.version:
                     errors.append(f'{rel}: DEP-VERSION-01 {dep_id or name} pinned v{pin}; current {target.path.relative_to(root)} is v{target.version}')
-        row = ROW_RE.search(doc.body)
+        row = ROW_RE.search(doc.body) or re.search(r'^\*\*Depends On(?: \([^\n]*\))?:\*\*\s*(.*?)\s*$', doc.body, re.M)
         if row:
             for dep in doc.dependencies:
                 if not dep.get('version'):
