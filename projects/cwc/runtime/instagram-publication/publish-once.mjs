@@ -133,7 +133,9 @@ async function main(){
  const mode=process.argv[2]||"--preflight";
  const v=validate(context());
  if(mode==="--self-test"){
-   assert(v.ctx.media.candidate_owner_approved===false&&v.blockers.includes("JPEG_DELIVERY_ADAPTATION_OWNER_APPROVAL_MISSING"),"CURRENT_PENDING_APPROVAL_GUARD_FAILED");
+   assert(v.ctx.media.candidate_owner_approved===true
+     ? !v.blockers.includes("JPEG_DELIVERY_ADAPTATION_OWNER_APPROVAL_MISSING")
+     : v.blockers.includes("JPEG_DELIVERY_ADAPTATION_OWNER_APPROVAL_MISSING"),"JPEG_APPROVAL_GATE_REGRESSION");
    console.log("PASS: 5 ordered media, exact STG-09/10 sha, caption, time; publish fail-closed");
  }else if(mode==="--preflight"){
    console.log(JSON.stringify({content_id:id,identity:v.identity,authorized_time:"2026-11-02T11:00:00Z",publish_ready:v.blockers.length===0,blockers:v.blockers}));
