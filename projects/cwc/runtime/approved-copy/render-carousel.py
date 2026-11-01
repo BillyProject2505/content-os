@@ -203,17 +203,26 @@ def render_semantic_blocks(img: Image.Image, slide: dict, assets: dict[str, Path
     return measurements
 
 
-def rasterize_svg(file: Path, out_width: int, background_color: str | None = None) -> Image.Image:
-    # Hash-locked SVG source bytes remain unmodified. The optional exact
-    # background lets CairoSVG paint White-on-Blue footer glyphs directly
-    # on their final target surface, avoiding a separate transparent-text
-    # raster followed by a second alpha-compositing pass.
-    data = cairosvg.svg2png(
-        bytestring=file.read_bytes(),
-        output_width=out_width,
-        background_color=background_color,
-    )
+def rasterize_svg(file: Path, out_width: int) -> Image.Image:
+    # Hash-locked SVG bytes are passed unmodified into the SVG renderer.
+    data = cairosvg.svg2png(bytestring=file.read_bytes(), output_width=out_width)
     return Image.open(io.BytesIO(data)).convert("RGBA")
+
+
+def restore_canonical_white_from_alpha(rendered: Image.Image) -> Image.Image:
+    """Realize the exact White footer treatment while preserving SVG coverage.
+
+    The source AS-004 White SVG is byte-verified and specifies #FFFFFF for
+    strokes and currentColor fills. Some native CairoSVG/Pango builds emit
+    chromatic RGB glyph fringes despite that source. Use only its alpha
+    coverage for pixel geometry/antialias and the source-declared White RGB;
+    this does not edit the locked SVG, alter glyph outlines, or substitute
+    a redrawn asset. The final full-canvas fidelity gate remains mandatory.
+    """
+    rgba = rendered.convert("RGBA")
+    canonical = Image.new("RGBA", rgba.size, WHITE)
+    canonical.putalpha(rgba.getchannel("A"))
+    return canonical
 
 
 def validate_white_footer_composite(canvas: Image.Image) -> None:
@@ -358,14 +367,11 @@ def compose(plan: dict, assets: dict[str, Path], output: Path) -> dict:
     if presenter.size != (1122, 1402):
         reject("PRESENTER_SIZE_MISMATCH", "reusable source PNG dimensions changed")
     logo = rasterize_svg(assets["logo"], LOGO_WIDTH)
-    # Footer uses the canonical blue surface during vector rasterization;
-    # do not recolor or mutate the approved White SVG or source asset pins.
-    footer = rasterize_svg(assets["footer"], 1070, background_color=BLUE)
+    # Reproduce the source-declared monochrome White treatment using only
+    # the hash-verified SVG geometry/alpha; avoid native RGB glyph fringing.
+    footer = restore_canonical_white_from_alpha(rasterize_svg(assets["footer"], 1070))
     if logo.width != LOGO_WIDTH or footer.size != (1070, 64):
         reject("SVG_SIZE_INVALID", "cannot rasterize canonical SVG")
-    if footer.getextrema()[-1] != (255, 255):
-        reject("FOOTER_BACKGROUND_INVALID",
-               "opaque canonical Blue target required during White SVG rasterization")
     # Fonts are loaded only from checksum-locked Drive assets by semantic role.
     renders = []
     for i, slide in enumerate(plan["slides"]):
