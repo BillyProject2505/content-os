@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "projects/cwc/runtime/approved-copy/**"
+      - "projects/cwc/content/research/**"
       - ".github/workflows/cwc-approved-copy-preflight.yml"
   workflow_dispatch:
     inputs:
@@ -59,6 +60,9 @@ jobs:
           [[ "$CONTENT_ID" =~ ^CWC-CRSL-[0-9]{4}$ ]] || { echo "::error::Invalid content ID"; exit 1; }
           [[ "$EXPECTED_FINGERPRINT" =~ ^[a-f0-9]{64}$ ]] || { echo "::error::Expected SHA-256 required"; exit 1; }
           mkdir -p "$RUNNER_TEMP/cwc-preflight"
+          node projects/cwc/runtime/approved-copy/research-gate.mjs \
+            --content-id "$CONTENT_ID" \
+            --out "$RUNNER_TEMP/cwc-preflight/research-evidence.json"
           node projects/cwc/runtime/approved-copy/preflight.mjs \
             --content-id "$CONTENT_ID" \
             --expected-copy-fingerprint "$EXPECTED_FINGERPRINT" \
@@ -66,13 +70,13 @@ jobs:
           {
             echo "## CWC approved-copy preflight"
             echo "Syntactic/integrity preflight PASS for $CONTENT_ID"
-            echo "Human approval, register state, clinical claims, rendering and publication NOT verified."
+            echo "Human approval, register state, clinical claims, rendering and publication NOT verified. Research coverage structure checked, not medically adjudicated."
             echo "NO render/approval/schedule/Meta write performed."
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Upload non-publishable evidence
         uses: actions/upload-artifact@v4
         with:
           name: cwc-approved-copy-preflight-evidence
-          path: ${{ runner.temp }}/cwc-preflight/evidence.json
+          path: ${{ runner.temp }}/cwc-preflight/*.json
           if-no-files-found: error
           retention-days: 14

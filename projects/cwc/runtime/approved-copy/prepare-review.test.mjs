@@ -21,6 +21,9 @@ test("Phase 1 uses actual CWC approved copy and layout but never grants release"
   assert.equal(out.typed.typography_layout.fingerprint,LAYOUT_FP);
   assert.equal(out.typed.slides.length,5);
   assert.equal(out.manifest.state,"PHASE1_VALIDATED_UNAPPROVED");
+  assert.equal(out.researchEvidence.result,"RESEARCH_EVIDENCE_STRUCTURE_PASS");
+  assert.equal(out.manifest.evidence.research_evidence_structure,"PASS");
+  assert.equal(out.manifest.evidence.clinical_claims_verified,false);
   assert.equal(out.manifest.evidence.publication_authorized,false);
   for(const gate of ["live_owner_approval_verified","content_register_live_verified",
     "clinical_claims_verified","asset_bytes_verified","deterministic_render_performed",
@@ -56,7 +59,7 @@ test("Phase 1 CLI creates only non-publishable four-file JSON review package",()
     ],{encoding:"utf8"});
     assert.equal(run.status,0,run.stderr);
     assert.deepEqual(fs.readdirSync(temp).sort(),[
-      "copy-preflight.json","phase1-manifest.json","render-plan-typed.json","render-plan.json"
+      "copy-preflight.json","phase1-manifest.json","render-plan-typed.json","render-plan.json","research-evidence.json"
     ]);
     const report=JSON.parse(fs.readFileSync(path.join(temp,"phase1-manifest.json"),"utf8"));
     assert.equal(report.evidence.publication_authorized,false);
