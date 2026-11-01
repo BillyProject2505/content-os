@@ -199,3 +199,52 @@ and scheduling/publication are separate later gates. BUS-172 dedicated CWC WIF/D
 reader remains deferred; it is not needed for this credential-free Phase 1. Do not
 mistake four JSON files for approved publication assets, and never replay a past
 editorial slot automatically.
+
+
+## 2026-11-01 — STG-03 Research Evidence Gate (BUS-170 / BUS-171)
+
+**Existing canonical authority:** CWC Production Workflow v1.22 already requires
+Research at STG-03, BEFORE STG-04 Planning and STG-05 Content Production.
+CWC-QA-001 already requires traceable claim-by-claim source evidence at STG-08.
+This operational change introduces NO extra stage or alternative QA mechanism.
+
+**Authoring sequence for each new CWC Carousel** (human editorial responsibility):
+STG-02 approved Content Brief and duplicate classification -> STG-03 research
+the exact claims and record primary sources, sections, point-of-use reliability,
+scope/applicability and contradictions -> resolve missing/contradictory evidence
+BEFORE copy is finalized -> STG-04 plan -> STG-05 Owner approved copy -> STG-06
+assets -> STG-07 visual -> independent STG-08 QA -> explicit sensitive-claim
+STG-09 Owner signoff -> release. If copy changes, recheck research mapping.
+
+**Single minimal STG-03 production evidence file:**
+`projects/cwc/content/research/<CWC-CRSL-NNNN>.research.json` (versioned in
+GitHub). The source-of-truth for semantic medical judgment remains human research
+review and the canonical STG-03 Output Contract; the JSON is its machine-checkable
+coverage/index record, not a new governance authority. Each claim must have
+- a claim ID, explicit coverage classification or editorial-only classification;
+- slide/caption locations, source IDs and applicability limits;
+- recoverable HTTPS source provenance with section and point-of-use reliability;
+- matching already approved-copy SHA-256 and dated review scope.
+
+`research-gate.mjs` fails closed if any slide or caption lacks mapped evidence,
+references are missing or malformed, sources lack reliability, a clinical claim
+has unsupported coverage class, or the content/copy fingerprint differs.
+It DOES NOT download/read URLs during Actions, verify source medical truth,
+decide a lifecycle transition, certify live local clinical procedure or impersonate
+a medical reviewer. Human clinical signoff and QA/approval flags must remain false.
+
+**Workflow enforcement:** manual approved-copy preflight, Phase 1 review
+preparation and full B2 review-candidate render all check the research matrix
+BEFORE producing their outputs; Phase 1 and B2 include research-evidence.json
+in their nonpublishable artifacts. PR tests include actual CWC-CRSL-0004 evidence
+plus negative tests for missing coverage/source provenance and fake approval.
+Every future Carousel Content ID needs its own evidence file. Do not create
+invented source citations or silently set a medical-verification PASS flag.
+
+**Existing pilot** CWC-CRSL-0004 maps six claim groups (HIV tests, 3-month
+2023 oral-PrEP tests, STI, kidney criteria, counselling, CWC DM navigation).
+It specifically distinguishes the month-1 follow-up from month-3 HIV tests,
+and does not certify that every 2026 facility follows the same operational SOP.
+Its dated research is review evidence, NOT STG-03 lifecycle exit signoff and
+NOT STG-08/09/10 or publication authorization. Preserve frozen copy and layout
+hashes and previously produced PNGs; these workflows do not publish.
