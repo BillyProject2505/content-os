@@ -11,7 +11,7 @@ status: "CANONICAL / ACTIVE"
 depends_on:
   - id: "DIUA-DIC-000012"
     name: "Coz We Care — Production Bible"
-    version: "2.22"
+    version: "2.23"
     status: "CANONICAL"
   - id: "DIUA-DIC-000017"
     name: "CWC Production Workflow"
@@ -42,7 +42,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Coz We Care |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000027` — ALLOCATED / ACTIVE per [BUS-17](../../system/Content-OS-Universal-Identifier-Registration-Record.md) and [BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md) |
 | Workflow Authority | CWC Production Workflow v1.22 CANONICAL LOCKED — authoritative lifecycle/state semantics, duplicate-gate integration, STG‑03 research-record authority, STG‑06/STG‑07 asset Production Behavior execution contract, and STG‑10 Approved Release Identity / publication-readiness semantics |
-| Depends On | CWC Production Bible v2.22; CWC Production Workflow v1.22; CWC Format Specialization Specification v1.31 |
+| Depends On | CWC Production Bible v2.23; CWC Production Workflow v1.22; CWC Format Specialization Specification v1.31 |
 | Scope | CWC content instances, duplicate-control metadata, adaptation provenance, and publication occurrences |
 
 ---
@@ -745,3 +745,8 @@ Allocated `CWC-STORY-0003` to [BUS-166](https://linear.app/bussiness-content-os/
 Native Carousel ID `CWC-CRSL-0004` allocated to [BUS-171](https://linear.app/bussiness-content-os/issue/BUS-171/cwc-carousel-pilot-kontrol-dan-tes-hiv-rutin-saat-memakai-prep-27-okt) following STG-02 duplicate control **D1 / RELATED CONTENT → ALLOW**. Its semantic lesson—routine HIV testing and clinically appropriate follow-up during **oral** PrEP—is distinct from `CWC-CRSL-0001` (basics/limitations), `CWC-CRSL-0003` (daily versus event-driven regimen), `CWC-POSTER-0004` (adherence), and `CWC-STORY-0002` (evergreen orientation). Legacy staging row 04 (“PrEP”) lacks sufficient source recovery for complete retrospective reconstruction; uncertainty remains recorded and duplicate screening must reopen if recovered evidence shows substantially overlapping content.
 
 Owner continuation on 2026-10-25 authorized moving forward with duplicate screening and native Content ID allocation after exact **v0.2 copy and caption** approval in the conversation (approval source recorded on BUS-171; earlier draft status preserved as history). Lifecycle mirror on definition exit: `DEFINED`. The Content ID is allocated **once** and must never be reused. This Content ID does not certify current national/local clinical protocol, finished production, QA, final sensitive-claim approval, any scheduled slot or publication. Owner pilot visual-direction approval is not STG-09 final release approval. Next available CRSL Content ID: `CWC-CRSL-0005`.
+
+
+### 2026-11-01 — CPB v2.23 HIV Text Color Rule Dependency Currency
+
+Content Register v1.28; pointer maintenance only, historical allocations and records unchanged. Owner revoked the red-for-“HIV” word override and chip; live CWC typography now inherits the enclosing text role color as defined by canonical CPB §7.4.4. Only the current CPB dependency pin is updated to v2.23. Historical references remain provenance; there is no new local rule, format geometry change, lifecycle transition, asset recoloring, clinical claim, or publication authorization. No published artifacts are retroactively modified.
