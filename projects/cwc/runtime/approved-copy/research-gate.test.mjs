@@ -25,6 +25,15 @@ test("Research gate validates actual CWC-CRSL-0004 evidence coverage without cla
  }
 });
 test("Research gate rejects mismatched copy",()=>mustFail(r=>{r.copy_fingerprint="0".repeat(64)},"RESEARCH_COPY_MISMATCH"));
+test("All external approved-copy source URLs must appear in research provenance",()=>{
+ const missing=new Set(research.sources.map(s=>s.url));
+ for(const source of copy.source_evidence) assert.ok(missing.has(source.source_url),source.source_url);
+});
+test("Research gate fails if an approved-copy external Reference was never mapped",()=>{
+ const altered=structuredClone(copy);
+ altered.source_evidence.push({claim:"Unmapped external reference",source_url:"https://example.org/new-source",checked_at:"2026-10-24"});
+ assert.throws(()=>validateResearch(altered,research),e=>e.code==="RESEARCH_COPY_SOURCE_MISSING");
+});
 test("Research gate rejects broken provenance",()=>mustFail(r=>{r.sources[0].url="http://example.com/"},"RESEARCH_SOURCE_INVALID"));
 test("Research gate rejects missing point-of-use reliability",()=>mustFail(r=>{r.sources[0].point_of_use_reliability=""},"RESEARCH_SOURCE_INVALID"));
 test("Research gate rejects unsupported coverage",()=>mustFail(r=>{r.claims[0].coverage="INSUFFICIENT_EVIDENCE"},"RESEARCH_CLAIM_INVALID"));
