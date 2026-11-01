@@ -6,7 +6,7 @@ system: "Content OS → Coz We Care (CWC)"
 owner: "[FORMAL] Billy Fernando Mende — CWC domain Owner, confirmed 2026-09-03 (per Root Documentation Structure §5.1)."
 related_issue: "BUS-18"
 universal_identifier: "DIUA-DIC-000012"
-version: "2.22"
+version: "2.23"
 status: "CANONICAL"
 depends_on:
   - id: "DIUA-DIC-000001"
@@ -31,8 +31,8 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | Coz We Care — Production Bible |
 | Document Class | Domain Production Bible |
 | System | Content OS → Coz We Care (CWC) |
-| Version | 2.22 |
-| Status | **CANONICAL** — v2.22 Owner-directed CWC caption follow/share standard (§6.6.2), retaining v2.21 cross-format layout and [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout): the [BUS-123](https://linear.app/bussiness-content-os/issue/BUS-123/cwc-format-poster-reference-validated-copy-brand-presenter-layout) reference-validated copy / Brand Presenter composition is now the single cross-format layout invariant for registered CWC mandatory branded frames. Format-local safe areas and presenter-presence applicability remain unchanged. Prior v2.20 Poster-local exception is absorbed into this unified rule. |
+| Version | 2.23 |
+| Status | **CANONICAL** — v2.23 Owner-directed HIV token color inheritance (§7.4.4). Prior v2.22 Owner-directed CWC caption follow/share standard (§6.6.2), retaining v2.21 cross-format layout and [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout): the [BUS-123](https://linear.app/bussiness-content-os/issue/BUS-123/cwc-format-poster-reference-validated-copy-brand-presenter-layout) reference-validated copy / Brand Presenter composition is now the single cross-format layout invariant for registered CWC mandatory branded frames. Format-local safe areas and presenter-presence applicability remain unchanged. Prior v2.20 Poster-local exception is absorbed into this unified rule. |
 | Related Issue | [BUS-18](https://linear.app/bussiness-content-os/issue/BUS-18/coz-we-care-production-bible) — Coz We Care — Production Bible |
 | Owner | **\[FORMAL\]** Billy Fernando Mende — CWC domain Owner, confirmed 2026-09-03 (per Root Documentation Structure §5.1). |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Coz We Care |
@@ -561,6 +561,13 @@ Global Typeface Decision — OWNER-APPROVED ([BUS-64](https://linear.app/bussine
 * Headline case may follow editorial intent; full uppercase is not the default headline treatment.
 * ALL CAPS is reserved for short kickers, labels, or controlled emphasis where legibility remains acceptable.
 
+**Default Text-Color Inheritance — OWNER-APPROVED (2026-11-01)**
+
+* In new CWC content, the literal word **“HIV”** SHALL use the same foreground color as the containing typographic element (headline, subheadline, body, supporting text, CTA, or other registered text role). Its spelling does not trigger a special color, highlight, chip, background, or token-level override.
+* The former hardcoded red HIV token behavior (including the white underlay piloted for `CWC-CRSL-0004`) is **REVOKED**. It SHALL NOT be applied by production renderers, generators, templates, or QA checks.
+* Color choices continue to come from the relevant approved text role and surface/brand specifications. This decision does not change official brand palette, logo/footer asset colors, or artwork where HIV is embedded as part of an immutable canonical asset.
+* A future exception must be explicitly approved and documented for that content/format; no legacy special treatment remains an implied default. Historical approved/published content is not retroactively rewritten solely for this rule.
+
 **Fallback Principle**
 
 A neutral system sans-serif MAY be used only as a temporary draft/proof fallback when Montserrat is technically unavailable. Final publication output requiring typography fidelity MUST use Montserrat or be corrected during deterministic/manual post-production. Fallback rendering SHALL NOT be treated as canonical visual fidelity.
@@ -571,7 +578,7 @@ No separate utility/data typeface is established. Data, numerals, and key figure
 
 **Authority Split — One Concept, One Home**
 
-* CPB §7.4.4 owns global Typeface family, approved weight set, semantic role hierarchy, global case principles, fallback policy, secondary/accent policy, and global numeric/data typography principle.
+* CPB §7.4.4 owns global Typeface family, approved weight set, semantic role hierarchy, global case principles, fallback policy, secondary/accent policy, global numeric/data typography principle, and HIV token foreground-color inheritance (no word-specific override).
 * FSS owns format-specific implementation constraints including exact font sizes, line-height/leading, format-dependent tracking/letter spacing, minimum readable size by canvas/format, and format-specific scaling/adaptation.
 * CAB/CRS own typography intrinsic to canonical assets. Asset-specific locked typography is not overridden by the global rule.
 * Existing AS-004 CWC Official Footer Platform remains protected under its existing CAB/CRS authority. Its exact locked typography values are defined by the current authoritative CAB/CRS representation and are not duplicated here.
@@ -683,3 +690,8 @@ Current format versions: FORMAT-POSTER v1.6; FORMAT-CAROUSEL v1.4; FORMAT-REEL v
 ## v2.22 Canonical Amendment Record — CWC Follow & Share Caption CTA (Owner Directive, 2026-10-10)
 
 Owner directed that CWC publication captions consistently include voluntary **follow** and **share** invitations. Rule materialized exclusively in the existing Chapter 6 Writing Standards (§6.6.2), supplementing §6.6.1 exactly-five-hashtag standard and §6.9 single-primary-CTA / service-navigation priority. Applicable to caption-bearing formats; the only bounded deviations concern absent caption surfaces, unverified platform handles, or clinical/safety priority, to be traced at Content Item level. No new workflow stage, lifecycle state, formatting object, asset, research claim, or independent governance document was introduced. Downstream CPB dependency-pinning receives pointer-only maintenance (no additional rule introduced locally). Source content instance: [BUS-165](https://linear.app/bussiness-content-os/issue/BUS-165/cwc-carousel-production-prep-harian-vs-event-driven-tidak-semua-metode); final caption changed after STG-09, so its previous R1 release remains superseded until reapproval.
+
+
+## v2.23 Canonical Amendment Record — HIV Word Color Inheritance (Owner Directive, 2026-11-01)
+
+Owner explicitly revoked the prior instruction to color the word “HIV” red. Within live CWC typographic content, “HIV” now inherits the color of its enclosing text role, with no red token override or white backing. This amendment is canonical in §7.4.4 and applies across CWC formats prospectively. Previously published art and locked AS-001/AS-004 artwork remain unchanged. CWC-CRSL-0004 pilot-specific red-on-white exception is withdrawn; its v0.4 local mock is a review artifact, not a publication or formal QA PASS. No changes to Content ID, editorial wording, lifecycle, clinical sources, or publication authority. Downstream dependency versions receive pointer-only maintenance.
