@@ -104,7 +104,7 @@ candidate renderer, not an activated full production workflow. It adds:
   ordered 1080x1350 PNG candidate slides plus contact sheet and SHA-256 report.
 - Strict single-role headline/body typography. Copy that cannot fit at registered sizes
   fails closed. No auto-edit, auto-wrap outside width, or sub-floor scaling.
-- Selected "HIV" words appear in mandatory red #E31C23.
+- The word "HIV" inherits its enclosing text role color (CPB v2.23 §7.4.4); no red word override or white chip is permitted.
 
 The pilot is deliberately restrictive; it does not yet support all CWC layouts, multiple
 text-role typography on one slide, Story/Reel/Poster, alternate presenters or both surfaces.
@@ -150,7 +150,7 @@ authority: hero 88/92 ExtraBold, headline 72/82 Bold, subheadline 52/64 Bold,
 kicker 28/34 SemiBold, body 38/52 Medium, supporting 34/46 Medium,
 CTA 38/44 Bold. All 4 Montserrat files are SHA-pinned to verified CWC Drive
 bytes. Text overflow triggers rejection, never text rewriting or below-floor
-font shrinking. The word HIV is red by default in live text. The yellow
+font shrinking. HIV inherits the enclosing typographic role color in live text. The yellow
 line is editorial decoration only, not part of copied source text.
 
 This is a **pilot layout contract**, not a newly canonical typography policy.

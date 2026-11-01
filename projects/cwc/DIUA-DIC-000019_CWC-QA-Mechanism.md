@@ -15,7 +15,7 @@ depends_on:
     status: "CANONICAL LOCKED"
   - id: "DIUA-DIC-000012"
     name: "Coz We Care — Production Bible"
-    version: "2.22"
+    version: "2.23"
     status: "CANONICAL"
   - id: "DIUA-DIC-000013"
     name: "CWC — Canonical Asset System (CAS)"
@@ -1289,3 +1289,8 @@ Story criteria are resolved inside the unchanged [BUS-86](https://linear.app/bus
 ### 2026-10-10 — CPB v2.22 Dependency Currency Maintenance
 
 Current normative CWC Production Bible pin synchronized from v2.21 to v2.22 following the Owner-directed caption follow/share closure in CPB §6.6.2. This is a **dependency pointer-only maintenance**; the local document version, workflow states, format geometry, asset behaviors, QA gates, register schema, and existing Content Item history remain unchanged. The two secondary engagement prompts are consumed from CPB at applicable caption-authoring steps, with clinical-action and five-hashtag rules preserved.
+
+
+### 2026-11-01 — CPB v2.23 HIV Text Color Rule Dependency Currency
+
+QA v1.32; normative pointer maintenance only, no gate change. Owner revoked the red-for-“HIV” word override and chip; live CWC typography now inherits the enclosing text role color as defined by canonical CPB §7.4.4. Only the current CPB dependency pin is updated to v2.23. Historical references remain provenance; there is no new local rule, format geometry change, lifecycle transition, asset recoloring, clinical claim, or publication authorization. No published artifacts are retroactively modified.

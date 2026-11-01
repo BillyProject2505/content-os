@@ -138,58 +138,51 @@ class RenderSafetyTests(unittest.TestCase):
             mod.paint_text(im, "Satu dua tiga empat lima enam tujuh delapan sembilan sepuluh",
                            {"x": 72, "y": 250, "width": 250, "height": 10}, font, 82, "#111111")
 
-    def test_hiv_word_rendered_using_project_red(self):
-        im = Image.new("RGB", (500, 130), "white")
-        draw = ImageDraw.Draw(im)
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 48)
-        mod.draw_line_tokens(draw, ["HIV", "bukan", "stigma"], 10, 10, font, "#222222")
-        self.assertIn((227, 28, 35), list(im.getdata()))
+    def test_reject_embedded_newline_and_tab_after_token_simplification(self):
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 40)
+        draw = ImageDraw.Draw(Image.new("RGB", (900, 160), mod.BLUE))
+        for text in ("Tes HIV\nberkala", "Tes HIV\tberkala"):
+            with self.assertRaises(mod.RenderRejected):
+                mod.words_and_lines(draw, text, font, 700, "CWC-CRSL-0004")
 
-
-    def test_hiv_chip_scoped_to_owner_approved_content_id(self):
+    def test_hiv_inherits_white_body_role_without_chip_for_any_content(self):
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 48)
-        approved = Image.new("RGB", (500, 130), mod.BLUE)
-        mod.draw_line_tokens(ImageDraw.Draw(approved), ["HIV", "rutin"], 24, 18,
+        text = ["Tes", "HIV", "rutin"]
+        approved = Image.new("RGB", (640, 160), mod.BLUE)
+        other = Image.new("RGB", (640, 160), mod.BLUE)
+        mod.draw_line_tokens(ImageDraw.Draw(approved), text, 72, 25,
                              font, mod.WHITE, "CWC-CRSL-0004")
-        pixels = list(approved.getdata())
-        self.assertIn((255, 255, 255), pixels)
-        self.assertIn((227, 28, 35), pixels)
-        other = Image.new("RGB", (500, 130), mod.BLUE)
-        mod.draw_line_tokens(ImageDraw.Draw(other), ["HIV", "rutin"], 24, 18,
+        mod.draw_line_tokens(ImageDraw.Draw(other), text, 72, 25,
                              font, mod.WHITE, "CWC-CRSL-9999")
-        self.assertNotIn((255, 255, 255), list(other.crop((16, 18, 25, 36)).getdata()))
-        self.assertIn((227, 28, 35), list(other.getdata()))
+        # The old pilot ID must not trigger token recoloring, background or extra spacing.
+        self.assertEqual(approved.tobytes(), other.tobytes())
+        self.assertNotIn((227, 28, 35), list(approved.getdata()))
+        self.assertEqual(approved.getpixel((67, 25)), (11, 61, 158))
+        self.assertIn((255, 255, 255), list(approved.getdata()))
 
-    def test_hiv_chip_padding_is_counted_in_line_width(self):
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 48)
-        draw = ImageDraw.Draw(Image.new("RGB", (1080, 150), mod.BLUE))
-        tokens = ["Tes", "HIV", "rutin"]
-        unscoped = mod.line_token_positions(draw, tokens, font, "CWC-CRSL-9999")
-        scoped = mod.line_token_positions(draw, tokens, font, "CWC-CRSL-0004")
-        self.assertGreater(scoped[2][1], unscoped[2][1])
-        self.assertGreaterEqual(scoped[2][1] - unscoped[2][1], 2 * mod.HIV_CHIP_PADDING_X)
-        # A width that fits plain text but not the underlay must wrap.
-        plain_right = unscoped[-1][1] + unscoped[-1][2]
-        scoped_right = scoped[-1][1] + scoped[-1][2]
-        limited = int((plain_right + scoped_right) / 2)
-        self.assertEqual(len(mod.words_and_lines(draw, "Tes HIV rutin", font, limited, "CWC-CRSL-9999")), 1)
-        self.assertGreater(len(mod.words_and_lines(draw, "Tes HIV rutin", font, limited, "CWC-CRSL-0004")), 1)
+    def test_hiv_inherits_other_typographic_color_and_punctuation(self):
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 44)
+        text = ["HIV,", "HIV?", "HIV", "dan", "PrEP"]
+        a = Image.new("RGB", (800, 150), mod.BLUE)
+        b = Image.new("RGB", (800, 150), mod.BLUE)
+        for im, content_id in ((a, "CWC-CRSL-0004"), (b, "CWC-CRSL-0001")):
+            mod.draw_line_tokens(ImageDraw.Draw(im), text, 72, 22,
+                                 font, "#FDCF00", content_id)
+        self.assertEqual(a.tobytes(), b.tobytes())
+        self.assertIn((253, 207, 0), list(a.getdata()))
+        self.assertNotIn((227, 28, 35), list(a.getdata()))
 
-    def test_hiv_chip_does_not_paint_over_neighboring_letters(self):
+    def test_hiv_has_ordinary_line_advance_and_wrapping(self):
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 48)
-        im = Image.new("RGB", (1080, 180), mod.BLUE)
-        draw = ImageDraw.Draw(im)
+        draw = ImageDraw.Draw(Image.new("RGB", (800, 160), mod.BLUE))
         tokens = ["Tes", "HIV", "rutin"]
-        positions = mod.line_token_positions(draw, tokens, font, "CWC-CRSL-0004")
-        mod.draw_line_tokens(draw, tokens, 72, 25, font, mod.WHITE, "CWC-CRSL-0004")
-        left = round(72 + positions[1][1]) - mod.HIV_CHIP_PADDING_X
-        prev_right = round(72 + positions[0][1] + positions[0][2])
-        next_left = round(72 + positions[2][1])
-        chip_right = round(72 + positions[1][1] + positions[1][2]) + mod.HIV_CHIP_PADDING_X
-        self.assertGreater(left, prev_right)
-        self.assertLess(chip_right, next_left)
-        self.assertEqual(im.getpixel((left, 25)), (255, 255, 255))
-        self.assertEqual(im.getpixel((left - 2, 25)), (11, 61, 158))
+        p = mod.line_token_positions(draw, tokens, font, "CWC-CRSL-0004")
+        q = mod.line_token_positions(draw, tokens, font, "CWC-CRSL-9999")
+        self.assertEqual(p, q)
+        self.assertEqual(p[2][1], p[1][1] + p[1][2] + draw.textlength(" ", font=font))
+        width = int(p[-1][1] + p[-1][2]) + 2
+        self.assertEqual(mod.words_and_lines(draw, "Tes HIV rutin", font, width, "CWC-CRSL-0004"),
+                         mod.words_and_lines(draw, "Tes HIV rutin", font, width, "CWC-CRSL-9999"))
 
     def test_actual_visible_alpha_presenter_placement(self):
         # Synthetic mask approximates the BUS-94 derivative's visible occupancy;
