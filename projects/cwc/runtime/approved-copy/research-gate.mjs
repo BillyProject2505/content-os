@@ -53,6 +53,12 @@ export function validateResearch(copy,research){
    "RESEARCH_SOURCE_INVALID","unique ID, HTTPS provenance, section and reliability required");
   ids.add(source.id);
  }
+ // Cover *all* external references already declared in approved-copy.
+ // Research sources may include supplemental context, but cannot omit a referenced URL.
+ // This is referential integrity only: it does not certify clinical truth or source currency.
+ requireThat(Array.isArray(copy.source_evidence)&&copy.source_evidence.every(s=>
+   url(s.source_url)&&research.sources.some(r=>r.url===s.source_url)),
+  "RESEARCH_COPY_SOURCE_MISSING","approved-copy external source has no matching research provenance record");
  requireThat(Array.isArray(research.claims)&&research.claims.length>0,
   "RESEARCH_CLAIMS_MISSING","claim-to-source matrix required");
  const claimIds=new Set(),covered=new Set(),usedSources=new Set();
