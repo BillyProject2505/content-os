@@ -159,3 +159,43 @@ currently NO allocated content layout file in this repository for the pilot;
 the manual job must fail closed until an authorized copy and reviewed layout
 exist. Exact visual parity with the previous R2 release and independent
 STG-08 / STG-09 remain unverified.
+
+
+## 2026-11-01 — BUS-170 Phase 1 MVP: non-publishable review preparation
+
+This is the current operational Phase 1 entrypoint. Existing Phase A/B1/B2 historical
+notes above are preserved for provenance; they are not evidence of final release.
+
+**GitHub workflow:** `.github/workflows/cwc-phase1-review-preparation.yml`
+- PR CI automatically tests content/preflight/layout contracts when CWC content, runtime,
+  or this workflow changes. Test success alone is NOT production readiness.
+- A human invokes `workflow_dispatch` on **main** with the real registered Carousel
+  Content ID, two independently verified approved-copy/layout SHA-256 fingerprints,
+  and confirmation `PREPARE_UNAPPROVED_CWC_REVIEW`.
+- The job executes the same JS `preflight.mjs` validation, CWC FORMAT-CAROUSEL
+  authority-pinned `buildCarouselRenderPlan()`, and `attachLayout()`. It emits
+  `copy-preflight.json`, `render-plan.json`, `render-plan-typed.json`, and
+  `phase1-manifest.json` as a 14-day review-only GitHub Actions artifact.
+- No credentials, Google Drive, Cloud IAM, renderer binaries, social platform
+  integration, content modification, Linear writeback, approvals, schedule or publishing.
+  `PHASE1_VALIDATED_UNAPPROVED` only means copy/layout integrity PASS.
+
+**Pilot exact inputs for CWC-CRSL-0004** (verify against current main before launch):
+- copy fingerprint: `27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60`
+- layout fingerprint: `a159704d5880edf2952d906b612c268e8d2190471caa671b5ae8ceac5e4e1124`
+- confirmation: `PREPARE_UNAPPROVED_CWC_REVIEW`
+
+Equivalent read-only local CLI, from the repository root:
+
+    node projects/cwc/runtime/approved-copy/prepare-review.mjs \
+      --content-id CWC-CRSL-0004 \
+      --copy-fingerprint 27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60 \
+      --layout-fingerprint a159704d5880edf2952d906b612c268e8d2190471caa671b5ae8ceac5e4e1124 \
+      --out /tmp/cwc-phase1
+
+**Stage boundary:** live authority/clinical evidence, asset SHA bytes, full official
+`render-carousel.py` output, STG-08 QA, STG-09 Owner release, STG-10 Release Identity,
+and scheduling/publication are separate later gates. BUS-172 dedicated CWC WIF/Drive
+reader remains deferred; it is not needed for this credential-free Phase 1. Do not
+mistake four JSON files for approved publication assets, and never replay a past
+editorial slot automatically.
