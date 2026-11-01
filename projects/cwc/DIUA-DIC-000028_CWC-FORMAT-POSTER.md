@@ -58,7 +58,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Prior Cross-Format Authority | [BUS-114](https://linear.app/bussiness-content-os/issue/BUS-114/cwc-cross-format-brand-presenter-layout-universal-5050-full-body) — superseded by [BUS-124](https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout) for current layout geometry across registered CWC formats; [BUS-123](https://linear.app/bussiness-content-os/issue/BUS-123/cwc-format-poster-reference-validated-copy-brand-presenter-layout) retained as the validated Poster source/reference |
 | Structural Classification | Tiered — Domain/Project Tier 2 — Coz We Care |
 | Universal Identifier | `DIUA-DIC-000028` — same governed FORMAT-POSTER document identity; this revision does not allocate a new identifier |
-| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CWC Production Bible v2.22 CANONICAL; CWC Format Specialization Specification v1.31 CANONICAL; CWC QA Mechanism (CWC-QA-001) v1.32 CANONICAL; CWC Asset Bible v1.36 CANONICAL; CWC Reference Sheet v1.23 CANONICAL |
+| Depends On | CWC Production Workflow v1.22 CANONICAL LOCKED; CWC Production Bible v2.23 CANONICAL; CWC Format Specialization Specification v1.31 CANONICAL; CWC QA Mechanism (CWC-QA-001) v1.32 CANONICAL; CWC Asset Bible v1.36 CANONICAL; CWC Reference Sheet v1.23 CANONICAL |
 
 ---
 
