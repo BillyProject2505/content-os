@@ -116,6 +116,15 @@ class OverlayTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Invalid seasonal period"):
                 overlay.apply_overlay(root, palette, logos, staged, Path(d) / "record.json")
 
+    def test_logo_manifest_must_match_amended_window(self):
+        with tempfile.TemporaryDirectory() as d:
+            root, palette, logos, staged, _ = self.fixture(d)
+            manifest = overlay.load(logos)
+            manifest["period"]["start"] = "2026-11-01"
+            overlay.save(logos, manifest)
+            with self.assertRaisesRegex(ValueError, "Seasonal logo validity window mismatch"):
+                overlay.apply_overlay(root, palette, logos, staged, Path(d) / "record.json")
+
     def test_layout_extension_not_authorized(self):
         with tempfile.TemporaryDirectory() as d:
             root, palette, logos, staged, _ = self.fixture(d)
