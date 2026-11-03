@@ -1,6 +1,6 @@
 # November 2026 — Trans Awareness Month (Color-only contract)
 
-**State:** DRAFT_PENDING_RENDER_QA / INACTIVE. This is an operational candidate, **not** an amendment to the project's permanent Sage/Burgundy palette. The JSON is deliberately **not consumed** by a production renderer or publication workflow.
+**State:** OWNER_VISUAL_APPROVED_PRODUCTION_INACTIVE (2026-11-03; proof-only Owner approval recorded in `2026-11-owner-visual-approval.json`). This is an operational candidate, **not** an amendment to the project's permanent Sage/Burgundy palette. The JSON is deliberately **not consumed** by a production renderer or publication workflow.
 
 ## Effective window and scope
 
