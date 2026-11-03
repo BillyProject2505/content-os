@@ -39,7 +39,7 @@ function validate(value) {
   exactKeys(value, ["schema", "campaign", "status", "period", "tokens", "preserve", "activation"]);
   assert.equal(value.schema, "sdoh-seasonal-color-only-v1");
   assert.equal(value.campaign, "Trans Awareness Month");
-  assert.equal(value.status, "DRAFT_PENDING_RENDER_QA");
+  assert.equal(value.status, "OWNER_VISUAL_APPROVED_PRODUCTION_INACTIVE");
   exactKeys(value.period, ["start", "end", "timezone"]);
   assert.equal(value.period.start, "2026-11-01");
   assert.equal(value.period.end, "2026-11-30");
