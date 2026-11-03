@@ -9,9 +9,11 @@ Publication-local dates: 2026-11-01 through 2026-11-30, Asia/Makassar (inclusive
 | Role | Sage series | Burgundy series |
 | --- | --- | --- |
 | Main surface | `#C5E4F0` (pastel blue) | `#F5C9DA` (pastel pink) |
-| Text fill | `#FFFFFF` | `#FFFFFF` |
-| Character fill | `#FFFFFF` | `#FFFFFF` |
-| Thin outline/stroke | `#4B7A94` | `#A2577A` |
+| Text fill | `#355E78` | `#793E61` |
+| Character fill | `#355E78` | `#793E61` |
+| Canonical existing linework | `#355E78` | `#793E61` |
+
+| Logo fill | `#355E78` | `#793E61` |
 
 No additional accent, plate, banner, decorative shape, or new layout is authorized by this contract.
 
@@ -25,7 +27,7 @@ No additional accent, plate, banner, decorative shape, or new layout is authoriz
 
 ## Contrast and QA
 
-White fill on either pale surface has intrinsically low luminance contrast. A thin, darker outline is **not sufficient evidence of readable text**. Keep these colors as an Owner-directed design candidate, but block production until actual rendered typography at canonical sizes passes documented optical and accessibility QA. Do not "fix" this by changing the font, stroke width, layout, introducing a dark panel, or inventing a new decoration without a separate Owner decision.
+Dark-on-pastel foreground contrast is approximately **5.20:1 for Sage** and **5.33:1 for Burgundy** against the nominal surface colors. A controlled proof using the checksum-verified BUS-49 v0.6.0 renderer copy, original Caveat Medium, original P02, and a QA-only alpha-preserving logo recolor passed: 5-slide render in each theme, text/character geometry and export metadata unchanged, original logo alpha identical, and source integrity PASS. All P01–P08 original pose sources were independently checksum-verified; hypothetical tint retains each source alpha exactly. The proof does NOT establish the deployed renderer has been updated, nor final Owner Visual Approval. Do not alter font, stroke width, layout or geometry as a workaround.
 
 Before any activation, verify (1) full transparency/geometry invariance of the actual character derivatives against canonical input, (2) unchanged font and layout metrics, (3) token application is strictly date-scoped and opt-in, (4) output contrast and legibility including mobile-scale proof, (5) original production gates, and (6) explicit Owner Visual Approval. Fail closed on any deviation.
 
@@ -38,3 +40,11 @@ node projects/sdoh/runtime/seasonal-color/self-test.mjs
 ```
 
 Further implementation needs a narrow, separately reviewed renderer integration change, validated with the original source assets—not a regenerated visual prototype.
+
+## Controlled proof evidence — November 3, 2026
+
+- Detached BUS-49 v0.6.0 package SHA-256 `7bc6ffd0acf56b487e2eb88e55127d383e3e9b1709921f9af16a0e04519afb9f` was used as an isolated QA copy; its immutable source was not modified.
+- Original font and P02 SHA-256 matched the canonical `carousel-v060-authority.json` pins. All P01–P08 matched registered pose checksums.
+- Recolor of original logo alpha did not alter source geometry; test-only derivative checksum is separate from canonical registry.
+- Nominal color contrast: Sage 5.20:1; Burgundy 5.33:1; sampled texture areas were also >4.5:1. Actual render remains a proof, NOT a publication-ready asset.
+- Asset decision: emit QA candidates only; register and activate no assets until separate Owner Visual Approval and a versioned production integration path.
