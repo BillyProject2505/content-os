@@ -52,7 +52,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const provenanceOut = path.resolve(arg("--provenance-out"));
     if (!/^SDOH-(SAGE|BURGUNDY)-CAR-[0-9]{4}$/.test(contentId) ||
         !/^[0-9a-f]{64}$/.test(fingerprint) ||
-        !/^2026-11-(0[1-9]|[12][0-9]|30)$/.test(targetDate)) fail("Invalid CLI input");
+        !/^2026-11-(0[8-9]|[12][0-9]|30)$/.test(targetDate)) fail("Invalid CLI input");
     const binding = JSON.parse(fs.readFileSync(path.join(ROOT,
       "projects/sdoh/runtime/seasonal-color/2026-11-content-binding.json"), "utf8"));
     const { copy } = loadApprovedCopy(contentId, { expectedCopyFingerprint: fingerprint });
