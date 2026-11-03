@@ -51,6 +51,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const id = arg("--content-id");
     const fingerprint = arg("--expected-copy-fingerprint");
     const targetDate = arg("--target-date");
+    requireThat(ID.test(id) && SHA.test(fingerprint) && DATE.test(targetDate), "Invalid request before file access");
     const binder = JSON.parse(fs.readFileSync(
       path.join(root, "projects/sdoh/runtime/seasonal-color/2026-11-content-binding.json"), "utf8"));
     const theme = id.includes("-BURGUNDY-") ? "burgundy" : "sage";
