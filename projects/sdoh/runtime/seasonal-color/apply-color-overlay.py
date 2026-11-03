@@ -49,7 +49,7 @@ def validate_contract(config, derivatives):
     require(config.get("status") == "OWNER_VISUAL_APPROVED_PRODUCTION_INACTIVE", "No visual approval")
     require(config.get("activation", {}).get("enabled") is False, "Production activation forbidden")
     require(config.get("period") == {
-        "start": "2026-11-01", "end": "2026-11-30", "timezone": "Asia/Makassar"
+        "start": "2026-11-08", "end": "2026-11-30", "timezone": "Asia/Makassar"
     }, "Invalid seasonal period")
     require(derivatives.get("schema") == "sdoh-seasonal-logo-derivatives-v1", "Unknown logo contract")
     require(derivatives.get("state") == "OWNER_VISUAL_APPROVED_STAGED_VERIFIED_NOT_CANONICAL",
