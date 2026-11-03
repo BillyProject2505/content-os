@@ -7,15 +7,17 @@ const contract = JSON.parse(readFileSync(file, "utf8"));
 const EXACT_TOKENS = {
   SAGE: {
     surface: "#C5E4F0",
-    text_fill: "#FFFFFF",
-    character_fill: "#FFFFFF",
-    stroke: "#4B7A94",
+    text_fill: "#355E78",
+    character_fill: "#355E78",
+    logo_fill: "#355E78",
+    stroke: "#355E78",
   },
   BURGUNDY: {
     surface: "#F5C9DA",
-    text_fill: "#FFFFFF",
-    character_fill: "#FFFFFF",
-    stroke: "#A2577A",
+    text_fill: "#793E61",
+    character_fill: "#793E61",
+    logo_fill: "#793E61",
+    stroke: "#793E61",
   },
 };
 const PRESERVE = [
@@ -44,7 +46,7 @@ function validate(value) {
   assert.equal(value.period.timezone, "Asia/Makassar");
   exactKeys(value.tokens, ["SAGE", "BURGUNDY"]);
   for (const theme of ["SAGE", "BURGUNDY"]) {
-    exactKeys(value.tokens[theme], ["surface", "text_fill", "character_fill", "stroke"]);
+    exactKeys(value.tokens[theme], ["surface", "text_fill", "character_fill", "logo_fill", "stroke"]);
     assert.deepEqual(value.tokens[theme], EXACT_TOKENS[theme]);
   }
   assert.deepEqual(value.preserve, PRESERVE);
