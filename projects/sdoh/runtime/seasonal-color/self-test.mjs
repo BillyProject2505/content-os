@@ -4,6 +4,8 @@ import { readFileSync } from "node:fs";
 
 const file = new URL("./2026-11-trans-awareness.json", import.meta.url);
 const contract = JSON.parse(readFileSync(file, "utf8"));
+const dateAmendment = JSON.parse(readFileSync(new URL("./2026-11-start-date-amendment.json", import.meta.url), "utf8"));
+const logoManifest = JSON.parse(readFileSync(new URL("./2026-11-logo-derivatives.json", import.meta.url), "utf8"));
 const EXACT_TOKENS = {
   SAGE: {
     surface: "#C5E4F0",
@@ -63,6 +65,13 @@ function validate(value) {
 }
 
 validate(contract);
+assert.equal(dateAmendment.schema, "sdoh-seasonal-effective-date-amendment-v1");
+assert.equal(dateAmendment.approval_state, "OWNER_APPROVED_SCHEDULE_CHANGE_ONLY_PRODUCTION_INACTIVE");
+assert.equal(dateAmendment.original_effective_period.start, "2026-11-01");
+assert.deepEqual(dateAmendment.amended_effective_period, contract.period);
+assert.deepEqual(logoManifest.period, contract.period);
+assert.equal(contract.activation.enabled, false);
+
 const clone = (v) => structuredClone(v);
 const unapproved = clone(contract);
 unapproved.activation.enabled = true;
