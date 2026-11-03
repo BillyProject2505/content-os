@@ -61,6 +61,20 @@ jobs:
             projects/sdoh/runtime/seasonal-color/2026-11-trans-awareness.json >/dev/null
           echo "Seasonal QA-only gate PASS; publication not authorized"
 
+      - name: Enforce November-specific content approval binding
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          TARGET_DATE: ${{ inputs.target_date }}
+        run: |
+          set -euo pipefail
+          node projects/sdoh/runtime/seasonal-color/verify-november-content.mjs \
+            --content-id "$CONTENT_ID" \
+            --expected-copy-fingerprint "$COPY_FINGERPRINT" \
+            --target-date "$TARGET_DATE"
+          echo "Explicit campaign content binding PASS"
+
       - name: Verify original BUS-49 authority
         run: node projects/sdoh/runtime/automated-content-production/scripts/verify-carousel-render-authority.mjs
 
