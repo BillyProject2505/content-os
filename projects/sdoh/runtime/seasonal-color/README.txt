@@ -48,3 +48,18 @@ Further implementation needs a narrow, separately reviewed renderer integration 
 - Recolor of original logo alpha did not alter source geometry; test-only derivative checksum is separate from canonical registry.
 - Nominal color contrast: Sage 5.20:1; Burgundy 5.33:1; sampled texture areas were also >4.5:1. Actual render remains a proof, NOT a publication-ready asset.
 - Asset decision: emit QA candidates only; register and activate no assets until separate Owner Visual Approval and a versioned production integration path.
+
+
+## November editorial and caption authority (Owner direction, 2026-11-03)
+
+- **Editorial campaign scope:** November SDOH content must specifically and respectfully address transgender awareness, including identity and self-acceptance (Sage), or stigma, dignity, mutual care, remembrance and resilience (Burgundy). Generic emotional copy from prior months must NOT be relabeled as November campaign content.
+- **Special dates:** Trans Awareness Week, November 13–19, 2026; Transgender Day of Remembrance, November 20, 2026. The entire month's editorial tone must not equate transgender identity with trauma. Balance support, dignity, solidarity and joy.
+- **Binding gate:** `2026-11-content-binding.json` currently has NO approved November content. The manual preview requires a separately Owner/editor-approved November copy, its approved fingerprint, theme, target date and campaign-specific approval evidence before making a render.
+- **Exact caption lines for every November campaign publication, Owner-supplied (not an official international slogan):**
+
+  `Transgender Awareness Month November 2026`
+
+  `To Honor and To Hold: Their Lives, Their Legacies`
+
+- **Placement:** preserve approved caption body verbatim. After the existing `satu dosis obat hati` signature, insert these two lines once and then preserve all five existing canonical hashtags in their original order. This is the November footer only; the shared base caption formatter, older copies and their fingerprints remain unchanged.
+- **Implementation:** `compose-november-caption.mjs` adds the exact two lines to a REVIEW-ONLY caption artifact after both COPY_APPROVED and campaign binding validation. No auto-approval, publishing, scheduling or permanent production activation.
