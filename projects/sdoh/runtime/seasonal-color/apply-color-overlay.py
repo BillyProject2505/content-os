@@ -52,6 +52,7 @@ def validate_contract(config, derivatives):
         "start": "2026-11-08", "end": "2026-11-30", "timezone": "Asia/Makassar"
     }, "Invalid seasonal period")
     require(derivatives.get("schema") == "sdoh-seasonal-logo-derivatives-v1", "Unknown logo contract")
+    require(derivatives.get("period") == config.get("period"), "Seasonal logo validity window mismatch")
     require(derivatives.get("state") == "OWNER_VISUAL_APPROVED_STAGED_VERIFIED_NOT_CANONICAL",
             "Unverified staged logos")
     require(set(config.get("tokens", {})) == set(THEMES), "Invalid theme list")
