@@ -45,6 +45,8 @@ test("reject old or unbound content and invalid campaign date", () => {
   fails(active, copy, {...args,targetDate:"2026-10-21"});
   fails(active, copy, {...args,targetDate:"2026-12-01"});
   fails(active, copy, {...args,targetDate:"2026-11-31"});
+  fails(active, copy, {...args,targetDate:"2026-11-01"});
+  fails(active, copy, {...args,targetDate:"2026-11-07"});
   fails({...active,items: [validItem,validItem]});
   fails({...active,campaign: "October"});
 });
@@ -89,4 +91,12 @@ test("real CLI rejects October approved copy when labelled as November", () => {
   assert.equal(cli.status, 1, "Old October content must never pass the November campaign gate");
   assert.match(cli.stderr, /NOVEMBER_CAMPAIGN_BINDING_REJECTED/);
   assert.doesNotMatch(cli.stderr, /ENOENT|MODULE_NOT_FOUND/);
+});
+
+test("November 8 is the first permitted campaign date", () => {
+  const first = clone(active);
+  first.items[0].target_date = "2026-11-08";
+  const result = validateNovemberBinding(first, copy, {...args, targetDate:"2026-11-08"});
+  assert.equal(result.target_date, "2026-11-08");
+  assert.equal(result.publication_authorized, false);
 });
