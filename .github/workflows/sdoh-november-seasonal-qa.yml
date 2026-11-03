@@ -51,7 +51,7 @@ jobs:
           set -euo pipefail
           [[ "$CONTENT_ID" =~ ^SDOH-(SAGE|BURGUNDY)-CAR-[0-9]{4}$ ]]
           [[ "$COPY_FINGERPRINT" =~ ^[0-9a-f]{64}$ ]]
-          [[ "$TARGET_DATE" =~ ^2026-11-(0[1-9]|[12][0-9]|30)$ ]]
+          [[ "$TARGET_DATE" =~ ^2026-11-(0[8-9]|[12][0-9]|30)$ ]]
           test "$CONFIRMATION" = "RENDER_SEASONAL_QA_ONLY"
           jq -e '.decision == "OWNER_VISUAL_APPROVED" and
                  (.explicit_exclusions | index("no_authority_to_publish_or_schedule"))' \
