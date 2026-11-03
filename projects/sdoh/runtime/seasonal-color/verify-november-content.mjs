@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const ID = /^SDOH-(SAGE|BURGUNDY)-CAR-[0-9]{4}$/;
 const SHA = /^[0-9a-f]{64}$/;
-const DATE = /^2026-11-(0[1-9]|[12][0-9]|30)$/;
+const DATE = /^2026-11-(0[8-9]|[12][0-9]|30)$/;
 // Theme relevance must be visible in the approved editorial copy itself,
 // not merely appended as a generic seasonal footer.
 const TOPIC_ANCHOR = /\btransgender\b|\btransfobia\b|\btransphobia\b|\borang\s+trans\b|\bkomunitas\s+trans\b|\bidentitas\s+gender\b/i;
