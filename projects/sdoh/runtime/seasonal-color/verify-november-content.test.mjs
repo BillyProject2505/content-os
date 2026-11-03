@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { validateNovemberBinding } from "./verify-november-content.mjs";
 import fs from "node:fs";
+import { spawnSync } from "node:child_process";
 
 const id = "SDOH-SAGE-CAR-0900"; // synthetic fixture, never allocated
 const fingerprint = "a".repeat(64);
@@ -69,4 +70,19 @@ test("reject schema extensions that could weaken governance", () => {
   const extra = clone(active);
   extra.items[0].auto_publish = true;
   fails(extra);
+});
+
+test("real CLI rejects October approved copy when labelled as November", () => {
+  const oldCopy = JSON.parse(fs.readFileSync(
+    new URL("../../content/sage/carousel/SDOH-SAGE-CAR-0009.json", import.meta.url), "utf8"
+  ));
+  const cli = spawnSync(process.execPath, [
+    new URL("./verify-november-content.mjs", import.meta.url).pathname,
+    "--content-id", oldCopy.content_id,
+    "--expected-copy-fingerprint", oldCopy.copy_fingerprint,
+    "--target-date", "2026-11-10",
+  ], { encoding: "utf8" });
+  assert.equal(cli.status, 1, "Old October content must never pass the November campaign gate");
+  assert.match(cli.stderr, /NOVEMBER_CAMPAIGN_BINDING_REJECTED/);
+  assert.doesNotMatch(cli.stderr, /ENOENT|MODULE_NOT_FOUND/);
 });
