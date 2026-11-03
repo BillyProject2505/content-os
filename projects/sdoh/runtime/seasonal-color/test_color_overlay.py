@@ -107,6 +107,15 @@ class OverlayTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "activation forbidden"):
                 overlay.apply_overlay(root, palette, logos, staged, Path(d) / "record.json")
 
+    def test_old_november_first_start_is_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root, palette, logos, staged, _ = self.fixture(d)
+            config = overlay.load(palette)
+            config["period"]["start"] = "2026-11-01"
+            overlay.save(palette, config)
+            with self.assertRaisesRegex(ValueError, "Invalid seasonal period"):
+                overlay.apply_overlay(root, palette, logos, staged, Path(d) / "record.json")
+
     def test_layout_extension_not_authorized(self):
         with tempfile.TemporaryDirectory() as d:
             root, palette, logos, staged, _ = self.fixture(d)
