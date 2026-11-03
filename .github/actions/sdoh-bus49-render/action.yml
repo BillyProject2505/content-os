@@ -19,6 +19,14 @@ inputs:
   contact_sheet:
     description: Path of the contact sheet JPEG to write
     required: true
+  seasonal_qa_config:
+    description: Optional fixed November 2026 palette file; QA proof only
+    required: false
+    default: ""
+  seasonal_qa_ack:
+    description: Must equal QA_ONLY_NO_PUBLICATION for seasonal preview
+    required: false
+    default: ""
 
 runs:
   using: composite
@@ -97,6 +105,50 @@ runs:
         assert features.version("raqm") == "0.10.5", features.version("raqm")
         print("Canonical renderer environment PASS")
         PY
+
+    - name: Apply November seasonal overlay (QA-only explicit opt-in)
+      if: ${{ inputs.seasonal_qa_config != '' }}
+      shell: bash
+      env:
+        SEASONAL_CONFIG: ${{ inputs.seasonal_qa_config }}
+        SEASONAL_QA_ACK: ${{ inputs.seasonal_qa_ack }}
+        GOOGLE_ACCESS_TOKEN: ${{ inputs.google_access_token }}
+      run: |
+        set -euo pipefail
+        if [ "$SEASONAL_CONFIG" != "projects/sdoh/runtime/seasonal-color/2026-11-trans-awareness.json" ] ||
+           [ "$SEASONAL_QA_ACK" != "QA_ONLY_NO_PUBLICATION" ]; then
+          echo "::error::Seasonal override requires fixed config and QA_ONLY_NO_PUBLICATION acknowledgement"
+          exit 1
+        fi
+        root="$RUNNER_TEMP/render-input"
+        pin="projects/sdoh/runtime/seasonal-color/2026-11-logo-derivatives.json"
+        mkdir -p "$root/seasonal-logos"
+        for theme in SAGE BURGUNDY; do
+          id="$(jq -r --arg t "$theme" '.assets[$t].google_drive_file_id' "$pin")"
+          name="$(jq -r --arg t "$theme" '.assets[$t].derivative_filename' "$pin")"
+          expected="$(jq -r --arg t "$theme" '.assets[$t].sha256' "$pin")"
+          test -n "$id" && test -n "$name" && test "${name##*/}" = "$name"
+          [[ "$expected" =~ ^[0-9a-f]{64}$ ]]
+          dst="$root/seasonal-logos/$name"
+          status="$(curl --silent --show-error --location --output "$dst" --write-out "%{http_code}" \
+            --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN" \
+            "https://www.googleapis.com/drive/v3/files/$id?alt=media")"
+          if [ "$status" != "200" ] || [ ! -s "$dst" ]; then
+            echo "::error::Seasonal logo fetch failed for $theme (HTTP $status)"
+            exit 1
+          fi
+          echo "$expected  $dst" | sha256sum --check --status || {
+            echo "::error::Seasonal logo SHA-256 mismatch for $theme"
+            exit 1
+          }
+        done
+        python projects/sdoh/runtime/seasonal-color/apply-color-overlay.py \
+          --renderer-root "$root/renderer/bus49_v060canonical" \
+          --config "$SEASONAL_CONFIG" \
+          --logos-manifest "$pin" \
+          --staged-logo-dir "$root/seasonal-logos" \
+          --record "$root/seasonal-qa-overlay-record.json"
+        echo "Seasonal overlay ready: QA proof only, no production authorization"
 
     - name: Render BUS-49 v0.6.0 review candidate
       shell: bash
