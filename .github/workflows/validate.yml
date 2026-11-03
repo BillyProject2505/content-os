@@ -82,6 +82,8 @@ jobs:
         run: node projects/sdoh/runtime/seasonal-color/self-test.mjs
       - name: Self-test November SDOH campaign content binding
         run: node --test projects/sdoh/runtime/seasonal-color/verify-november-content.test.mjs
+      - name: Self-test November SDOH campaign caption footer
+        run: node --test projects/sdoh/runtime/seasonal-color/compose-november-caption.test.mjs
       - name: Install Pillow and Inter for KDS renderer self-test
         run: |
           python -m pip install --quiet pillow
