@@ -1,0 +1,39 @@
+{
+  "schema": "sdoh-seasonal-color-only-v1",
+  "campaign": "Trans Awareness Month",
+  "status": "DRAFT_PENDING_RENDER_QA",
+  "period": {
+    "start": "2026-11-01",
+    "end": "2026-11-30",
+    "timezone": "Asia/Makassar"
+  },
+  "tokens": {
+    "SAGE": {
+      "surface": "#C5E4F0",
+      "text_fill": "#FFFFFF",
+      "character_fill": "#FFFFFF",
+      "stroke": "#4B7A94"
+    },
+    "BURGUNDY": {
+      "surface": "#F5C9DA",
+      "text_fill": "#FFFFFF",
+      "character_fill": "#FFFFFF",
+      "stroke": "#A2577A"
+    }
+  },
+  "preserve": [
+    "canonical_character_asset_identity",
+    "canonical_pose_route",
+    "character_geometry_and_alpha",
+    "Caveat_Medium_identity_and_metrics",
+    "layout_and_safe_areas",
+    "logo_geometry_and_placement",
+    "production_and_owner_approval_gates"
+  ],
+  "activation": {
+    "enabled": false,
+    "requires_canonical_source_compatible_render": true,
+    "requires_visual_contrast_qa": true,
+    "requires_owner_visual_approval": true
+  }
+}
