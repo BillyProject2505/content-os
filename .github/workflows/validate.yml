@@ -84,5 +84,7 @@ jobs:
         run: |
           python -m pip install --quiet pillow
           sudo apt-get install -y --no-install-recommends fonts-inter >/dev/null 2>&1 || echo "fonts-inter unavailable; self-test falls back to DejaVu"
+      - name: Self-test November SDOH color-only renderer overlay
+        run: python projects/sdoh/runtime/seasonal-color/test_color_overlay.py
       - name: Self-test KDS Psychology Series deterministic renderer (shared-baseline typography, Layout Bible geometry)
         run: python projects/kds/runtime/psychology-series-renderer/selftest.py
