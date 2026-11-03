@@ -59,6 +59,11 @@ jobs:
           jq -e '.activation.enabled == false and
                  .status == "OWNER_VISUAL_APPROVED_PRODUCTION_INACTIVE"' \
             projects/sdoh/runtime/seasonal-color/2026-11-trans-awareness.json >/dev/null
+          jq -e '.approval_state == "OWNER_APPROVED_SCHEDULE_CHANGE_ONLY_PRODUCTION_INACTIVE" and
+                 .amended_effective_period.start == "2026-11-08" and
+                 .amended_effective_period.end == "2026-11-30" and
+                 .original_effective_period.start == "2026-11-01"' \
+            projects/sdoh/runtime/seasonal-color/2026-11-start-date-amendment.json >/dev/null
           echo "Seasonal QA-only gate PASS; publication not authorized"
 
       - name: Enforce November-specific content approval binding
