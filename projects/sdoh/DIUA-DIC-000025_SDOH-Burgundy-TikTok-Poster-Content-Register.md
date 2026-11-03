@@ -55,8 +55,8 @@ Operational register for Burgundy TikTok Poster content instances. This document
 ## Authority boundary
 
 * [BUS-24](DIUA-DIC-000007_SDOH-Project-Architecture.md) owns project identity and Burgundy / Seri Jujur semantics.
-* [BUS-25](DIUA-DIC-000008_SDOH-Production-SOP.md) v1.42 CANONICAL owns cross-format workflow and caption baseline.
-* [BUS-27](DIUA-DIC-000010_SDOH-QA-Document.md) v1.33 CANONICAL owns project-level QA.
+* [BUS-25](DIUA-DIC-000008_SDOH-Production-SOP.md) v1.43 CANONICAL owns cross-format workflow and caption baseline.
+* [BUS-27](DIUA-DIC-000010_SDOH-QA-Document.md) v1.34 CANONICAL owns project-level QA.
 * [BUS-28](DIUA-DIC-000011_SDOH-Asset-Registry.md) owns reusable asset identity/provenance.
 * [BUS-52](https://linear.app/bussiness-content-os/issue/BUS-52/satu-dosis-obat-hati-sage-tiktok-poster-production) owns shared Poster base mechanics.
 * [BUS-53](https://linear.app/bussiness-content-os/issue/BUS-53/satu-dosis-obat-hati-burgundy-tiktok-poster-production) owns Burgundy deterministic deltas and Burgundy-specific validation.
