@@ -4,7 +4,7 @@
 
 ## Effective window and scope
 
-Publication-local dates: 2026-11-01 through 2026-11-30, Asia/Makassar (inclusive). Applicability to Carousel, Reels, and TikTok Poster requires separate format-specific renderer proof. Content IDs alone do not encode publication dates: never infer effective period from an ID or silently alter already published media.
+Publication-local dates: **2026-11-08 through 2026-11-30**, Asia/Makassar (inclusive), as amended by the Owner on 2026-11-03. **November 1–7 are out of scope** for the thematic campaign, seasonal palette and required campaign caption lines. Applicability to Carousel, Reels, and TikTok Poster requires separate format-specific renderer proof. Content IDs alone do not encode publication dates: never infer effective period from an ID or silently alter already published media.
 
 | Role | Sage series | Burgundy series |
 | --- | --- | --- |
@@ -53,7 +53,7 @@ Further implementation needs a narrow, separately reviewed renderer integration 
 ## November editorial and caption authority (Owner direction, 2026-11-03)
 
 - **Editorial campaign scope:** November SDOH content must specifically and respectfully address transgender awareness, including identity and self-acceptance (Sage), or stigma, dignity, mutual care, remembrance and resilience (Burgundy). Generic emotional copy from prior months must NOT be relabeled as November campaign content.
-- **Special dates:** Trans Awareness Week, November 13–19, 2026; Transgender Day of Remembrance, November 20, 2026. The entire month's editorial tone must not equate transgender identity with trauma. Balance support, dignity, solidarity and joy.
+- **Special dates:** Trans Awareness Week, November 13–19, 2026; Transgender Day of Remembrance, November 20, 2026. The campaign editorial tone must not equate transgender identity with trauma. Balance support, dignity, solidarity and joy.
 - **Binding gate:** `2026-11-content-binding.json` currently has NO approved November content. The manual preview requires a separately Owner/editor-approved November copy, its approved fingerprint, theme, target date and campaign-specific approval evidence before making a render.
 - **Exact caption lines for every November campaign publication, Owner-supplied (not an official international slogan):**
 
@@ -63,3 +63,12 @@ Further implementation needs a narrow, separately reviewed renderer integration 
 
 - **Placement:** preserve approved caption body verbatim. After the existing `satu dosis obat hati` signature, insert these two lines once and then preserve all five existing canonical hashtags in their original order. This is the November footer only; the shared base caption formatter, older copies and their fingerprints remain unchanged.
 - **Implementation:** `compose-november-caption.mjs` adds the exact two lines to a REVIEW-ONLY caption artifact after both COPY_APPROVED and campaign binding validation. No auto-approval, publishing, scheduling or permanent production activation.
+
+## Owner effective-date amendment — 2026-11-03
+
+The Owner subsequently directed: "Tema ini kita mulai dari tanggal 8 november". This **supersedes only the start date** (formerly 2026-11-01) in the original visual approval and production brief; all approved colors, canonical asset preservation, and 2026-11-30 end date are unchanged. See `2026-11-start-date-amendment.json`.
+
+- **2026-11-01 to 2026-11-07:** normal SDOH content and existing design rules, no Trans Awareness Month campaign binding, November caption footer, or seasonal recolor.
+- **2026-11-08 to 2026-11-30:** eligible for Trans Awareness Month editorial, colors, and caption footer, subject to the existing campaign-specific content approval and QA gates.
+- Do not retroactively edit, recolor, reschedule, or relabel content already published or scheduled for November 1–7.
+- No automatic production activation or publication authority is conferred by this schedule amendment.
