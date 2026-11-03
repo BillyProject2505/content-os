@@ -15,11 +15,11 @@ depends_on:
     status: "CANONICAL"
   - id: "DIUA-DIC-000008"
     name: "Satu Dosis Obat Hati — Production SOP"
-    version: "1.42"
+    version: "1.43"
     status: "CANONICAL"
   - id: "DIUA-DIC-000010"
     name: "Satu Dosis Obat Hati — QA Document"
-    version: "1.33"
+    version: "1.34"
     status: "CANONICAL"
   - id: "DIUA-DIC-000011"
     name: "Satu Dosis Obat Hati — Asset Registry"
@@ -38,12 +38,12 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Class | Domain/Project Operational Content Register |
 | System | Content OS → Satu Dosis Obat Hati (SDOH) |
 | Version | 1.6 |
-| Status | **CANONICAL / LOCKED** — v1.6 reconciliation (2026-10-21): synchronized dependencies to Production SOP v1.42 and QA Document v1.33; reconciled Linear instance `SDOH-SAGE-REEL-0003` into the canonical register; advanced next available Sage Reel ID to `SDOH-SAGE-REEL-0004`; and recorded BUS-45 §3.5 Continuous Illustrated Storytelling v1.0 as the governing visual-execution default for future Sage Reels. Existing locked Sage Reels 0001–0003 remain grandfathered. Prior state: v1.5 CANONICAL / LOCKED. |
+| Status | **CANONICAL / LOCKED** — v1.6 reconciliation (2026-10-21): synchronized dependencies to Production SOP v1.43 and QA Document v1.34; reconciled Linear instance `SDOH-SAGE-REEL-0003` into the canonical register; advanced next available Sage Reel ID to `SDOH-SAGE-REEL-0004`; and recorded BUS-45 §3.5 Continuous Illustrated Storytelling v1.0 as the governing visual-execution default for future Sage Reels. Existing locked Sage Reels 0001–0003 remain grandfathered. Prior state: v1.5 CANONICAL / LOCKED. |
 | Owner | Billy Fernando Mende |
 | Related Issue | [BUS-51](<https://linear.app/bussiness-content-os/issue/BUS-51>) |
 | Structural Classification | Tiered — Document Tier: Domain/Project (Tier 2) — Satu Dosis Obat Hati |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000022` — ALLOCATED / ACTIVE, per [BUS-16](../../system/Content-OS-Universal-Identifier-Registry.md) v1.20 and [BUS-17](../../system/Content-OS-Universal-Identifier-Registration-Record.md) v1.18 |
-| Depends On | SDOH Project Architecture v1.13; SDOH Production SOP v1.42; SDOH QA Document v1.33; SDOH Asset Registry v1.28 |
+| Depends On | SDOH Project Architecture v1.13; SDOH Production SOP v1.43; SDOH QA Document v1.34; SDOH Asset Registry v1.28 |
 | Scope | Instance konten Sage Reels dan kejadian publikasinya |
 | References | [BUS-45](<https://linear.app/bussiness-content-os/issue/BUS-45>) eksekusi; [BUS-24](<https://linear.app/bussiness-content-os/issue/BUS-24>) semantik; [BUS-25](<https://linear.app/bussiness-content-os/issue/BUS-25>) SOP; [BUS-26](<https://linear.app/bussiness-content-os/issue/BUS-26>) riset; [BUS-27](<https://linear.app/bussiness-content-os/issue/BUS-27>) QA; [BUS-28](<https://linear.app/bussiness-content-os/issue/BUS-28>) aset |
 | Aturan pencatatan | [BUS-51](<https://linear.app/bussiness-content-os/issue/BUS-51>) — Aturan pencatatan bersama v0.1 |
