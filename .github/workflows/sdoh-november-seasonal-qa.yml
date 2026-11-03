@@ -93,6 +93,31 @@ jobs:
             --out "$RUNNER_TEMP/render_manifest.json" \
             --snapshot-out "$RUNNER_TEMP/november-review/approved_copy.json"
 
+      - name: Compose two-line November caption (review artifact only)
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          TARGET_DATE: ${{ inputs.target_date }}
+        run: |
+          set -euo pipefail
+          node projects/sdoh/runtime/seasonal-color/compose-november-caption.mjs \
+            --content-id "$CONTENT_ID" \
+            --expected-copy-fingerprint "$COPY_FINGERPRINT" \
+            --target-date "$TARGET_DATE" \
+            --out "$RUNNER_TEMP/november-review/caption.txt" \
+            --provenance-out "$RUNNER_TEMP/november-review/caption-provenance.json"
+          jq -e --arg id "$CONTENT_ID" --arg fp "$COPY_FINGERPRINT" '
+            .content_id == $id and
+            .source_copy_fingerprint == $fp and
+            .status == "REVIEW_ONLY_NOT_PUBLISHED" and
+            .publication_authorized == false and
+            .campaign_lines == [
+              "Transgender Awareness Month November 2026",
+              "To Honor and To Hold: Their Lives, Their Legacies"
+            ]
+          ' "$RUNNER_TEMP/november-review/caption-provenance.json" >/dev/null
+
       - name: Authenticate Google Drive read-only
         id: auth
         uses: google-github-actions/auth@v3
