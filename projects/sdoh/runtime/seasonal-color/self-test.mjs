@@ -41,7 +41,7 @@ function validate(value) {
   assert.equal(value.campaign, "Trans Awareness Month");
   assert.equal(value.status, "OWNER_VISUAL_APPROVED_PRODUCTION_INACTIVE");
   exactKeys(value.period, ["start", "end", "timezone"]);
-  assert.equal(value.period.start, "2026-11-01");
+  assert.equal(value.period.start, "2026-11-08");
   assert.equal(value.period.end, "2026-11-30");
   assert.equal(value.period.timezone, "Asia/Makassar");
   exactKeys(value.tokens, ["SAGE", "BURGUNDY"]);
