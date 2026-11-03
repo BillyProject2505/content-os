@@ -7,7 +7,9 @@ import { spawnSync } from "node:child_process";
 const id = "SDOH-SAGE-CAR-0900"; // synthetic fixture, never allocated
 const fingerprint = "a".repeat(64);
 const targetDate = "2026-11-10";
-const copy = { content_id: id, theme: "SAGE", status: "COPY_APPROVED", copy_fingerprint: fingerprint };
+const copy = { content_id: id, theme: "SAGE", status: "COPY_APPROVED", copy_fingerprint: fingerprint,
+  slides: [{slide:1,copy:"Setiap orang transgender berhak dihormati"}],
+  caption_body_paragraphs: ["Identitas gender seseorang patut dihormati."] };
 const validItem = {
   content_id: id, theme: "SAGE", copy_fingerprint: fingerprint,
   target_date: targetDate, approval_ref: "https://github.com/example/content-os/issues/1"
@@ -63,6 +65,8 @@ test("reject mismatched editorial approval, source copy, or target date", () => 
   fails(active, { ...copy, status:"COPY_DRAFT" });
   fails(active, { ...copy, copy_fingerprint:"b".repeat(64) });
   fails(active, { ...copy, theme:"BURGUNDY" });
+  fails(active, { ...copy, slides: [{slide:1,copy:"Kamu boleh menerima dirimu pelan pelan"}], caption_body_paragraphs:["Kamu berhak merasakan dukungan."] });
+
   fails({...active,state:"NO_NOVEMBER_COPY_APPROVED"});
 });
 
