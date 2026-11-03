@@ -26,7 +26,7 @@ def contrast(left, right):
     return (high + 0.05) / (low + 0.05)
 
 def verify(manifest, render_report, overlay, authority, palette, logos, rendered_dir, target_date):
-    require("2026-11-01" <= target_date <= "2026-11-30", "Target date outside seasonal window")
+    require("2026-11-08" <= target_date <= "2026-11-30", "Target date outside seasonal window")
     require(overlay.get("schema") == "sdoh-seasonal-render-overlay-v1", "No seasonal overlay provenance")
     require(overlay.get("mode") == "QA_ONLY" and overlay.get("production_activation") is False, "Overlay not QA-only")
     require(palette.get("activation", {}).get("enabled") is False, "Production activation not allowed")
