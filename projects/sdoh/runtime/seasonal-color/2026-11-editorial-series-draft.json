@@ -1,0 +1,661 @@
+{
+  "schema": "sdoh-november-2026-editorial-series-draft-v1",
+  "campaign": "Trans Awareness Month 2026",
+  "state": "EDITORIAL_DRAFT_ONLY_NOT_CANONICAL",
+  "timezone": "Asia/Makassar",
+  "period": {
+    "start": "2026-11-08",
+    "end": "2026-11-30"
+  },
+  "cadence": {
+    "cycle_start": "2026-11-08",
+    "days": [
+      "SAGE",
+      "OFF",
+      "BURGUNDY",
+      "SAGE",
+      "OFF",
+      "BURGUNDY",
+      "OFF"
+    ],
+    "publication_time": null
+  },
+  "summary": {
+    "content_slots": 13,
+    "sage": 7,
+    "burgundy": 6,
+    "previously_approved": 1,
+    "new_copy_drafts": 12,
+    "off_days": 10
+  },
+  "schedule": [
+    {
+      "date": "2026-11-08",
+      "theme": "SAGE",
+      "content_id": "SDOH-SAGE-CAR-0015",
+      "status": "OWNER_FINAL_VISUAL_AND_CAPTION_APPROVED",
+      "reference": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6686164240"
+    },
+    {
+      "date": "2026-11-09",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-10",
+      "theme": "BURGUNDY",
+      "content_id": "SDOH-BURGUNDY-CAR-0017",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-11",
+      "theme": "SAGE",
+      "content_id": "SDOH-SAGE-CAR-0016",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-12",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-13",
+      "theme": "BURGUNDY",
+      "content_id": "SDOH-BURGUNDY-CAR-0018",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-14",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-15",
+      "theme": "SAGE",
+      "content_id": "SDOH-SAGE-CAR-0017",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-16",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-17",
+      "theme": "BURGUNDY",
+      "content_id": "SDOH-BURGUNDY-CAR-0019",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-18",
+      "theme": "SAGE",
+      "content_id": "SDOH-SAGE-CAR-0018",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-19",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-20",
+      "theme": "BURGUNDY",
+      "content_id": "SDOH-BURGUNDY-CAR-0020",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-21",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-22",
+      "theme": "SAGE",
+      "content_id": "SDOH-SAGE-CAR-0019",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-23",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-24",
+      "theme": "BURGUNDY",
+      "content_id": "SDOH-BURGUNDY-CAR-0021",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-25",
+      "theme": "SAGE",
+      "content_id": "SDOH-SAGE-CAR-0020",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-26",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-27",
+      "theme": "BURGUNDY",
+      "content_id": "SDOH-BURGUNDY-CAR-0022",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-28",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    },
+    {
+      "date": "2026-11-29",
+      "theme": "SAGE",
+      "content_id": "SDOH-SAGE-CAR-0021",
+      "status": "COPY_DRAFT_EDITORIAL_REVIEW"
+    },
+    {
+      "date": "2026-11-30",
+      "theme": "OFF",
+      "status": "NO_POST_PLANNED"
+    }
+  ],
+  "editorial_basis": [
+    "https://glaad.org/transweek/",
+    "https://glaad.org/reference/calendar/",
+    "https://pflag.org/resource/transgender-resources/",
+    "https://www.americanbar.org/groups/domestic_violence/initiatives/five-for-five/transgender-awareness-and-remembrance/"
+  ],
+  "editorial_principles": [
+    "Theme-specific and respectfully trans-affirming",
+    "Avoid portraying being transgender as a condition or as equivalent to trauma",
+    "SAGE: acceptance, dignity, listening, joy; BURGUNDY: boundaries, allyship, solidarity, remembrance",
+    "November 20 is solemn remembrance without graphic violence or unverified counts",
+    "No celebrity/real-person image likenesses, unapproved names, or unverified factual claims",
+    "Copy body only; project caption signature, two-line seasonal footer, and five hashtags are assembled after Owner approval"
+  ],
+  "existing_approved_content": {
+    "content_id": "SDOH-SAGE-CAR-0015",
+    "path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0015.json",
+    "source_copy_fingerprint": "f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519",
+    "approval_evidence": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6686164240",
+    "note": "Do not rewrite, duplicate or downgrade this approved item."
+  },
+  "drafts": [
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0017",
+      "planned_date": "2026-11-10",
+      "theme": "BURGUNDY",
+      "status": "COPY_DRAFT",
+      "title": "Identitas bukan undangan untuk dihakimi",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "identitas gender bukan undangan bagi orang lain untuk menghakimi"
+        },
+        {
+          "slide": 2,
+          "copy": "pertanyaan yang memaksa bisa terasa seperti pintu tanpa kunci"
+        },
+        {
+          "slide": 3,
+          "copy": "kamu berhak menentukan apa yang ingin kamu ceritakan"
+        },
+        {
+          "slide": 4,
+          "copy": "rasa hormat tidak menunggu jawaban tentang hidup pribadimu"
+        },
+        {
+          "slide": 5,
+          "copy": "batas yang kamu pilih tetap pantas untuk dijaga"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "identitas gender seseorang bukan ruang terbuka untuk semua pertanyaan. rasa ingin tahu tidak selalu memberi kita hak untuk meminta jawaban.",
+        "ketika orang transgender harus terus menjelaskan hidupnya supaya dihormati, percakapan bisa menjadi beban. batas pribadi bukan tanda bahwa seseorang menyembunyikan sesuatu yang salah.",
+        "kita bisa memilih menghormati tanpa mendesak. mendengar ketika seseorang ingin berbagi, dan menerima ketika ia memilih tidak bercerita."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0016",
+      "planned_date": "2026-11-11",
+      "theme": "SAGE",
+      "status": "COPY_DRAFT",
+      "title": "Nama adalah bentuk penghormatan",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "menyebut nama seseorang dengan benar adalah bentuk kepedulian"
+        },
+        {
+          "slide": 2,
+          "copy": "nama yang dipakai seseorang membantu mereka merasa dikenali"
+        },
+        {
+          "slide": 3,
+          "copy": "kita boleh belajar tanpa menuntut kisah di baliknya"
+        },
+        {
+          "slide": 4,
+          "copy": "kalau keliru perbaiki dengan tenang lalu lanjutkan percakapan"
+        },
+        {
+          "slide": 5,
+          "copy": "rasa aman sering tumbuh dari kebiasaan sederhana"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "kadang dukungan tidak datang sebagai kalimat besar. ia hadir ketika kita memanggil seseorang dengan nama yang ia gunakan.",
+        "bagi orang transgender, penghormatan sederhana ini bisa membuat percakapan terasa lebih nyaman. kita tidak perlu menuntut penjelasan tentang nama lama, tubuh, atau perjalanan seseorang untuk menunjukkan rasa hormat.",
+        "jika keliru, perbaiki dengan singkat dan tulus. yang berarti bukan kesempurnaan, melainkan kesediaan untuk belajar dan konsisten."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0018",
+      "planned_date": "2026-11-13",
+      "theme": "BURGUNDY",
+      "status": "COPY_DRAFT",
+      "title": "Kesadaran harus terlihat dalam sikap",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "pekan kesadaran transgender tidak cukup menjadi tulisan di layar"
+        },
+        {
+          "slide": 2,
+          "copy": "memahami berarti mau mendengar pengalaman tanpa buru buru menyimpulkan"
+        },
+        {
+          "slide": 3,
+          "copy": "keberpihakan terlihat ketika lelucon merendahkan tidak dibiarkan"
+        },
+        {
+          "slide": 4,
+          "copy": "jangan jadikan cerita seseorang sebagai pelajaran yang dipaksa"
+        },
+        {
+          "slide": 5,
+          "copy": "dukungan yang nyata hadir juga setelah unggahan berlalu"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "tanggal 13 sampai 19 november diperingati sebagai transgender awareness week. pekan ini mengajak kita mengenal dan menghormati hidup orang transgender dengan lebih baik.",
+        "kesadaran tidak berhenti pada mengunggah slogan. ia terlihat saat kita berhenti menyebarkan prasangka, mendengarkan tanpa menghakimi, dan tidak menjadikan pengalaman pribadi orang lain sebagai tontonan.",
+        "belajar adalah langkah awal. menjaga rasa hormat dalam keseharian adalah bagian yang perlu terus dilanjutkan."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0017",
+      "planned_date": "2026-11-15",
+      "theme": "SAGE",
+      "status": "COPY_DRAFT",
+      "title": "Ada ruang untuk bahagia",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "menjadi transgender tidak menghapus ruang untuk merasa bahagia"
+        },
+        {
+          "slide": 2,
+          "copy": "ada kegembiraan dalam pertemanan yang menerima tanpa syarat"
+        },
+        {
+          "slide": 3,
+          "copy": "ada lega ketika bisa memakai nama yang terasa tepat"
+        },
+        {
+          "slide": 4,
+          "copy": "tak semua momen harus menjelaskan perjuangan di baliknya"
+        },
+        {
+          "slide": 5,
+          "copy": "kamu layak merayakan hidup yang sedang dijalani"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "cerita orang transgender tidak hanya tentang tantangan atau luka. ada kegembiraan, persahabatan, pencapaian, dan momen kecil yang juga layak diberi tempat.",
+        "selama pekan kesadaran ini, kita bisa belajar melihat seseorang sebagai pribadi yang utuh. tidak semua senyum perlu dijelaskan dengan kisah perjuangan di belakangnya.",
+        "kalau hari ini ada sesuatu yang membuatmu lega atau bahagia, kamu boleh menikmatinya. sukacita juga bagian dari hidupmu."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0019",
+      "planned_date": "2026-11-17",
+      "theme": "BURGUNDY",
+      "status": "COPY_DRAFT",
+      "title": "Candaan juga punya dampak",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "candaan tentang identitas gender tetap bisa melukai seseorang"
+        },
+        {
+          "slide": 2,
+          "copy": "tertawa bersama tidak sama dengan menertawakan keberadaan orang"
+        },
+        {
+          "slide": 3,
+          "copy": "kita bisa berhenti ikut menyebarkan kalimat yang merendahkan"
+        },
+        {
+          "slide": 4,
+          "copy": "menegur dengan tenang juga bentuk menjaga ruang bersama"
+        },
+        {
+          "slide": 5,
+          "copy": "dukungan transgender tampak ketika kita berani bertindak hormat"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "tidak semua kalimat yang disebut candaan terasa ringan bagi orang yang menerimanya. terutama ketika yang dijadikan bahan tertawa adalah identitas gender seseorang.",
+        "kita tidak perlu mempermalukan siapa pun untuk menghentikan sesuatu yang merendahkan. tidak ikut tertawa, mengalihkan percakapan, atau menegur secara tenang dapat menjadi langkah yang berarti.",
+        "dukungan kepada orang transgender terlihat dalam pilihan kecil sehari hari. rasa hormat perlu hadir bahkan ketika orang yang dibicarakan tidak berada di ruangan."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0018",
+      "planned_date": "2026-11-18",
+      "theme": "SAGE",
+      "status": "COPY_DRAFT",
+      "title": "Mendengar tanpa mengambil alih cerita",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "dukungan sering dimulai dari satu orang yang bersedia mendengar"
+        },
+        {
+          "slide": 2,
+          "copy": "tidak semua pengalaman transgender meminta nasihat atau jawaban cepat"
+        },
+        {
+          "slide": 3,
+          "copy": "kadang teman hanya ingin ruang untuk menjadi dirinya"
+        },
+        {
+          "slide": 4,
+          "copy": "bertanya apa yang dibutuhkan lebih baik daripada berasumsi"
+        },
+        {
+          "slide": 5,
+          "copy": "kehadiran yang tenang bisa terasa sangat berarti"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "ketika seseorang berbagi pengalaman tentang identitas gender atau kesehariannya, kita mungkin ingin segera memberi saran. tetapi dukungan tidak selalu membutuhkan jawaban.",
+        "bagi sebagian orang transgender, didengar tanpa dipotong, dipertanyakan, atau diburu penjelasannya sudah terasa berarti. kita bisa bertanya apakah ia ingin ditemani, didengarkan, atau dibantu mencari pilihan.",
+        "setiap orang punya kebutuhan berbeda. hadir dengan terbuka membuat kita lebih mampu menghargai cara mereka sendiri."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0020",
+      "planned_date": "2026-11-20",
+      "theme": "BURGUNDY",
+      "status": "COPY_DRAFT",
+      "title": "Mengenang dengan martabat",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "hari ini kita mengenang nyawa transgender yang direnggut kekerasan"
+        },
+        {
+          "slide": 2,
+          "copy": "di balik kehilangan ada seseorang dengan cerita dan harapan"
+        },
+        {
+          "slide": 3,
+          "copy": "kita tidak perlu mengulang detail luka untuk menghormati mereka"
+        },
+        {
+          "slide": 4,
+          "copy": "duka pantas diberi ruang tanpa dijadikan tontonan"
+        },
+        {
+          "slide": 5,
+          "copy": "mengenang berarti menjaga martabat dan menolak kekerasan terus berulang"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "tanggal 20 november adalah transgender day of remembrance, hari untuk mengenang orang transgender yang kehilangan nyawa akibat kekerasan anti transgender.",
+        "di balik setiap kehilangan ada manusia dengan hubungan, harapan, dan kehidupan yang layak dihormati. mengenang mereka tidak mengharuskan kita menampilkan detail kekerasan atau menjadikan duka sebagai tontonan.",
+        "hari ini kita memberi ruang bagi ingatan, kepedulian, dan solidaritas. semoga penghormatan tidak berhenti ketika hari peringatan berlalu."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0019",
+      "planned_date": "2026-11-22",
+      "theme": "SAGE",
+      "status": "COPY_DRAFT",
+      "title": "Kebahagiaan juga layak terlihat",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "setelah hari yang berat kegembiraan tetap boleh mendapat tempat"
+        },
+        {
+          "slide": 2,
+          "copy": "hidup transgender juga berisi tawa persahabatan dan pencapaian"
+        },
+        {
+          "slide": 3,
+          "copy": "kita dapat merayakan cerita tanpa menuntut kisah luka"
+        },
+        {
+          "slide": 4,
+          "copy": "ruang aman memberi kesempatan untuk tumbuh dengan utuh"
+        },
+        {
+          "slide": 5,
+          "copy": "kebahagiaanmu bukan hal kecil yang perlu disembunyikan"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "setelah memberi ruang bagi duka, kita juga bisa memberi ruang bagi hidup yang terus berjalan. pengalaman orang transgender jauh lebih luas daripada kekerasan yang sering dibicarakan.",
+        "ada persahabatan yang menguatkan, hal baru yang dipelajari, dan hari biasa yang terasa damai. semuanya pantas hadir dalam cerita yang kita bagikan.",
+        "menghormati seseorang berarti melihat hidupnya secara utuh. bukan hanya kesulitannya, tetapi juga kegembiraan yang ingin ia rayakan."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0021",
+      "planned_date": "2026-11-24",
+      "theme": "BURGUNDY",
+      "status": "COPY_DRAFT",
+      "title": "Ruang aman adalah tanggung jawab bersama",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "ruang aman tidak lahir dari satu orang yang bertahan"
+        },
+        {
+          "slide": 2,
+          "copy": "ia tumbuh ketika banyak orang menolak sikap merendahkan"
+        },
+        {
+          "slide": 3,
+          "copy": "menghormati identitas gender adalah bagian dari kebiasaan bersama"
+        },
+        {
+          "slide": 4,
+          "copy": "tanggung jawab menjaga ruang tidak boleh dibebankan sendiri"
+        },
+        {
+          "slide": 5,
+          "copy": "solidaritas berarti hadir bahkan ketika tidak ada sorotan"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "ruang yang aman tidak seharusnya bergantung pada kemampuan satu orang untuk terus menjelaskan atau membela dirinya. lingkungan juga memiliki tanggung jawab.",
+        "ketika ada orang transgender yang direndahkan, kita dapat mengambil bagian dengan menghentikan komentar yang melukai dan menjaga privasi. tindakan sederhana yang dilakukan bersama dapat mengubah suasana percakapan.",
+        "solidaritas bukan sekadar mengatakan kita peduli. ia tumbuh dari kebiasaan yang konsisten, termasuk saat tidak ada yang menyaksikan."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0020",
+      "planned_date": "2026-11-25",
+      "theme": "SAGE",
+      "status": "COPY_DRAFT",
+      "title": "Tidak perlu berlomba mengenali diri",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "mengenali diri bukan perlombaan yang harus diselesaikan hari ini"
+        },
+        {
+          "slide": 2,
+          "copy": "sebagian orang transgender menempuh proses yang terus berubah"
+        },
+        {
+          "slide": 3,
+          "copy": "boleh ada hari ketika kamu masih mencari bahasa"
+        },
+        {
+          "slide": 4,
+          "copy": "tak perlu membandingkan langkahmu dengan cerita orang lain"
+        },
+        {
+          "slide": 5,
+          "copy": "setiap langkah mengenal diri tetap punya maknanya sendiri"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "perjalanan mengenali diri bisa berbeda bagi setiap orang. ada yang menemukan kata yang terasa tepat sejak lama, ada pula yang masih mencoba memahami pengalaman pribadinya.",
+        "tidak ada garis waktu yang harus diikuti semua orang transgender. perubahan cara memahami diri bukan alasan untuk meragukan martabat seseorang atau menuntut kepastian segera.",
+        "kamu boleh mengambil waktu, bertanya, atau diam sejenak. nilai dirimu tidak ditentukan oleh seberapa cepat kamu mampu menjelaskan semuanya."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0022",
+      "planned_date": "2026-11-27",
+      "theme": "BURGUNDY",
+      "status": "COPY_DRAFT",
+      "title": "Dukungan tidak berakhir bersama kampanye",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "dukungan yang berarti tidak berhenti saat kampanye selesai"
+        },
+        {
+          "slide": 2,
+          "copy": "sikap hormat perlu hadir juga dalam percakapan sehari hari"
+        },
+        {
+          "slide": 3,
+          "copy": "ketika ada prasangka kita bisa memilih tidak menambahnya"
+        },
+        {
+          "slide": 4,
+          "copy": "keselamatan transgender membutuhkan kepedulian yang terus dijaga"
+        },
+        {
+          "slide": 5,
+          "copy": "konsistensi lebih berharga daripada janji yang hanya terdengar"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "menjelang akhir november, mudah menganggap kepedulian selesai ketika unggahan terakhir terbit. padahal kehidupan orang transgender tidak mengikuti kalender kampanye.",
+        "kita masih bisa menjaga nama, privasi, dan ruang percakapan yang menghormati sesama. dukungan menjadi bermakna ketika hadir dalam rutinitas, bukan hanya saat ada ajakan bersama.",
+        "jika ingin membawa satu hal dari kampanye ini, bawalah kebiasaan untuk berpikir sebelum menghakimi dan bertindak ketika melihat sikap merendahkan."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0021",
+      "planned_date": "2026-11-29",
+      "theme": "SAGE",
+      "status": "COPY_DRAFT",
+      "title": "Membawa penghormatan ke hari berikutnya",
+      "slides": [
+        {
+          "slide": 1,
+          "copy": "akhir kampanye bukan akhir dari menghormati hidup transgender"
+        },
+        {
+          "slide": 2,
+          "copy": "kita bisa membawa satu kebiasaan baik ke hari besok"
+        },
+        {
+          "slide": 3,
+          "copy": "memanggil nama dengan tepat dan menjaga privasi orang"
+        },
+        {
+          "slide": 4,
+          "copy": "mendengar lebih lama dan menghakimi sedikit lebih lambat"
+        },
+        {
+          "slide": 5,
+          "copy": "ruang aman dibangun ulang melalui perhatian yang konsisten"
+        }
+      ],
+      "caption_body_paragraphs": [
+        "bulan november hampir selesai, tetapi perhatian yang kita bangun tidak harus ikut berakhir. penghormatan bagi orang transgender dapat menjadi bagian biasa dari cara kita memperlakukan sesama.",
+        "dimulai dari nama yang tepat, percakapan yang tidak menghakimi, dan keputusan untuk tidak menyebarkan prasangka. tidak semua dukungan harus terlihat besar agar terasa berarti.",
+        "semoga yang tertinggal dari kampanye ini bukan hanya unggahan, tetapi kebiasaan saling menjaga yang terus kita pilih."
+      ],
+      "owner_copy_approval": false,
+      "owner_visual_approval": false,
+      "production_binding": false,
+      "scheduled": false,
+      "published": false
+    }
+  ],
+  "gates": {
+    "owner_approval_required_before_copy_promotion": true,
+    "production_binding_changes": false,
+    "production_activation": false,
+    "calendar_events_created": false,
+    "scheduled": false,
+    "published": false
+  }
+}
