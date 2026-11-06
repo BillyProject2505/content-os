@@ -78,6 +78,10 @@ jobs:
         run: node projects/sdoh/runtime/automated-content-production/scripts/remediation-hint-self-test.mjs
       - name: Self-test SDOH approved-copy Production Path
         run: node projects/sdoh/runtime/automated-content-production/scripts/approved-copy-production-self-test.mjs
+      - name: Preflight November 8 Sage Carousel Owner-approved copy (not published)
+        run: node projects/sdoh/runtime/automated-content-production/scripts/sdoh-november-first-copy-self-test.mjs
+      - name: Self-test approved Sage 0015 instance-only balanced_3 wrap
+        run: node --test projects/sdoh/runtime/automated-content-production/scripts/sage-0015-balanced3-self-test.mjs
       - name: Self-test November SDOH seasonal color-only contract (inactive)
         run: node projects/sdoh/runtime/seasonal-color/self-test.mjs
       - name: Self-test November SDOH campaign content binding

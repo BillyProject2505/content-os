@@ -1,0 +1,31 @@
+{
+  "schema": "sdoh-owner-copy-approval-v1",
+  "content_id": "SDOH-SAGE-CAR-0015",
+  "theme": "SAGE",
+  "campaign": "Trans Awareness Month 2026",
+  "owner_decision": "APPROVED",
+  "owner_approval_date": "2026-11-06",
+  "owner_approval_evidence": {
+    "description": "Owner explicitly replied 'approve' to five-slide and three-paragraph caption draft in this SDOH conversation.",
+    "github_review_record": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6683448778",
+    "linear_execution_issue": "https://linear.app/bussiness-content-os/issue/BUS-174/sdoh-sage-car-0015-setiap-orang-transgender-berhak-merasa-aman-sebagai"
+  },
+  "copy_fingerprint": "f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519",
+  "approved_scope": [
+    "exact_five_slide_text",
+    "exact_three_caption_body_paragraphs",
+    "existing_project_caption_signature_and_hashtags",
+    "Owner_specified_two_line_November_campaign_footer"
+  ],
+  "campaign_target_date": "2026-11-08",
+  "campaign_timezone": "Asia/Makassar",
+  "lifecycle": {
+    "copy_status": "COPY_APPROVED",
+    "campaign_binding": "PENDING_CROSS_PR_INTEGRATION",
+    "visual_render_qa": "NOT_RUN_LIVE",
+    "owner_content_visual_approval": "NOT_GRANTED",
+    "production_activation": false,
+    "scheduled": false,
+    "published": false
+  }
+}
