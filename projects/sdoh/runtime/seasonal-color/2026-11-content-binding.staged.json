@@ -1,0 +1,40 @@
+{
+  "schema": "sdoh-november-campaign-binding-staging-v1",
+  "status": "PENDING_APPROVED_COPY_MAIN_MERGE",
+  "campaign": "Trans Awareness Month 2026",
+  "staging_purpose": "Provenance only; active November binding remains empty until approved content exists on same reviewed branch/main.",
+  "period": {
+    "start": "2026-11-08",
+    "end": "2026-11-30",
+    "timezone": "Asia/Makassar"
+  },
+  "item": {
+    "content_id": "SDOH-SAGE-CAR-0015",
+    "theme": "SAGE",
+    "copy_fingerprint": "f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519",
+    "target_date": "2026-11-08",
+    "approval_ref": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6683448778"
+  },
+  "source": {
+    "repository": "BillyProject2505/content-os",
+    "draft_pr": "https://github.com/BillyProject2505/content-os/pull/191",
+    "branch": "content/sdoh-sage-car-0015-trans-awareness-2026-11-08",
+    "content_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0015.json",
+    "approval_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0015.owner-copy-approval.json",
+    "owner_instance_wrap_approval_record": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6684068829"
+  },
+  "gates": {
+    "owner_copy_approved": true,
+    "approved_copy_present_in_this_pr": false,
+    "main_has_approved_copy": false,
+    "active_campaign_binding": false,
+    "QA_only_live_render": false,
+    "owner_content_visual_approval": false,
+    "production_activation": false,
+    "scheduled": false,
+    "published": false,
+    "owner_instance_wrap_override_approval": true,
+    "live_runtime_QA": false,
+    "staged_only": true
+  }
+}
