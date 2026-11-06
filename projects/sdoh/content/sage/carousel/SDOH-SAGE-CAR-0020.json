@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0020",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "mengenali diri bukan perlombaan yang harus diselesaikan hari ini"
+    },
+    {
+      "slide": 2,
+      "copy": "sebagian orang transgender menempuh proses yang terus berubah"
+    },
+    {
+      "slide": 3,
+      "copy": "boleh ada hari ketika kamu masih mencari bahasa"
+    },
+    {
+      "slide": 4,
+      "copy": "tak perlu membandingkan langkahmu dengan cerita orang lain"
+    },
+    {
+      "slide": 5,
+      "copy": "setiap langkah mengenal diri tetap punya maknanya sendiri"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "perjalanan mengenali diri bisa berbeda bagi setiap orang. ada yang menemukan kata yang terasa tepat sejak lama, ada pula yang masih mencoba memahami pengalaman pribadinya.",
+    "tidak ada garis waktu yang harus diikuti semua orang transgender. perubahan cara memahami diri bukan alasan untuk meragukan martabat seseorang atau menuntut kepastian segera.",
+    "kamu boleh mengambil waktu, bertanya, atau diam sejenak. nilai dirimu tidak ditentukan oleh seberapa cepat kamu mampu menjelaskan semuanya."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "mengenali diri"
+        ],
+        [
+          "transgender"
+        ],
+        [
+          "mencari bahasa"
+        ],
+        [
+          "membandingkan"
+        ],
+        [
+          "setiap langkah"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "mengenali diri"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "transgender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "mencari bahasa"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "membandingkan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "setiap langkah"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "c08c501f4cc874515a13ff6d89a3bdc53af331a7bc8796d45fd3a78cb66ef2eb"
+}
