@@ -121,3 +121,18 @@ test("approved November binding staging remains inert until copy and runtime int
   assert.deepEqual(activeBinding.items, []);
   assert.equal(activeBinding.state, "NO_NOVEMBER_COPY_APPROVED");
 });
+
+test("manual November render includes canonical review-package validator and keeps release closed", () => {
+  const yaml = fs.readFileSync(new URL("../../../../.github/workflows/sdoh-november-seasonal-qa.yml", import.meta.url), "utf8");
+  const renderer = yaml.indexOf("name: Render with canonical source and isolated color overlay");
+  const seasonalVerifier = yaml.indexOf("name: Verify seasonal result, hashes, source identity and contrast");
+  const canonicalVerifier = yaml.indexOf("name: Run canonical approved-copy review-package validator (QA-only)");
+  const upload = yaml.indexOf("name: Upload QA-only proof for explicit Owner review");
+  assert.ok(0 < renderer && renderer < seasonalVerifier && seasonalVerifier < canonicalVerifier && canonicalVerifier < upload);
+  assert.match(yaml, /validate-carousel-review-package\.mjs/);
+  assert.match(yaml, /\.technical_qa\.text_overflow == false/);
+  assert.match(yaml, /\.source_copy\.status == "COPY_APPROVED"/);
+  assert.match(yaml, /\.approval == "NOT_GRANTED"/);
+  assert.match(yaml, /github\.ref == 'refs\/heads\/main'/);
+  assert.doesNotMatch(yaml, /^\s*(schedule|pull_request_target):\s*$/m);
+});
