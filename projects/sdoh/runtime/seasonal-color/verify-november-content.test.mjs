@@ -26,14 +26,14 @@ const fails = (binding, data = copy, supplied = args) =>
   assert.throws(() => validateNovemberBinding(binding, data, supplied),
     /NOVEMBER_CAMPAIGN_BINDING_REJECTED/);
 
-test("binding grants QA eligibility only to Owner-approved Sage 0015 for November 8", () => {
+test("original Sage 0015 QA eligibility remains identical after adding batch-scoped bindings", () => {
   const live = JSON.parse(fs.readFileSync(new URL("./2026-11-content-binding.json", import.meta.url), "utf8"));
   const approved = JSON.parse(fs.readFileSync(
     new URL("../../content/sage/carousel/SDOH-SAGE-CAR-0015.json", import.meta.url), "utf8"));
   const owner = JSON.parse(fs.readFileSync(
     new URL("../../content/sage/carousel/SDOH-SAGE-CAR-0015.owner-copy-approval.json", import.meta.url), "utf8"));
   assert.equal(live.state, "NOVEMBER_CAMPAIGN_COPY_APPROVED");
-  assert.equal(live.items.length, 1);
+  assert.equal(live.items.length, 13);
   assert.equal(owner.owner_decision, "APPROVED");
   assert.equal(owner.copy_fingerprint, approved.copy_fingerprint);
   assert.equal(live.items[0].copy_fingerprint, owner.copy_fingerprint);
@@ -141,7 +141,8 @@ test("historical staged record matches the single QA-only binding", () => {
   assert.equal(draft.gates.production_activation, false);
   assert.equal(draft.gates.scheduled, false);
   assert.equal(draft.gates.published, false);
-  assert.deepEqual(activeBinding.items, [draft.item]);
+  assert.deepEqual(activeBinding.items[0], draft.item);
+  assert.equal(activeBinding.items.length, 13);
   assert.equal(activeBinding.state, "NOVEMBER_CAMPAIGN_COPY_APPROVED");
   assert.equal(draft.gates.production_activation, false);
   assert.equal(draft.gates.published, false);

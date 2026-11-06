@@ -75,8 +75,11 @@ test("Each of twelve frozen copy packets passes actual approved-copy, semantic a
   assert.equal(seen.size, 12);
 });
 
-test("Production binding and calendar gates remain unchanged for the newly approved copy", () => {
-  assert.deepEqual(binding.items.map((item) => item.content_id), ["SDOH-SAGE-CAR-0015"]);
+test("Owner batch approval remains separate from QA binding and schedule/publication gates", () => {
+  assert.equal(binding.items.length, 13);
+  assert.equal(binding.items[0].content_id, "SDOH-SAGE-CAR-0015");
+  assert.deepEqual(new Set(binding.items.slice(1).map(x => x.content_id)),
+    new Set(approval.items.map(x => x.content_id)));
   assert.equal(season.activation.enabled, false);
   assert.equal(editorial.gates.production_binding_changes, false);
   assert.equal(editorial.gates.calendar_events_created, false);

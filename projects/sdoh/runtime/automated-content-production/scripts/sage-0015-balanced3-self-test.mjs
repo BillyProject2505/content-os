@@ -69,7 +69,7 @@ test("Other Sage and Burgundy content plans remain unchanged", () => {
     );
   }
   assert.deepEqual(
-    resolveVisualPlan({contentId:"SDOH-SAGE-CAR-0016",theme:"SAGE",authority}),
+    resolveVisualPlan({contentId:"SDOH-SAGE-CAR-0099",theme:"SAGE",authority}),
     authority.sage_default_visual_plan
   );
 });

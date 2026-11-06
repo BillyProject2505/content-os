@@ -76,11 +76,14 @@ test("twelve complete five-slide/caption drafts are allocated only editorially",
   assert.equal(ids.size, 12);
 });
 
-test("previously approved item remains unchanged and new drafts are not bound or scheduled", () => {
+test("immutable editorial snapshot stays unchanged despite later QA binding proposal", () => {
   assert.equal(approved.content_id, "SDOH-SAGE-CAR-0015");
   assert.equal(approved.status, "COPY_APPROVED");
   assert.equal(draft.existing_approved_content.source_copy_fingerprint, approved.copy_fingerprint);
-  assert.deepEqual(binding.items.map(x => x.content_id), ["SDOH-SAGE-CAR-0015"]);
+  assert.equal(binding.items.length, 13);
+  assert.equal(binding.items[0].content_id, "SDOH-SAGE-CAR-0015");
+  assert.deepEqual(new Set(binding.items.slice(1).map(x => x.content_id)),
+    new Set(draft.drafts.map(x => x.content_id)));
   assert.equal(season.activation.enabled, false);
   for (const flag of ["production_binding_changes", "production_activation", "calendar_events_created", "scheduled", "published"]) {
     assert.equal(draft.gates[flag], false);
