@@ -80,6 +80,8 @@ jobs:
         run: node projects/sdoh/runtime/automated-content-production/scripts/approved-copy-production-self-test.mjs
       - name: Preflight November 8 Sage Carousel Owner-approved copy (not published)
         run: node projects/sdoh/runtime/automated-content-production/scripts/sdoh-november-first-copy-self-test.mjs
+      - name: Self-test approved Sage 0015 instance-only balanced_3 wrap
+        run: node --test projects/sdoh/runtime/automated-content-production/scripts/sage-0015-balanced3-self-test.mjs
       - name: Install Pillow and Inter for KDS renderer self-test
         run: |
           python -m pip install --quiet pillow
