@@ -54,7 +54,7 @@ Further implementation needs a narrow, separately reviewed renderer integration 
 
 - **Editorial campaign scope:** November SDOH content must specifically and respectfully address transgender awareness, including identity and self-acceptance (Sage), or stigma, dignity, mutual care, remembrance and resilience (Burgundy). Generic emotional copy from prior months must NOT be relabeled as November campaign content.
 - **Special dates:** Trans Awareness Week, November 13–19, 2026; Transgender Day of Remembrance, November 20, 2026. The campaign editorial tone must not equate transgender identity with trauma. Balance support, dignity, solidarity and joy.
-- **Binding gate:** `2026-11-content-binding.json` currently has NO approved November content. The manual preview requires a separately Owner/editor-approved November copy, its approved fingerprint, theme, target date and campaign-specific approval evidence before making a render.
+- **Binding gate:** `2026-11-content-binding.json` remains **empty and runtime-inactive**, while the first November item `SDOH-SAGE-CAR-0015` received explicit Owner Copy Approval on 2026-11-06 in separate Draft PR #191. Its exact fingerprint, evidence and 8 November target are recorded in `2026-11-content-binding.staged.json`; this staged file is never consumed by the runtime. The manual preview requires a separately Owner/editor-approved November copy, its approved fingerprint, theme, target date and campaign-specific approval evidence before making a render.
 - **Exact caption lines for every November campaign publication, Owner-supplied (not an official international slogan):**
 
   `Transgender Awareness Month November 2026`
@@ -72,3 +72,12 @@ The Owner subsequently directed: "Tema ini kita mulai dari tanggal 8 november". 
 - **2026-11-08 to 2026-11-30:** eligible for Trans Awareness Month editorial, colors, and caption footer, subject to the existing campaign-specific content approval and QA gates.
 - Do not retroactively edit, recolor, reschedule, or relabel content already published or scheduled for November 1–7.
 - No automatic production activation or publication authority is conferred by this schedule amendment.
+
+
+## November first-item approval and QA dependency — 2026-11-06
+
+- **Approved copy:** `SDOH-SAGE-CAR-0015`, fingerprint `f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519`, Owner Copy Approved in Draft [PR #191](https://github.com/BillyProject2505/content-os/pull/191). Main does not yet contain the copy; no automatic promotion is permitted.
+- **Staged only:** `2026-11-content-binding.staged.json` preserves this specific campaign approval with target 2026-11-08 and reference. The active `2026-11-content-binding.json` remains empty; QA runtime still requires reviewed integration and actual approved source on the same branch.
+- **QA blocker:** canonical default `wrapCopy` produces text widths greater than 600 px for slides 1, 2 and 5. The BUS-49 canonical renderer **correctly rejects** the first slide without outputting a review package. Do not weaken the overflow gate or change approved words.
+- **Visual candidate:** the **existing** three-line `balanced_3` wrap routine renders all five slides with unchanged words, source assets, font, pose map and geometry. Instance-level `balanced_3` override is **not yet Owner approved** and is not automatically applied to the production renderer. Review-only [Google Drive proof](https://drive.google.com/file/d/1pcrVJ4I57SDx69EUHlbJCNtuLNC2P77B/view) (ZIP SHA-256 `4130e15c01b61b9e3db0f08593c49f078097ce51624dcf9bbfd0ca2d88acd908` verified by raw download).
+- No merge, content-specific Owner Visual Approval, schedule, publication, or activation has been authorized.
