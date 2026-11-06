@@ -100,3 +100,24 @@ test("November 8 is the first permitted campaign date", () => {
   assert.equal(result.target_date, "2026-11-08");
   assert.equal(result.publication_authorized, false);
 });
+
+test("approved November binding staging remains inert until copy and runtime integration", () => {
+  const draft = JSON.parse(fs.readFileSync(
+    new URL("./2026-11-content-binding.staged.json", import.meta.url), "utf8"));
+  const activeBinding = JSON.parse(fs.readFileSync(
+    new URL("./2026-11-content-binding.json", import.meta.url), "utf8"));
+  assert.equal(draft.schema, "sdoh-november-campaign-binding-staging-v1");
+  assert.equal(draft.status, "PENDING_APPROVED_COPY_MAIN_MERGE");
+  assert.equal(draft.campaign, "Trans Awareness Month 2026");
+  assert.equal(draft.item.content_id, "SDOH-SAGE-CAR-0015");
+  assert.equal(draft.item.theme, "SAGE");
+  assert.equal(draft.item.copy_fingerprint, "f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519");
+  assert.equal(draft.item.target_date, "2026-11-08");
+  assert.match(draft.item.approval_ref, /^https:\/\/github\.com\/BillyProject2505\/content-os\/pull\/191#issuecomment-/);
+  assert.equal(draft.gates.active_campaign_binding, false);
+  assert.equal(draft.gates.production_activation, false);
+  assert.equal(draft.gates.scheduled, false);
+  assert.equal(draft.gates.published, false);
+  assert.deepEqual(activeBinding.items, []);
+  assert.equal(activeBinding.state, "NO_NOVEMBER_COPY_APPROVED");
+});
