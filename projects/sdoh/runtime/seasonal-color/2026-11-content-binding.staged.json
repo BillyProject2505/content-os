@@ -20,7 +20,8 @@
     "draft_pr": "https://github.com/BillyProject2505/content-os/pull/191",
     "branch": "content/sdoh-sage-car-0015-trans-awareness-2026-11-08",
     "content_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0015.json",
-    "approval_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0015.owner-copy-approval.json"
+    "approval_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0015.owner-copy-approval.json",
+    "owner_instance_wrap_approval_record": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6684068829"
   },
   "gates": {
     "owner_copy_approved": true,
@@ -31,6 +32,9 @@
     "owner_content_visual_approval": false,
     "production_activation": false,
     "scheduled": false,
-    "published": false
+    "published": false,
+    "owner_instance_wrap_override_approval": true,
+    "live_runtime_QA": false,
+    "staged_only": true
   }
 }
