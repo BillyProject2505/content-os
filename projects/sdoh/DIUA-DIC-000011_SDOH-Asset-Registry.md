@@ -50,7 +50,7 @@ This document registers identity and core spec together (name, values, usage rul
 
 ## 2.1 Canonical Binary Storage & Resolution Authority
 
-**Canonical short form:** `Resolve in Linear → fetch exact binary from Google Drive → compute SHA-256 independently → compare to active checksum → Produce; otherwise FAIL CLOSED.`
+**Canonical short form:** `Resolve the current authoritative governed record → fetch its exact Google Drive binary → compute SHA-256 independently → compare to the active checksum → Produce; otherwise FAIL CLOSED.`
 
 This short form is normative for all new SDOH production runs.
 
@@ -58,7 +58,7 @@ This short form is normative for all new SDOH production runs.
 
 SDOH now uses one active persistent-binary provider:
 
-* **Linear / SDOH Asset Registry** = authority for reusable asset identity, semantic scope, canonical SHA-256, provenance state, and active Google Drive locator.
+* **SDOH Asset Registry governed text** = authority for reusable asset identity, semantic scope, canonical SHA-256, provenance state, and active Google Drive locator. After the per-document cutover, read this canonical text from GitHub `main`; Linear remains the execution/work-management and migrated-reference surface.
 * **Google Drive** = the sole active persistent binary store for SDOH production assets and current canonical implementation packages.
 * Dropbox locators/content hashes retained elsewhere in this document or historical issues are **historical provenance only** after this migration. They must not be used to source active production binaries.
 * File Library, chat/runtime copies, historical Linear attachments, previews, local caches, and visually similar replacements are not production authority.
@@ -67,11 +67,11 @@ SDOH now uses one active persistent-binary provider:
 
 For every reusable asset or implementation binary required by a production job:
 
-1. Resolve the active asset/object/implementation record from Linear.
+1. Resolve the active asset/object/implementation record from its current governed-text authority: GitHub `main` after that document's cutover, or Linear for a document not yet cut over.
 2. Resolve the exact Google Drive file ID recorded by the active authority.
 3. Fetch the exact raw bytes from that Google Drive file.
 4. Compute SHA-256 independently over the raw bytes.
-5. Compare the computed SHA-256 with the active canonical SHA-256 recorded in Linear.
+5. Compare the computed SHA-256 with the active canonical SHA-256 recorded in that authoritative governed record.
 6. **MATCH → PASS / PRODUCE.**
 7. **MISSING / MISMATCH / UNVERIFIABLE → FAIL CLOSED / NON-PRODUCTION.**
 
