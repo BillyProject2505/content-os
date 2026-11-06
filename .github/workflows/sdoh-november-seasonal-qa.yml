@@ -166,6 +166,34 @@ jobs:
                  .publication_authorized == false' \
             "$RUNNER_TEMP/november-review/seasonal_qa.json" >/dev/null
 
+      - name: Run canonical approved-copy review-package validator (QA-only)
+        env:
+          EXPECTED_COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          CONTENT_ID: ${{ inputs.content_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node projects/sdoh/runtime/automated-content-production/scripts/validate-carousel-review-package.mjs \
+            --report "$RUNNER_TEMP/november-review/rendered/render_report.json" \
+            --manifest "$RUNNER_TEMP/render_manifest.json" \
+            --copy "$RUNNER_TEMP/november-review/approved_copy.json" \
+            --expected-copy-fingerprint "$EXPECTED_COPY_FINGERPRINT" \
+            --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json \
+            --out "$RUNNER_TEMP/november-review/review_package.json"
+          jq -e --arg id "$CONTENT_ID" --arg fp "$EXPECTED_COPY_FINGERPRINT" '
+            .content_id == $id and
+            .production_path == "APPROVED_COPY" and
+            .state == "READY_FOR_OWNER_REVIEW" and
+            .approval == "NOT_GRANTED" and
+            .publication_state == "PLANNED" and
+            .technical_qa.result == "PASS" and
+            .technical_qa.text_overflow == false and
+            .source_copy.status == "COPY_APPROVED" and
+            .source_copy.copy_fingerprint == $fp and
+            (.outputs | length) == 5
+          ' "$RUNNER_TEMP/november-review/review_package.json" >/dev/null
+          echo "Canonical review package QA PASS — no Owner media approval or publication authority"
+
       - name: Upload QA-only proof for explicit Owner review
         uses: actions/upload-artifact@v4
         with:
