@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0017",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "identitas gender bukan undangan bagi orang lain untuk menghakimi"
+    },
+    {
+      "slide": 2,
+      "copy": "pertanyaan yang memaksa bisa terasa seperti pintu tanpa kunci"
+    },
+    {
+      "slide": 3,
+      "copy": "kamu berhak menentukan apa yang ingin kamu ceritakan"
+    },
+    {
+      "slide": 4,
+      "copy": "rasa hormat tidak menunggu jawaban tentang hidup pribadimu"
+    },
+    {
+      "slide": 5,
+      "copy": "batas yang kamu pilih tetap pantas untuk dijaga"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "identitas gender seseorang bukan ruang terbuka untuk semua pertanyaan. rasa ingin tahu tidak selalu memberi kita hak untuk meminta jawaban.",
+    "ketika orang transgender harus terus menjelaskan hidupnya supaya dihormati, percakapan bisa menjadi beban. batas pribadi bukan tanda bahwa seseorang menyembunyikan sesuatu yang salah.",
+    "kita bisa memilih menghormati tanpa mendesak. mendengar ketika seseorang ingin berbagi, dan menerima ketika ia memilih tidak bercerita."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "identitas gender"
+        ],
+        [
+          "pertanyaan"
+        ],
+        [
+          "berhak"
+        ],
+        [
+          "rasa hormat"
+        ],
+        [
+          "batas"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "identitas gender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "pertanyaan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "berhak"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "rasa hormat"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "batas"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "ee5db9478a92f538ee5d0d6e885eb7c52499b4167feb98a7ce95574fec251136"
+}
