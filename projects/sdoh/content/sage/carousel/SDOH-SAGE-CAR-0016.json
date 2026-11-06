@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0016",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "menyebut nama seseorang dengan benar adalah bentuk kepedulian"
+    },
+    {
+      "slide": 2,
+      "copy": "nama yang dipakai seseorang membantu mereka merasa dikenali"
+    },
+    {
+      "slide": 3,
+      "copy": "kita boleh belajar tanpa menuntut kisah di baliknya"
+    },
+    {
+      "slide": 4,
+      "copy": "kalau keliru perbaiki dengan tenang lalu lanjutkan percakapan"
+    },
+    {
+      "slide": 5,
+      "copy": "rasa aman sering tumbuh dari kebiasaan sederhana"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "kadang dukungan tidak datang sebagai kalimat besar. ia hadir ketika kita memanggil seseorang dengan nama yang ia gunakan.",
+    "bagi orang transgender, penghormatan sederhana ini bisa membuat percakapan terasa lebih nyaman. kita tidak perlu menuntut penjelasan tentang nama lama, tubuh, atau perjalanan seseorang untuk menunjukkan rasa hormat.",
+    "jika keliru, perbaiki dengan singkat dan tulus. yang berarti bukan kesempurnaan, melainkan kesediaan untuk belajar dan konsisten."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "nama seseorang"
+        ],
+        [
+          "nama yang dipakai"
+        ],
+        [
+          "kisah"
+        ],
+        [
+          "keliru"
+        ],
+        [
+          "rasa aman"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "nama seseorang"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "nama yang dipakai"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "kisah"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "keliru"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "rasa aman"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "918119e34241e70f7a0411299bac17e3c673fbddf3a3db15b32b0a55182c9994"
+}
