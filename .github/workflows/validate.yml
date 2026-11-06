@@ -70,6 +70,8 @@ jobs:
         run: node projects/sdoh/runtime/automated-content-production/scripts/bus144-pilot-request-self-test.mjs
       - name: Self-test SDOH carousel render authority
         run: node projects/sdoh/runtime/automated-content-production/scripts/verify-carousel-render-authority.mjs
+      - name: Self-test BUS-49 Python 3.13.5 renderer runner compatibility
+        run: node --test projects/sdoh/runtime/automated-content-production/scripts/bus49-python-runner-compat-self-test.mjs
       - name: Self-test SDOH automated carousel render
         run: node projects/sdoh/runtime/automated-content-production/scripts/automated-carousel-render-self-test.mjs
       - name: Self-test SDOH retry canonical-fingerprint integrity
