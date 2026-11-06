@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0017",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "menjadi transgender tidak menghapus ruang untuk merasa bahagia"
+    },
+    {
+      "slide": 2,
+      "copy": "ada kegembiraan dalam pertemanan yang menerima tanpa syarat"
+    },
+    {
+      "slide": 3,
+      "copy": "ada lega ketika bisa memakai nama yang terasa tepat"
+    },
+    {
+      "slide": 4,
+      "copy": "tak semua momen harus menjelaskan perjuangan di baliknya"
+    },
+    {
+      "slide": 5,
+      "copy": "kamu layak merayakan hidup yang sedang dijalani"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "cerita orang transgender tidak hanya tentang tantangan atau luka. ada kegembiraan, persahabatan, pencapaian, dan momen kecil yang juga layak diberi tempat.",
+    "selama pekan kesadaran ini, kita bisa belajar melihat seseorang sebagai pribadi yang utuh. tidak semua senyum perlu dijelaskan dengan kisah perjuangan di belakangnya.",
+    "kalau hari ini ada sesuatu yang membuatmu lega atau bahagia, kamu boleh menikmatinya. sukacita juga bagian dari hidupmu."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "transgender"
+        ],
+        [
+          "kegembiraan"
+        ],
+        [
+          "nama"
+        ],
+        [
+          "perjuangan"
+        ],
+        [
+          "merayakan"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "transgender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "kegembiraan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "nama"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "perjuangan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "merayakan"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "2d918b8d889e1cb49c02b9675a8a60a85b5a483e39d2d83402ab8a0301b1676c"
+}
