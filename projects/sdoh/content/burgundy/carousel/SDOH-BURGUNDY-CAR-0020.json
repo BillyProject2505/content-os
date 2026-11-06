@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0020",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "hari ini kita mengenang nyawa transgender yang direnggut kekerasan"
+    },
+    {
+      "slide": 2,
+      "copy": "di balik kehilangan ada seseorang dengan cerita dan harapan"
+    },
+    {
+      "slide": 3,
+      "copy": "kita tidak perlu mengulang detail luka untuk menghormati mereka"
+    },
+    {
+      "slide": 4,
+      "copy": "duka pantas diberi ruang tanpa dijadikan tontonan"
+    },
+    {
+      "slide": 5,
+      "copy": "mengenang berarti menjaga martabat dan menolak kekerasan terus berulang"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "tanggal 20 november adalah transgender day of remembrance, hari untuk mengenang orang transgender yang kehilangan nyawa akibat kekerasan anti transgender.",
+    "di balik setiap kehilangan ada manusia dengan hubungan, harapan, dan kehidupan yang layak dihormati. mengenang mereka tidak mengharuskan kita menampilkan detail kekerasan atau menjadikan duka sebagai tontonan.",
+    "hari ini kita memberi ruang bagi ingatan, kepedulian, dan solidaritas. semoga penghormatan tidak berhenti ketika hari peringatan berlalu."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "mengenang"
+        ],
+        [
+          "kehilangan"
+        ],
+        [
+          "detail luka"
+        ],
+        [
+          "duka"
+        ],
+        [
+          "martabat"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "mengenang"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "kehilangan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "detail luka"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "duka"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "martabat"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "689a5866cbb66bbe0a6b11672e28fde61daa026e1d3d72f432d9387877842a35"
+}

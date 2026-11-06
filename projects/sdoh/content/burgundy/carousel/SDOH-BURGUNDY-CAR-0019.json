@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0019",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "candaan tentang identitas gender tetap bisa melukai seseorang"
+    },
+    {
+      "slide": 2,
+      "copy": "tertawa bersama tidak sama dengan menertawakan keberadaan orang"
+    },
+    {
+      "slide": 3,
+      "copy": "kita bisa berhenti ikut menyebarkan kalimat yang merendahkan"
+    },
+    {
+      "slide": 4,
+      "copy": "menegur dengan tenang juga bentuk menjaga ruang bersama"
+    },
+    {
+      "slide": 5,
+      "copy": "dukungan transgender tampak ketika kita berani bertindak hormat"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "tidak semua kalimat yang disebut candaan terasa ringan bagi orang yang menerimanya. terutama ketika yang dijadikan bahan tertawa adalah identitas gender seseorang.",
+    "kita tidak perlu mempermalukan siapa pun untuk menghentikan sesuatu yang merendahkan. tidak ikut tertawa, mengalihkan percakapan, atau menegur secara tenang dapat menjadi langkah yang berarti.",
+    "dukungan kepada orang transgender terlihat dalam pilihan kecil sehari hari. rasa hormat perlu hadir bahkan ketika orang yang dibicarakan tidak berada di ruangan."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "candaan"
+        ],
+        [
+          "menertawakan"
+        ],
+        [
+          "kalimat yang merendahkan"
+        ],
+        [
+          "menegur"
+        ],
+        [
+          "dukungan transgender"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "candaan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "menertawakan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "kalimat yang merendahkan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "menegur"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "dukungan transgender"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "017349eef4343d112ca024fbd9811c2856933ef58b3899eafa0c428ce5807992"
+}

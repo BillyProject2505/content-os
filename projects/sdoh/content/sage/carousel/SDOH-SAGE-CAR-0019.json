@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0019",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "hidup transgender tidak harus selalu menjadi bahan perdebatan"
+    },
+    {
+      "slide": 2,
+      "copy": "ada hari tenang yang cukup dijalani seperti biasa"
+    },
+    {
+      "slide": 3,
+      "copy": "tidak setiap pilihan perlu membawa pesan untuk dunia"
+    },
+    {
+      "slide": 4,
+      "copy": "kamu boleh beristirahat dari tuntutan untuk menjelaskan diri"
+    },
+    {
+      "slide": 5,
+      "copy": "menjadi manusia biasa pun layak mendapat ruang aman"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "setelah tanggal peringatan berlalu, hidup terus berjalan dalam banyak bentuk. ada pekerjaan, obrolan dengan teman, rencana kecil, dan hari yang tidak istimewa.",
+    "orang transgender tidak seharusnya selalu diminta menjadi juru bicara bagi semua orang atau menjelaskan seluruh pengalaman hidupnya. mereka juga berhak menjalani keseharian tanpa sorotan.",
+    "kadang penghormatan terasa sederhana: membiarkan seseorang menjadi dirinya sendiri, tanpa menjadikannya perdebatan atau simbol yang harus mewakili siapa pun."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "hidup transgender"
+        ],
+        [
+          "hari tenang"
+        ],
+        [
+          "pilihan"
+        ],
+        [
+          "beristirahat"
+        ],
+        [
+          "ruang aman"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "hidup transgender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "hari tenang"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "pilihan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "beristirahat"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "ruang aman"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "8e75bed82764c6389a00439d4f0b9d3018863e90c665157e723a98ee28d477d9"
+}
