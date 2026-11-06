@@ -328,6 +328,20 @@
         "P01"
       ],
       "wrap_mode": "balanced_3"
+    },
+    "SDOH-SAGE-CAR-0015": {
+      "layout_mode": "illustrated_single_character",
+      "anchor": "lower_right",
+      "scale": "md",
+      "ground_mode": "embedded",
+      "pose_route": [
+        "P02",
+        "P03",
+        "P05",
+        "P06",
+        "P07"
+      ],
+      "wrap_mode": "balanced_3"
     }
   }
 }
