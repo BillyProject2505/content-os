@@ -1,0 +1,136 @@
+{
+  "schema": "sdoh-november-2026-owner-copy-approval-batch-v1",
+  "decision": "OWNER_COPY_APPROVED",
+  "recorded_date": "2026-11-06",
+  "approval_source": {
+    "type": "explicit_owner_confirmation",
+    "response": "disetujui",
+    "scope": "all twelve complete drafts in PR #195",
+    "github_evidence_url": "https://github.com/BillyProject2505/content-os/pull/195#issuecomment-6686660189",
+    "editorial_source_path": "projects/sdoh/runtime/seasonal-color/2026-11-editorial-series-draft.json",
+    "editorial_source_blob_sha": "cadaaf629376ecc1e43652284326eb045ecae101",
+    "editorial_source_commit": "a77c0b58119c3c7a718baa90d4d0df26d6b700d8"
+  },
+  "scope": {
+    "content_count": 12,
+    "applies_only_to": [
+      "slide_copy",
+      "caption_body_paragraphs"
+    ],
+    "immutable_copy_source": true,
+    "approved_copy_records_prepared_in_pr": true,
+    "all_new_copy_canonical_on_main": false,
+    "owner_visual_approval": false,
+    "november_binding_expansion": false,
+    "global_palette_activation": false,
+    "publication_scheduling": false,
+    "publication": false,
+    "merge_permission": false
+  },
+  "items": [
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0017",
+      "theme": "BURGUNDY",
+      "planned_date": "2026-11-10",
+      "canonical_copy_path": "projects/sdoh/content/burgundy/carousel/SDOH-BURGUNDY-CAR-0017.json",
+      "copy_fingerprint": "ee5db9478a92f538ee5d0d6e885eb7c52499b4167feb98a7ce95574fec251136",
+      "copy_file_blob_sha": "3ceae7fbcc613fa25b1a576bdb625a5e8eaf2bf1"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0016",
+      "theme": "SAGE",
+      "planned_date": "2026-11-11",
+      "canonical_copy_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0016.json",
+      "copy_fingerprint": "918119e34241e70f7a0411299bac17e3c673fbddf3a3db15b32b0a55182c9994",
+      "copy_file_blob_sha": "34a0d14fc9d525571bca33940d55e93f68c265b8"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0018",
+      "theme": "BURGUNDY",
+      "planned_date": "2026-11-13",
+      "canonical_copy_path": "projects/sdoh/content/burgundy/carousel/SDOH-BURGUNDY-CAR-0018.json",
+      "copy_fingerprint": "35123c6ac4fe506d0a2a1852889cce69383c8f2b180832ec00f415b6a2ee222b",
+      "copy_file_blob_sha": "6d9246ad54c7621e0985c5abd007040100f935a2"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0017",
+      "theme": "SAGE",
+      "planned_date": "2026-11-15",
+      "canonical_copy_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0017.json",
+      "copy_fingerprint": "2d918b8d889e1cb49c02b9675a8a60a85b5a483e39d2d83402ab8a0301b1676c",
+      "copy_file_blob_sha": "ca948c49fecdbfc8bec090f48871215a29eee4cd"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0019",
+      "theme": "BURGUNDY",
+      "planned_date": "2026-11-17",
+      "canonical_copy_path": "projects/sdoh/content/burgundy/carousel/SDOH-BURGUNDY-CAR-0019.json",
+      "copy_fingerprint": "017349eef4343d112ca024fbd9811c2856933ef58b3899eafa0c428ce5807992",
+      "copy_file_blob_sha": "6eea24e129661ab90b247729d92855cd50577854"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0018",
+      "theme": "SAGE",
+      "planned_date": "2026-11-18",
+      "canonical_copy_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0018.json",
+      "copy_fingerprint": "02962c07164093602b561439c8730ec9fbc364ce9131ba35aeeeeaf3ef668163",
+      "copy_file_blob_sha": "11887a576cb8512c9c87729da03d168b7c2bd636"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0020",
+      "theme": "BURGUNDY",
+      "planned_date": "2026-11-20",
+      "canonical_copy_path": "projects/sdoh/content/burgundy/carousel/SDOH-BURGUNDY-CAR-0020.json",
+      "copy_fingerprint": "689a5866cbb66bbe0a6b11672e28fde61daa026e1d3d72f432d9387877842a35",
+      "copy_file_blob_sha": "fc14a52bb05cfc1c12785347c975525d26e6e11c"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0019",
+      "theme": "SAGE",
+      "planned_date": "2026-11-22",
+      "canonical_copy_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0019.json",
+      "copy_fingerprint": "8e75bed82764c6389a00439d4f0b9d3018863e90c665157e723a98ee28d477d9",
+      "copy_file_blob_sha": "8ffa7279b5b478291c5aa8b968a4d97561ae937e"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0021",
+      "theme": "BURGUNDY",
+      "planned_date": "2026-11-24",
+      "canonical_copy_path": "projects/sdoh/content/burgundy/carousel/SDOH-BURGUNDY-CAR-0021.json",
+      "copy_fingerprint": "6a0069cc124088da337ac5054d7e049bd21b2883c01eeaa1f5942aae09fd0864",
+      "copy_file_blob_sha": "87b246191fa008c30df03dfbc3127c1e25c05bd5"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0020",
+      "theme": "SAGE",
+      "planned_date": "2026-11-25",
+      "canonical_copy_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0020.json",
+      "copy_fingerprint": "c08c501f4cc874515a13ff6d89a3bdc53af331a7bc8796d45fd3a78cb66ef2eb",
+      "copy_file_blob_sha": "86f6901667e96e0398ad33d2670033ad13c80907"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0022",
+      "theme": "BURGUNDY",
+      "planned_date": "2026-11-27",
+      "canonical_copy_path": "projects/sdoh/content/burgundy/carousel/SDOH-BURGUNDY-CAR-0022.json",
+      "copy_fingerprint": "a4b3d89000869403f4cde528b2595a9c27ec3cdeaa1cbb4f8b98640dc8b21c0b",
+      "copy_file_blob_sha": "728cb03e574d8af08c0379a0d0b7e5ea9dcfcbd9"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0021",
+      "theme": "SAGE",
+      "planned_date": "2026-11-29",
+      "canonical_copy_path": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0021.json",
+      "copy_fingerprint": "1c06f20dad15159fdbc003452d7436d15a9ce3e4dfb67a848c9315d80834873a",
+      "copy_file_blob_sha": "7f18f5b1cbf6c46f480c19d4b60a31aadb9904c9"
+    }
+  ],
+  "gates": {
+    "owner_copy_approval_recorded": true,
+    "canonical_promotion_pending_merge": true,
+    "individual_copy_gate_validation_required": true,
+    "render_qa_required": true,
+    "owner_visual_approval_required": true,
+    "publication_schedule_owner_approval_required": true
+  }
+}
