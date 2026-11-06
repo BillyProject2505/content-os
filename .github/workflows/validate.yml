@@ -84,6 +84,12 @@ jobs:
         run: node --test projects/sdoh/runtime/seasonal-color/verify-november-content.test.mjs
       - name: Self-test November SDOH campaign caption footer
         run: node --test projects/sdoh/runtime/seasonal-color/compose-november-caption.test.mjs
+      - name: Integrated QA-only November Sage 0015 proof gate (no activation)
+        run: node --test projects/sdoh/runtime/seasonal-color/qa-0015-integration.test.mjs
+      - name: Approved Sage 0015 instance-only balanced-3 regression
+        run: node --test projects/sdoh/runtime/automated-content-production/scripts/sage-0015-balanced3-self-test.mjs
+      - name: Approved Sage 0015 source and Owner approval preflight
+        run: node projects/sdoh/runtime/automated-content-production/scripts/sdoh-november-first-copy-self-test.mjs
       - name: Install Pillow and Inter for KDS renderer self-test
         run: |
           python -m pip install --quiet pillow
