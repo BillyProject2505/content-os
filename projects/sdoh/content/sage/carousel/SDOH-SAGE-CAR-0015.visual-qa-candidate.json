@@ -56,7 +56,9 @@
     "ICC_present": true,
     "original_character_asset_hashes_verified": true,
     "original_source_copy_modified": false,
-    "caveat": "Visual/layout instance-level override is NOT Owner-approved; no renderer authority file has been changed."
+    "caveat": "Owner approved this content-specific balanced_3 wrap and reviewed the QA proof on 2026-11-06. Exact GitHub Actions live output has NOT been generated or accepted; no other visual-plan parameters were approved.",
+    "owner_decision": "OWNER_APPROVED_INSTANCE_WRAP_BALANCED_3",
+    "approval_record": "projects/sdoh/content/sage/carousel/SDOH-SAGE-CAR-0015.owner-balanced3-approval.json"
   },
   "QA_proof": {
     "storage": "Google Drive Seasonal / November 2026",
@@ -74,7 +76,7 @@
   "gating": {
     "owner_copy_approval": true,
     "owner_seasonal_palette_approval": true,
-    "owner_instance_wrap_override_approval": false,
+    "owner_instance_wrap_override_approval": true,
     "owner_content_visual_approval": false,
     "runtime_github_actions_QA": false,
     "content_PR_merged": false,
@@ -84,5 +86,5 @@
     "scheduled": false,
     "published": false
   },
-  "next_decision": "Owner to approve or reject candidate balanced_3 wrapping as an instance-specific visual plan while preserving exact approved copy; do not merge or publish."
+  "next_decision": "Integrate this approved instance plan into reviewed QA-only runtime, verify exact live output and request separate production release approval; no merge or publication implied."
 }
