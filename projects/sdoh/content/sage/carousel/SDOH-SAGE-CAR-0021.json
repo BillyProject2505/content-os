@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0021",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "akhir kampanye bukan akhir dari menghormati hidup transgender"
+    },
+    {
+      "slide": 2,
+      "copy": "kita bisa membawa satu kebiasaan baik ke hari besok"
+    },
+    {
+      "slide": 3,
+      "copy": "memanggil nama dengan tepat dan menjaga privasi orang"
+    },
+    {
+      "slide": 4,
+      "copy": "mendengar lebih lama dan menghakimi sedikit lebih lambat"
+    },
+    {
+      "slide": 5,
+      "copy": "ruang aman dibangun ulang melalui perhatian yang konsisten"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "bulan november hampir selesai, tetapi perhatian yang kita bangun tidak harus ikut berakhir. penghormatan bagi orang transgender dapat menjadi bagian biasa dari cara kita memperlakukan sesama.",
+    "dimulai dari nama yang tepat, percakapan yang tidak menghakimi, dan keputusan untuk tidak menyebarkan prasangka. tidak semua dukungan harus terlihat besar agar terasa berarti.",
+    "semoga yang tertinggal dari kampanye ini bukan hanya unggahan, tetapi kebiasaan saling menjaga yang terus kita pilih."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "akhir kampanye"
+        ],
+        [
+          "kebiasaan baik"
+        ],
+        [
+          "privasi"
+        ],
+        [
+          "mendengar"
+        ],
+        [
+          "ruang aman"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "akhir kampanye"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "kebiasaan baik"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "privasi"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "mendengar"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "ruang aman"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "1c06f20dad15159fdbc003452d7436d15a9ce3e4dfb67a848c9315d80834873a"
+}
