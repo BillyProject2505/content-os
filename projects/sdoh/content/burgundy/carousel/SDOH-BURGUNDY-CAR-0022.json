@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0022",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "dukungan yang berarti tidak berhenti saat kampanye selesai"
+    },
+    {
+      "slide": 2,
+      "copy": "sikap hormat perlu hadir juga dalam percakapan sehari hari"
+    },
+    {
+      "slide": 3,
+      "copy": "ketika ada prasangka kita bisa memilih tidak menambahnya"
+    },
+    {
+      "slide": 4,
+      "copy": "keselamatan transgender membutuhkan kepedulian yang terus dijaga"
+    },
+    {
+      "slide": 5,
+      "copy": "konsistensi lebih berharga daripada janji yang hanya terdengar"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "menjelang akhir november, mudah menganggap kepedulian selesai ketika unggahan terakhir terbit. padahal kehidupan orang transgender tidak mengikuti kalender kampanye.",
+    "kita masih bisa menjaga nama, privasi, dan ruang percakapan yang menghormati sesama. dukungan menjadi bermakna ketika hadir dalam rutinitas, bukan hanya saat ada ajakan bersama.",
+    "jika ingin membawa satu hal dari kampanye ini, bawalah kebiasaan untuk berpikir sebelum menghakimi dan bertindak ketika melihat sikap merendahkan."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "dukungan"
+        ],
+        [
+          "sikap hormat"
+        ],
+        [
+          "prasangka"
+        ],
+        [
+          "keselamatan transgender"
+        ],
+        [
+          "konsistensi"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "dukungan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "sikap hormat"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "prasangka"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "keselamatan transgender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "konsistensi"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "a4b3d89000869403f4cde528b2595a9c27ec3cdeaa1cbb4f8b98640dc8b21c0b"
+}
