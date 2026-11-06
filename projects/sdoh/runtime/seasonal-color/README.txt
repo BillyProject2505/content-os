@@ -54,7 +54,7 @@ Further implementation needs a narrow, separately reviewed renderer integration 
 
 - **Editorial campaign scope:** November SDOH content must specifically and respectfully address transgender awareness, including identity and self-acceptance (Sage), or stigma, dignity, mutual care, remembrance and resilience (Burgundy). Generic emotional copy from prior months must NOT be relabeled as November campaign content.
 - **Special dates:** Trans Awareness Week, November 13–19, 2026; Transgender Day of Remembrance, November 20, 2026. The campaign editorial tone must not equate transgender identity with trauma. Balance support, dignity, solidarity and joy.
-- **Binding gate:** `2026-11-content-binding.json` remains **empty and runtime-inactive**, while the first November item `SDOH-SAGE-CAR-0015` received explicit Owner Copy Approval on 2026-11-06 in separate Draft PR #191. Its exact fingerprint, evidence and 8 November target are recorded in `2026-11-content-binding.staged.json`; this staged file is never consumed by the runtime. The manual preview requires a separately Owner/editor-approved November copy, its approved fingerprint, theme, target date and campaign-specific approval evidence before making a render.
+- **Binding gate:** The **QA-only binding proposal** in this Draft branch registers exactly `SDOH-SAGE-CAR-0015` (approved copy fingerprint, Owner approval reference and 2026-11-08 target) for a **manual review render only**. The original `2026-11-content-binding.staged.json` is preserved as historical provenance, not used by the runtime. The binding change is not yet merged to `main`; production palette activation remains disabled, and no schedule/publish action exists in the manual QA workflow.
 - **Exact caption lines for every November campaign publication, Owner-supplied (not an official international slogan):**
 
   `Transgender Awareness Month November 2026`
@@ -76,8 +76,21 @@ The Owner subsequently directed: "Tema ini kita mulai dari tanggal 8 november". 
 
 ## November first-item approval and QA dependency — 2026-11-06
 
-- **Approved copy:** `SDOH-SAGE-CAR-0015`, fingerprint `f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519`, Owner Copy Approved in Draft [PR #191](https://github.com/BillyProject2505/content-os/pull/191). Main does not yet contain the copy; no automatic promotion is permitted.
-- **Staged only:** `2026-11-content-binding.staged.json` preserves this specific campaign approval with target 2026-11-08 and reference. The active `2026-11-content-binding.json` remains empty; QA runtime still requires reviewed integration and actual approved source on the same branch.
+- **Approved copy:** `SDOH-SAGE-CAR-0015`, fingerprint `f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519`, Owner Copy Approved in [merged PR #191](https://github.com/BillyProject2505/content-os/pull/191). Copy and instance-only `balanced_3` plan are on GitHub `main`; no publication authorization is implied.
+- **Binding proposal:** `2026-11-content-binding.json` in this Draft PR now has one content-specific approved item for **2026-11-08**. Until this PR is reviewed and separately authorized for merge, GitHub `main` remains binding-inactive and the live seasonal render cannot pass its gate.
 - **QA blocker:** canonical default `wrapCopy` produces text widths greater than 600 px for slides 1, 2 and 5. The BUS-49 canonical renderer **correctly rejects** the first slide without outputting a review package. Do not weaken the overflow gate or change approved words.
-- **Visual candidate:** the **existing** three-line `balanced_3` wrap routine renders all five slides with unchanged words, source assets, font, pose map and geometry. Instance-level `balanced_3` override is **not yet Owner approved** and is not automatically applied to the production renderer. Review-only [Google Drive proof](https://drive.google.com/file/d/1pcrVJ4I57SDx69EUHlbJCNtuLNC2P77B/view) (ZIP SHA-256 `4130e15c01b61b9e3db0f08593c49f078097ce51624dcf9bbfd0ca2d88acd908` verified by raw download).
+- **Owner-approved line-wrap:** the existing three-line `balanced_3` routine was approved **only for `SDOH-SAGE-CAR-0015`** in [PR #191](https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6684068829). It rendered all five slides in local QA without altering words, source assets, font, pose map or geometry. The [Drive proof](https://drive.google.com/file/d/1pcrVJ4I57SDx69EUHlbJCNtuLNC2P77B/view) is a candidate reference (ZIP SHA-256 `4130e15c01b61b9e3db0f08593c49f078097ce51624dcf9bbfd0ca2d88acd908`); live GitHub Actions render has **not** yet been reviewed.
 - No merge, content-specific Owner Visual Approval, schedule, publication, or activation has been authorized.
+
+
+## Campaign binding proposal — QA-only, pending separate merge approval (2026-11-06)
+
+One content item is eligible for technical QA review when and only when the reviewed binding patch is merged to `main`:
+
+- Content: `SDOH-SAGE-CAR-0015`; target date **2026-11-08** (Asia/Makassar).
+- Copy status `COPY_APPROVED`, exact fingerprint `f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519`.
+- Approval evidence: `https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6683448778`.
+- In-scope action: manual, read-only Drive-authenticated BUS-49 QA render, caption and asset hash verification, upload a short-lived QA proof artifact for Owner review.
+- Explicitly out-of-scope: production activation, calendar scheduling, Instagram/TikTok publication, modifying historic content or removing the final Owner release gate.
+
+**Do not merge this QA binding Draft PR or run publication without explicit Owner authorization.**

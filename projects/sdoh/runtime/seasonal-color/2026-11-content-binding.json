@@ -1,6 +1,14 @@
 {
   "schema": "sdoh-november-campaign-binding-v1",
   "campaign": "Trans Awareness Month 2026",
-  "items": [],
-  "state": "NO_NOVEMBER_COPY_APPROVED"
+  "items": [
+    {
+      "content_id": "SDOH-SAGE-CAR-0015",
+      "theme": "SAGE",
+      "copy_fingerprint": "f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519",
+      "target_date": "2026-11-08",
+      "approval_ref": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6683448778"
+    }
+  ],
+  "state": "NOVEMBER_CAMPAIGN_COPY_APPROVED"
 }
