@@ -1,0 +1,133 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0015",
+  "status": "COPY_DRAFT",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "setiap orang transgender berhak merasa aman sebagai dirinya"
+    },
+    {
+      "slide": 2,
+      "copy": "identitas gender tidak harus dijelaskan agar layak dihormati"
+    },
+    {
+      "slide": 3,
+      "copy": "kamu boleh memilih kapan dan kepada siapa bercerita"
+    },
+    {
+      "slide": 4,
+      "copy": "nama yang kamu gunakan dan privasimu tetap berarti"
+    },
+    {
+      "slide": 5,
+      "copy": "dukungan dimulai saat kita mendengar tanpa menghakimi"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "Mulai 8 November, Satu Dosis Obat Hati mengangkat Transgender Awareness Month. Setiap orang transgender berhak dihormati dan merasa aman sebagai dirinya.",
+    "Rasa hormat bisa dimulai dari hal sederhana: menggunakan nama yang seseorang pakai, menjaga privasinya, serta mendengarkan tanpa menghakimi.",
+    "Tidak semua orang ingin membagikan pengalaman pribadinya. Kita dapat tetap hadir dengan hormat, tanpa memaksa penjelasan tentang identitas gender atau perjalanan hidupnya."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "transgender"
+        ],
+        [
+          "identitas gender"
+        ],
+        [
+          "privasimu"
+        ],
+        [
+          "mendengar"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender itu salah",
+        "kamu harus mengungkapkan identitasmu"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.75,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "transgender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "identitas gender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "memilih"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "privasimu"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "mendengar"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 75,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "6dde1c9642744818d1e3ea94a5c3e084356de9c9fa6c4264600842c5c9ed2c8e"
+}
