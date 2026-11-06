@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0021",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "ruang aman tidak lahir dari satu orang yang bertahan"
+    },
+    {
+      "slide": 2,
+      "copy": "ia tumbuh ketika banyak orang menolak sikap merendahkan"
+    },
+    {
+      "slide": 3,
+      "copy": "menghormati identitas gender adalah bagian dari kebiasaan bersama"
+    },
+    {
+      "slide": 4,
+      "copy": "tanggung jawab menjaga ruang tidak boleh dibebankan sendiri"
+    },
+    {
+      "slide": 5,
+      "copy": "solidaritas berarti hadir bahkan ketika tidak ada sorotan"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "ruang yang aman tidak seharusnya bergantung pada kemampuan satu orang untuk terus menjelaskan atau membela dirinya. lingkungan juga memiliki tanggung jawab.",
+    "ketika ada orang transgender yang direndahkan, kita dapat mengambil bagian dengan menghentikan komentar yang melukai dan menjaga privasi. tindakan sederhana yang dilakukan bersama dapat mengubah suasana percakapan.",
+    "solidaritas bukan sekadar mengatakan kita peduli. ia tumbuh dari kebiasaan yang konsisten, termasuk saat tidak ada yang menyaksikan."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "ruang aman"
+        ],
+        [
+          "merendahkan"
+        ],
+        [
+          "identitas gender"
+        ],
+        [
+          "tanggung jawab"
+        ],
+        [
+          "solidaritas"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "ruang aman"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "merendahkan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "identitas gender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "tanggung jawab"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "solidaritas"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "6a0069cc124088da337ac5054d7e049bd21b2883c01eeaa1f5942aae09fd0864"
+}
