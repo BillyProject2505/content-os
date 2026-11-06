@@ -26,11 +26,34 @@ const fails = (binding, data = copy, supplied = args) =>
   assert.throws(() => validateNovemberBinding(binding, data, supplied),
     /NOVEMBER_CAMPAIGN_BINDING_REJECTED/);
 
-test("fail closed: repo starts without any November approved binding", () => {
+test("binding grants QA eligibility only to Owner-approved Sage 0015 for November 8", () => {
   const live = JSON.parse(fs.readFileSync(new URL("./2026-11-content-binding.json", import.meta.url), "utf8"));
-  assert.equal(live.state, "NO_NOVEMBER_COPY_APPROVED");
-  assert.deepEqual(live.items, []);
-  fails(live);
+  const approved = JSON.parse(fs.readFileSync(
+    new URL("../../content/sage/carousel/SDOH-SAGE-CAR-0015.json", import.meta.url), "utf8"));
+  const owner = JSON.parse(fs.readFileSync(
+    new URL("../../content/sage/carousel/SDOH-SAGE-CAR-0015.owner-copy-approval.json", import.meta.url), "utf8"));
+  assert.equal(live.state, "NOVEMBER_CAMPAIGN_COPY_APPROVED");
+  assert.equal(live.items.length, 1);
+  assert.equal(owner.owner_decision, "APPROVED");
+  assert.equal(owner.copy_fingerprint, approved.copy_fingerprint);
+  assert.equal(live.items[0].copy_fingerprint, owner.copy_fingerprint);
+  assert.equal(live.items[0].target_date, "2026-11-08");
+  assert.equal(live.items[0].approval_ref, owner.owner_approval_evidence.github_review_record);
+  const args = { contentId: approved.content_id, fingerprint: approved.copy_fingerprint, targetDate: "2026-11-08" };
+  assert.equal(validateNovemberBinding(live, approved, args).publication_authorized, false);
+  for (const day of ["2026-11-01", "2026-11-07", "2026-11-09", "2026-12-01"]) {
+    assert.throws(() => validateNovemberBinding(live, approved, {...args, targetDate: day}),
+      /NOVEMBER_CAMPAIGN_BINDING_REJECTED/);
+  }
+  fails(live); // unrelated synthetic content is still denied
+  const cli = spawnSync(process.execPath, [
+    new URL("./verify-november-content.mjs", import.meta.url).pathname,
+    "--content-id", approved.content_id,
+    "--expected-copy-fingerprint", approved.copy_fingerprint,
+    "--target-date", "2026-11-08",
+  ], { encoding: "utf8" });
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.match(cli.stdout, /"publication_authorized":false/);
 });
 
 test("accept one explicitly bound approved November copy without granting publication", () => {
@@ -101,7 +124,7 @@ test("November 8 is the first permitted campaign date", () => {
   assert.equal(result.publication_authorized, false);
 });
 
-test("approved November binding staging remains inert until copy and runtime integration", () => {
+test("historical staged record matches the single QA-only binding", () => {
   const draft = JSON.parse(fs.readFileSync(
     new URL("./2026-11-content-binding.staged.json", import.meta.url), "utf8"));
   const activeBinding = JSON.parse(fs.readFileSync(
@@ -118,8 +141,10 @@ test("approved November binding staging remains inert until copy and runtime int
   assert.equal(draft.gates.production_activation, false);
   assert.equal(draft.gates.scheduled, false);
   assert.equal(draft.gates.published, false);
-  assert.deepEqual(activeBinding.items, []);
-  assert.equal(activeBinding.state, "NO_NOVEMBER_COPY_APPROVED");
+  assert.deepEqual(activeBinding.items, [draft.item]);
+  assert.equal(activeBinding.state, "NOVEMBER_CAMPAIGN_COPY_APPROVED");
+  assert.equal(draft.gates.production_activation, false);
+  assert.equal(draft.gates.published, false);
 });
 
 test("manual November render includes canonical review-package validator and keeps release closed", () => {
