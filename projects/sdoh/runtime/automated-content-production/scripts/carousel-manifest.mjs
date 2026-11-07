@@ -135,6 +135,24 @@ export function resolveVisualPlan({ contentId, theme, authority, preferInstanceP
   throw new Error(`Unsupported carousel theme: ${theme}`);
 }
 
+// Instance-only repair for BURGUNDY-CAR-0018, slide 02.
+// Run 42370255756: even the best three-line wrap measured 606.75px (>600px).
+// Canonical BUS-49 v0.6.0 + pinned font reproduced the failure locally;
+// 4 lines (3/2/3/1 words) measured 471.75px, retaining all approved words.
+// No source copy, renderer, palette, character route, or other item changes.
+function wrapBurgundy0018Slide2(copy) {
+  const words = String(copy).trim().split(/\s+/).filter(Boolean);
+  if (words.length !== 9) {
+    throw new Error("BURGUNDY-CAR-0018 slide 02 approved-copy layout changed; new Owner QA required");
+  }
+  return [
+    words.slice(0, 3).join(" "),
+    words.slice(3, 5).join(" "),
+    words.slice(5, 8).join(" "),
+    words.slice(8).join(" "),
+  ].join("\n");
+}
+
 export function buildCarouselRenderManifest({ contentId, theme, slides, authority, preferInstancePlan = true }) {
   const plan = resolveVisualPlan({ contentId, theme, authority, preferInstancePlan });
   return {
@@ -143,8 +161,12 @@ export function buildCarouselRenderManifest({ contentId, theme, slides, authorit
     layout_mode: plan.layout_mode,
     slides: slides.map((slide, index) => ({
       slide_number: slide.slide,
-      copy: plan.wrap_mode === "balanced_3"
-        ? wrapBalancedThreeLines(slide.copy)
+      copy: theme === "BURGUNDY" &&
+        contentId === "SDOH-BURGUNDY-CAR-0018" &&
+        slide.slide === 2
+        ? wrapBurgundy0018Slide2(slide.copy)
+        : plan.wrap_mode === "balanced_3"
+          ? wrapBalancedThreeLines(slide.copy)
         : theme === "BURGUNDY"
           ? (contentId === "SDOH-BURGUNDY-CAR-0008" ? wrapBalancedThreeLines(slide.copy) : wrapBurgundyCopy(slide.copy))
           : (contentId === "SDOH-SAGE-CAR-0006" ? wrapSageIllustratedCopy(slide.copy) : wrapCopy(slide.copy)),
