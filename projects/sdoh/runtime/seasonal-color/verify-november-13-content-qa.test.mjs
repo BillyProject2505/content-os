@@ -72,7 +72,13 @@ test("all 12 Owner-approved sources pass real copy, campaign, caption, manifest 
     assertManifestMatchesCopy(manifest,copy);
     assert.equal(manifest.slides.length,5,id);
     for(const [i,slide] of manifest.slides.entries()){
-      assert.equal(slide.copy.split("\n").length,3,id+" slide "+(i+1));
+      const lineCount = (id === "SDOH-BURGUNDY-CAR-0018" && i === 1) ? 4 : 3;
+      assert.equal(slide.copy.split("\n").length,lineCount,id+" slide "+(i+1));
+      if (lineCount === 4) {
+        assert.equal(slide.copy,
+          "memahami berarti mau\nmendengar pengalaman\ntanpa buru buru\nmenyimpulkan",
+          "Instance-only wrap must not change Owner-approved words");
+      }
       assert.equal(slide.character.pose_id,plan.pose_route[i],id);
       assert.equal(slide.character.anchor,"lower_right",id);
       assert.equal(slide.character.scale,"md",id);
