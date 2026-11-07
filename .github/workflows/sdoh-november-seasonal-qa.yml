@@ -1,7 +1,7 @@
 name: SDOH November 2026 seasonal Carousel QA preview (manual only)
 
-# Manual, read-only review proof. This workflow does NOT grant Owner approval,
-# schedule content, register assets, invoke Instagram or publish anything.
+# Manual or explicitly reusable, read-only review proof. This workflow does NOT
+# grant Owner approval, schedule content, register assets or publish anything.
 on:
   workflow_dispatch:
     inputs:
@@ -15,6 +15,25 @@ on:
         type: string
       target_date:
         description: November 2026 publication-local YYYY-MM-DD for seasonal relevance; NOT a scheduling action
+        required: true
+        type: string
+      confirmation:
+        description: Must be RENDER_SEASONAL_QA_ONLY
+        required: true
+        type: string
+
+  workflow_call:
+    inputs:
+      content_id:
+        description: Approved SDOH Sage/Burgundy Carousel content ID
+        required: true
+        type: string
+      expected_copy_fingerprint:
+        description: Expected 64-character COPY_APPROVED fingerprint
+        required: true
+        type: string
+      target_date:
+        description: November 2026 editorial date, not publication scheduling
         required: true
         type: string
       confirmation:

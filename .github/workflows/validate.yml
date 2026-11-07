@@ -94,6 +94,8 @@ jobs:
         run: node --test projects/sdoh/runtime/seasonal-color/verify-november-approved-batch.test.mjs
       - name: QA-only full November campaign binding and visual plan regression
         run: node --test projects/sdoh/runtime/seasonal-color/verify-november-13-content-qa.test.mjs
+      - name: QA-only remaining ten November carousel batch contract regression
+        run: node --test projects/sdoh/runtime/seasonal-color/verify-november-remaining-10-batch.test.mjs
       - name: Self-test November SDOH campaign caption footer
         run: node --test projects/sdoh/runtime/seasonal-color/compose-november-caption.test.mjs
       - name: Install Pillow and Inter for KDS renderer self-test
