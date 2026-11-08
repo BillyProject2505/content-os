@@ -9,8 +9,20 @@
 
 - **Effective editorial dates on main:** `2026-11-effective-editorial-schedule.json`. Owner requested "jadwal diganti dimulai besok" on 8 November 2026 (WITA); start moves to **9 November 2026**. Twelve dates shift by one day, but `SDOH-BURGUNDY-CAR-0020` stays **20 November** because its approved "hari ini" text refers to Transgender Day of Remembrance on that date.
 - **Source of truth rule:** use its `revised_editorial_date` for upcoming editorial-date discussions. The previous `2026-11-editorial-series-draft.json` remains an immutable historic draft; `2026-11-content-binding.json.target_date` and `2026-11-final-media-archive.json.editorial_date` are frozen **original QA/asset approval provenance**, NOT a live publication schedule.
-- **Release gate:** `publication_time=null`, `channel=null`, `calendar_events_created=false`, `scheduled=false`, `authorized=false`; no Instagram, TikTok, Google Calendar, production activation, or GitHub publishing action is authorized by the editorial change. Never rewrite the approved 13 final media ZIPs/65 JPEGs/13 captions or the original checksums.
+- **Confirmed plan / release gate:** `publication_time="19:30"`, `channel="INSTAGRAM"`, `account="@satudosisobathati"`; `calendar_events_created=false`, `scheduled=false`, `authorized=false`; no Instagram, TikTok, Google Calendar, production activation, or GitHub publishing action is authorized by the editorial change. Never rewrite the approved 13 final media ZIPs/65 JPEGs/13 captions or the original checksums.
 - The approved copy and media can be reused only with their existing exact hashes; no rerender is needed. **This file is informational**, the revision JSON and its CI test define the active proposal.
+
+## Publication readiness audit — 2026-11-08
+
+- Live Linear registers checked: Sage `458e4dc3-a1a6-4a44-ab6e-afefa1d28eba` (updated 2026-11-05T11:31:46.869Z) and Burgundy `346b4c0c-9aec-4454-a2b5-06210b2c88c6` (updated 2026-11-03T09:25:13.562Z). None of the seven Sage IDs 0015–0021 or six Burgundy IDs 0017–0022 appears anywhere in these documents. All thirteen require material records, publication records and execution manifest records before the existing publisher can consume them.
+- The existing executor requires five individual Drive JPEG IDs and their exact approved SHA-256 values per content, plus the exact final composed caption, a locked caption revision, issue reference, asset folder, account and matching timestamp. The final-media archive indexes ZIP files; ZIP locators cannot be substituted for JPEG IDs. Individual delivery assets and service-account access must be verified before claiming readiness.
+- Use the existing executor contract: extract the approved JPEG bytes without rerendering, verify against the archived per-slide hashes, and prepare register records without setting live `SCHEDULED` state until release is authorized.
+- Repository scheduler variable, deployed Worker controls, credentials and live Drive read access have not been verified by this audit. A successful editorial-plan CI run does not validate these operational dependencies.
+- No release, Calendar write, register mutation, workflow dispatch or publication occurred during this audit.
+
+# Historical color-only proposal and QA decisions
+
+The sections below retain earlier proposal-stage statements. For current 13-item approvals, use `2026-11-final-media-archive.json`; for current dates/time/channel, use `2026-11-effective-editorial-schedule.json`. Earlier one-item and pending-QA statements below are historical, not the current campaign status.
 
 # November 2026 — Trans Awareness Month (Color-only contract)
 
