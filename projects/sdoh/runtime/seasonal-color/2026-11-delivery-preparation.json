@@ -677,5 +677,14 @@
         }
       ]
     }
+  ],
+  "editorial_blockers": [
+    {
+      "content_id": "SDOH-SAGE-CAR-0015",
+      "code": "CAPTION_START_DATE_CONFLICT",
+      "approved_caption_excerpt": "Mulai 8 November",
+      "planned_date": "2026-11-09",
+      "resolution": "Owner must approve an exact caption correction or explicitly retain the historical wording. Current approved caption is unchanged."
+    }
   ]
 }
