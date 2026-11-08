@@ -16,9 +16,9 @@ const nextDay=(date)=>new Date(Date.parse(date+"T12:00:00Z")+86400000).toISOStri
 
 test("13 approved items retain identity, order, fingerprints, original evidence and unique new dates",()=>{
   assert.equal(active.schema,"sdoh-november-2026-effective-editorial-schedule-v1");
-  assert.equal(active.decision,"OWNER_REQUESTED_RESTART_NOVEMBER_09");
+  assert.equal(active.decision,"OWNER_CONFIRMED_INSTAGRAM_1930_WITA");
   assert.equal(active.timezone,"Asia/Makassar");
-  assert.equal(active.status,"EDITORIAL_DATE_REVISION_ONLY");
+  assert.equal(active.status,"EDITORIAL_TIMING_AND_CHANNEL_CONFIRMED_NOT_SCHEDULED");
   assert.equal(active.items.length,13);
   assert.equal(active.summary.content_items,13);
   assert.equal(active.summary.shifted_by_one_day,12);
@@ -69,8 +69,16 @@ test("historic dates remain immutable and no publish, schedule or activation aut
     frozen.schedule.filter(x=>x.theme!=="OFF").map(x=>[x.date,x.content_id]));
   assert.equal(active.authority.frozen_evidence_unchanged,true);
   assert.equal(active.authority.release_gate_separate,true);
-  assert.equal(active.calendar.publication_time,null);
-  assert.equal(active.calendar.channel,null);
+  assert.equal(active.calendar.publication_time,"19:30");
+  assert.equal(active.calendar.channel,"INSTAGRAM");
+  assert.equal(active.calendar.account,"@satudosisobathati");
+  assert.equal(active.calendar.utc_offset,"+08:00");
+  assert.equal(active.calendar.planned_instagram_times_local.length,13);
+  active.calendar.planned_instagram_times_local.forEach((slot,index)=>{
+    assert.equal(slot.content_id,active.items[index].content_id);
+    assert.equal(slot.local_at,active.items[index].revised_editorial_date+"T19:30:00+08:00");
+    assert.equal(new Date(slot.local_at).toISOString().slice(11,16),"11:30");
+  });
   assert.equal(active.calendar.calendar_events_created,false);
   assert.equal(active.calendar.scheduling_executed,false);
   assert.equal(active.publication.scheduled,false);
