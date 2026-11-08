@@ -16,7 +16,10 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 def get(url, token="", limit=20 * 1024 * 1024):
-    request = urllib.request.Request(url, method="GET")
+    request = urllib.request.Request(
+        url, method="GET",
+        headers={"User-Agent": "sdoh-readiness-diagnostic/1.0"},
+    )
     if token:
         request.add_header("Authorization", "Bearer " + token)
     try:
