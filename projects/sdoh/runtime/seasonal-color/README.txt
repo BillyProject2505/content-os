@@ -1,3 +1,11 @@
+## Current delivery and register preparation — 2026-11-08
+
+This status supersedes the earlier publication readiness audit below. All 13 November items now have Approved material rows, PLANNED publication rows and exact media/caption execution-manifest records in their routed Linear registers. The publisher must still reject them while PLANNED. Readback tested with the actual runtime parser: 13 planned rejections, 13 isolated due-time positive simulations and 13 early rejections PASS; old rows and manifest records preserved.
+
+65 individual JPEGs were staged to Drive and raw-byte readback SHA-256 verified. Delivery index: `2026-11-delivery-preparation.json`. Caption revisions v1.0 label the original approved composed captions; SAGE-0015 v1.1 contains only the Owner-approved “Mulai 9 November” correction. Original source ZIPs remain immutable.
+
+Remaining prerequisites: verify publisher service-account Drive access, scheduler configuration and deployed Worker readiness, then obtain explicit release authorization. Current folder permissions show only the owner; no service-account access was granted or proven. No Calendar changes, scheduling, dispatch or posting has occurred.
+
 ## Instagram publishing intent — 19:30 WITA, thirteen final media items (pending separate release approval)
 
 - Owner confirmed **Instagram `@satudosisobathati` at 19:30 WITA** for all 13 November editorial slots, starting **2026-11-09**. The precise proposed local ISO date-times are in `2026-11-effective-editorial-schedule.json#calendar.planned_instagram_times_local`. WITA is `UTC+08:00`; 19:30 local is 11:30 UTC.
