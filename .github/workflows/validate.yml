@@ -98,6 +98,8 @@ jobs:
         run: node --test projects/sdoh/runtime/seasonal-color/verify-november-remaining-10-batch.test.mjs
       - name: Verify November Owner-approved final media archive registry
         run: node --test projects/sdoh/runtime/seasonal-color/verify-november-final-media-archive.test.mjs
+      - name: Validate revised November editorial dates without changing immutable QA evidence
+        run: node --test projects/sdoh/runtime/seasonal-color/verify-november-effective-editorial-schedule.test.mjs
       - name: Self-test November SDOH campaign caption footer
         run: node --test projects/sdoh/runtime/seasonal-color/compose-november-caption.test.mjs
       - name: Install Pillow and Inter for KDS renderer self-test
