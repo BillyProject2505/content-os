@@ -1,6 +1,6 @@
 {
   "schema": "sdoh-november-2026-delivery-preparation-v1",
-  "status": "MEDIA_STAGED_REGISTERS_PREPARED_NOT_SCHEDULED",
+  "status": "OWNER_AUTHORIZED_SCHEDULED",
   "recorded_date": "2026-11-08",
   "delivery_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
   "delivery_folder_url": "https://drive.google.com/drive/folders/16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
@@ -66,16 +66,42 @@
     }
   },
   "publication": {
-    "authorized": false,
-    "scheduled": false,
+    "authorized": true,
+    "scheduled": true,
     "registers_updated": true,
-    "workflow_dispatched": false
+    "workflow_dispatched": false,
+    "release_approval": {
+      "date": "2026-11-08",
+      "owner_response": "setuju",
+      "scope": "Activate all 13 campaign carousels as SCHEDULED for Instagram @satudosisobathati at 19:30 WITA on the agreed November 9–30 dates.",
+      "evidence": "Explicit Owner reply to activation question in this conversation.",
+      "execution": "Existing Cloudflare cron and GitHub scheduled orchestrator; no immediate publication dispatch."
+    },
+    "register_activation": {
+      "date": "2026-11-08",
+      "scheduled_records": 13,
+      "readback_authority_pass": 13,
+      "early_rejections": 13,
+      "media_and_captions_unchanged": true,
+      "registers": [
+        {
+          "id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+          "updated_at": "2026-11-08T04:51:23.454Z",
+          "url": "https://linear.app/bussiness-content-os/document/sdoh-sage-carousel-content-register-v03-35911e808c25"
+        },
+        {
+          "id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+          "updated_at": "2026-11-08T04:51:27.386Z",
+          "url": "https://linear.app/bussiness-content-os/document/sdoh-burgundy-carousel-content-register-v03-9954ad905ba3"
+        }
+      ]
+    }
   },
   "notes": [
     "Prepared delivery data only; not a live execution authority manifest.",
     "JPEGs extracted byte-identically from approved ZIPs; no rerender or re-encoding. SAGE-0015 delivery caption has a separately Owner-approved date amendment; original ZIP caption remains immutable.",
     "All records use campaign tracking issue BUS-175; individual issues are not fabricated.",
-    "Linear material/log/manifest records prepared with publication state PLANNED. Caption v1.0 labels original approved composed captions; SAGE-0015 v1.1 labels the separately approved date amendment."
+    "Linear campaign publication rows activated from PLANNED to SCHEDULED after explicit Owner release approval on 2026-11-08; exact media/caption manifests unchanged."
   ],
   "records": [
     {
