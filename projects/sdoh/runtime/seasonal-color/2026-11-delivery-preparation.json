@@ -9,10 +9,13 @@
   "verification": {
     "zip_sha256_matches": 13,
     "jpeg_sha256_matches": 65,
-    "caption_sha256_matches": 13,
+    "caption_sha256_matches": 12,
     "drive_jpeg_raw_readback_matches": 65,
     "service_account_access": "NOT_TESTED",
-    "worker_readiness": "NOT_TESTED"
+    "worker_readiness": "NOT_TESTED",
+    "caption_sha256_matches_scope": "Current delivery captions matching original archive captions; 12 unchanged plus one separately approved amendment.",
+    "source_caption_sha256_matches_before_amendment": 13,
+    "owner_approved_caption_amendments": 1
   },
   "publication": {
     "authorized": false,
@@ -22,7 +25,7 @@
   },
   "notes": [
     "Prepared delivery data only; not a live execution authority manifest.",
-    "JPEGs extracted byte-identically from approved ZIPs; no rerender, re-encoding or caption edits.",
+    "JPEGs extracted byte-identically from approved ZIPs; no rerender or re-encoding. SAGE-0015 delivery caption has a separately Owner-approved date amendment; original ZIP caption remains immutable.",
     "caption_revision must be resolved when preparing locked material-register rows; no new copy approval is inferred.",
     "All records use campaign tracking issue BUS-175; individual issues are not fabricated."
   ],
@@ -35,8 +38,8 @@
       "planned_at": "2026-11-09T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
       "caption_revision": null,
-      "approved_caption": "Mulai 8 November, kampanye Transgender Awareness Month mengajak kita menghormati identitas setiap orang. Setiap orang transgender berhak merasa aman sebagai dirinya.\n\nRasa hormat bisa dimulai dari hal sederhana: menggunakan nama yang seseorang pakai, menjaga privasinya, serta mendengarkan tanpa menghakimi.\n\nTidak semua orang ingin membagikan pengalaman pribadinya. Kita dapat tetap hadir dengan hormat, tanpa memaksa penjelasan tentang identitas gender atau perjalanan hidupnya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
-      "caption_sha256": "220da2e19044166f2a630477a18fdec3c9cdb692e48a1531990ff067e9557f50",
+      "approved_caption": "Mulai 9 November, kampanye Transgender Awareness Month mengajak kita menghormati identitas setiap orang. Setiap orang transgender berhak merasa aman sebagai dirinya.\n\nRasa hormat bisa dimulai dari hal sederhana: menggunakan nama yang seseorang pakai, menjaga privasinya, serta mendengarkan tanpa menghakimi.\n\nTidak semua orang ingin membagikan pengalaman pribadinya. Kita dapat tetap hadir dengan hormat, tanpa memaksa penjelasan tentang identitas gender atau perjalanan hidupnya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "5d13d0f741ec7da701996fcdb662f1884f4c7ce1cbe71fd45a56c5f0a6fc88c1",
       "source_zip_sha256": "3d5d549c40b98c10d8a71ee144986ef0b920bd4b0990995f2fcdfebf327bf46b",
       "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6686164240",
       "media": [
@@ -75,7 +78,21 @@
           "mime_type": "image/jpeg",
           "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0015_S05.jpg"
         }
-      ]
+      ],
+      "source_caption_sha256": "220da2e19044166f2a630477a18fdec3c9cdb692e48a1531990ff067e9557f50",
+      "caption_amendment": {
+        "status": "OWNER_APPROVED",
+        "decision_date": "2026-11-08",
+        "owner_response": "setuju",
+        "approved_change": {
+          "from": "Mulai 8 November",
+          "to": "Mulai 9 November"
+        },
+        "scope": "Only the opening date phrase; all remaining caption bytes and all media unchanged.",
+        "source_caption_sha256": "220da2e19044166f2a630477a18fdec3c9cdb692e48a1531990ff067e9557f50",
+        "amended_caption_sha256": "5d13d0f741ec7da701996fcdb662f1884f4c7ce1cbe71fd45a56c5f0a6fc88c1",
+        "evidence": "Owner reply in this conversation to the explicit correction question; recorded in PR #201."
+      }
     },
     {
       "content_id": "SDOH-BURGUNDY-CAR-0017",
@@ -678,13 +695,5 @@
       ]
     }
   ],
-  "editorial_blockers": [
-    {
-      "content_id": "SDOH-SAGE-CAR-0015",
-      "code": "CAPTION_START_DATE_CONFLICT",
-      "approved_caption_excerpt": "Mulai 8 November",
-      "planned_date": "2026-11-09",
-      "resolution": "Owner must approve an exact caption correction or explicitly retain the historical wording. Current approved caption is unchanged."
-    }
-  ]
+  "editorial_blockers": []
 }
