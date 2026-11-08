@@ -1,0 +1,55 @@
+name: SDOH read-only readiness diagnostics
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "Type VERIFY_SDOH_READ_ONLY"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main' && inputs.confirmation == 'VERIFY_SDOH_READ_ONLY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Authenticate with scheduler service account
+        id: auth
+        if: vars.GCP_PROJECT_ID != '' && vars.GCP_WORKLOAD_IDENTITY_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != ''
+        continue-on-error: true
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+          create_credentials_file: false
+      - name: Verify Drive bytes and Worker health
+        if: always()
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          SDOH_SCHEDULED_AUTOMATION_ENABLED: ${{ vars.SDOH_SCHEDULED_AUTOMATION_ENABLED }}
+          LINEAR_API_KEY_PRESENT: ${{ secrets.LINEAR_API_KEY != '' }}
+          EXECUTOR_INGEST_SECRET_PRESENT: ${{ secrets.EXECUTOR_INGEST_SECRET != '' }}
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: python3 projects/sdoh/runtime/seasonal-color/readiness_diagnostic.py
+      - name: Save sanitized report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdoh-readiness
+          path: ${{ runner.temp }}/sdoh-readiness.json
+          if-no-files-found: error
+          retention-days: 7
