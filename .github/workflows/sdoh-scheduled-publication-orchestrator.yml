@@ -620,6 +620,12 @@ jobs:
             echo "- Global manual publishing window: not opened by this workflow"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Check November schedule and overdue publication evidence
+        if: ${{ always() && !cancelled() }}
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: node projects/sdoh/runtime/seasonal-color/november-publication-monitor.mjs
+
       - name: Cleanup temporary files
         if: always()
         shell: bash
