@@ -1,6 +1,6 @@
 {
   "schema": "sdoh-november-2026-delivery-preparation-v1",
-  "status": "MEDIA_STAGED_REGISTER_PREPARATION_ONLY",
+  "status": "MEDIA_STAGED_REGISTERS_PREPARED_NOT_SCHEDULED",
   "recorded_date": "2026-11-08",
   "delivery_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
   "delivery_folder_url": "https://drive.google.com/drive/folders/16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
@@ -15,19 +15,38 @@
     "worker_readiness": "NOT_TESTED",
     "caption_sha256_matches_scope": "Current delivery captions matching original archive captions; 12 unchanged plus one separately approved amendment.",
     "source_caption_sha256_matches_before_amendment": 13,
-    "owner_approved_caption_amendments": 1
+    "owner_approved_caption_amendments": 1,
+    "register_readback": {
+      "checked_date": "2026-11-08",
+      "records": 13,
+      "planned_rejected": 13,
+      "isolated_due_simulations_allowed": 13,
+      "early_simulations_rejected": 13,
+      "old_rows_and_manifest_records_preserved": true,
+      "registers": [
+        {
+          "id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+          "updated_at": "2026-11-08T03:54:42.019Z"
+        },
+        {
+          "id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+          "updated_at": "2026-11-08T03:54:44.833Z"
+        }
+      ]
+    },
+    "delivery_folder_permission_observation": "Drive metadata lists only owner billyfernando2505@gmail.com; publisher service-account access is not established by this result."
   },
   "publication": {
     "authorized": false,
     "scheduled": false,
-    "registers_updated": false,
+    "registers_updated": true,
     "workflow_dispatched": false
   },
   "notes": [
     "Prepared delivery data only; not a live execution authority manifest.",
     "JPEGs extracted byte-identically from approved ZIPs; no rerender or re-encoding. SAGE-0015 delivery caption has a separately Owner-approved date amendment; original ZIP caption remains immutable.",
-    "caption_revision must be resolved when preparing locked material-register rows; no new copy approval is inferred.",
-    "All records use campaign tracking issue BUS-175; individual issues are not fabricated."
+    "All records use campaign tracking issue BUS-175; individual issues are not fabricated.",
+    "Linear material/log/manifest records prepared with publication state PLANNED. Caption v1.0 labels original approved composed captions; SAGE-0015 v1.1 labels the separately approved date amendment."
   ],
   "records": [
     {
@@ -37,7 +56,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-09T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.1",
       "approved_caption": "Mulai 9 November, kampanye Transgender Awareness Month mengajak kita menghormati identitas setiap orang. Setiap orang transgender berhak merasa aman sebagai dirinya.\n\nRasa hormat bisa dimulai dari hal sederhana: menggunakan nama yang seseorang pakai, menjaga privasinya, serta mendengarkan tanpa menghakimi.\n\nTidak semua orang ingin membagikan pengalaman pribadinya. Kita dapat tetap hadir dengan hormat, tanpa memaksa penjelasan tentang identitas gender atau perjalanan hidupnya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "5d13d0f741ec7da701996fcdb662f1884f4c7ce1cbe71fd45a56c5f0a6fc88c1",
       "source_zip_sha256": "3d5d549c40b98c10d8a71ee144986ef0b920bd4b0990995f2fcdfebf327bf46b",
@@ -101,7 +120,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-11T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "identitas gender seseorang bukan ruang terbuka untuk semua pertanyaan. rasa ingin tahu tidak selalu memberi kita hak untuk meminta jawaban.\n\nketika orang transgender harus terus menjelaskan hidupnya supaya dihormati, percakapan bisa menjadi beban. batas pribadi bukan tanda bahwa seseorang menyembunyikan sesuatu yang salah.\n\nkita bisa memilih menghormati tanpa mendesak. mendengar ketika seseorang ingin berbagi, dan menerima ketika ia memilih tidak bercerita.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "be6a2d2828a88fefa4a600059b93e2938c6cc4c27b1cf055f10622e59ec21003",
       "source_zip_sha256": "df374b22b0e4041632650b5a5557ec5f44a70ed62c47d415e20763c5ae681098",
@@ -151,7 +170,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-12T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "kadang dukungan tidak datang sebagai kalimat besar. ia hadir ketika kita memanggil seseorang dengan nama yang ia gunakan.\n\nbagi orang transgender, penghormatan sederhana ini bisa membuat percakapan terasa lebih nyaman. kita tidak perlu menuntut penjelasan tentang nama lama, tubuh, atau perjalanan seseorang untuk menunjukkan rasa hormat.\n\njika keliru, perbaiki dengan singkat dan tulus. yang berarti bukan kesempurnaan, melainkan kesediaan untuk belajar dan konsisten.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "90329f6267758f7459190540467ef8ca277fdfa997ac1a677a88033e6ca68457",
       "source_zip_sha256": "56e5dda4431ca1dd95e568229191ad2fddac838a5e8155dafa704ccb3c0003ed",
@@ -201,7 +220,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-14T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "tanggal 13 sampai 19 november diperingati sebagai transgender awareness week. pekan ini mengajak kita mengenal dan menghormati hidup orang transgender dengan lebih baik.\n\nkesadaran tidak berhenti pada mengunggah slogan. ia terlihat saat kita berhenti menyebarkan prasangka, mendengarkan tanpa menghakimi, dan tidak menjadikan pengalaman pribadi orang lain sebagai tontonan.\n\nbelajar adalah langkah awal. menjaga rasa hormat dalam keseharian adalah bagian yang perlu terus dilanjutkan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "eeec3c4ccfa4f9497bdcb3193a4b2393d2230334b29ee9b2f9c6410822dedc22",
       "source_zip_sha256": "7c5416e61234b3b4a955cc0f902b14a73f3fd515e44d7ac1a7722159c8babbd2",
@@ -251,7 +270,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-16T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "cerita orang transgender tidak hanya tentang tantangan atau luka. ada kegembiraan, persahabatan, pencapaian, dan momen kecil yang juga layak diberi tempat.\n\nselama pekan kesadaran ini, kita bisa belajar melihat seseorang sebagai pribadi yang utuh. tidak semua senyum perlu dijelaskan dengan kisah perjuangan di belakangnya.\n\nkalau hari ini ada sesuatu yang membuatmu lega atau bahagia, kamu boleh menikmatinya. sukacita juga bagian dari hidupmu.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "4eafcd985bec09699ecd99a46b12ed6a80318755bcd19e3801988266c39e7d6e",
       "source_zip_sha256": "a21b674339cc92ae53582d352ec33845f161294808314e6be3fb09ab43396b46",
@@ -301,7 +320,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-18T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "tidak semua kalimat yang disebut candaan terasa ringan bagi orang yang menerimanya. terutama ketika yang dijadikan bahan tertawa adalah identitas gender seseorang.\n\nkita tidak perlu mempermalukan siapa pun untuk menghentikan sesuatu yang merendahkan. tidak ikut tertawa, mengalihkan percakapan, atau menegur secara tenang dapat menjadi langkah yang berarti.\n\ndukungan kepada orang transgender terlihat dalam pilihan kecil sehari hari. rasa hormat perlu hadir bahkan ketika orang yang dibicarakan tidak berada di ruangan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "b11930f408b780b34075d04fa77dfcd542870fd97de483bb28bd862e47490516",
       "source_zip_sha256": "31e1b983cdd021de20b16ed4f30d391d14404a49c4be4d268f3403ab455aa6ad",
@@ -351,7 +370,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-19T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "ketika seseorang berbagi pengalaman tentang identitas gender atau kesehariannya, kita mungkin ingin segera memberi saran. tetapi dukungan tidak selalu membutuhkan jawaban.\n\nbagi sebagian orang transgender, didengar tanpa dipotong, dipertanyakan, atau diburu penjelasannya sudah terasa berarti. kita bisa bertanya apakah ia ingin ditemani, didengarkan, atau dibantu mencari pilihan.\n\nsetiap orang punya kebutuhan berbeda. hadir dengan terbuka membuat kita lebih mampu menghargai cara mereka sendiri.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "125b5d27eca0c15abad262b36c4e9a3bb6f346a53cfcd84b5f90c7d132b229f0",
       "source_zip_sha256": "946990e49d91f46bb2129ea63fdad63136c80a1ca267d3622d36e41132e7dc24",
@@ -401,7 +420,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-20T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "tanggal 20 november adalah transgender day of remembrance, hari untuk mengenang orang transgender yang kehilangan nyawa akibat kekerasan anti transgender.\n\ndi balik setiap kehilangan ada manusia dengan hubungan, harapan, dan kehidupan yang layak dihormati. mengenang mereka tidak mengharuskan kita menampilkan detail kekerasan atau menjadikan duka sebagai tontonan.\n\nhari ini kita memberi ruang bagi ingatan, kepedulian, dan solidaritas. semoga penghormatan tidak berhenti ketika hari peringatan berlalu.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "f3a498e76209cd8edf36d267e8389c1f66dda8a8ead094945eb03bfc932f3544",
       "source_zip_sha256": "f8380ba885f4b7931e3f06ab2180759d88032d8c35f6301e95e71336ec32556d",
@@ -451,7 +470,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-23T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "setelah tanggal peringatan berlalu, hidup terus berjalan dalam banyak bentuk. ada pekerjaan, obrolan dengan teman, rencana kecil, dan hari yang tidak istimewa.\n\norang transgender tidak seharusnya selalu diminta menjadi juru bicara bagi semua orang atau menjelaskan seluruh pengalaman hidupnya. mereka juga berhak menjalani keseharian tanpa sorotan.\n\nkadang penghormatan terasa sederhana: membiarkan seseorang menjadi dirinya sendiri, tanpa menjadikannya perdebatan atau simbol yang harus mewakili siapa pun.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "524ba19c7fdf43fb6423460d7a6daceb77d0912a0b1c7d60d7dc248a84705d99",
       "source_zip_sha256": "ccb6bd520d60c48209282ca1323dca22bc7083b2a8e83b3acbcac21fc93153f4",
@@ -501,7 +520,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-25T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "ruang yang aman tidak seharusnya bergantung pada kemampuan satu orang untuk terus menjelaskan atau membela dirinya. lingkungan juga memiliki tanggung jawab.\n\nketika ada orang transgender yang direndahkan, kita dapat mengambil bagian dengan menghentikan komentar yang melukai dan menjaga privasi. tindakan sederhana yang dilakukan bersama dapat mengubah suasana percakapan.\n\nsolidaritas bukan sekadar mengatakan kita peduli. ia tumbuh dari kebiasaan yang konsisten, termasuk saat tidak ada yang menyaksikan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "6657ba7930fd2603aaf2ba1e8c1e7507df4d95a5d3f0e8185c46b102f25fd7f1",
       "source_zip_sha256": "9240893e5398ff78c1f6715ce74aaefb03eefa01fa81b7699f17065482cd2875",
@@ -551,7 +570,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-26T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "perjalanan mengenali diri bisa berbeda bagi setiap orang. ada yang menemukan kata yang terasa tepat sejak lama, ada pula yang masih mencoba memahami pengalaman pribadinya.\n\ntidak ada garis waktu yang harus diikuti semua orang transgender. perubahan cara memahami diri bukan alasan untuk meragukan martabat seseorang atau menuntut kepastian segera.\n\nkamu boleh mengambil waktu, bertanya, atau diam sejenak. nilai dirimu tidak ditentukan oleh seberapa cepat kamu mampu menjelaskan semuanya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "7b4189ddb17d18fdc8c522bce6655c3173de7bfcef01b4214f2eac0e379e4c0f",
       "source_zip_sha256": "55646fd0a7caf62dacb03e11e74569f06ba07734333a81a95a3a8153aa6cfa8a",
@@ -601,7 +620,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-28T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "menjelang akhir november, mudah menganggap kepedulian selesai ketika unggahan terakhir terbit. padahal kehidupan orang transgender tidak mengikuti kalender kampanye.\n\nkita masih bisa menjaga nama, privasi, dan ruang percakapan yang menghormati sesama. dukungan menjadi bermakna ketika hadir dalam rutinitas, bukan hanya saat ada ajakan bersama.\n\njika ingin membawa satu hal dari kampanye ini, bawalah kebiasaan untuk berpikir sebelum menghakimi dan bertindak ketika melihat sikap merendahkan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "8fe2cd7fbf16cc4ad6f2fbefcf0240e76cdf194a878d7adddb44b2e03b3f84df",
       "source_zip_sha256": "1a72319186416545ac95c0c2ebe209cbbaafcded36adb27346a39416ba4aabc8",
@@ -651,7 +670,7 @@
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
       "planned_at": "2026-11-30T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
-      "caption_revision": null,
+      "caption_revision": "v1.0",
       "approved_caption": "bulan november hampir selesai, tetapi perhatian yang kita bangun tidak harus ikut berakhir. penghormatan bagi orang transgender dapat menjadi bagian biasa dari cara kita memperlakukan sesama.\n\ndimulai dari nama yang tepat, percakapan yang tidak menghakimi, dan keputusan untuk tidak menyebarkan prasangka. tidak semua dukungan harus terlihat besar agar terasa berarti.\n\nsemoga yang tertinggal dari kampanye ini bukan hanya unggahan, tetapi kebiasaan saling menjaga yang terus kita pilih.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
       "caption_sha256": "d807e4dcf3e84904c8c772e60a3677e893c239a77e0c63cff32143be1139f7f1",
       "source_zip_sha256": "29330bf5438521d7719586dbdb193e667980b40f6b008106053c086dc8862f10",
