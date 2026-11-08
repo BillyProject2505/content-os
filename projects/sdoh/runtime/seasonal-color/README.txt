@@ -1,3 +1,10 @@
+## CURRENT EDITORIAL DATE PLAN — 2026-11-08 Owner request (pending PR merge)
+
+- **Effective plan proposed for November 2026:** `2026-11-effective-editorial-schedule.json`. Owner requested "jadwal diganti dimulai besok" on 8 November 2026 (WITA); start moves to **9 November 2026**. Twelve dates shift by one day, but `SDOH-BURGUNDY-CAR-0020` stays **20 November** because its approved "hari ini" text refers to Transgender Day of Remembrance on that date.
+- **Source of truth rule:** once this plan PR is approved and merged, use its `revised_editorial_date` for upcoming editorial-date discussions. The previous `2026-11-editorial-series-draft.json` remains an immutable historic draft; `2026-11-content-binding.json.target_date` and `2026-11-final-media-archive.json.editorial_date` are frozen **original QA/asset approval provenance**, NOT a live publication schedule.
+- **Release gate:** `publication_time=null`, `channel=null`, `calendar_events_created=false`, `scheduled=false`, `authorized=false`; no Instagram, TikTok, Google Calendar, production activation, or GitHub publishing action is authorized by the editorial change. Never rewrite the approved 13 final media ZIPs/65 JPEGs/13 captions or the original checksums.
+- The approved copy and media can be reused only with their existing exact hashes; no rerender is needed. **This file is informational**, the revision JSON and its CI test define the active proposal.
+
 # November 2026 — Trans Awareness Month (Color-only contract)
 
 **State:** OWNER_VISUAL_APPROVED_PRODUCTION_INACTIVE (2026-11-03; proof-only Owner approval recorded in `2026-11-owner-visual-approval.json`). This is an operational candidate, **not** an amendment to the project's permanent Sage/Burgundy palette. The JSON is deliberately **not consumed** by a production renderer or publication workflow.
