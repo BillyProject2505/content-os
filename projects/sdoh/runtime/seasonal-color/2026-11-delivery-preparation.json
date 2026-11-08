@@ -769,5 +769,107 @@
       ]
     }
   ],
-  "editorial_blockers": []
+  "editorial_blockers": [],
+  "calendar_sync": {
+    "status": "VERIFIED",
+    "date": "2026-11-08",
+    "calendar_id": "billymende2505@gmail.com",
+    "timezone": "Asia/Makassar",
+    "informational_only": true,
+    "events": [
+      {
+        "content_id": "SDOH-SAGE-CAR-0015",
+        "event_id": "n951ve210o83jp33hec6vlda5g",
+        "event_url": "https://www.google.com/calendar/event?eid=bjk1MXZlMjEwbzgzanAzM2hlYzZ2bGRhNWcgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-09T19:30:00+08:00",
+        "end": "2026-11-09T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0017",
+        "event_id": "c1g4i3sk2li7e7odumt767s088",
+        "event_url": "https://www.google.com/calendar/event?eid=YzFnNGkzc2sybGk3ZTdvZHVtdDc2N3MwODggYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-11T19:30:00+08:00",
+        "end": "2026-11-11T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0016",
+        "event_id": "upceqq0nhmg4q6r8842ifhmf6o",
+        "event_url": "https://www.google.com/calendar/event?eid=dXBjZXFxMG5obWc0cTZyODg0MmlmaG1mNm8gYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-12T19:30:00+08:00",
+        "end": "2026-11-12T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0018",
+        "event_id": "330v8a3uafhdl6g8sefru2aukc",
+        "event_url": "https://www.google.com/calendar/event?eid=MzMwdjhhM3VhZmhkbDZnOHNlZnJ1MmF1a2MgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-14T19:30:00+08:00",
+        "end": "2026-11-14T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0017",
+        "event_id": "nmledl1c80kppqefvdf5faea7g",
+        "event_url": "https://www.google.com/calendar/event?eid=bm1sZWRsMWM4MGtwcHFlZnZkZjVmYWVhN2cgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-16T19:30:00+08:00",
+        "end": "2026-11-16T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0019",
+        "event_id": "f6oi2n5f3rhg63aind6phod0ho",
+        "event_url": "https://www.google.com/calendar/event?eid=ZjZvaTJuNWYzcmhnNjNhaW5kNnBob2QwaG8gYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-18T19:30:00+08:00",
+        "end": "2026-11-18T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0018",
+        "event_id": "7cjub96i70h71rh2s8b4ff0gs8",
+        "event_url": "https://www.google.com/calendar/event?eid=N2NqdWI5Nmk3MGg3MXJoMnM4YjRmZjBnczggYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-19T19:30:00+08:00",
+        "end": "2026-11-19T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0020",
+        "event_id": "4jrqp0fnnvotpm2smfakafmrjg",
+        "event_url": "https://www.google.com/calendar/event?eid=NGpycXAwZm5udm90cG0yc21mYWthZm1yamcgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-20T19:30:00+08:00",
+        "end": "2026-11-20T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0019",
+        "event_id": "5it0d2cd5auokqrnpnan5e850c",
+        "event_url": "https://www.google.com/calendar/event?eid=NWl0MGQyY2Q1YXVva3FybnBuYW41ZTg1MGMgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-23T19:30:00+08:00",
+        "end": "2026-11-23T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0021",
+        "event_id": "824dapdq2dq0i9a57hfd19dtvc",
+        "event_url": "https://www.google.com/calendar/event?eid=ODI0ZGFwZHEyZHEwaTlhNTdoZmQxOWR0dmMgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-25T19:30:00+08:00",
+        "end": "2026-11-25T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0020",
+        "event_id": "93sof1bbbnoan3gt7q1r5oikug",
+        "event_url": "https://www.google.com/calendar/event?eid=OTNzb2YxYmJibm9hbjNndDdxMXI1b2lrdWcgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-26T19:30:00+08:00",
+        "end": "2026-11-26T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0022",
+        "event_id": "u1orffmialton0ev9dqs10ekho",
+        "event_url": "https://www.google.com/calendar/event?eid=dTFvcmZmbWlhbHRvbjBldjlkcXMxMGVraG8gYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-28T19:30:00+08:00",
+        "end": "2026-11-28T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0021",
+        "event_id": "jij4tgrifs0becf7cjigqcu36k",
+        "event_url": "https://www.google.com/calendar/event?eid=amlqNHRncmlmczBiZWNmN2NqaWdxY3UzNmsgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-30T19:30:00+08:00",
+        "end": "2026-11-30T20:00:00+08:00"
+      }
+    ],
+    "cancelled_content_id": "SDOH-BURGUNDY-CAR-0008",
+    "deleted_event_id": "ek37kf740euf3fv6vsu5lh5738"
+  }
 }

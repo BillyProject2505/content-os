@@ -79,7 +79,7 @@ test("historic dates remain immutable and release activation has explicit Owner 
     assert.equal(slot.local_at,active.items[index].revised_editorial_date+"T19:30:00+08:00");
     assert.equal(new Date(slot.local_at).toISOString().slice(11,16),"11:30");
   });
-  assert.equal(active.calendar.calendar_events_created,false);
+  assert.equal(active.calendar.calendar_events_created,true);
   assert.equal(active.calendar.scheduling_executed,true);
   assert.equal(active.publication.scheduled,true);
   assert.equal(active.publication.authorized,true);
