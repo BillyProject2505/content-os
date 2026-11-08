@@ -11,8 +11,8 @@
     "jpeg_sha256_matches": 65,
     "caption_sha256_matches": 12,
     "drive_jpeg_raw_readback_matches": 65,
-    "service_account_access": "NOT_TESTED",
-    "worker_readiness": "NOT_TESTED",
+    "service_account_access": "PASS_65_OF_65_SHA256",
+    "worker_readiness": "HEALTH_PASS_PUBLICATION_NOT_TESTED",
     "caption_sha256_matches_scope": "Current delivery captions matching original archive captions; 12 unchanged plus one separately approved amendment.",
     "source_caption_sha256_matches_before_amendment": 13,
     "owner_approved_caption_amendments": 1,
@@ -34,7 +34,36 @@
         }
       ]
     },
-    "delivery_folder_permission_observation": "Drive metadata lists only owner billyfernando2505@gmail.com; publisher service-account access is not established by this result."
+    "delivery_folder_permission_observation": "Historical pre-remediation metadata listed only the owner. Superseded for effective read access by readiness run 42447489516: scheduler service account read all 65 exact JPEGs successfully.",
+    "readiness_evidence": {
+      "run_url": "https://github.com/BillyProject2505/content-os/actions/runs/42447489516",
+      "checked_commit": "96ae7ac1bf2bfe4632c0a09e842b7c61035125a4",
+      "artifact_id": 13603962517,
+      "artifact_zip_sha256": "f65678b358570a9410c37e49d1a03648ad5a1a0036efef5959d6af3769d6d104",
+      "wif_token_obtained": true,
+      "media_passed": 65,
+      "worker_http_status": 200,
+      "worker_account_match": true,
+      "worker_commit_sha": "633c1e9d15c6a60eed2a3abecac2a83cd9790966",
+      "github_scheduler_enabled": true,
+      "scheduled_wakeup_enabled": true,
+      "manual_publishing_enabled": false
+    },
+    "scheduler_evidence": {
+      "status": "CRON_DISPATCH_AND_LINEAR_DISCOVERY_PASS_NO_DUE_CONTENT",
+      "run_urls": [
+        "https://github.com/BillyProject2505/content-os/actions/runs/42447766401",
+        "https://github.com/BillyProject2505/content-os/actions/runs/42448093045"
+      ],
+      "observed_at_utc": [
+        "2026-11-08T04:40:37Z",
+        "2026-11-08T04:45:37Z"
+      ],
+      "wake_source": "cloudflare-cron",
+      "decision": "NO_DUE_CONTENT",
+      "publication_steps": "SKIPPED",
+      "limitations": "No due-content execution, D1 preparation, Meta publication or evidence writeback was exercised. EXECUTOR_INGEST_SECRET validity remains untested."
+    }
   },
   "publication": {
     "authorized": false,

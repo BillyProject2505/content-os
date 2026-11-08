@@ -4,7 +4,7 @@ This status supersedes the earlier publication readiness audit below. All 13 Nov
 
 65 individual JPEGs were staged to Drive and raw-byte readback SHA-256 verified. Delivery index: `2026-11-delivery-preparation.json`. Caption revisions v1.0 label the original approved composed captions; SAGE-0015 v1.1 contains only the Owner-approved “Mulai 9 November” correction. Original source ZIPs remain immutable.
 
-Remaining prerequisites: verify publisher service-account Drive access, scheduler configuration and deployed Worker readiness, then obtain explicit release authorization. Current folder permissions show only the owner; no service-account access was granted or proven. No Calendar changes, scheduling, dispatch or posting has occurred.
+Readiness verified on 2026-11-08: run https://github.com/BillyProject2505/content-os/actions/runs/42447489516 obtained the scheduler service-account WIF token and read all 65 JPEGs with exact SHA-256 matches. Worker health returned HTTP 200 with the expected Instagram identity. Scheduler GitHub and Worker wakeup flags are enabled. Runs 42447766401 and 42448093045, five minutes apart, logged wake_source=cloudflare-cron and successful Linear discovery with NO_DUE_CONTENT; all publication steps were skipped. This proves the observed dispatch/discovery path, not due-content publication or EXECUTOR_INGEST_SECRET validity. Evidence is recorded in the delivery index. Remaining prerequisite: explicit release authorization before changing the 13 campaign records from PLANNED to SCHEDULED. No campaign scheduling, Calendar write or posting has occurred.
 
 ## Instagram publishing intent — 19:30 WITA, thirteen final media items (pending separate release approval)
 
