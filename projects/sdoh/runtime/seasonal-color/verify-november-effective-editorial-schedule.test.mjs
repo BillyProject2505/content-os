@@ -18,7 +18,7 @@ test("13 approved items retain identity, order, fingerprints, original evidence 
   assert.equal(active.schema,"sdoh-november-2026-effective-editorial-schedule-v1");
   assert.equal(active.decision,"OWNER_CONFIRMED_INSTAGRAM_1930_WITA");
   assert.equal(active.timezone,"Asia/Makassar");
-  assert.equal(active.status,"EDITORIAL_TIMING_AND_CHANNEL_CONFIRMED_NOT_SCHEDULED");
+  assert.equal(active.status,"OWNER_AUTHORIZED_SCHEDULED");
   assert.equal(active.items.length,13);
   assert.equal(active.summary.content_items,13);
   assert.equal(active.summary.shifted_by_one_day,12);
@@ -62,7 +62,7 @@ test("memorial item remains on Nov 20 because approved copy explicitly says 'har
   assert.match(copy.caption_body_paragraphs[0],/tanggal 20 november/);
 });
 
-test("historic dates remain immutable and no publish, schedule or activation authority is invented",()=>{
+test("historic dates remain immutable and release activation has explicit Owner evidence",()=>{
   assert.deepEqual(binding.items.map(x=>x.target_date),
     archived.items.map(x=>x.editorial_date));
   assert.deepEqual(binding.items.map(x=>[x.target_date,x.content_id]),
@@ -80,10 +80,13 @@ test("historic dates remain immutable and no publish, schedule or activation aut
     assert.equal(new Date(slot.local_at).toISOString().slice(11,16),"11:30");
   });
   assert.equal(active.calendar.calendar_events_created,false);
-  assert.equal(active.calendar.scheduling_executed,false);
-  assert.equal(active.publication.scheduled,false);
-  assert.equal(active.publication.authorized,false);
-  assert.equal(active.publication.activation_enabled,false);
+  assert.equal(active.calendar.scheduling_executed,true);
+  assert.equal(active.publication.scheduled,true);
+  assert.equal(active.publication.authorized,true);
+  assert.equal(active.publication.activation_enabled,true);
+  assert.equal(active.publication.release_approval.owner_response,"setuju");
+  assert.equal(active.publication.release_approval.date,"2026-11-08");
+  assert.equal(active.publication.activation_evidence,"2026-11-delivery-preparation.json#publication.register_activation");
   assert.equal(active.publication.published_by_this_revision,false);
   assert.equal(archived.publication.scheduled,false);
   assert.equal(archived.publication.authorized,false);

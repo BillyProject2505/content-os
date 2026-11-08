@@ -1,4 +1,10 @@
-## Current delivery and register preparation — 2026-11-08
+## Current release status — OWNER AUTHORIZED / SCHEDULED — 2026-11-08
+
+Owner replied “setuju” to explicit activation of all 13 November Instagram carousels at 19:30 WITA. All 13 live Linear publication rows are now SCHEDULED (7 Sage, 6 Burgundy); readback with the runtime authority parser passed for all 13, with matching caption/media hashes, due-time discovery and early-time rejection. Existing cron handles due-time execution. First slot: SDOH-SAGE-CAR-0015, 2026-11-09 19:30 WITA (11:30 UTC). TDOR remains November 20. No immediate publication was dispatched and no Calendar events were created. SCHEDULED is not proof of publication; actual results require runtime evidence and writeback. Release approval and exact register readback references: `2026-11-delivery-preparation.json#publication`.
+
+The sections below are historical preparation/approval stages and are superseded by this release status for authorization and scheduling. Approved source media, copy, hashes and historical QA remain unchanged.
+
+## Historical delivery and register preparation — 2026-11-08
 
 This status supersedes the earlier publication readiness audit below. All 13 November items now have Approved material rows, PLANNED publication rows and exact media/caption execution-manifest records in their routed Linear registers. The publisher must still reject them while PLANNED. Readback tested with the actual runtime parser: 13 planned rejections, 13 isolated due-time positive simulations and 13 early rejections PASS; old rows and manifest records preserved.
 
