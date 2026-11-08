@@ -25,7 +25,7 @@
     "timezone": "Asia/Makassar",
     "publication_time": "19:30",
     "channel": "INSTAGRAM",
-    "calendar_events_created": false,
+    "calendar_events_created": true,
     "scheduling_executed": true,
     "account": "@satudosisobathati",
     "utc_offset": "+08:00",
@@ -82,7 +82,8 @@
         "content_id": "SDOH-SAGE-CAR-0021",
         "local_at": "2026-11-30T19:30:00+08:00"
       }
-    ]
+    ],
+    "sync_evidence": "2026-11-delivery-preparation.json#calendar_sync"
   },
   "publication": {
     "activation_enabled": true,
