@@ -647,6 +647,8 @@ async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, 
       retry_safe: false,
       remote_media_id: mediaId,
       remote_permalink: remote.permalink,
+      published_at: remote.timestamp,
+      caption_comparison: await compareCaptionEvidence(caption, remote.caption),
     });
   }
 
@@ -890,4 +892,25 @@ function executorError(code, httpStatus = 500) {
 
 function result(status, extra = {}) {
   return { status, ...extra };
+}
+
+/** Diagnostic only: does not relax exact caption verification or mutate authority. */
+export async function compareCaptionEvidence(expected, actual) {
+  const a = normalizeLineEndings(expected), b = normalizeLineEndings(actual);
+  const hash = async value => Array.from(new Uint8Array(
+    await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value))
+  ), byte => byte.toString(16).padStart(2, "0")).join("");
+  const tags = value => value.split("\n").filter(line => /^\s*#/.test(line));
+  const narrative = value => value.split("\n").filter(line => !/^\s*#/.test(line)).join("\n").replace(/\n+$/, "");
+  return {
+    expected_sha256: await hash(String(expected ?? "")),
+    remote_sha256: await hash(String(actual ?? "")),
+    expected_length: String(expected ?? "").length,
+    remote_length: String(actual ?? "").length,
+    line_endings_normalized_equal: a === b,
+    equal_without_final_newlines: a.replace(/\n+$/, "") === b.replace(/\n+$/, ""),
+    non_hashtag_text_equal: narrative(a) === narrative(b),
+    expected_hashtag_lines: tags(a),
+    remote_hashtag_lines: tags(b),
+  };
 }
