@@ -1,0 +1,96 @@
+{
+  "schema": "cwc-stg10-publication-reschedule-authorization-v1",
+  "content_item_id": "CWC-CRSL-0004",
+  "owner_decision": {
+    "date": "2026-11-09",
+    "verbatim": "iya",
+    "interpreted_against_immediately_preceding_explicit_question": "Apakah Anda ingin menjadwalkan ulang ke Selasa, 10 November 2026 pukul 19.00 WITA?",
+    "meaning": "Explicit Owner authorization to move only the publication time for this same already approved release.",
+    "authorized_by_role": "CWC Domain Owner",
+    "separate_from_prior_authorization": true
+  },
+  "previous_slot": {
+    "authorization_source_path": "projects/cwc/content/release/CWC-CRSL-0004.stg10-publication-authorization.json",
+    "authorization_source_git_blob_sha": "42f0317291138d7b1ae97f73351af881945beb97",
+    "target_utc": "2026-11-02T11:00:00Z",
+    "status": "MISSED_AND_EXPIRED",
+    "incident_record_path": "projects/cwc/content/release/CWC-CRSL-0004.missed-slot-reconciliation-20261109.json",
+    "observed_github_run_id": 41521268351,
+    "forbid_replay": true
+  },
+  "new_slot": {
+    "target_local": "2026-11-10T19:00:00+08:00",
+    "target_timezone": "Asia/Makassar",
+    "target_utc": "2026-11-10T11:00:00Z",
+    "utc_window_end": "2026-11-10T11:20:00Z",
+    "weekday": "Tuesday",
+    "target_platform": "Instagram",
+    "target_account": "@cozwecare.id",
+    "status": "OWNER_AUTHORIZED_GITHUB_ACTIONS_TARGET_NOT_PLATFORM_SCHEDULED",
+    "github_cron_is_best_effort": true,
+    "auto_post_window_minutes": 20
+  },
+  "approved_package": {
+    "release_identity": "sha256:6b3695d3e100dbb6abd8696d0e786ef935ce1e6a7ab169c377828a8362e3cb5f",
+    "release_prep_path": "projects/cwc/content/release/CWC-CRSL-0004.stg10-release-preparation.json",
+    "release_prep_git_blob_sha": "358327826bb3cb6342fb9916852c90f8c81d27d0",
+    "stg09_approval_path": "projects/cwc/content/approval/CWC-CRSL-0004.stg09-approval.json",
+    "stg09_approval_git_blob_sha": "e42abd3d585d7a03a05fb11594ff94f3e12572ff",
+    "caption_sha256": "8f9f66615d3a25b697075bbc8ad3a56ba0c256b97d181df87b5132127ce67bb3",
+    "approved_copy_fingerprint": "27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60",
+    "jpeg_public_media_commit": "7bcc15e10947d35c733cec94051432524a337406",
+    "jpeg_files": [
+      {
+        "order": 1,
+        "name": "slide-01.jpg",
+        "sha256": "bc3334e58a53a83f7699bb519b0b9236d8423f7d90f3d27d84e4843e5d161a20",
+        "source_png_sha256": "db0e1d6db90ee0e7d81eb88ec98b7df43ed23d1d1b35aa93df7947afcc2184bd"
+      },
+      {
+        "order": 2,
+        "name": "slide-02.jpg",
+        "sha256": "b4b2d931b20559617c8cb38ce5cd4c4772d4a55c5194465392721673d64506a4",
+        "source_png_sha256": "c688bcc570e2b29be9b16b93b4d5abbbf0e4c87c2d42ed462f606e3e4b98e218"
+      },
+      {
+        "order": 3,
+        "name": "slide-03.jpg",
+        "sha256": "56ca391d62fb597097b2945d6a03c58c2aca20372ab9f50effbea4544c43ae75",
+        "source_png_sha256": "fccec5a75e1f7efc141c2971ab577f703e697411cef70e7b489cfe7c281bfd32"
+      },
+      {
+        "order": 4,
+        "name": "slide-04.jpg",
+        "sha256": "479628d1856bc09f33c4cc6537f1b7a53b11a8e762ed04540416881b110e58bd",
+        "source_png_sha256": "272ed6c52c086810d1c3a78a7a236fdc57449bdb1dd0930901f56b90c0974204"
+      },
+      {
+        "order": 5,
+        "name": "slide-05.jpg",
+        "sha256": "5bcf8ef706160a0c2e5fdbbb762474d2ac3f8a15c20a77573f45e4b69330f07a",
+        "source_png_sha256": "789de1782f4723a4d53fe6b9bcc193417740229d9e8638c0f4b0a3c2fac7d0c1"
+      }
+    ],
+    "source_files_unchanged": true,
+    "caption_unchanged": true,
+    "sensitive_claim_owner_approval_carried_forward": true
+  },
+  "execution_and_controls": {
+    "github_actions_workflow": ".github/workflows/cwc-instagram-publish-0004.yml",
+    "prior_attempt_tag": "cwc-crsl-0004-ig-attempt-20261102",
+    "next_attempt_tag": "cwc-crsl-0004-ig-attempt-20261110",
+    "current_register_version": "1.37",
+    "lifecycle_retained": "READY_FOR_PUBLICATION",
+    "exception_status_retained": "BLOCKED",
+    "verified_meta_credentials_for_new_slot": false,
+    "connected_meta_instagram_account_verified": false,
+    "provider_remote_schedule_id": null,
+    "publish_attempted_under_new_slot": false,
+    "actual_post_id": null,
+    "publication_live_proof": null,
+    "publication_authority_until_window_end_only": true,
+    "do_not_clear_blocked_until_readonly_meta_account_check": true,
+    "no_unattended_retry_after_window": true,
+    "no_platform_published_claim": true
+  }
+}

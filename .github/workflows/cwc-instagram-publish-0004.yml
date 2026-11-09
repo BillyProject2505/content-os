@@ -11,6 +11,7 @@ on:
       - main
     paths:
       - "projects/cwc/content/instagram-media/CWC-CRSL-0004.media-adaptation.json"
+      - "projects/cwc/content/release/CWC-CRSL-0004.stg10-reschedule-20261110.json"
   workflow_dispatch:
     inputs:
       mode:
@@ -26,8 +27,12 @@ on:
         type: string
         required: false
         default: ""
-  # Expired 2026-11-02 one-shot cron retired after verified missed slot.
-  # A new target requires fresh Owner authorization and a new reviewed schedule.
+  schedule:
+    # New explicit Owner authorization: Tue 2026-11-10 19:00 WITA = 11:00 UTC.
+    # GitHub cron is best-effort and may be delayed or dropped.
+    # Runtime verifies exact year/date, immutable release and a +20 minute deadline.
+    # Multiple wake-ups are guarded by one-shot Git tag and platform duplicate check.
+    - cron: "0,5,10,15 11 10 11 *"
 
 permissions:
   contents: read

@@ -8,7 +8,7 @@ import {spawnSync} from "node:child_process";
 
 const ROOT="projects/cwc/";
 const id="CWC-CRSL-0004";
-const targetMs=Date.parse("2026-11-02T11:00:00Z");
+const targetMs=Date.parse("2026-11-10T11:00:00Z");
 const publicationWindowStatus=(ms)=>ms<targetMs?"NOT_YET_OPEN":ms>targetMs+20*60*1000?"EXPIRED":"OPEN";
 const digest=b=>crypto.createHash("sha256").update(b).digest("hex");
 const j=p=>JSON.parse(fs.readFileSync(ROOT+p,"utf8"));
@@ -21,23 +21,42 @@ function canonical(x){
 function context(){
  const release=j("content/release/"+id+".stg10-release-preparation.json");
  const authorization=j("content/release/"+id+".stg10-publication-authorization.json");
+ const reschedule=j("content/release/"+id+".stg10-reschedule-20261110.json");
  const approval=j("content/approval/"+id+".stg09-approval.json");
  const qa=j("content/qa/"+id+".stg08-qa.json");
  const copy=j("content/carousel/"+id+".json");
  const media=j("content/instagram-media/"+id+".media-adaptation.json");
  const register=fs.readFileSync(ROOT+"DIUA-DIC-000027_CWC-Content-Register.md","utf8");
- return {release,authorization,approval,qa,copy,media,register};
+ return {release,authorization,reschedule,approval,qa,copy,media,register};
 }
 function validate(c){
- const {release:r,authorization:a,approval:o,qa:q,copy,media:m,register}=c;
- assert(r.content_item_id===id&&a.content_item_id===id&&o.content_item_id===id&&m.content_id===id,"CWC_CONTENT_ID_MISMATCH");
+ const {release:r,authorization:a,reschedule:t,approval:o,qa:q,copy,media:m,register}=c;
+ assert(r.content_item_id===id&&a.content_item_id===id&&t.content_item_id===id&&o.content_item_id===id&&m.content_id===id,"CWC_CONTENT_ID_MISMATCH");
  assert(o.decision==="APPROVED"&&o.sensitive_claim_signoff.explicit_owner_signoff==="APPROVED","STG09_OWNER_OR_CLAIM_SIGNOFF_MISSING");
  assert(q.verdict==="PASS"&&q.checks.length===20,"STG08_QA_NOT_PASS");
  const calculated="sha256:"+digest(JSON.stringify(canonical(r.identity_material)));
  assert(r.approved_release_identity===calculated&&a.approved_release.release_identity===calculated&&m.source_approved_release_identity===calculated,"RELEASE_IDENTITY_DRIFT");
  assert(r.identity_material.approved_copy_fingerprint===copy.copy_fingerprint,"COPY_FINGERPRINT_DRIFT");
  assert(r.identity_material.caption_sha256===digest(Buffer.from(copy.caption,"utf8")),"CAPTION_SHA_DRIFT");
- assert(a.requested_publication.utc_datetime==="2026-11-02T11:00:00Z"&&a.human_authorization.authorized===true,"STG10_PUBLISH_TIME_NOT_AUTHORIZED");
+ // Keep the historical authority immutable; the later explicit Owner decision
+ // authorizes only this new time, for the same exact source/caption/IG account.
+ assert(a.requested_publication.utc_datetime==="2026-11-02T11:00:00Z"&&a.human_authorization.authorized===true,"HISTORIC_STG10_AUTHORIZATION_DRIFT");
+ assert(t.owner_decision.verbatim==="iya"
+   && t.owner_decision.interpreted_against_immediately_preceding_explicit_question==="Apakah Anda ingin menjadwalkan ulang ke Selasa, 10 November 2026 pukul 19.00 WITA?"
+   && t.previous_slot.target_utc===a.requested_publication.utc_datetime
+   && t.previous_slot.status==="MISSED_AND_EXPIRED"
+   && t.new_slot.target_utc==="2026-11-10T11:00:00Z"
+   && Date.parse(t.new_slot.target_utc)===targetMs
+   && t.new_slot.utc_window_end==="2026-11-10T11:20:00Z"
+   && t.new_slot.target_account==="@cozwecare.id"
+   && t.approved_package.release_identity===calculated
+   && t.approved_package.caption_sha256===r.identity_material.caption_sha256
+   && t.approved_package.jpeg_public_media_commit===m.public_media_git_sha
+   && t.approved_package.jpeg_files.length===5
+   && t.approved_package.jpeg_files.every((f,i)=>f.order===i+1&&f.sha256===m.files[i].sha256&&f.source_png_sha256===m.files[i].source_png_sha256)
+   && t.execution_and_controls.next_attempt_tag==="cwc-crsl-0004-ig-attempt-20261110"
+   && t.execution_and_controls.exception_status_retained==="BLOCKED",
+   "RESCHEDULE_OWNER_AUTHORIZATION_OR_RELEASE_IDENTITY_DRIFT");
  assert(a.human_authorization.destination_account==="@cozwecare.id","DESTINATION_ACCOUNT_DRIFT");
  assert(r.publishable_artifacts.ordered_files.length===5&&m.files.length===5,"CAROUSEL_LENGTH_NOT_FIVE");
  for(let i=0;i<5;i++){
@@ -95,7 +114,7 @@ async function validatePublicMedia(ctx){
 function claimExactlyOnce(){
  const token=process.env.GITHUB_TOKEN;
  assert(token&&process.env.GITHUB_REPOSITORY==="BillyProject2505/content-os","GITHUB_EXECUTION_AUTHORITY_MISMATCH");
- const args=["api","-X","POST","repos/BillyProject2505/content-os/git/refs","-f","ref=refs/tags/cwc-crsl-0004-ig-attempt-20261102","-f","sha="+process.env.GITHUB_SHA];
+ const args=["api","-X","POST","repos/BillyProject2505/content-os/git/refs","-f","ref=refs/tags/cwc-crsl-0004-ig-attempt-20261110","-f","sha="+process.env.GITHUB_SHA];
  const r=spawnSync("gh",args,{encoding:"utf8",env:{...process.env,GH_TOKEN:token},timeout:20000});
  assert(r.status===0,"PUBLISH_ATTEMPT_LOCK_UNAVAILABLE_OR_ALREADY_EXISTS__STOP_AND_RECONCILE");
 }
@@ -126,7 +145,7 @@ async function publish(v){
  assert(/^[0-9]+$/.test(String(published.id||"")),"PUBLISH_RESPONSE_AMBIGUOUS__DO_NOT_RETRY");
  const proof=await api(published.id+"?fields=id,caption,permalink,media_type");
  assert(proof.id===published.id&&proof.caption===copy.caption&&proof.permalink&&proof.media_type==="CAROUSEL","LIVE_MEDIA_IDENTITY_INCOMPLETE__DO_NOT_RETRY");
- const evidence={content_id:id,approved_release_identity:v.identity,scheduled_target:"2026-11-02T11:00:00Z",published_media_id:proof.id,permalink:proof.permalink,media_type:proof.media_type,caption_sha256:digest(Buffer.from(proof.caption,"utf8")),checked_at:new Date().toISOString()};
+ const evidence={content_id:id,approved_release_identity:v.identity,scheduled_target:"2026-11-10T11:00:00Z",published_media_id:proof.id,permalink:proof.permalink,media_type:proof.media_type,caption_sha256:digest(Buffer.from(proof.caption,"utf8")),checked_at:new Date().toISOString()};
  fs.writeFileSync(process.env.RUNNER_TEMP+"/cwc-instagram-live-proof.json",JSON.stringify(evidence,null,2)+"\n");
  if(process.env.GITHUB_STEP_SUMMARY)fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,"\nCWC Instagram verified live: "+proof.permalink+"\n");
  console.log(JSON.stringify({result:"PLATFORM_LIVE_PROOF_CAPTURED",permalink:proof.permalink,published_media_id:proof.id}));
@@ -144,7 +163,7 @@ async function main(){
      : v.blockers.includes("JPEG_DELIVERY_ADAPTATION_OWNER_APPROVAL_MISSING"),"JPEG_APPROVAL_GATE_REGRESSION");
    console.log("PASS: 5 ordered media, exact STG-09/10 sha, caption, time; publish fail-closed");
  }else if(mode==="--preflight"){
-   console.log(JSON.stringify({content_id:id,identity:v.identity,authorized_time:"2026-11-02T11:00:00Z",publish_ready:v.blockers.length===0,blockers:v.blockers}));
+   console.log(JSON.stringify({content_id:id,identity:v.identity,authorized_time:"2026-11-10T11:00:00Z",publish_ready:v.blockers.length===0,blockers:v.blockers}));
  }else if(mode==="--publish"){
    await publish(v);
  }else{
