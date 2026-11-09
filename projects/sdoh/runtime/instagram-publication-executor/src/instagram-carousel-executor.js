@@ -1,3 +1,4 @@
+import { matchReviewedPublicationAmendment } from "./reviewed-publication-amendments.js";
 import { createSignedMediaUrl } from "./media-gateway.js";
 import { loadAndValidateStoredAuthority } from "./execution-authority.js";
 import { findBlockingSiblingJob } from "./cross-job-guard.js";
@@ -549,6 +550,7 @@ export async function reconcileCarouselPublication({
       env,
       jobId,
       mediaId: job.remote_media_id,
+      reconciliationJob: job,
       caption,
       client,
       now,
@@ -562,6 +564,7 @@ export async function reconcileCarouselPublication({
       env,
       jobId,
       mediaId: published.remote_id,
+      reconciliationJob: job,
       caption,
       client,
       now,
@@ -620,7 +623,7 @@ export async function reconcileCarouselPublication({
   });
 }
 
-async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, now }) {
+async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, now, reconciliationJob = null }) {
   let remote;
   try {
     remote = await client.getPublishedMedia(mediaId);
@@ -639,7 +642,11 @@ async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, 
     });
   }
 
-  if (normalizeLineEndings(remote.caption) !== normalizeLineEndings(caption)) {
+  const captionMatches = normalizeLineEndings(remote.caption) === normalizeLineEndings(caption);
+  const reviewedAmendment = !captionMatches && reconciliationJob
+    ? await matchReviewedPublicationAmendment({ job: reconciliationJob, caption, remote })
+    : null;
+  if (!captionMatches && !reviewedAmendment) {
     await markReconciliationRequired(env.DB, jobId, "REMOTE_CAPTION_MISMATCH");
     return result("REMOTE_CAPTION_MISMATCH", {
       ok: false,
@@ -682,6 +689,8 @@ async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, 
     remote_media_id: mediaId,
     remote_permalink: remote.permalink,
     published_at: remote.timestamp,
+    caption_verification: reviewedAmendment ? "REVIEWED_POST_PUBLICATION_AMENDMENT" : "ORIGINAL_AUTHORITY",
+    caption_amendment: reviewedAmendment,
   });
 }
 
