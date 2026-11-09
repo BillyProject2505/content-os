@@ -80,10 +80,10 @@ jobs:
           {
             echo "## SDOH runtime reconciliation diagnostic"
             echo
-            echo "- Job state: `$state`"
-            echo "- Last error: `$(jq -r '.job.last_error // "NONE"' "$response_file")`"
-            echo "- Media count: `$(jq -r '.media_count // 0' "$response_file")`"
-            echo "- Artifact count: `$(jq -r '.artifacts | length' "$response_file")`"
+            printf -- '- Job state: `%s`\n' "$state"
+            printf -- '- Last error: `%s`\n' "$(jq -r '.job.last_error // "NONE"' "$response_file")"
+            printf -- '- Media count: `%s`\n' "$(jq -r '.media_count // 0' "$response_file")"
+            printf -- '- Artifact count: `%s`\n' "$(jq -r '.artifacts | length' "$response_file")"
             echo
             echo "### Remote artifacts"
             jq -r '.artifacts[]? | "- \(.kind) slot \(.slot): state=\(.state), remote_id=\(.remote_id // "NONE")"' "$response_file"
@@ -129,7 +129,7 @@ jobs:
           status="$(jq -r '.result.status // "UNKNOWN"' "$response_file")"
           echo "reconcile_status=$status"
           # Published caption evidence only; no credentials or stored token data.
-          jq '{status:.result.status, remote_media_id:.result.remote_media_id, remote_permalink:.result.remote_permalink, published_at:.result.published_at, caption_comparison:.result.caption_comparison}' "$response_file" | tee -a "$GITHUB_STEP_SUMMARY"
+          jq '{status:.result.status, remote_media_id:.result.remote_media_id, remote_permalink:.result.remote_permalink, published_at:.result.published_at, caption_comparison:.result.caption_comparison, caption_verification:.result.caption_verification, caption_amendment:.result.caption_amendment}' "$response_file" | tee -a "$GITHUB_STEP_SUMMARY"
 
           case "$status" in
             PUBLISHED|ALREADY_PUBLISHED)
