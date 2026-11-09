@@ -169,16 +169,22 @@
       },
       "publication_evidence": {
         "status": "PUBLISHED",
-        "evidence_basis": "OWNER_CONFIRMED_WITH_PERMALINK",
+        "evidence_basis": "META_API_AND_OWNER_CAPTION_HASH_MATCH",
         "owner_confirmation_date": "2026-11-09",
         "permalink": "https://www.instagram.com/p/DfhOwnMIBwK/",
         "shortcode": "DfhOwnMIBwK",
-        "actual_published_at": null,
+        "actual_published_at": "2026-11-09T11:31:53+0000",
         "manual_hashtag_edit_confirmed": true,
         "hashtags": "#satudosisobathati #manado #mentalhealthmanado #transawarenessmonth #transgender",
-        "remote_caption_independently_verified": false,
-        "runtime_reconciliation": "PENDING_REMOTE_CAPTION_MISMATCH",
-        "repost_authorized": false
+        "remote_caption_independently_verified": true,
+        "runtime_reconciliation": "PENDING_REVIEWED_AMENDMENT_DEPLOY_AND_RECONCILE",
+        "repost_authorized": false,
+        "remote_media_id": "18150047068583407",
+        "remote_caption_sha256": "5b8e9de5ce40ffb45fccf6c9b8f344b6bed6e895609c0c0ec9600747ca7af257",
+        "published_caption": "Mulai 9 November, kampanye Transgender Awareness Month mengajak kita menghormati identitas setiap orang. Setiap orang transgender berhak merasa aman sebagai dirinya.\n\nRasa hormat bisa dimulai dari hal sederhana: menggunakan nama yang seseorang pakai, menjaga privasinya, serta mendengarkan tanpa menghakimi.\n\nTidak semua orang ingin membagikan pengalaman pribadinya. Kita dapat tetap hadir dengan hormat, tanpa memaksa penjelasan tentang identitas gender atau perjalanan hidupnya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026 🏳️‍⚧️\nTo Honor and To Hold: Their Lives, Their Legacies\n\n#satudosisobathati #transawarenessmonth #manado #mentalhealthmanado #transgender",
+        "remote_evidence_run": "https://github.com/BillyProject2505/content-os/actions/runs/42636664300",
+        "caption_amendment_id": "SDOH-SAGE-CAR-0015-PUBLISHED-CAPTION-20261109",
+        "caption_difference": "November hashtag replacement/order; flag emoji; blank line before hashtags; removed trailing newline. Narrative unchanged."
       }
     },
     {
@@ -965,7 +971,7 @@
     "pending_reconciliation": [
       "SDOH-SAGE-CAR-0015"
     ],
-    "pending_reason": "Sage0015 publication/manual hashtag edit confirmed by Owner with permalink; remote timestamp/full caption and runtime mismatch still pending reconciliation. Historical execution authority preserved.",
+    "pending_reason": "Published caption verified by exact Meta/Owner SHA-256 match; controlled runtime reconciliation of the reviewed amendment remains pending. Original execution authority preserved.",
     "permanent_rule_changed": false
   }
 }

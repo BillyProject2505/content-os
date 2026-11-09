@@ -1,3 +1,4 @@
+import assert from "node:assert/strict";
 import {
   executeCarouselPublication,
   reconcileCarouselPublication,
@@ -127,6 +128,21 @@ function createFakeDb(state) {
         },
 
         async run() {
+          if (normalized.startsWith("INSERT INTO publication_job_remote_artifacts")) {
+            const [jobId, kind, slot, remote_id, artifactState] = bound;
+            assert.equal(jobId, state.job.id);
+            const old = state.artifacts.find(x => x.kind === kind && x.slot === slot);
+            if (old) Object.assign(old, { remote_id, state: artifactState });
+            else state.artifacts.push({ kind, slot, remote_id, state: artifactState });
+            return { meta: { changes: 1 } };
+          }
+          if (normalized.startsWith("UPDATE publication_jobs") && normalized.includes("SET state = 'PUBLISHED'")) {
+            assert.equal(bound[0], state.job.id);
+            Object.assign(state.job, { state: "PUBLISHED", remote_media_id: bound[1],
+              remote_permalink: bound[2], published_at: bound[3], last_error: null });
+            return { meta: { changes: 1 } };
+          }
+
           if (
             normalized.startsWith("UPDATE publication_jobs") &&
             normalized.includes("SET state = 'FAILED'")
@@ -270,3 +286,72 @@ console.log("immutable authority caption used by execute/reconcile");
 console.log("second execute: 0 Meta calls after PUBLISH_ATTEMPTED");
 console.log("reconcile: read-only parent status check only");
 console.log("duplicate media_publish attempts: 0");
+
+const originalCaption = "Mulai 9 November, kampanye Transgender Awareness Month mengajak kita menghormati identitas setiap orang. Setiap orang transgender berhak merasa aman sebagai dirinya.\n\nRasa hormat bisa dimulai dari hal sederhana: menggunakan nama yang seseorang pakai, menjaga privasinya, serta mendengarkan tanpa menghakimi.\n\nTidak semua orang ingin membagikan pengalaman pribadinya. Kita dapat tetap hadir dengan hormat, tanpa memaksa penjelasan tentang identitas gender atau perjalanan hidupnya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n";
+const publishedCaption = "Mulai 9 November, kampanye Transgender Awareness Month mengajak kita menghormati identitas setiap orang. Setiap orang transgender berhak merasa aman sebagai dirinya.\n\nRasa hormat bisa dimulai dari hal sederhana: menggunakan nama yang seseorang pakai, menjaga privasinya, serta mendengarkan tanpa menghakimi.\n\nTidak semua orang ingin membagikan pengalaman pribadinya. Kita dapat tetap hadir dengan hormat, tanpa memaksa penjelasan tentang identitas gender atau perjalanan hidupnya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026 🏳️‍⚧️\nTo Honor and To Hold: Their Lives, Their Legacies\n\n#satudosisobathati #transawarenessmonth #manado #mentalhealthmanado #transgender";
+const amendedJobId = "IG-SDOH-SAGE-CAR-0015-20261109T113000Z";
+function amendmentState() {
+  const s = makeState();
+  Object.assign(s.job, { id: amendedJobId, content_id: "SDOH-SAGE-CAR-0015",
+    scheduled_at: "2026-11-09T19:30:00+08:00", caption_revision: "v1.1",
+    remote_media_id: "18150047068583407" });
+  Object.assign(s.authority, { content_id: s.job.content_id, scheduled_at: s.job.scheduled_at,
+    caption_revision: "v1.1", approved_caption: originalCaption,
+    caption_sha256: "5d13d0f741ec7da701996fcdb662f1884f4c7ce1cbe71fd45a56c5f0a6fc88c1" });
+  return s;
+}
+function publishedRemote() {
+  return { id: "18150047068583407", permalink: "https://www.instagram.com/p/DfhOwnMIBwK/",
+    timestamp: "2026-11-09T11:31:53+0000", caption: publishedCaption };
+}
+for (const variant of ["exact", "remote-caption", "original-caption", "media", "permalink",
+    "timestamp", "job", "content", "account", "schedule", "artifact-fallback", "original-match"]) {
+  const s = amendmentState(), remote = publishedRemote();
+  if (variant === "remote-caption") remote.caption += " ";
+  if (variant === "original-caption") {
+    s.authority.approved_caption += " ";
+    s.authority.caption_sha256 = await sha256Hex(s.authority.approved_caption);
+  }
+  if (variant === "media") s.job.remote_media_id = remote.id = "other-media";
+  if (variant === "permalink") remote.permalink += "wrong";
+  if (variant === "timestamp") remote.timestamp = "2026-11-09T11:31:54+0000";
+  if (variant === "job") s.job.id += "-other";
+  if (variant === "content") s.authority.content_id = s.job.content_id = "SDOH-SAGE-CAR-0016";
+  if (variant === "account") s.authority.destination_account = s.job.account = "@other";
+  if (variant === "schedule") s.authority.scheduled_at = s.job.scheduled_at = "2026-11-10T19:30:00+08:00";
+  if (variant === "artifact-fallback") {
+    s.job.remote_media_id = null;
+    s.artifacts.push({kind: "PUBLISHED_MEDIA", slot: 0, remote_id: remote.id, state: "RETURNED"});
+  }
+  if (variant === "original-match") remote.caption = originalCaption;
+  const snapshotBefore = JSON.stringify(s.authority);
+  let calls = 0;
+  const fetchImpl = async (url, options = {}) => {
+    assert.equal(options.method || "GET", "GET", "No Meta writes allowed");
+    assert.ok(!String(url).includes("/media_publish"));
+    calls++;
+    return Response.json(remote);
+  };
+  const result = await reconcileCarouselPublication({env: createEnv(s), jobId: s.job.id,
+    fetchImpl, now: () => Date.parse("2026-11-09T15:00:00Z")});
+  assert.equal(calls, 1);
+  const accepted = ["exact", "artifact-fallback", "original-match"].includes(variant);
+  assert.equal(result.status, accepted ? "PUBLISHED" : "REMOTE_CAPTION_MISMATCH", variant);
+  assert.equal(JSON.stringify(s.authority), snapshotBefore, "Immutable authority must remain untouched");
+  assert.equal(result.retry_safe, false);
+  if (accepted) {
+    assert.equal(s.job.state, "PUBLISHED");
+    assert.equal(s.job.last_error, null);
+    assert.equal(s.credential, null);
+    assert.equal(result.caption_verification, variant === "original-match" ?
+      "ORIGINAL_AUTHORITY" : "REVIEWED_POST_PUBLICATION_AMENDMENT");
+    // Repeated reconciliation stays read-only and has the same outcome.
+    const again = await reconcileCarouselPublication({env: createEnv(s), jobId: s.job.id,
+      fetchImpl, now: () => Date.parse("2026-11-09T15:01:00Z")});
+    assert.equal(again.status, "PUBLISHED");
+  } else {
+    assert.equal(s.job.state, "FAILED");
+    assert.ok(!s.artifacts.some(x => x.state === "VERIFIED"));
+  }
+}
+console.log("Reviewed published-caption amendment PASS: exact identity/hash match only, immutable authority, no Meta writes, repeat-safe.");
