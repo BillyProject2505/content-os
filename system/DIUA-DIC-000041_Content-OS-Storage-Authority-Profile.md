@@ -46,7 +46,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Related Issue | [BUS-109](https://linear.app/bussiness-content-os/issue/BUS-109/content-os-storage-authority-profile) — Content OS — Storage Authority Profile |
 | Universal Identifier (UNIS/DIC) | `DIUA-DIC-000041` — ALLOCATED — ACTIVE |
 | Depends On | Content OS — Root Documentation Structure v2.5 CANONICAL; Content OS — Root Level Architecture v1.11 CANONICAL; Content OS — System Architecture v1.16 CANONICAL; Content OS — System Governance v1.17 CANONICAL |
-| Related Implementation Specification | Content OS — Repository Representation Profile v1.3 CANONICAL |
+| Related Implementation Specification | Content OS — Repository Representation Profile v1.4 CANONICAL |
 
 ## 1. Purpose
 
