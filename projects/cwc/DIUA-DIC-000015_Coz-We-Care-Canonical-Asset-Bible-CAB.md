@@ -402,3 +402,13 @@ Current boundary:
 This is a terminology/authority-boundary correction only. No asset behavior or canonical binary changed.
 
 **Version:** 1.35 → 1.36.
+
+## Editorial Historical CAB Source Interpretation — 2026-11-09
+
+**Non-authoritative provenance note.** The legacy `CWC-CAB-001` v5.0 document is a historical baseline, not the current production specification or a second governed-text authority. It must not be re-imported into BUS-21 or used to override this canonical CAB, the current CAR, or the current CRS.
+
+The legacy v5.0 asset numbering differs from the active sequence: `CWC-CAB-AS-003` described **Canonical Footer Platforms** in that historical source. In the current canonical inventory, `CWC-CAB-AS-003` denotes the **Official Brand Color Asset** and `CWC-CAB-AS-004` denotes the **Official Footer Platform**. The legacy `CWC-CAR-AS-001`-style registry references must not be treated as equivalent to the current `CWC-OBJ-000001`-style CAR object identifiers without an explicitly governed mapping.
+
+This note documents historical interpretation only. The current AS-001–AS-005 inventory, per-asset Production Behavior assignments, asset specifications, visual-reference mappings, binaries, lifecycle states, and existing Owner locks remain unchanged.
+
+**Version:** v1.36 retained; non-normative clarification tracked through the Git commit and PR.

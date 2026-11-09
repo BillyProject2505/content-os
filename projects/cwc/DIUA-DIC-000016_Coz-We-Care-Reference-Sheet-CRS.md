@@ -464,9 +464,9 @@ Current tracked state as of 2026-09-16:
 
 **Authority basis:** Content OS — Storage Authority Profile v1.2 CANONICAL ([BUS-109](../../system/DIUA-DIC-000041_Content-OS-Storage-Authority-Profile.md)).
 
-Read-back boundary:
+**Historical read-back boundary (2026-09-26; superseded by the completed repository cutover):**
 
-* this Linear CRS document is the sole governed text/reference-record authority;
+* at that historical checkpoint, the Linear CRS document was the sole governed text/reference-record authority;
 * Google Drive stores approved binary/image/reference assets and is addressed through stable file IDs;
 * Drive binaries do not create independent text/governance authority;
 * repository/GitHub representation remains separately governed by the Repository Representation Profile.
@@ -474,3 +474,11 @@ Read-back boundary:
 The only current normative wording corrected in this revision was the residual phrase `authoritative Drive repository`; historical migration records were preserved unchanged.
 
 **Version:** 1.22 → 1.23.
+
+## Editorial Post-Cutover Authority Read-Back — 2026-11-09
+
+**Current canonical governed-text authority:** this CRS document in GitHub `BillyProject2505/content-os` following the completed CWC repository cutover under Storage Authority Profile SAP1. The Linear CRS document is a migrated historical/reference representation and execution/audit-trail linkage, not a second canonical governed-text authority. Google Drive is limited to binary assets and visual-reference evidence. The preceding v1.23 section records the 2026-09-26 historical read-back and does not govern the current authority boundary.
+
+This is an editorial authority clarification only; all canonical asset identities, lifecycle states, Owner locks, reference IDs, binary mappings, and visual specifications are unchanged.
+
+**Version:** v1.23 retained; editorial read-back of already-completed authority migration, tracked by Git commit and PR.
