@@ -1,0 +1,61 @@
+{
+  "schema": "sdoh-seasonal-owner-visual-approval-v1",
+  "recorded_date": "2026-11-03",
+  "decision_source": "Owner explicit 'setuju' in ongoing SDOH Trans Awareness Month conversation following request for Owner Visual Approval",
+  "decision": "OWNER_VISUAL_APPROVED",
+  "approval_scope": {
+    "campaign": "Trans Awareness Month 2026",
+    "applicability": [
+      "SAGE",
+      "BURGUNDY"
+    ],
+    "period": {
+      "start": "2026-11-01",
+      "end": "2026-11-30",
+      "timezone": "Asia/Makassar"
+    },
+    "color_only": {
+      "SAGE": {
+        "surface": "#C5E4F0",
+        "text": "#355E78",
+        "character": "#355E78",
+        "logo": "#355E78",
+        "linework": "#355E78"
+      },
+      "BURGUNDY": {
+        "surface": "#F5C9DA",
+        "text": "#793E61",
+        "character": "#793E61",
+        "logo": "#793E61",
+        "linework": "#793E61"
+      }
+    },
+    "visual_proof_sha256": "b2243a69f2b4fc2470bc8d83cd736112033ee6a0f81dc3212d2caa0f459ef2a4",
+    "candidate_kit_sha256": "8107b1d665008627d20af5686d59f1ac1fe14718f124421196cd5fd255358b52"
+  },
+  "preservation": [
+    "registered_character_identity_and_pose_map",
+    "alpha_geometry",
+    "Caveat_Medium",
+    "font_metrics",
+    "layout",
+    "logo_geometry",
+    "asset_hash_provenance",
+    "approval_and_publication_gates"
+  ],
+  "explicit_exclusions": [
+    "no_authority_to_merge",
+    "no_authority_to_publish_or_schedule",
+    "no_production_activation",
+    "no_authority_to_replace_canonical_original_binaries",
+    "no_approval_of_future_unreviewed_rendered_outputs"
+  ],
+  "remaining_gates": [
+    "versioned_renderer_integration",
+    "production_render_QA",
+    "format_specific_compatibility",
+    "binary_persistence_and_checksum_readback_if_registered",
+    "existing_publication_approval"
+  ],
+  "status": "VISUAL_APPROVAL_RECORDED_PRODUCTION_INACTIVE"
+}

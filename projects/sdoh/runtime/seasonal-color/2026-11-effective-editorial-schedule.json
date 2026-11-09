@@ -1,0 +1,239 @@
+{
+  "schema": "sdoh-november-2026-effective-editorial-schedule-v1",
+  "campaign": "Transgender Awareness Month November 2026",
+  "decision": "OWNER_CONFIRMED_INSTAGRAM_1930_WITA",
+  "decision_date": "2026-11-08",
+  "decision_evidence": "User: ya; response to question 'Apakah seluruh 13 konten akan dipublikasikan pukul 19.30 WITA di Instagram?'",
+  "status": "OWNER_AUTHORIZED_SCHEDULED",
+  "timezone": "Asia/Makassar",
+  "effective_period": {
+    "start": "2026-11-09",
+    "end": "2026-11-30"
+  },
+  "authority": {
+    "purpose": "Current agreed dates/time/account; release activation recorded after explicit Owner approval. Runtime authority remains the live Linear registers.",
+    "supersedes_for_editorial_planning_only": [
+      "projects/sdoh/runtime/seasonal-color/2026-11-editorial-series-draft.json#schedule",
+      "projects/sdoh/runtime/seasonal-color/2026-11-content-binding.json#items[*].target_date",
+      "projects/sdoh/runtime/seasonal-color/2026-11-final-media-archive.json#items[*].editorial_date"
+    ],
+    "frozen_evidence_unchanged": true,
+    "release_gate_separate": true
+  },
+  "rule": "Move editorial dates one day later, except the memorial item which remains on Nov 20 to match its approved 'hari ini' copy and Transgender Day of Remembrance.",
+  "calendar": {
+    "timezone": "Asia/Makassar",
+    "publication_time": "19:30",
+    "channel": "INSTAGRAM",
+    "calendar_events_created": true,
+    "scheduling_executed": true,
+    "account": "@satudosisobathati",
+    "utc_offset": "+08:00",
+    "planned_instagram_times_local": [
+      {
+        "content_id": "SDOH-SAGE-CAR-0015",
+        "local_at": "2026-11-09T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0017",
+        "local_at": "2026-11-11T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0016",
+        "local_at": "2026-11-12T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0018",
+        "local_at": "2026-11-14T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0017",
+        "local_at": "2026-11-16T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0019",
+        "local_at": "2026-11-18T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0018",
+        "local_at": "2026-11-19T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0020",
+        "local_at": "2026-11-20T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0019",
+        "local_at": "2026-11-23T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0021",
+        "local_at": "2026-11-25T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0020",
+        "local_at": "2026-11-26T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0022",
+        "local_at": "2026-11-28T19:30:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0021",
+        "local_at": "2026-11-30T19:30:00+08:00"
+      }
+    ],
+    "sync_evidence": "2026-11-delivery-preparation.json#calendar_sync"
+  },
+  "publication": {
+    "activation_enabled": true,
+    "scheduled": true,
+    "authorized": true,
+    "published_by_this_revision": false,
+    "release_approval": {
+      "date": "2026-11-08",
+      "owner_response": "setuju",
+      "scope": "Activate all 13 campaign carousels as SCHEDULED for Instagram @satudosisobathati at 19:30 WITA on the agreed November 9–30 dates.",
+      "evidence": "Explicit Owner reply to activation question in this conversation.",
+      "execution": "Existing Cloudflare cron and GitHub scheduled orchestrator; no immediate publication dispatch."
+    },
+    "activation_evidence": "2026-11-delivery-preparation.json#publication.register_activation"
+  },
+  "summary": {
+    "content_items": 13,
+    "shifted_by_one_day": 12,
+    "protected_memorial_date": 1
+  },
+  "items": [
+    {
+      "content_id": "SDOH-SAGE-CAR-0015",
+      "theme": "SAGE",
+      "copy_fingerprint": "f322a5532ba7e8d7e07fb5c37dd65b803eb69221766191b09094bb5495ff6519",
+      "previous_editorial_date": "2026-11-08",
+      "revised_editorial_date": "2026-11-09",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6686164240",
+      "archive_registry_content_id": "SDOH-SAGE-CAR-0015"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0017",
+      "theme": "BURGUNDY",
+      "copy_fingerprint": "ee5db9478a92f538ee5d0d6e885eb7c52499b4167feb98a7ce95574fec251136",
+      "previous_editorial_date": "2026-11-10",
+      "revised_editorial_date": "2026-11-11",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/196#issuecomment-6687570108",
+      "archive_registry_content_id": "SDOH-BURGUNDY-CAR-0017"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0016",
+      "theme": "SAGE",
+      "copy_fingerprint": "918119e34241e70f7a0411299bac17e3c673fbddf3a3db15b32b0a55182c9994",
+      "previous_editorial_date": "2026-11-11",
+      "revised_editorial_date": "2026-11-12",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/196#issuecomment-6688266992",
+      "archive_registry_content_id": "SDOH-SAGE-CAR-0016"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0018",
+      "theme": "BURGUNDY",
+      "copy_fingerprint": "35123c6ac4fe506d0a2a1852889cce69383c8f2b180832ec00f415b6a2ee222b",
+      "previous_editorial_date": "2026-11-13",
+      "revised_editorial_date": "2026-11-14",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-BURGUNDY-CAR-0018"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0017",
+      "theme": "SAGE",
+      "copy_fingerprint": "2d918b8d889e1cb49c02b9675a8a60a85b5a483e39d2d83402ab8a0301b1676c",
+      "previous_editorial_date": "2026-11-15",
+      "revised_editorial_date": "2026-11-16",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-SAGE-CAR-0017"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0019",
+      "theme": "BURGUNDY",
+      "copy_fingerprint": "017349eef4343d112ca024fbd9811c2856933ef58b3899eafa0c428ce5807992",
+      "previous_editorial_date": "2026-11-17",
+      "revised_editorial_date": "2026-11-18",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-BURGUNDY-CAR-0019"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0018",
+      "theme": "SAGE",
+      "copy_fingerprint": "02962c07164093602b561439c8730ec9fbc364ce9131ba35aeeeeaf3ef668163",
+      "previous_editorial_date": "2026-11-18",
+      "revised_editorial_date": "2026-11-19",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-SAGE-CAR-0018"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0020",
+      "theme": "BURGUNDY",
+      "copy_fingerprint": "689a5866cbb66bbe0a6b11672e28fde61daa026e1d3d72f432d9387877842a35",
+      "previous_editorial_date": "2026-11-20",
+      "revised_editorial_date": "2026-11-20",
+      "date_rule": "FIXED_NOVEMBER_20_TDOR",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-BURGUNDY-CAR-0020"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0019",
+      "theme": "SAGE",
+      "copy_fingerprint": "8e75bed82764c6389a00439d4f0b9d3018863e90c665157e723a98ee28d477d9",
+      "previous_editorial_date": "2026-11-22",
+      "revised_editorial_date": "2026-11-23",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-SAGE-CAR-0019"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0021",
+      "theme": "BURGUNDY",
+      "copy_fingerprint": "6a0069cc124088da337ac5054d7e049bd21b2883c01eeaa1f5942aae09fd0864",
+      "previous_editorial_date": "2026-11-24",
+      "revised_editorial_date": "2026-11-25",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-BURGUNDY-CAR-0021"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0020",
+      "theme": "SAGE",
+      "copy_fingerprint": "c08c501f4cc874515a13ff6d89a3bdc53af331a7bc8796d45fd3a78cb66ef2eb",
+      "previous_editorial_date": "2026-11-25",
+      "revised_editorial_date": "2026-11-26",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-SAGE-CAR-0020"
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0022",
+      "theme": "BURGUNDY",
+      "copy_fingerprint": "a4b3d89000869403f4cde528b2595a9c27ec3cdeaa1cbb4f8b98640dc8b21c0b",
+      "previous_editorial_date": "2026-11-27",
+      "revised_editorial_date": "2026-11-28",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-BURGUNDY-CAR-0022"
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0021",
+      "theme": "SAGE",
+      "copy_fingerprint": "1c06f20dad15159fdbc003452d7436d15a9ce3e4dfb67a848c9315d80834873a",
+      "previous_editorial_date": "2026-11-29",
+      "revised_editorial_date": "2026-11-30",
+      "date_rule": "MOVE_PLUS_ONE_CALENDAR_DAY",
+      "owner_final_media_approval": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "archive_registry_content_id": "SDOH-SAGE-CAR-0021"
+    }
+  ]
+}

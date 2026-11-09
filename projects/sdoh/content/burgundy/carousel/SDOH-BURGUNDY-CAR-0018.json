@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-BURGUNDY-CAR-0018",
+  "status": "COPY_APPROVED",
+  "theme": "BURGUNDY",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "pekan kesadaran transgender tidak cukup menjadi tulisan di layar"
+    },
+    {
+      "slide": 2,
+      "copy": "memahami berarti mau mendengar pengalaman tanpa buru buru menyimpulkan"
+    },
+    {
+      "slide": 3,
+      "copy": "keberpihakan terlihat ketika lelucon merendahkan tidak dibiarkan"
+    },
+    {
+      "slide": 4,
+      "copy": "jangan jadikan cerita seseorang sebagai pelajaran yang dipaksa"
+    },
+    {
+      "slide": 5,
+      "copy": "dukungan yang nyata hadir juga setelah unggahan berlalu"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "tanggal 13 sampai 19 november diperingati sebagai transgender awareness week. pekan ini mengajak kita mengenal dan menghormati hidup orang transgender dengan lebih baik.",
+    "kesadaran tidak berhenti pada mengunggah slogan. ia terlihat saat kita berhenti menyebarkan prasangka, mendengarkan tanpa menghakimi, dan tidak menjadikan pengalaman pribadi orang lain sebagai tontonan.",
+    "belajar adalah langkah awal. menjaga rasa hormat dalam keseharian adalah bagian yang perlu terus dilanjutkan."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "pekan kesadaran transgender"
+        ],
+        [
+          "mendengar pengalaman"
+        ],
+        [
+          "lelucon merendahkan"
+        ],
+        [
+          "cerita seseorang"
+        ],
+        [
+          "dukungan yang nyata"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "pekan kesadaran transgender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "mendengar pengalaman"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "lelucon merendahkan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "cerita seseorang"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "dukungan yang nyata"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "35123c6ac4fe506d0a2a1852889cce69383c8f2b180832ec00f415b6a2ee222b"
+}

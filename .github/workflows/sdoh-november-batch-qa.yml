@@ -1,0 +1,61 @@
+name: SDOH November 2026 — remaining 10 carousel QA batch (manual only)
+
+# One manual dispatch fans out exactly 10 previously Owner-copy-approved items
+# into the existing seasonal QA workflow. Nothing schedules, posts, publishes,
+# changes production activation or grants Owner Final Visual Approval.
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Enter RENDER_REMAINING_10_QA_ONLY to render 10 review artifacts
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  qa-batch:
+    if: github.ref == 'refs/heads/main' && inputs.confirmation == 'RENDER_REMAINING_10_QA_ONLY'
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - content_id: SDOH-BURGUNDY-CAR-0018
+            expected_copy_fingerprint: 35123c6ac4fe506d0a2a1852889cce69383c8f2b180832ec00f415b6a2ee222b
+            target_date: 2026-11-13
+          - content_id: SDOH-SAGE-CAR-0017
+            expected_copy_fingerprint: 2d918b8d889e1cb49c02b9675a8a60a85b5a483e39d2d83402ab8a0301b1676c
+            target_date: 2026-11-15
+          - content_id: SDOH-BURGUNDY-CAR-0019
+            expected_copy_fingerprint: 017349eef4343d112ca024fbd9811c2856933ef58b3899eafa0c428ce5807992
+            target_date: 2026-11-17
+          - content_id: SDOH-SAGE-CAR-0018
+            expected_copy_fingerprint: 02962c07164093602b561439c8730ec9fbc364ce9131ba35aeeeeaf3ef668163
+            target_date: 2026-11-18
+          - content_id: SDOH-BURGUNDY-CAR-0020
+            expected_copy_fingerprint: 689a5866cbb66bbe0a6b11672e28fde61daa026e1d3d72f432d9387877842a35
+            target_date: 2026-11-20
+          - content_id: SDOH-SAGE-CAR-0019
+            expected_copy_fingerprint: 8e75bed82764c6389a00439d4f0b9d3018863e90c665157e723a98ee28d477d9
+            target_date: 2026-11-22
+          - content_id: SDOH-BURGUNDY-CAR-0021
+            expected_copy_fingerprint: 6a0069cc124088da337ac5054d7e049bd21b2883c01eeaa1f5942aae09fd0864
+            target_date: 2026-11-24
+          - content_id: SDOH-SAGE-CAR-0020
+            expected_copy_fingerprint: c08c501f4cc874515a13ff6d89a3bdc53af331a7bc8796d45fd3a78cb66ef2eb
+            target_date: 2026-11-25
+          - content_id: SDOH-BURGUNDY-CAR-0022
+            expected_copy_fingerprint: a4b3d89000869403f4cde528b2595a9c27ec3cdeaa1cbb4f8b98640dc8b21c0b
+            target_date: 2026-11-27
+          - content_id: SDOH-SAGE-CAR-0021
+            expected_copy_fingerprint: 1c06f20dad15159fdbc003452d7436d15a9ce3e4dfb67a848c9315d80834873a
+            target_date: 2026-11-29
+    uses: ./.github/workflows/sdoh-november-seasonal-qa.yml
+    with:
+      content_id: ${{ matrix.content_id }}
+      expected_copy_fingerprint: ${{ matrix.expected_copy_fingerprint }}
+      target_date: ${{ matrix.target_date }}
+      confirmation: RENDER_SEASONAL_QA_ONLY

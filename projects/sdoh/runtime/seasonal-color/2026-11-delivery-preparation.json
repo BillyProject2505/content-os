@@ -1,0 +1,875 @@
+{
+  "schema": "sdoh-november-2026-delivery-preparation-v1",
+  "status": "OWNER_AUTHORIZED_SCHEDULED",
+  "recorded_date": "2026-11-08",
+  "delivery_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+  "delivery_folder_url": "https://drive.google.com/drive/folders/16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+  "source_archive": "projects/sdoh/runtime/seasonal-color/2026-11-final-media-archive.json",
+  "timing_plan_pr": 201,
+  "verification": {
+    "zip_sha256_matches": 13,
+    "jpeg_sha256_matches": 65,
+    "caption_sha256_matches": 12,
+    "drive_jpeg_raw_readback_matches": 65,
+    "service_account_access": "PASS_65_OF_65_SHA256",
+    "worker_readiness": "HEALTH_PASS_PUBLICATION_NOT_TESTED",
+    "caption_sha256_matches_scope": "Current delivery captions matching original archive captions; 12 unchanged plus one separately approved amendment.",
+    "source_caption_sha256_matches_before_amendment": 13,
+    "owner_approved_caption_amendments": 1,
+    "register_readback": {
+      "checked_date": "2026-11-08",
+      "records": 13,
+      "planned_rejected": 13,
+      "isolated_due_simulations_allowed": 13,
+      "early_simulations_rejected": 13,
+      "old_rows_and_manifest_records_preserved": true,
+      "registers": [
+        {
+          "id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+          "updated_at": "2026-11-08T03:54:42.019Z"
+        },
+        {
+          "id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+          "updated_at": "2026-11-08T03:54:44.833Z"
+        }
+      ]
+    },
+    "delivery_folder_permission_observation": "Historical pre-remediation metadata listed only the owner. Superseded for effective read access by readiness run 42447489516: scheduler service account read all 65 exact JPEGs successfully.",
+    "readiness_evidence": {
+      "run_url": "https://github.com/BillyProject2505/content-os/actions/runs/42447489516",
+      "checked_commit": "96ae7ac1bf2bfe4632c0a09e842b7c61035125a4",
+      "artifact_id": 13603962517,
+      "artifact_zip_sha256": "f65678b358570a9410c37e49d1a03648ad5a1a0036efef5959d6af3769d6d104",
+      "wif_token_obtained": true,
+      "media_passed": 65,
+      "worker_http_status": 200,
+      "worker_account_match": true,
+      "worker_commit_sha": "633c1e9d15c6a60eed2a3abecac2a83cd9790966",
+      "github_scheduler_enabled": true,
+      "scheduled_wakeup_enabled": true,
+      "manual_publishing_enabled": false
+    },
+    "scheduler_evidence": {
+      "status": "CRON_DISPATCH_AND_LINEAR_DISCOVERY_PASS_NO_DUE_CONTENT",
+      "run_urls": [
+        "https://github.com/BillyProject2505/content-os/actions/runs/42447766401",
+        "https://github.com/BillyProject2505/content-os/actions/runs/42448093045"
+      ],
+      "observed_at_utc": [
+        "2026-11-08T04:40:37Z",
+        "2026-11-08T04:45:37Z"
+      ],
+      "wake_source": "cloudflare-cron",
+      "decision": "NO_DUE_CONTENT",
+      "publication_steps": "SKIPPED",
+      "limitations": "No due-content execution, D1 preparation, Meta publication or evidence writeback was exercised. EXECUTOR_INGEST_SECRET validity remains untested."
+    }
+  },
+  "publication": {
+    "authorized": true,
+    "scheduled": true,
+    "registers_updated": true,
+    "workflow_dispatched": false,
+    "release_approval": {
+      "date": "2026-11-08",
+      "owner_response": "setuju",
+      "scope": "Activate all 13 campaign carousels as SCHEDULED for Instagram @satudosisobathati at 19:30 WITA on the agreed November 9–30 dates.",
+      "evidence": "Explicit Owner reply to activation question in this conversation.",
+      "execution": "Existing Cloudflare cron and GitHub scheduled orchestrator; no immediate publication dispatch."
+    },
+    "register_activation": {
+      "date": "2026-11-08",
+      "scheduled_records": 13,
+      "readback_authority_pass": 13,
+      "early_rejections": 13,
+      "media_and_captions_unchanged": true,
+      "registers": [
+        {
+          "id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+          "updated_at": "2026-11-08T04:51:23.454Z",
+          "url": "https://linear.app/bussiness-content-os/document/sdoh-sage-carousel-content-register-v03-35911e808c25"
+        },
+        {
+          "id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+          "updated_at": "2026-11-08T04:51:27.386Z",
+          "url": "https://linear.app/bussiness-content-os/document/sdoh-burgundy-carousel-content-register-v03-9954ad905ba3"
+        }
+      ]
+    }
+  },
+  "notes": [
+    "Prepared delivery data only; not a live execution authority manifest.",
+    "JPEGs extracted byte-identically from approved ZIPs; no rerender or re-encoding. SAGE-0015 delivery caption has a separately Owner-approved date amendment; original ZIP caption remains immutable.",
+    "All records use campaign tracking issue BUS-175; individual issues are not fabricated.",
+    "Linear campaign publication rows activated from PLANNED to SCHEDULED after explicit Owner release approval on 2026-11-08; exact media/caption manifests unchanged."
+  ],
+  "records": [
+    {
+      "content_id": "SDOH-SAGE-CAR-0015",
+      "linear_issue": "BUS-175",
+      "register_document_id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-09T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.1",
+      "approved_caption": "Mulai 9 November, kampanye Transgender Awareness Month mengajak kita menghormati identitas setiap orang. Setiap orang transgender berhak merasa aman sebagai dirinya.\n\nRasa hormat bisa dimulai dari hal sederhana: menggunakan nama yang seseorang pakai, menjaga privasinya, serta mendengarkan tanpa menghakimi.\n\nTidak semua orang ingin membagikan pengalaman pribadinya. Kita dapat tetap hadir dengan hormat, tanpa memaksa penjelasan tentang identitas gender atau perjalanan hidupnya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "5d13d0f741ec7da701996fcdb662f1884f4c7ce1cbe71fd45a56c5f0a6fc88c1",
+      "source_zip_sha256": "3d5d549c40b98c10d8a71ee144986ef0b920bd4b0990995f2fcdfebf327bf46b",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/191#issuecomment-6686164240",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1Kw3J7d1q4k55LE9K-xzWzDhrBE8IUu8c",
+          "sha256": "e6e73af53f8ec210e5046c5f7911fe11b17f4a3ca3e162e9fc746c6b9969c27e",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0015_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1X2eiZSugIu3LjVPl7k1iYovXSt3ITwPd",
+          "sha256": "cfc27aee85cf3cfc8c995d89bb6801c328d246f026a9bf18bbf1a8f6e51ecd29",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0015_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1H2tkAM_aBR9gvc9lw1vypL9k8GVrnMMh",
+          "sha256": "af77939277c0663e6f12ab4a8eb69289febe7a9a7988d239fc4d1841c8f13826",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0015_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1YN8VjLMFAISDH0xrF5_WDy-gsb3OT7E8",
+          "sha256": "1a6354ddfa35e9fee029a8592470204783c3f339c528b2dadd41f8e0cdc2ee1c",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0015_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1yTGV8KggrJxQYr6L30GTAdleft7AysrK",
+          "sha256": "d627ea0a6e26bb6ddac991eb7ef05f8b7c0c49e07873047dbe273c55c8f71f68",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0015_S05.jpg"
+        }
+      ],
+      "source_caption_sha256": "220da2e19044166f2a630477a18fdec3c9cdb692e48a1531990ff067e9557f50",
+      "caption_amendment": {
+        "status": "OWNER_APPROVED",
+        "decision_date": "2026-11-08",
+        "owner_response": "setuju",
+        "approved_change": {
+          "from": "Mulai 8 November",
+          "to": "Mulai 9 November"
+        },
+        "scope": "Only the opening date phrase; all remaining caption bytes and all media unchanged.",
+        "source_caption_sha256": "220da2e19044166f2a630477a18fdec3c9cdb692e48a1531990ff067e9557f50",
+        "amended_caption_sha256": "5d13d0f741ec7da701996fcdb662f1884f4c7ce1cbe71fd45a56c5f0a6fc88c1",
+        "evidence": "Owner reply in this conversation to the explicit correction question; recorded in PR #201."
+      }
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0017",
+      "linear_issue": "BUS-175",
+      "register_document_id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-11T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "identitas gender seseorang bukan ruang terbuka untuk semua pertanyaan. rasa ingin tahu tidak selalu memberi kita hak untuk meminta jawaban.\n\nketika orang transgender harus terus menjelaskan hidupnya supaya dihormati, percakapan bisa menjadi beban. batas pribadi bukan tanda bahwa seseorang menyembunyikan sesuatu yang salah.\n\nkita bisa memilih menghormati tanpa mendesak. mendengar ketika seseorang ingin berbagi, dan menerima ketika ia memilih tidak bercerita.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "be6a2d2828a88fefa4a600059b93e2938c6cc4c27b1cf055f10622e59ec21003",
+      "source_zip_sha256": "df374b22b0e4041632650b5a5557ec5f44a70ed62c47d415e20763c5ae681098",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/196#issuecomment-6687570108",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "11CQlo4kSsxoENISAuzk850HnlJR03S21",
+          "sha256": "91cae0118187b9d80a6c1f7dff0e30dcfdc3a22a2824f1d56241482a47958a09",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0017_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1h-nIoIAvQ7jkWgRm3_7u9KS39j3FvVBh",
+          "sha256": "48be1cc08a9c0d0ee9036427cfce466a519cb9751e86864c3a7bafa906c3aae1",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0017_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1PgCAJZ9t_pr6Ju9cwp7ac-DfGYJN00-O",
+          "sha256": "f0e3ad40088324b39fe8c7df8e1757df2a26adc369f9b2b5a12ebf5b7a05b7c5",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0017_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1YPngpezREuoVc3Afq5a8nvGLjjNUpmhf",
+          "sha256": "1cb64784efa5989d11eedda54d876cf27baf7e0f55464e6c314ded3379e0eaa9",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0017_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1PClC2NwMOx6vr2z8UrQ0FHfwBDTNrySi",
+          "sha256": "0933a417dabb29cb2562f48c25a600c3b1e4ca171544892e5dac069d4520d377",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0017_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0016",
+      "linear_issue": "BUS-175",
+      "register_document_id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-12T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "kadang dukungan tidak datang sebagai kalimat besar. ia hadir ketika kita memanggil seseorang dengan nama yang ia gunakan.\n\nbagi orang transgender, penghormatan sederhana ini bisa membuat percakapan terasa lebih nyaman. kita tidak perlu menuntut penjelasan tentang nama lama, tubuh, atau perjalanan seseorang untuk menunjukkan rasa hormat.\n\njika keliru, perbaiki dengan singkat dan tulus. yang berarti bukan kesempurnaan, melainkan kesediaan untuk belajar dan konsisten.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "90329f6267758f7459190540467ef8ca277fdfa997ac1a677a88033e6ca68457",
+      "source_zip_sha256": "56e5dda4431ca1dd95e568229191ad2fddac838a5e8155dafa704ccb3c0003ed",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/196#issuecomment-6688266992",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1k1xH5o17aFyzoHKsE_vUotQrbTW_D8pq",
+          "sha256": "fccbeea4dc579592a087b2ddfef3b2e915ec90f4413844a497493e3ebdb51bd1",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0016_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "164tYJJc2gdVFN5b4PUS7DQq9Ad4C95xq",
+          "sha256": "c869666ac80541e51f25e0d3f0bcdd7bed14c438bfe3500052d4bcb68e94bad9",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0016_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1j9KgTf8VvJ4Df1X14D5hJnXq1k-qOIx7",
+          "sha256": "6a58a18340e4f49a6bdfe64638e3f7db0234982183d3edb8be43fdca0921c679",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0016_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "12pDfleVmh3uiSvBYrBT88o1beRdO4f-H",
+          "sha256": "9842addeb24e1e37167f5d10decb3276b33c5b4c9743225d949fb1b2c494a5f6",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0016_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1WqQoCxL8PgX8AZ51mBIp9eK5fc896BO2",
+          "sha256": "a3e93b86bf4b940b72bef93a4b4ba35243f57dacb0c1418e5ddca59c1de966f6",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0016_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0018",
+      "linear_issue": "BUS-175",
+      "register_document_id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-14T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "tanggal 13 sampai 19 november diperingati sebagai transgender awareness week. pekan ini mengajak kita mengenal dan menghormati hidup orang transgender dengan lebih baik.\n\nkesadaran tidak berhenti pada mengunggah slogan. ia terlihat saat kita berhenti menyebarkan prasangka, mendengarkan tanpa menghakimi, dan tidak menjadikan pengalaman pribadi orang lain sebagai tontonan.\n\nbelajar adalah langkah awal. menjaga rasa hormat dalam keseharian adalah bagian yang perlu terus dilanjutkan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "eeec3c4ccfa4f9497bdcb3193a4b2393d2230334b29ee9b2f9c6410822dedc22",
+      "source_zip_sha256": "7c5416e61234b3b4a955cc0f902b14a73f3fd515e44d7ac1a7722159c8babbd2",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1hyt-T9mzOb69_78Fo4UI8EW6MkXhmja8",
+          "sha256": "b7d2129ff47a47a6d03bec9abe8c71d9a4e57fea45e0585ea4a14b8d17cf7298",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0018_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1n9L0RGHYJywZtOONxv8OhStEQLlJonfu",
+          "sha256": "2f503fe094a0241e3002d3aa7cf771951d6afb5e13f94655b399d736b6789ceb",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0018_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1zi1YYGVvQEm1D7MrqV7Zg2YOppy3mZ36",
+          "sha256": "fc1aa8b85cd330128834dd2b87e0003b96862cc1564505aa0e44c62dca231dc5",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0018_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1VOpQ7erA808LTa3Fv4ekmwk5piuKwXgk",
+          "sha256": "66c421da298f3a1f4a7713a94c6748b0ea689c82dc00a92d83f2dd55be165b2e",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0018_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "107neU-1JeOAHKaxQKWF-5TCabqew2kyc",
+          "sha256": "99a4fa4d31b8cb37caf83d6a6d976be06bf532c471da99ae3af587a1ac4ac36a",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0018_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0017",
+      "linear_issue": "BUS-175",
+      "register_document_id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-16T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "cerita orang transgender tidak hanya tentang tantangan atau luka. ada kegembiraan, persahabatan, pencapaian, dan momen kecil yang juga layak diberi tempat.\n\nselama pekan kesadaran ini, kita bisa belajar melihat seseorang sebagai pribadi yang utuh. tidak semua senyum perlu dijelaskan dengan kisah perjuangan di belakangnya.\n\nkalau hari ini ada sesuatu yang membuatmu lega atau bahagia, kamu boleh menikmatinya. sukacita juga bagian dari hidupmu.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "4eafcd985bec09699ecd99a46b12ed6a80318755bcd19e3801988266c39e7d6e",
+      "source_zip_sha256": "a21b674339cc92ae53582d352ec33845f161294808314e6be3fb09ab43396b46",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1qAbL7VkKR5BGMbm2aBDnNdwayikRWJFI",
+          "sha256": "c6945fe95327592744206c38858fe8d8cf756182a3087eb962c1b7a1fc8551dc",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0017_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1ddbqdI_mKb2B4LDHlPZxkrnT4sPLxdeA",
+          "sha256": "07830737d1fb32c8a303884e2d49d568426132da45e42c09b7a400b081daaf2f",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0017_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1McZiqgRUr7zFeSbTuPLid5-mJQ1qTU5G",
+          "sha256": "352b5c1153f7110f716a0c8f0bd741d0a587d8321b238bc33657bae5c4c60cfe",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0017_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1YUO2hhJIWpNpm32E_Qnm-1IV6wnce031",
+          "sha256": "cc3fb2089ede41c55d92309cb25d543346d6ed42d8c1500dbafaffa400216243",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0017_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "186XaIYZTjwXYYt2en_bTwvqAJJ-xW_ze",
+          "sha256": "51625280484b67247274540b5f88e39d616fd055448bff2fc19a3e2771801467",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0017_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0019",
+      "linear_issue": "BUS-175",
+      "register_document_id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-18T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "tidak semua kalimat yang disebut candaan terasa ringan bagi orang yang menerimanya. terutama ketika yang dijadikan bahan tertawa adalah identitas gender seseorang.\n\nkita tidak perlu mempermalukan siapa pun untuk menghentikan sesuatu yang merendahkan. tidak ikut tertawa, mengalihkan percakapan, atau menegur secara tenang dapat menjadi langkah yang berarti.\n\ndukungan kepada orang transgender terlihat dalam pilihan kecil sehari hari. rasa hormat perlu hadir bahkan ketika orang yang dibicarakan tidak berada di ruangan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "b11930f408b780b34075d04fa77dfcd542870fd97de483bb28bd862e47490516",
+      "source_zip_sha256": "31e1b983cdd021de20b16ed4f30d391d14404a49c4be4d268f3403ab455aa6ad",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1qC-otA7tNGVa5_fF6l7uCB3X563_gopf",
+          "sha256": "21bb0227eaa62a9effa986b90c39a0bddf610e78b8079482cd05391485973e89",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0019_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1zhWiCnlknQfYv0QxN4nBcZoj1KjKnmPS",
+          "sha256": "7912f0b310353ae3e7340dc5c3312f4066778ba744279bb491166bd6765d2ca6",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0019_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1oltFmeVA3_7A-bCSe6FiBTz132MX_W-D",
+          "sha256": "99af49bdbe587972b36a78ec06ea1a13d4fb117bd4243456c3697400e10110e9",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0019_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1ZM8Sr6Hy3957Uln_rwGoVNKvZrsoqv-A",
+          "sha256": "ae26a7060d0146e9109d9443b428217555af8ffdc1b25075ca7ff4f8513897d3",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0019_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1GyMCZFJIgDKCRRlbi87ls_fk1EhAC63H",
+          "sha256": "9c81fd677b6495c8b6bd09eeb68b5cc84f80f4c899dd0899ec9a87d820b56af8",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0019_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0018",
+      "linear_issue": "BUS-175",
+      "register_document_id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-19T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "ketika seseorang berbagi pengalaman tentang identitas gender atau kesehariannya, kita mungkin ingin segera memberi saran. tetapi dukungan tidak selalu membutuhkan jawaban.\n\nbagi sebagian orang transgender, didengar tanpa dipotong, dipertanyakan, atau diburu penjelasannya sudah terasa berarti. kita bisa bertanya apakah ia ingin ditemani, didengarkan, atau dibantu mencari pilihan.\n\nsetiap orang punya kebutuhan berbeda. hadir dengan terbuka membuat kita lebih mampu menghargai cara mereka sendiri.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "125b5d27eca0c15abad262b36c4e9a3bb6f346a53cfcd84b5f90c7d132b229f0",
+      "source_zip_sha256": "946990e49d91f46bb2129ea63fdad63136c80a1ca267d3622d36e41132e7dc24",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1XKtqwEICQsRsPfPbocjCzvplgiC8K1LR",
+          "sha256": "0ab93fd0fc6131925ad6ab68ac55848f211210bfafe4fa34cdc7c4ee6c5786c5",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0018_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1D70GYytnxf1wGhnYrJh-k55UzG03YGIr",
+          "sha256": "4b157ae440110402988a46f807a556d0de032bd5188f32315ea9f864410ecc8c",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0018_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1wl9ruAamqOhkF2rPdwnhDJ7K9zyXKl91",
+          "sha256": "6283f1468aa4d9c10681c5d0ba96f92aa804352274504b25ab40017f8613c8df",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0018_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1BaWAugGhoSrM1jodhUqOn2c61pEPkMIA",
+          "sha256": "7daaac4e49735ee420795dfe8a5b9005e4227cb31d5915e1f9b07a266c0a3f09",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0018_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1cW0ypQIDGpikz51d8D0KjgflwOOjmsoU",
+          "sha256": "ba14f535e1b0a83831ff4a62005b4cd8c96d41098ef648bdd1fef79d53725bee",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0018_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0020",
+      "linear_issue": "BUS-175",
+      "register_document_id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-20T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "tanggal 20 november adalah transgender day of remembrance, hari untuk mengenang orang transgender yang kehilangan nyawa akibat kekerasan anti transgender.\n\ndi balik setiap kehilangan ada manusia dengan hubungan, harapan, dan kehidupan yang layak dihormati. mengenang mereka tidak mengharuskan kita menampilkan detail kekerasan atau menjadikan duka sebagai tontonan.\n\nhari ini kita memberi ruang bagi ingatan, kepedulian, dan solidaritas. semoga penghormatan tidak berhenti ketika hari peringatan berlalu.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "f3a498e76209cd8edf36d267e8389c1f66dda8a8ead094945eb03bfc932f3544",
+      "source_zip_sha256": "f8380ba885f4b7931e3f06ab2180759d88032d8c35f6301e95e71336ec32556d",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1vyQzNBDEqc6UHOKWVKVS4-JXGKlEY-Rc",
+          "sha256": "26a7050a0d011df008d02359beeb66c932932eb0a9ee537d55e8f097cc7c2b26",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0020_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "16PV9jV-IoROP9zNSQGjmNx7dQENaORa3",
+          "sha256": "36a18408f1eec3fdbc1d861dd404d7bdd8757b4523f1c40c6b27daee4ac1880d",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0020_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1E_NWIHnwhMAxBRxdDrlT6R-WsYwub8aV",
+          "sha256": "dac6362234ab79b8b313ace4c3fdddd12b09f6ad6380e087a9f9571389e30647",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0020_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1YAZuhKa8eYJBo0RIJPczGLV_Tt6nFYcX",
+          "sha256": "fe4f9cbaee72c7ab31fccfe19e6b2078ae61e6aee2614083fe025b09ba1eb0a8",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0020_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1DMrNVa_DEie15dPgN4VrZZYZvdPnDPr-",
+          "sha256": "274e3f1750c862b3765a143f8912fc638e507f53da9a51accf00355915451f4f",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0020_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0019",
+      "linear_issue": "BUS-175",
+      "register_document_id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-23T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "setelah tanggal peringatan berlalu, hidup terus berjalan dalam banyak bentuk. ada pekerjaan, obrolan dengan teman, rencana kecil, dan hari yang tidak istimewa.\n\norang transgender tidak seharusnya selalu diminta menjadi juru bicara bagi semua orang atau menjelaskan seluruh pengalaman hidupnya. mereka juga berhak menjalani keseharian tanpa sorotan.\n\nkadang penghormatan terasa sederhana: membiarkan seseorang menjadi dirinya sendiri, tanpa menjadikannya perdebatan atau simbol yang harus mewakili siapa pun.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "524ba19c7fdf43fb6423460d7a6daceb77d0912a0b1c7d60d7dc248a84705d99",
+      "source_zip_sha256": "ccb6bd520d60c48209282ca1323dca22bc7083b2a8e83b3acbcac21fc93153f4",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1ITcCX9RQYGy-8N3c-ndvvV0AyZeUznRZ",
+          "sha256": "9fa901ec49e2d950c55fa88d19462235432af0bb0baaf3245269c8511dc4a9e3",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0019_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1v5IA15FSF26LREf8K-Upsjy6QveGI_g4",
+          "sha256": "1b936fa0ddae88d06b65548f6b520a8adf9e05f424ed5433c21c6b61a565e281",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0019_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1XKO-KO_trsH0aweWRfs7xJiSYonxlc-z",
+          "sha256": "c698c35d5ad0c6222af4a90968ecf4d3d7de772f877ac79837417943f04c645c",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0019_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1BqOm5vEMcx3cRrPolRVb1fjnTh0nCx55",
+          "sha256": "93c670dd24e105274436fb5efd57ec5e1f50d3b5ab98b86abaa4bf79dcced72c",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0019_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1I6xYuGHzfP36afCIz4EOZbZsrjnBJCik",
+          "sha256": "5f6a1b9bda7143f9ad8a32242bf34dc06758e3e025bc8c0412ed7bd362fb0984",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0019_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0021",
+      "linear_issue": "BUS-175",
+      "register_document_id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-25T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "ruang yang aman tidak seharusnya bergantung pada kemampuan satu orang untuk terus menjelaskan atau membela dirinya. lingkungan juga memiliki tanggung jawab.\n\nketika ada orang transgender yang direndahkan, kita dapat mengambil bagian dengan menghentikan komentar yang melukai dan menjaga privasi. tindakan sederhana yang dilakukan bersama dapat mengubah suasana percakapan.\n\nsolidaritas bukan sekadar mengatakan kita peduli. ia tumbuh dari kebiasaan yang konsisten, termasuk saat tidak ada yang menyaksikan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "6657ba7930fd2603aaf2ba1e8c1e7507df4d95a5d3f0e8185c46b102f25fd7f1",
+      "source_zip_sha256": "9240893e5398ff78c1f6715ce74aaefb03eefa01fa81b7699f17065482cd2875",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1R-OsdlAWp5K4DQ7oolNZYv7R3ke1bza-",
+          "sha256": "6b583e1a90702f41cadd8662a7e4a4a46496900d12bec8b5579262f905117541",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0021_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1jR6ayCjhWFTMj88G2Zjy4355BpyRLDqu",
+          "sha256": "ebfed7cf006fba7d20299afe3683dfb29638b4cbebc4dd6042cb801a06908672",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0021_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1kWFDdkWYmdtcsonjZaXLxl1ohVG3lWR-",
+          "sha256": "ede13bf05be2e0b88207cf05c9a21c0bb01d4a8875aaa19d16e865c67c3ffba3",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0021_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1-3iwN6iUSZuOLV5fQo5LRRLUHl4C4Lc2",
+          "sha256": "63def76db5f4b7c5e6ce61595d0d58e53bdeca69ed5f9f9abf85189520fba508",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0021_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1aSoabR6kBMLJwoV20h1gP0J3WcUMJzLL",
+          "sha256": "da2a6678d05535c228cf1e226c51f4ae266e323671c081197669c0d17444b0f9",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0021_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0020",
+      "linear_issue": "BUS-175",
+      "register_document_id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-26T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "perjalanan mengenali diri bisa berbeda bagi setiap orang. ada yang menemukan kata yang terasa tepat sejak lama, ada pula yang masih mencoba memahami pengalaman pribadinya.\n\ntidak ada garis waktu yang harus diikuti semua orang transgender. perubahan cara memahami diri bukan alasan untuk meragukan martabat seseorang atau menuntut kepastian segera.\n\nkamu boleh mengambil waktu, bertanya, atau diam sejenak. nilai dirimu tidak ditentukan oleh seberapa cepat kamu mampu menjelaskan semuanya.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "7b4189ddb17d18fdc8c522bce6655c3173de7bfcef01b4214f2eac0e379e4c0f",
+      "source_zip_sha256": "55646fd0a7caf62dacb03e11e74569f06ba07734333a81a95a3a8153aa6cfa8a",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1NTRcf-XCDcJjCH9NC2IBxvZqwMNMov3j",
+          "sha256": "0136923a6f48d1f99a4a1975e24e86d67b0bdfa6f0d75aeda6e82ae62f8a8a1e",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0020_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1Qb_vVTzsbfYj1WbDm1LtzUQIi6_8Xkb0",
+          "sha256": "7bbab68a9102053cf1eb832474b4f14c49596f9185455c8b95093a22f47fb504",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0020_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1hWQXDLPLZX3gdB3WYOoA8heO83AST7CD",
+          "sha256": "aaec45e17b6ee4c326915d7f29a3608b9c7f785e6154ce2f41392e00a3874506",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0020_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1yflOBylpuKuxjyldKpRkxnurA7J95s0O",
+          "sha256": "82673d366fd480c4b1d5318a62a6bb86e3c2299f0fae44313900632bb5479b8f",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0020_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1L8uf4HUqvFH2txlcX4fBhQRI5XWVhkKT",
+          "sha256": "9038bad830ae7285baadba579a76b79da80bbc518c5b99fa609f489c073e03eb",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0020_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-BURGUNDY-CAR-0022",
+      "linear_issue": "BUS-175",
+      "register_document_id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-28T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "menjelang akhir november, mudah menganggap kepedulian selesai ketika unggahan terakhir terbit. padahal kehidupan orang transgender tidak mengikuti kalender kampanye.\n\nkita masih bisa menjaga nama, privasi, dan ruang percakapan yang menghormati sesama. dukungan menjadi bermakna ketika hadir dalam rutinitas, bukan hanya saat ada ajakan bersama.\n\njika ingin membawa satu hal dari kampanye ini, bawalah kebiasaan untuk berpikir sebelum menghakimi dan bertindak ketika melihat sikap merendahkan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "8fe2cd7fbf16cc4ad6f2fbefcf0240e76cdf194a878d7adddb44b2e03b3f84df",
+      "source_zip_sha256": "1a72319186416545ac95c0c2ebe209cbbaafcded36adb27346a39416ba4aabc8",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1qIiE8OB-UVMcnAh5vcXoc95cPtnoTTMn",
+          "sha256": "72b3139ca07bfe1dc759ba03dd9a5762cba06e5ef1c779d265db52c67785351d",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0022_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1ISmvSybG1iwbhSUHcimbqB2gIudAUCDM",
+          "sha256": "53dfd250b5567b5a60b81b6babfba81064eb9488408eba51901a08cfa3fcc06a",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0022_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1hLUEpFGbdhCwAeaNGEwbxTUbgX6TIbsM",
+          "sha256": "cdebcc9758eec26a964c4165eb80defe235b52123ebb90fc2733316b3a3d0d80",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0022_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "1qYblc4k_rVxpDBdGl-981X_o0kOIhkMy",
+          "sha256": "fb3f8b7569d33c99992e5a3c6714da34e3974c1ac6d4acd9aaced0cf740241e9",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0022_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "1gC_fQHaWJ1-XDcmBaYMbmeIO3vG2XiOn",
+          "sha256": "afb6b8a930f9ddc4ffbdb7f8be6fabf9ba8a7d607c058202684deae04197b738",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_BURGUNDY_SDOH-BURGUNDY-CAR-0022_S05.jpg"
+        }
+      ]
+    },
+    {
+      "content_id": "SDOH-SAGE-CAR-0021",
+      "linear_issue": "BUS-175",
+      "register_document_id": "458e4dc3-a1a6-4a44-ab6e-afefa1d28eba",
+      "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
+      "planned_at": "2026-11-30T19:30:00+08:00",
+      "destination_account": "@satudosisobathati",
+      "caption_revision": "v1.0",
+      "approved_caption": "bulan november hampir selesai, tetapi perhatian yang kita bangun tidak harus ikut berakhir. penghormatan bagi orang transgender dapat menjadi bagian biasa dari cara kita memperlakukan sesama.\n\ndimulai dari nama yang tepat, percakapan yang tidak menghakimi, dan keputusan untuk tidak menyebarkan prasangka. tidak semua dukungan harus terlihat besar agar terasa berarti.\n\nsemoga yang tertinggal dari kampanye ini bukan hanya unggahan, tetapi kebiasaan saling menjaga yang terus kita pilih.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #obathati #manado #mentalhealthmanado #pelanpelanaja\n",
+      "caption_sha256": "d807e4dcf3e84904c8c772e60a3677e893c239a77e0c63cff32143be1139f7f1",
+      "source_zip_sha256": "29330bf5438521d7719586dbdb193e667980b40f6b008106053c086dc8862f10",
+      "owner_approval_evidence": "https://github.com/BillyProject2505/content-os/pull/197#issuecomment-6716244556",
+      "media": [
+        {
+          "slot": 1,
+          "drive_file_id": "1LmdAVSYhKoATbbcktuNhWNEYkz9zmLS8",
+          "sha256": "85c42d9200a9d92ff15f456ac766b9e69839f81b5d04c59956bd605a0c24230d",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0021_S01.jpg"
+        },
+        {
+          "slot": 2,
+          "drive_file_id": "1Ers702xbfecy5KfGTXgzqiFCMJgiVfI5",
+          "sha256": "26dcb56172ff92732f248d38ffe332a60f4fef16bd277e6b685edffe4d51675f",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0021_S02.jpg"
+        },
+        {
+          "slot": 3,
+          "drive_file_id": "1kYoFZAwCGVkPLhLN_SoQEwa98rHKczkj",
+          "sha256": "109b0205cda91c64c43d42627d00c6317a024446f2ecba217f8b46859db260fa",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0021_S03.jpg"
+        },
+        {
+          "slot": 4,
+          "drive_file_id": "14jkZU5pQRcti8fCFfIIzZ_Vi9mlLxvbH",
+          "sha256": "faca8b0ca636b565ab7d1b9bdde00b0fa12badc7e0538c3b034fc6d92fbd006c",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0021_S04.jpg"
+        },
+        {
+          "slot": 5,
+          "drive_file_id": "10htaS4iCp5SsPqHSREQaaiO2Kr-pl9Fb",
+          "sha256": "34b775e0eb1d870fc4b3ada049091a48b91a3adea679afb878b83515daacdf51",
+          "mime_type": "image/jpeg",
+          "filename": "SDOH_SAGE_SDOH-SAGE-CAR-0021_S05.jpg"
+        }
+      ]
+    }
+  ],
+  "editorial_blockers": [],
+  "calendar_sync": {
+    "status": "VERIFIED",
+    "date": "2026-11-08",
+    "calendar_id": "billymende2505@gmail.com",
+    "timezone": "Asia/Makassar",
+    "informational_only": true,
+    "events": [
+      {
+        "content_id": "SDOH-SAGE-CAR-0015",
+        "event_id": "n951ve210o83jp33hec6vlda5g",
+        "event_url": "https://www.google.com/calendar/event?eid=bjk1MXZlMjEwbzgzanAzM2hlYzZ2bGRhNWcgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-09T19:30:00+08:00",
+        "end": "2026-11-09T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0017",
+        "event_id": "c1g4i3sk2li7e7odumt767s088",
+        "event_url": "https://www.google.com/calendar/event?eid=YzFnNGkzc2sybGk3ZTdvZHVtdDc2N3MwODggYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-11T19:30:00+08:00",
+        "end": "2026-11-11T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0016",
+        "event_id": "upceqq0nhmg4q6r8842ifhmf6o",
+        "event_url": "https://www.google.com/calendar/event?eid=dXBjZXFxMG5obWc0cTZyODg0MmlmaG1mNm8gYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-12T19:30:00+08:00",
+        "end": "2026-11-12T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0018",
+        "event_id": "330v8a3uafhdl6g8sefru2aukc",
+        "event_url": "https://www.google.com/calendar/event?eid=MzMwdjhhM3VhZmhkbDZnOHNlZnJ1MmF1a2MgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-14T19:30:00+08:00",
+        "end": "2026-11-14T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0017",
+        "event_id": "nmledl1c80kppqefvdf5faea7g",
+        "event_url": "https://www.google.com/calendar/event?eid=bm1sZWRsMWM4MGtwcHFlZnZkZjVmYWVhN2cgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-16T19:30:00+08:00",
+        "end": "2026-11-16T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0019",
+        "event_id": "f6oi2n5f3rhg63aind6phod0ho",
+        "event_url": "https://www.google.com/calendar/event?eid=ZjZvaTJuNWYzcmhnNjNhaW5kNnBob2QwaG8gYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-18T19:30:00+08:00",
+        "end": "2026-11-18T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0018",
+        "event_id": "7cjub96i70h71rh2s8b4ff0gs8",
+        "event_url": "https://www.google.com/calendar/event?eid=N2NqdWI5Nmk3MGg3MXJoMnM4YjRmZjBnczggYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-19T19:30:00+08:00",
+        "end": "2026-11-19T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0020",
+        "event_id": "4jrqp0fnnvotpm2smfakafmrjg",
+        "event_url": "https://www.google.com/calendar/event?eid=NGpycXAwZm5udm90cG0yc21mYWthZm1yamcgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-20T19:30:00+08:00",
+        "end": "2026-11-20T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0019",
+        "event_id": "5it0d2cd5auokqrnpnan5e850c",
+        "event_url": "https://www.google.com/calendar/event?eid=NWl0MGQyY2Q1YXVva3FybnBuYW41ZTg1MGMgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-23T19:30:00+08:00",
+        "end": "2026-11-23T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0021",
+        "event_id": "824dapdq2dq0i9a57hfd19dtvc",
+        "event_url": "https://www.google.com/calendar/event?eid=ODI0ZGFwZHEyZHEwaTlhNTdoZmQxOWR0dmMgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-25T19:30:00+08:00",
+        "end": "2026-11-25T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0020",
+        "event_id": "93sof1bbbnoan3gt7q1r5oikug",
+        "event_url": "https://www.google.com/calendar/event?eid=OTNzb2YxYmJibm9hbjNndDdxMXI1b2lrdWcgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-26T19:30:00+08:00",
+        "end": "2026-11-26T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-BURGUNDY-CAR-0022",
+        "event_id": "u1orffmialton0ev9dqs10ekho",
+        "event_url": "https://www.google.com/calendar/event?eid=dTFvcmZmbWlhbHRvbjBldjlkcXMxMGVraG8gYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-28T19:30:00+08:00",
+        "end": "2026-11-28T20:00:00+08:00"
+      },
+      {
+        "content_id": "SDOH-SAGE-CAR-0021",
+        "event_id": "jij4tgrifs0becf7cjigqcu36k",
+        "event_url": "https://www.google.com/calendar/event?eid=amlqNHRncmlmczBiZWNmN2NqaWdxY3UzNmsgYmlsbHltZW5kZTI1MDVAbQ&ctz=Asia/Makassar",
+        "start": "2026-11-30T19:30:00+08:00",
+        "end": "2026-11-30T20:00:00+08:00"
+      }
+    ],
+    "cancelled_content_id": "SDOH-BURGUNDY-CAR-0008",
+    "deleted_event_id": "ek37kf740euf3fv6vsu5lh5738"
+  }
+}

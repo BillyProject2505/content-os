@@ -1,0 +1,235 @@
+name: SDOH November 2026 seasonal Carousel QA preview (manual only)
+
+# Manual or explicitly reusable, read-only review proof. This workflow does NOT
+# grant Owner approval, schedule content, register assets or publish anything.
+on:
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: Approved SDOH Sage/Burgundy Carousel content ID
+        required: true
+        type: string
+      expected_copy_fingerprint:
+        description: Expected 64-character COPY_APPROVED fingerprint
+        required: true
+        type: string
+      target_date:
+        description: November 2026 publication-local YYYY-MM-DD for seasonal relevance; NOT a scheduling action
+        required: true
+        type: string
+      confirmation:
+        description: Must be RENDER_SEASONAL_QA_ONLY
+        required: true
+        type: string
+
+  workflow_call:
+    inputs:
+      content_id:
+        description: Approved SDOH Sage/Burgundy Carousel content ID
+        required: true
+        type: string
+      expected_copy_fingerprint:
+        description: Expected 64-character COPY_APPROVED fingerprint
+        required: true
+        type: string
+      target_date:
+        description: November 2026 editorial date, not publication scheduling
+        required: true
+        type: string
+      confirmation:
+        description: Must be RENDER_SEASONAL_QA_ONLY
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  review-proof:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate scope, Owner proof approval and copy reference
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          TARGET_DATE: ${{ inputs.target_date }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$CONTENT_ID" =~ ^SDOH-(SAGE|BURGUNDY)-CAR-[0-9]{4}$ ]]
+          [[ "$COPY_FINGERPRINT" =~ ^[0-9a-f]{64}$ ]]
+          [[ "$TARGET_DATE" =~ ^2026-11-(0[8-9]|[12][0-9]|30)$ ]]
+          test "$CONFIRMATION" = "RENDER_SEASONAL_QA_ONLY"
+          jq -e '.decision == "OWNER_VISUAL_APPROVED" and
+                 (.explicit_exclusions | index("no_authority_to_publish_or_schedule"))' \
+            projects/sdoh/runtime/seasonal-color/2026-11-owner-visual-approval.json >/dev/null
+          jq -e '.activation.enabled == false and
+                 .status == "OWNER_VISUAL_APPROVED_PRODUCTION_INACTIVE"' \
+            projects/sdoh/runtime/seasonal-color/2026-11-trans-awareness.json >/dev/null
+          jq -e '.approval_state == "OWNER_APPROVED_SCHEDULE_CHANGE_ONLY_PRODUCTION_INACTIVE" and
+                 .amended_effective_period.start == "2026-11-08" and
+                 .amended_effective_period.end == "2026-11-30" and
+                 .original_effective_period.start == "2026-11-01"' \
+            projects/sdoh/runtime/seasonal-color/2026-11-start-date-amendment.json >/dev/null
+          echo "Seasonal QA-only gate PASS; publication not authorized"
+
+      - name: Enforce November-specific content approval binding
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          TARGET_DATE: ${{ inputs.target_date }}
+        run: |
+          set -euo pipefail
+          node projects/sdoh/runtime/seasonal-color/verify-november-content.mjs \
+            --content-id "$CONTENT_ID" \
+            --expected-copy-fingerprint "$COPY_FINGERPRINT" \
+            --target-date "$TARGET_DATE"
+          echo "Explicit campaign content binding PASS"
+
+      - name: Verify original BUS-49 authority
+        run: node projects/sdoh/runtime/automated-content-production/scripts/verify-carousel-render-authority.mjs
+
+      - name: Build manifest from approved copy (same editorial gates)
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/november-review"
+          node projects/sdoh/runtime/automated-content-production/scripts/build-approved-copy-render-manifest.mjs \
+            --content-id "$CONTENT_ID" \
+            --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json \
+            --expected-copy-fingerprint "$COPY_FINGERPRINT" \
+            --out "$RUNNER_TEMP/render_manifest.json" \
+            --snapshot-out "$RUNNER_TEMP/november-review/approved_copy.json"
+
+      - name: Compose two-line November caption (review artifact only)
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          TARGET_DATE: ${{ inputs.target_date }}
+        run: |
+          set -euo pipefail
+          node projects/sdoh/runtime/seasonal-color/compose-november-caption.mjs \
+            --content-id "$CONTENT_ID" \
+            --expected-copy-fingerprint "$COPY_FINGERPRINT" \
+            --target-date "$TARGET_DATE" \
+            --out "$RUNNER_TEMP/november-review/caption.txt" \
+            --provenance-out "$RUNNER_TEMP/november-review/caption-provenance.json"
+          jq -e --arg id "$CONTENT_ID" --arg fp "$COPY_FINGERPRINT" '
+            .content_id == $id and
+            .source_copy_fingerprint == $fp and
+            .status == "REVIEW_ONLY_NOT_PUBLISHED" and
+            .publication_authorized == false and
+            .campaign_lines == [
+              "Transgender Awareness Month November 2026",
+              "To Honor and To Hold: Their Lives, Their Legacies"
+            ]
+          ' "$RUNNER_TEMP/november-review/caption-provenance.json" >/dev/null
+
+      - name: Authenticate Google Drive read-only
+        id: auth
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+
+      - name: Render with canonical source and isolated color overlay
+        uses: ./.github/actions/sdoh-bus49-render
+        with:
+          google_access_token: ${{ steps.auth.outputs.access_token }}
+          manifest: ${{ runner.temp }}/render_manifest.json
+          out_dir: ${{ runner.temp }}/november-review/rendered
+          contact_sheet: ${{ runner.temp }}/november-review/contact-sheet.jpg
+          seasonal_qa_config: projects/sdoh/runtime/seasonal-color/2026-11-trans-awareness.json
+          seasonal_qa_ack: QA_ONLY_NO_PUBLICATION
+
+      - name: Verify seasonal result, hashes, source identity and contrast
+        env:
+          TARGET_DATE: ${{ inputs.target_date }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="projects/sdoh/runtime/seasonal-color"
+          cp "$RUNNER_TEMP/render_manifest.json" "$RUNNER_TEMP/november-review/"
+          cp "$RUNNER_TEMP/render-input/seasonal-qa-overlay-record.json" "$RUNNER_TEMP/november-review/"
+          python "$root/verify-seasonal-render.py" \
+            --manifest "$RUNNER_TEMP/render_manifest.json" \
+            --report "$RUNNER_TEMP/november-review/rendered/render_report.json" \
+            --overlay "$RUNNER_TEMP/render-input/seasonal-qa-overlay-record.json" \
+            --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json \
+            --palette "$root/2026-11-trans-awareness.json" \
+            --logos "$root/2026-11-logo-derivatives.json" \
+            --rendered-dir "$RUNNER_TEMP/november-review/rendered" \
+            --target-date "$TARGET_DATE" \
+            --out "$RUNNER_TEMP/november-review/seasonal_qa.json"
+          jq -e '.status == "TECHNICAL_QA_PASS_OWNER_CONTENT_REVIEW_REQUIRED" and
+                 .publication_authorized == false' \
+            "$RUNNER_TEMP/november-review/seasonal_qa.json" >/dev/null
+
+      - name: Run canonical approved-copy review-package validator (QA-only)
+        env:
+          EXPECTED_COPY_FINGERPRINT: ${{ inputs.expected_copy_fingerprint }}
+          CONTENT_ID: ${{ inputs.content_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node projects/sdoh/runtime/automated-content-production/scripts/validate-carousel-review-package.mjs \
+            --report "$RUNNER_TEMP/november-review/rendered/render_report.json" \
+            --manifest "$RUNNER_TEMP/render_manifest.json" \
+            --copy "$RUNNER_TEMP/november-review/approved_copy.json" \
+            --expected-copy-fingerprint "$EXPECTED_COPY_FINGERPRINT" \
+            --authority projects/sdoh/runtime/automated-content-production/render-runtime/carousel-v060-authority.json \
+            --out "$RUNNER_TEMP/november-review/review_package.json"
+          jq -e --arg id "$CONTENT_ID" --arg fp "$EXPECTED_COPY_FINGERPRINT" '
+            .content_id == $id and
+            .production_path == "APPROVED_COPY" and
+            .state == "READY_FOR_OWNER_REVIEW" and
+            .approval == "NOT_GRANTED" and
+            .publication_state == "PLANNED" and
+            .technical_qa.result == "PASS" and
+            .technical_qa.text_overflow == false and
+            .source_copy.status == "COPY_APPROVED" and
+            .source_copy.copy_fingerprint == $fp and
+            (.outputs | length) == 5
+          ' "$RUNNER_TEMP/november-review/review_package.json" >/dev/null
+          echo "Canonical review package QA PASS — no Owner media approval or publication authority"
+
+      - name: Upload QA-only proof for explicit Owner review
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.content_id }}-november-seasonal-QA-only
+          path: ${{ runner.temp }}/november-review
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Summary — no publication
+        shell: bash
+        run: |
+          {
+            echo "## November 2026 — SDOH seasonal color proof"
+            echo
+            echo "- Technical QA: PASS"
+            echo "- Status: OWNER_CONTENT_REVIEW_REQUIRED"
+            echo "- Production activation: DISABLED"
+            echo "- Scheduling: NONE"
+            echo "- Publication: NONE"
+          } >> "$GITHUB_STEP_SUMMARY"

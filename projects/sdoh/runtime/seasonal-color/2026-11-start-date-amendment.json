@@ -1,0 +1,41 @@
+{
+  "schema": "sdoh-seasonal-effective-date-amendment-v1",
+  "campaign": "Trans Awareness Month 2026",
+  "recorded_date": "2026-11-03",
+  "source": "Owner explicit direction in ongoing SDOH conversation: 'Tema ini kita mulai dari tanggal 8 november'",
+  "original_effective_period": {
+    "start": "2026-11-01",
+    "end": "2026-11-30",
+    "timezone": "Asia/Makassar"
+  },
+  "amended_effective_period": {
+    "start": "2026-11-08",
+    "end": "2026-11-30",
+    "timezone": "Asia/Makassar"
+  },
+  "scope": [
+    "campaign_editorial_content",
+    "seasonal_color_override",
+    "november_caption_footer",
+    "campaign_only_review_render"
+  ],
+  "preserved": [
+    "owner_approved_palette",
+    "canonical_assets",
+    "pose_map",
+    "Caveat_Medium_font",
+    "layout_geometry",
+    "historical_content",
+    "existing_publication_schedule",
+    "owner_approval_gates"
+  ],
+  "explicit_exclusions": [
+    "no_retroactive_change_to_2026-11-01_through_2026-11-07",
+    "no_calendar_changes",
+    "no_production_activation",
+    "no_merge_authorization",
+    "no_publication_authorization"
+  ],
+  "approval_state": "OWNER_APPROVED_SCHEDULE_CHANGE_ONLY_PRODUCTION_INACTIVE",
+  "supersedes": "effective start date only in 2026-11-owner-visual-approval.json; that original approval record remains preserved as historical evidence"
+}

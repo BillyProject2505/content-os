@@ -1,0 +1,136 @@
+{
+  "content_id": "SDOH-SAGE-CAR-0018",
+  "status": "COPY_APPROVED",
+  "theme": "SAGE",
+  "slides": [
+    {
+      "slide": 1,
+      "copy": "dukungan sering dimulai dari satu orang yang bersedia mendengar"
+    },
+    {
+      "slide": 2,
+      "copy": "tidak semua pengalaman transgender meminta nasihat atau jawaban cepat"
+    },
+    {
+      "slide": 3,
+      "copy": "kadang teman hanya ingin ruang untuk menjadi dirinya"
+    },
+    {
+      "slide": 4,
+      "copy": "bertanya apa yang dibutuhkan lebih baik daripada berasumsi"
+    },
+    {
+      "slide": 5,
+      "copy": "kehadiran yang tenang bisa terasa sangat berarti"
+    }
+  ],
+  "caption_body_paragraphs": [
+    "ketika seseorang berbagi pengalaman tentang identitas gender atau kesehariannya, kita mungkin ingin segera memberi saran. tetapi dukungan tidak selalu membutuhkan jawaban.",
+    "bagi sebagian orang transgender, didengar tanpa dipotong, dipertanyakan, atau diburu penjelasannya sudah terasa berarti. kita bisa bertanya apakah ia ingin ditemani, didengarkan, atau dibantu mencari pilihan.",
+    "setiap orang punya kebutuhan berbeda. hadir dengan terbuka membuat kita lebih mampu menghargai cara mereka sendiri."
+  ],
+  "guardrails": {
+    "semantic": {
+      "required_slide_anchor_groups": [
+        [
+          "dukungan"
+        ],
+        [
+          "pengalaman transgender"
+        ],
+        [
+          "teman"
+        ],
+        [
+          "bertanya"
+        ],
+        [
+          "kehadiran"
+        ]
+      ],
+      "minimum_required_slide_anchor_groups": 4,
+      "forbidden_slide_phrases": [
+        "transgender adalah penyakit",
+        "identitas gender harus disembuhkan"
+      ]
+    },
+    "editorial": {
+      "min_words_per_slide": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "max_words_per_slide": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "min_total_slide_words": 35,
+      "min_unique_slide_content_words": 25,
+      "max_pairwise_content_similarity": 0.78,
+      "slide_progression": [
+        {
+          "slide": 1,
+          "required_anchor_groups": [
+            [
+              "dukungan"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 2,
+          "required_anchor_groups": [
+            [
+              "pengalaman transgender"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 3,
+          "required_anchor_groups": [
+            [
+              "teman"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 4,
+          "required_anchor_groups": [
+            [
+              "bertanya"
+            ]
+          ],
+          "minimum_groups": 1
+        },
+        {
+          "slide": 5,
+          "required_anchor_groups": [
+            [
+              "kehadiran"
+            ]
+          ],
+          "minimum_groups": 1
+        }
+      ],
+      "caption_min_body_words": 50,
+      "caption_max_body_words": 80,
+      "caption_min_body_paragraphs": 3,
+      "caption_required_signature": "satu dosis obat hati",
+      "caption_required_hashtags": [
+        "#satudosisobathati",
+        "#obathati",
+        "#manado",
+        "#mentalhealthmanado",
+        "#pelanpelanaja"
+      ]
+    }
+  },
+  "copy_fingerprint": "02962c07164093602b561439c8730ec9fbc364ce9131ba35aeeeeaf3ef668163"
+}

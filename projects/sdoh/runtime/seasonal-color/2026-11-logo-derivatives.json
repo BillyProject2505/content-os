@@ -1,0 +1,58 @@
+{
+  "schema": "sdoh-seasonal-logo-derivatives-v1",
+  "campaign": "Trans Awareness Month 2026",
+  "period": {
+    "start": "2026-11-08",
+    "end": "2026-11-30",
+    "timezone": "Asia/Makassar"
+  },
+  "state": "OWNER_VISUAL_APPROVED_STAGED_VERIFIED_NOT_CANONICAL",
+  "storage": {
+    "provider": "google_drive",
+    "folder_id": "1yhoFG6xgP8Cg6jarGKuv0us823H7husv",
+    "folder_url": "https://drive.google.com/drive/folders/1yhoFG6xgP8Cg6jarGKuv0us823H7husv"
+  },
+  "method": "For pixels with alpha>0, set RGB to theme-specific approved foreground; preserve the original alpha channel, canvas dimensions and geometry. Re-encode isolated derivative PNG; never overwrite source.",
+  "assets": {
+    "SAGE": {
+      "source_role": "CAROUSEL-SAGE-LOGO-DERIVATIVE",
+      "source_filename": "logo_burgundy_on_sage_transparent_v0.2.png",
+      "source_sha256": "1d7ca8638cccadae53a8d15f716097e538f208e36c4e371e2f12e598a8dd6e21",
+      "source_dimensions": [
+        1257,
+        878
+      ],
+      "target_foreground": "#355E78",
+      "derivative_filename": "SDOH-LOGO-SAGE-NOV2026-OWNER-VISUAL-APPROVED.png",
+      "sha256": "52fe51bb5954e5b735acb2be52e7444a31171f1eb6180266a925328f7ca4ce51",
+      "google_drive_file_id": "1vDirkaeTlUIl1T5QCskUDXtJjwEZnqC1",
+      "google_drive_url": "https://drive.google.com/file/d/1vDirkaeTlUIl1T5QCskUDXtJjwEZnqC1/view",
+      "downloaded_raw_byte_sha256": "52fe51bb5954e5b735acb2be52e7444a31171f1eb6180266a925328f7ca4ce51",
+      "geometry_and_alpha_equal": true
+    },
+    "BURGUNDY": {
+      "source_role": "CAROUSEL-BURGUNDY-LOGO-DERIVATIVE",
+      "source_filename": "logo_sage_on_burgundy_transparent_v0.2.png",
+      "source_sha256": "6d5108ad2b5d54218982daba0fa8545c19cba9e4828672fab0a0b8f3f98861df",
+      "source_dimensions": [
+        985,
+        687
+      ],
+      "target_foreground": "#793E61",
+      "derivative_filename": "SDOH-LOGO-BURGUNDY-NOV2026-OWNER-VISUAL-APPROVED.png",
+      "sha256": "a4009758bb5b215673f0cb1721fae1570f057885d762db08713bb6fdb550b270",
+      "google_drive_file_id": "1MJEXTozySeNe9fn1R5jYfcPsHoNkBzbl",
+      "google_drive_url": "https://drive.google.com/file/d/1MJEXTozySeNe9fn1R5jYfcPsHoNkBzbl/view",
+      "downloaded_raw_byte_sha256": "a4009758bb5b215673f0cb1721fae1570f057885d762db08713bb6fdb550b270",
+      "geometry_and_alpha_equal": true
+    }
+  },
+  "gate": {
+    "asset_provenance_recorded": true,
+    "official_asset_registry_mutated": false,
+    "production_renderer_integrated": false,
+    "production_activation_enabled": false,
+    "owner_publication_approval_granted": false,
+    "status": "STAGED_VERIFIED"
+  }
+}
