@@ -1,0 +1,63 @@
+{
+  "schema": "cwc-publication-slot-reconciliation-v1",
+  "content_item_id": "CWC-CRSL-0004",
+  "reconciliation_date": "2026-11-09",
+  "scope": "GitHub Actions execution evidence for previously approved Instagram carousel publication slot; does not confirm platform-wide publishing history",
+  "owner_authorization": {
+    "source_record": "projects/cwc/content/release/CWC-CRSL-0004.stg10-publication-authorization.json",
+    "target_local": "2026-11-02T19:00:00+08:00",
+    "target_utc": "2026-11-02T11:00:00Z",
+    "expiry_utc": "2026-11-02T11:20:00Z",
+    "decision_status": "EXPIRED_FOR_FUTURE_EXECUTION"
+  },
+  "release": {
+    "approved_release_identity": "sha256:6b3695d3e100dbb6abd8696d0e786ef935ce1e6a7ab169c377828a8362e3cb5f",
+    "jpeg_media_commit": "7bcc15e10947d35c733cec94051432524a337406",
+    "jpeg_owner_approval_comment_id": "202b2559-35f8-49af-af29-22d26c4b6fc7",
+    "image_hashes_unchanged": true,
+    "caption_unchanged": true
+  },
+  "observed_scheduled_execution": {
+    "provider": "GitHub Actions",
+    "url": "https://github.com/BillyProject2505/content-os/actions/runs/41521268351",
+    "run_id": 41521268351,
+    "event": "schedule",
+    "scheduled_job_conclusion": "failure",
+    "triggered_at_utc": "2026-11-02T20:39:52Z",
+    "triggered_at_local": "2026-11-03T04:39:52+08:00",
+    "delta_from_target_seconds": 34792,
+    "head_sha": "6bba50b49a007f6c7bf34f85f5b720b9949a63ef",
+    "publish_job_id": 125537613720,
+    "publish_job_conclusion": "failure",
+    "failure_diagnostic": "CWC_PUBLISH_REJECTED: PUBLISH_WINDOW_CLOSED_OR_NOT_YET_OPEN",
+    "meta_variables_at_run": {
+      "CWC_INSTAGRAM_PUBLISH_ENABLED": "EMPTY",
+      "CWC_META_IG_USER_ID": "EMPTY",
+      "CWC_META_ACCESS_TOKEN": "EMPTY_OR_UNSET_SECRET"
+    },
+    "meta_publish_attempt_seen_in_run": false,
+    "live_proof_artifact_count": 0
+  },
+  "additional_evidence": {
+    "github_publish_attempt_git_tag": "refs/tags/cwc-crsl-0004-ig-attempt-20261102",
+    "tag_found_in_git": false,
+    "source": "GitHub GET /git/ref/tags/... returns 404 on 2026-11-09",
+    "limitations": "Tag absence does not establish that there was no manual Instagram post outside this GitHub workflow. No connected live Instagram account read was available for independent post search."
+  },
+  "reconciled_state": {
+    "canonical_content_register_version_before": "1.36",
+    "canonical_primary_lifecycle_state_retained": "READY_FOR_PUBLICATION",
+    "exception_status_retained": "BLOCKED",
+    "publication_log_write": false,
+    "github_schedule_disabled_by_reviewed_pr": true,
+    "manual_preflight_retained": true,
+    "expired_publishing_authorization_not_reusable": true,
+    "publishing_confirmed_by_platform": false,
+    "platform_post_url": null,
+    "future_publish_requires_new_owner_date_and_time": true
+  },
+  "root_cause_classification": "MISSED_GITHUB_SCHEDULE_WAKEUP_WITH_EXPIRED_WINDOW",
+  "contributing_dependency": "CWC Meta credential variables and secret empty in failed run; no valid CWC Meta publication readiness evidence",
+  "action": "Retire expired one-off schedule; preserve exact approved binaries and content; add expiry to preflight; solicit fresh Owner publication date only after credentials and read-only CWC Meta account verification. Do not auto-retry past date.",
+  "no_substitution": "No change to five approved PNGs, five Owner-approved JPEG derivatives, captions, hashtags, STG-09 Owner approval, medical QA, or original release identity."
+}
