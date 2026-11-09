@@ -166,6 +166,19 @@
         "source_caption_sha256": "220da2e19044166f2a630477a18fdec3c9cdb692e48a1531990ff067e9557f50",
         "amended_caption_sha256": "5d13d0f741ec7da701996fcdb662f1884f4c7ce1cbe71fd45a56c5f0a6fc88c1",
         "evidence": "Owner reply in this conversation to the explicit correction question; recorded in PR #201."
+      },
+      "publication_evidence": {
+        "status": "PUBLISHED",
+        "evidence_basis": "OWNER_CONFIRMED_WITH_PERMALINK",
+        "owner_confirmation_date": "2026-11-09",
+        "permalink": "https://www.instagram.com/p/DfhOwnMIBwK/",
+        "shortcode": "DfhOwnMIBwK",
+        "actual_published_at": null,
+        "manual_hashtag_edit_confirmed": true,
+        "hashtags": "#satudosisobathati #manado #mentalhealthmanado #transawarenessmonth #transgender",
+        "remote_caption_independently_verified": false,
+        "runtime_reconciliation": "PENDING_REMOTE_CAPTION_MISMATCH",
+        "repost_authorized": false
       }
     },
     {
@@ -952,7 +965,7 @@
     "pending_reconciliation": [
       "SDOH-SAGE-CAR-0015"
     ],
-    "pending_reason": "Run 42609643574 reached REMOTE_CAPTION_MISMATCH after publish attempt; preserve its immutable authority until remote reconciliation.",
+    "pending_reason": "Sage0015 publication/manual hashtag edit confirmed by Owner with permalink; remote timestamp/full caption and runtime mismatch still pending reconciliation. Historical execution authority preserved.",
     "permanent_rule_changed": false
   }
 }
