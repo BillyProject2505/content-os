@@ -26,11 +26,8 @@ on:
         type: string
         required: false
         default: ""
-  schedule:
-    # Only 2026-11-02 11:00 UTC (19:00 WITA) is authorized.
-    # Rechecks every 5 min guard against delayed scheduler; hard deadline 11:20 UTC.
-    # GitHub cron can be delayed or dropped; this is best effort, not exact-time SLA.
-    - cron: "0,5,10,15 11 2 11 *"
+  # Expired 2026-11-02 one-shot cron retired after verified missed slot.
+  # A new target requires fresh Owner authorization and a new reviewed schedule.
 
 permissions:
   contents: read

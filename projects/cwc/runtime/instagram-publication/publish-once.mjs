@@ -9,6 +9,7 @@ import {spawnSync} from "node:child_process";
 const ROOT="projects/cwc/";
 const id="CWC-CRSL-0004";
 const targetMs=Date.parse("2026-11-02T11:00:00Z");
+const publicationWindowStatus=(ms)=>ms<targetMs?"NOT_YET_OPEN":ms>targetMs+20*60*1000?"EXPIRED":"OPEN";
 const digest=b=>crypto.createHash("sha256").update(b).digest("hex");
 const j=p=>JSON.parse(fs.readFileSync(ROOT+p,"utf8"));
 const assert=(x,msg)=>{if(!x)throw Error(msg)};
@@ -50,6 +51,7 @@ function validate(c){
  const blocked=line.includes(" | READY_FOR_PUBLICATION | BLOCKED |");
  const blockers=[];
  if(blocked)blockers.push("GOVERNANCE_EXCEPTION_BLOCKED");
+ if(publicationWindowStatus(Date.now())==="EXPIRED")blockers.push("OWNER_AUTHORIZED_PUBLICATION_WINDOW_EXPIRED");
  if(m.candidate_owner_approved!==true||!m.approval_evidence)blockers.push("JPEG_DELIVERY_ADAPTATION_OWNER_APPROVAL_MISSING");
  if(!/^[a-f0-9]{40}$/.test(m.public_media_git_sha||""))blockers.push("IMMUTABLE_PUBLIC_JPEG_MEDIA_COMMIT_MISSING");
  if(process.env.CWC_INSTAGRAM_PUBLISH_ENABLED!=="true")blockers.push("CWC_INSTAGRAM_PUBLISH_ENABLED_NOT_TRUE");
@@ -99,7 +101,7 @@ function claimExactlyOnce(){
 }
 async function publish(v){
  const now=Date.now();
- assert(now>=targetMs&&now<=targetMs+20*60*1000,"PUBLISH_WINDOW_CLOSED_OR_NOT_YET_OPEN");
+ assert(publicationWindowStatus(now)==="OPEN","PUBLISH_WINDOW_CLOSED_OR_NOT_YET_OPEN");
  assert(v.blockers.length===0,"PUBLISH_GATES_BLOCKED_"+v.blockers.join("_"));
  const {copy,media:m}=v.ctx;
  const ig=process.env.CWC_META_IG_USER_ID;
@@ -133,6 +135,10 @@ async function main(){
  const mode=process.argv[2]||"--preflight";
  const v=validate(context());
  if(mode==="--self-test"){
+   assert(publicationWindowStatus(targetMs-1)==="NOT_YET_OPEN","TIME_WINDOW_EARLY_REGRESSION");
+   assert(publicationWindowStatus(targetMs)==="OPEN","TIME_WINDOW_START_REGRESSION");
+   assert(publicationWindowStatus(targetMs+20*60*1000)==="OPEN","TIME_WINDOW_END_REGRESSION");
+   assert(publicationWindowStatus(targetMs+20*60*1000+1)==="EXPIRED","TIME_WINDOW_EXPIRY_REGRESSION");
    assert(v.ctx.media.candidate_owner_approved===true
      ? !v.blockers.includes("JPEG_DELIVERY_ADAPTATION_OWNER_APPROVAL_MISSING")
      : v.blockers.includes("JPEG_DELIVERY_ADAPTATION_OWNER_APPROVAL_MISSING"),"JPEG_APPROVAL_GATE_REGRESSION");
