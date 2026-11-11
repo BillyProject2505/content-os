@@ -6,7 +6,7 @@ system: "Content OS → Satu Dosis Obat Hati (SDOH)"
 owner: "Billy Fernando Mende"
 related_issue: "BUS-51"
 universal_identifier: "DIUA-DIC-000022"
-version: "1.6"
+version: "1.7"
 status: "CANONICAL / LOCKED"
 depends_on:
   - id: "DIUA-DIC-000007"
@@ -37,7 +37,7 @@ representation_profile: "DIUA-DIC-000026@1.3"
 | Document Name | Satu Dosis Obat Hati — Sage Reels Content Register |
 | Document Class | Domain/Project Operational Content Register |
 | System | Content OS → Satu Dosis Obat Hati (SDOH) |
-| Version | 1.6 |
+| Version | 1.7 |
 | Status | **CANONICAL / LOCKED** — v1.6 reconciliation (2026-10-21): synchronized dependencies to Production SOP v1.43 and QA Document v1.34; reconciled Linear instance `SDOH-SAGE-REEL-0003` into the canonical register; advanced next available Sage Reel ID to `SDOH-SAGE-REEL-0004`; and recorded BUS-45 §3.5 Continuous Illustrated Storytelling v1.0 as the governing visual-execution default for future Sage Reels. Existing locked Sage Reels 0001–0003 remain grandfathered. Prior state: v1.5 CANONICAL / LOCKED. |
 | Owner | Billy Fernando Mende |
 | Related Issue | [BUS-51](<https://linear.app/bussiness-content-os/issue/BUS-51>) |
@@ -67,6 +67,7 @@ Satu Final Master terkonfirmasi telah dimigrasikan dari [BUS-45](https://linear.
 | SDOH-SAGE-REEL-0003 | Pengalamanmu punya tempat dalam percakapan — World Mental Health Day 2026 / lived experience / meaningful listening | Narration v1.0 APPROVED / LOCKED: pengalaman yang sulit diceritakan tetap nyata dan layak didengar; final visual direction uses five environment-backed animated scenes progressing from private interior → reflection → spatial opening → conversation space. | **READY — Final Master v1 CANONICAL / LOCKED; Final Cover v1 CANONICAL / LOCKED; Caption v1.0 APPROVED / LOCKED.** Publication evidence remains **UNVERIFIED** in this register. A 2026-11-03 read-only account audit identified a candidate Instagram Reel for this Content ID; do not schedule or republish until that candidate is verified. TikTok remains separately unverified. | WHO World Mental Health Day 2026 — “Lived experiences heard: real voices, real change”; WHO 2026 webinar on meaningful engagement of people with lived experience. | Marcel / ElevenLabs Take 2 selected; final waveform-derived timing: F1 0.000–3.733 / F2 3.733–11.233 / F3 11.233–17.600 / F4 17.600–24.300 / F5 24.300–30.600 s. Creative Rebuild v2 approved. | [Final Master v1](<https://drive.google.com/file/d/12WYyPlmOkCw06kN6iGample4Fnm0O-Gl/view?usp=drivesdk>) — 1080×1920, H.264/AAC, 30 fps, 30.600 s, SHA-256 `467bf2551031225092abaffbbf5af5b2186368907a3b8ed8f0f1d0b56f92b0f7`; Final Cover v1 Drive ID `1VaeAoUqD6adLk_37xNumTdHIYFEsZ4AV`, SHA-256 `ad27ce8078bb7e86dc870604f5fdd81f01aeb91c344636db8d44c6ec29a1e047`; Caption v1.0 Drive doc ID `1lyS0-JGXfr06W-oKeywuxzED_ufy2oEb6Zb_v_wkMXE`. | Cross-register comparison required before 0004 production. 0003 is related to 0001 through emotional recognition and to 0002 through conversation/listening, but its core angle is distinct: lived experience must have space in mental-health conversation. |
 
 | SDOH-SAGE-REEL-0004 | nggak harus / sekarang — cover copy; Continuous Illustrated Storytelling | Script/audio lock not established by this reconciliation; execution record: [BUS-169](https://linear.app/bussiness-content-os/issue/BUS-169) | **IN PRODUCTION — NOT SCHEDULED / NOT PUBLISHED**. Final Cover v1 CANONICAL / LOCKED per BUS-169; final audiovisual master and caption are separate open gates. | Claim review evidence remains to be linked where applicable; no research PASS inferred. | 10 micro-scenes M01–M10 reported produced in BUS-169; scene binaries, provenance and scene-level QA/Owner approval still require consolidation. | [Final Cover v1](https://drive.google.com/file/d/1zGj3AM8xV-mWz1057ZSh_BgA6jbKvJlO/view) — SHA-256 `0f0fcd0b4603531be8f6f383392ec48cfc39877414eeaab67e3b00f71486dd18`; [working folder](https://drive.google.com/drive/folders/19PwPs2X6WJXWLFPsoiIEHdhIGX3ilC_p). Cover QA JSON retains pre-approval status; the issue records subsequent cover approval. No final-master QA claimed. | Duplicate-check evidence remains to be linked; allocation does not certify a duplicate-check PASS. |
+| SDOH-SAGE-REEL-0005 | Pesan yang belum dikirim — privasi, kendali atas cerita diri, dan pilihan waktu/ruang untuk berbagi | Narration v0.1 OWNER-APPROVED / LOCKED; Voice Take B OWNER-APPROVED / LOCKED; revised Caption v0.1 OWNER-APPROVED / LOCKED; cover copy “ceritamu tetap milikmu.” OWNER-APPROVED / LOCKED. Execution: [BUS-176](https://linear.app/bussiness-content-os/issue/BUS-176/sage-reels-november-pesan-yang-belum-dikirim-candidate-sdoh-sage-reel) | **PUBLISHED — OWNER-REPORTED** (not independently verified). | Agency/privacy framing; no claim disclosure is universally safe or required. | Approved character variant (long hair + trans flag pin), M01 composition, Motion review v0.2; narration/voice locked. | Motion v0.2 review SHA-256 `0f99080c8637661edd8dde0ebd20578d4b3d4a649356e5ff7dc980c2abb98511`; final published master/package checksum and independent platform QA unavailable. | Platform/account, URL/post ID and actual publication time (WITA) not supplied; owner report only. |
 
 ### Provenance SDOH-SAGE-REEL-0001
 
@@ -88,6 +89,7 @@ Satu baris per kejadian publikasi yang diketahui, bukan per master. Ikuti status
 | SDOH-SAGE-REEL-0002 | TikTok — account not independently resolved from short URL | 2026-09-24, time TBD (WITA) | **PUBLISHED** | 2026-09-26 — Owner provided live TikTok short URL and actual publication time | **2026-09-26, 21.35 WITA** — confirmed by Owner | [https://vt.tiktok.com/ZSbY5g3EC/](<https://vt.tiktok.com/ZSbY5g3EC/>) — short-link ID `ZSbY5g3EC` | Published as the second platform event for the same SDOH-SAGE-REEL-0002 master; no new Content ID or rerender |
 | SDOH-SAGE-REEL-0003 | Instagram — **@satudosisobathati** | 2026-10-08, 19.30 WITA (corrected target) | **UNVERIFIED / RECONCILIATION HOLD** | 2026-11-03 read-only account audit in [BUS-142](https://linear.app/bussiness-content-os/issue/BUS-142) identified a 2026-10-08 Reel with shortcode `DeO1IetgN6n` as this Content ID; final post/content match and exact WITA time remain to be recorded here | — | Candidate shortcode `DeO1IetgN6n` — not promoted as verified publication evidence | Do not schedule, publish, or republish this Instagram instance until the candidate is reconciled against the live account and the exact content/master; TikTok is separate. |
 | SDOH-SAGE-REEL-0003 | TikTok — account not independently verified in this record | 2026-10-08, 19.30 WITA (corrected target) | **PLANNED / UNVERIFIED** | No verified publication evidence recorded as of 2026-10-21 | — | — | Separate publication event under the same exact Final Master v1; requires independent evidence. |
+| SDOH-SAGE-REEL-0005 | Instagram — account not specified | — | **PUBLISHED — OWNER-REPORTED** | Owner report recorded 2026-11-11 in BUS-176; account/queue not independently verified | — | — | URL/post ID and actual WITA time not supplied; no independent verification claimed |
 
 Status publikasi SDOH-SAGE-REEL-0001: **PUBLISHED**. URL/ID posting, akun tujuan **@satudosisobathati**, dan waktu terbit aktual **2026-09-15 pukul 17.00 WITA** dikonfirmasi Owner.
 
@@ -500,3 +502,7 @@ For **future Sage Reels beginning with the next unallocated instance**, BUS-45 �
 - canonical stickman identity, Sage/Burgundy palette, hand-drawn restraint, asset provenance, Owner Visual Approval, cover, caption, and publication gates remain in force.
 
 `SDOH-SAGE-REEL-0001`–`0003` remain grandfathered historical/locked instances and are not reopened by this change.
+
+## Sage Reels Register v1.7 — Publication status sync — 2026-11-11
+
+Added `SDOH-SAGE-REEL-0005` using the Owner-reported publication status recorded in [BUS-176](https://linear.app/bussiness-content-os/issue/BUS-176/sage-reels-november-pesan-yang-belum-dikirim-candidate-sdoh-sage-reel). Status is **PUBLISHED — OWNER-REPORTED**. Platform/account, public URL/post ID, actual publication time (WITA), final master checksum and independent publication verification remain unspecified. No missing evidence has been inferred; this entry does not certify final-master QA. Previous v1.6 remains historical; this change proposes v1.7.
