@@ -454,3 +454,101 @@ console.log("Reviewed published-caption amendment PASS: exact identity/hash matc
   assert.equal(requests.length,2,"Second reconciliation only reads remote state");
 }
 console.log("Sage 0016 exact trailing-LF exception PASS: identity, SHA-256, 12 negative guards, no Meta writes, idempotent.");
+
+
+// Burgundy 0017: approved separate owner acceptance after Meta remote read-back
+// (run 43234618196). Only the final LF may be missing. No publish calls.
+{
+  const delivery = JSON.parse(readFileSync(
+    new URL("../../seasonal-color/2026-11-delivery-preparation.json", import.meta.url), "utf8"
+  ));
+  const record = delivery.records.find(row => row.content_id === "SDOH-BURGUNDY-CAR-0017");
+  assert.ok(record, "Burgundy 0017 frozen record exists");
+  const caption = record.approved_caption;
+  assert.ok(caption.endsWith("\n") && !caption.endsWith("\n\n"), "Exactly one terminal approved LF");
+  assert.equal(caption.length, 657);
+  assert.equal(await sha256Hex(caption), "d096ffe21e99f7e2351b19cf5b506b055d85ea82d2abb52a9475a597d986ce20");
+  const remoteCaption = caption.slice(0, -1);
+  assert.equal(remoteCaption.length, 656);
+  assert.equal(await sha256Hex(remoteCaption), "ac85c2f3f0f01a512d63c69313a402203384ab130b6ddff04f6431c6da165dad");
+
+  const job = {
+    id: "IG-SDOH-BURGUNDY-CAR-0017-20261111T113000Z",
+    content_id: "SDOH-BURGUNDY-CAR-0017",
+    account: "@satudosisobathati",
+    platform: "instagram",
+    format: "carousel",
+    scheduled_at: "2026-11-11T19:30:00+08:00",
+  };
+  const remote = {
+    id: "18122249815986930",
+    permalink: "https://www.instagram.com/p/DfmYO-Sm5UY/",
+    timestamp: "2026-11-11T11:31:01+0000",
+    caption: remoteCaption,
+  };
+  const accepted = await matchReviewedPublicationAmendment({job, caption, remote});
+  assert.equal(accepted?.id,"SDOH-BURGUNDY-CAR-0017-PUBLISHED-CAPTION-20261111");
+  assert.equal(accepted?.exact_change,"REMOVE_ONE_TRAILING_LF");
+
+  const negative = [
+    [{id:job.id+"-copy"}, {}],
+    [{content_id:"SDOH-SAGE-CAR-0016"}, {}],
+    [{account:"@other"}, {}],
+    [{platform:"facebook"}, {}],
+    [{format:"reel"}, {}],
+    [{scheduled_at:"2026-11-12T19:30:00+08:00"}, {}],
+    [{}, {id:remote.id+"1"}],
+    [{}, {permalink:remote.permalink+"broken"}],
+    [{}, {timestamp:"2026-11-11T11:31:02+0000"}],
+    [{}, {caption:remoteCaption+" "}],
+    [{}, {caption:remoteCaption.slice(0,-1)}],
+    [{}, {caption:caption+"\n"}],
+  ];
+  for (const [jobChanges,remoteChanges] of negative) {
+    assert.equal(await matchReviewedPublicationAmendment({
+      job:{...job,...jobChanges},caption,remote:{...remote,...remoteChanges}
+    }),null,"Reject changed identity, remote media, or non-LF caption drift");
+  }
+  assert.equal(await matchReviewedPublicationAmendment({
+    job,caption:caption+" ",remote
+  }),null,"Changing immutable approved source caption is rejected");
+
+  const state = makeState();
+  Object.assign(state.job, {...job, state:"FAILED", governance_ref:GOVERNANCE_REF,
+    caption_revision:"v1.1",remote_media_id:remote.id,last_error:"REMOTE_CAPTION_MISMATCH"});
+  Object.assign(state.authority, {
+    content_id:job.content_id,register_document_id:record.register_document_id,
+    scheduled_at:job.scheduled_at,caption_revision:"v1.1",
+    destination_account:job.account,approved_caption:caption,
+    caption_sha256:await sha256Hex(caption),
+  });
+  const immutableBefore = JSON.stringify(state.authority);
+  const requests = [];
+  const fetchImpl = async (url,options={}) => {
+    const method=options.method||"GET";
+    requests.push({url:String(url),method});
+    assert.equal(method,"GET","No Meta mutations during controlled reconcile");
+    assert.ok(!String(url).includes("/media_publish"),"No double publication");
+    return Response.json(remote);
+  };
+  const result = await reconcileCarouselPublication({
+    env:createEnv(state),jobId:job.id,fetchImpl,
+    now:()=>Date.parse("2026-11-12T14:20:00Z"),
+  });
+  assert.equal(result.status,"PUBLISHED");
+  assert.equal(result.caption_verification,"REVIEWED_POST_PUBLICATION_AMENDMENT");
+  assert.equal(result.caption_amendment?.id,"SDOH-BURGUNDY-CAR-0017-PUBLISHED-CAPTION-20261111");
+  assert.equal(result.remote_media_id,remote.id);
+  assert.equal(state.job.state,"PUBLISHED");
+  assert.equal(state.job.last_error,null);
+  assert.equal(state.credential,null);
+  assert.equal(JSON.stringify(state.authority),immutableBefore,"Immutable authority unchanged");
+  assert.equal(requests.length,1,"Exactly one Meta read");
+  const again = await reconcileCarouselPublication({
+    env:createEnv(state),jobId:job.id,fetchImpl,
+    now:()=>Date.parse("2026-11-12T14:21:00Z"),
+  });
+  assert.equal(again.status,"PUBLISHED");
+  assert.equal(requests.length,2,"Idempotent reconciliation makes only a new GET");
+}
+console.log("Burgundy 0017 terminal-LF exception PASS: exact identity + 2 SHA-256, negative guards, no Meta writes, idempotence.");
