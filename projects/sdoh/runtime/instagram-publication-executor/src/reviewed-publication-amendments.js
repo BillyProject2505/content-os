@@ -4,7 +4,7 @@ import { sha256Hex } from "./execution-authority.js";
 // authorized reconciliation. Its exact SHA matches Meta evidence in run
 // 42636664300. This is a single-post acceptance record, never publish authority.
 // Narrative unchanged: November hashtags, flag emoji, and newline changes only.
-// Two independently reviewed, single-publication post-publish evidence exceptions.
+// Reviewed, single-publication post-publish evidence exceptions.
 // These records never authorize publication and never modify approved source copy.
 const amendments = Object.freeze([
   Object.freeze({
@@ -33,11 +33,25 @@ const amendments = Object.freeze([
     exact_change: "REMOVE_ONE_TRAILING_LF",
     evidence_url: "https://github.com/BillyProject2505/content-os/actions/runs/43228783158",
   }),
+  Object.freeze({
+    id: "SDOH-BURGUNDY-CAR-0017-PUBLISHED-CAPTION-20261111",
+    job_id: "IG-SDOH-BURGUNDY-CAR-0017-20261111T113000Z",
+    content_id: "SDOH-BURGUNDY-CAR-0017",
+    account: "@satudosisobathati",
+    scheduled_at: "2026-11-11T19:30:00+08:00",
+    original_sha256: "d096ffe21e99f7e2351b19cf5b506b055d85ea82d2abb52a9475a597d986ce20",
+    published_sha256: "ac85c2f3f0f01a512d63c69313a402203384ab130b6ddff04f6431c6da165dad",
+    media_id: "18122249815986930",
+    permalink: "https://www.instagram.com/p/DfmYO-Sm5UY/",
+    published_at: "2026-11-11T11:31:01+0000",
+    exact_change: "REMOVE_ONE_TRAILING_LF",
+    evidence_url: "https://github.com/BillyProject2505/content-os/actions/runs/43234618196",
+  }),
 ]);
 
 // Only called by reconciliation after immutable stored authority validation.
 // An exact ID/remote identity and both caption SHA-256 hashes are required.
-// The 0016 exception accepts ONLY one missing trailing LF; no global normalization.
+// The 0016 and 0017 exceptions accept ONLY one missing trailing LF for their exact posts.
 export async function matchReviewedPublicationAmendment({ job, caption, remote }) {
   if (!job || !remote || typeof caption !== "string" ||
       typeof remote.caption !== "string") return null;
