@@ -342,12 +342,18 @@
         "runtime_job_id": "IG-SDOH-SAGE-CAR-0016-20261112T113000Z",
         "runtime_state": "PUBLISHED",
         "runtime_last_error": null,
-        "runtime_reconciliation": "COMPLETED_RUNTIME_ONLY_LINEAR_WRITEBACK_PENDING",
+        "runtime_reconciliation": "COMPLETED_RUNTIME_AND_LINEAR_REGISTER_SYNCED",
         "duplicate_publication_authorized": false,
         "runtime_reconciliation_run": "https://github.com/BillyProject2505/content-os/actions/runs/43228783158/attempts/2",
         "caption_verification": "REVIEWED_POST_PUBLICATION_AMENDMENT",
         "caption_amendment_id": "SDOH-SAGE-CAR-0016-PUBLISHED-CAPTION-20261112",
-        "worker_deploy_provenance": "https://github.com/BillyProject2505/content-os/actions/runs/43230775532"
+        "worker_deploy_provenance": "https://github.com/BillyProject2505/content-os/actions/runs/43230775532",
+        "linear_register_state": "PUBLISHED",
+        "linear_writeback_decision": "WRITEBACK_APPLIED",
+        "linear_post_write_verification": "ALREADY_SYNCED",
+        "linear_writeback_run": "https://github.com/BillyProject2505/content-os/actions/runs/43232679436",
+        "linear_writeback_plan_sha256": "43f42a739cd7d3bfe0f9e73badd236aeb4ccf75fd036c69aede76dd2f2790f6a",
+        "linear_register_verified_updated_at": "2026-11-12T14:00:10.718Z"
       }
     },
     {
