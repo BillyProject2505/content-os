@@ -340,10 +340,14 @@
         "caption_remote_sha256": "acd81caba82d1d6f5a022b652b8c29c3be288753bd72c14066683568677de963",
         "caption_difference": "Trailing final newline only (665 expected vs 664 remote); equal_without_final_newlines=true; non_hashtag_text_equal=true; hashtag lines identical.",
         "runtime_job_id": "IG-SDOH-SAGE-CAR-0016-20261112T113000Z",
-        "runtime_state": "FAILED",
-        "runtime_last_error": "REMOTE_CAPTION_MISMATCH",
-        "runtime_reconciliation": "PENDING_OWNER_REVIEW_OF_EXACT_CAPTION_VARIANCE",
-        "duplicate_publication_authorized": false
+        "runtime_state": "PUBLISHED",
+        "runtime_last_error": null,
+        "runtime_reconciliation": "COMPLETED_RUNTIME_ONLY_LINEAR_WRITEBACK_PENDING",
+        "duplicate_publication_authorized": false,
+        "runtime_reconciliation_run": "https://github.com/BillyProject2505/content-os/actions/runs/43228783158/attempts/2",
+        "caption_verification": "REVIEWED_POST_PUBLICATION_AMENDMENT",
+        "caption_amendment_id": "SDOH-SAGE-CAR-0016-PUBLISHED-CAPTION-20261112",
+        "worker_deploy_provenance": "https://github.com/BillyProject2505/content-os/actions/runs/43230775532"
       }
     },
     {
