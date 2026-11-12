@@ -257,19 +257,28 @@
         "scope": "Hashtag line only; narrative and media unchanged."
       },
       "publication_evidence": {
-        "status": "PUBLISHED_OWNER_REPORTED",
-        "evidence_basis": "OWNER_SUPPLIED_PERMALINK_AND_REPORTED_LOCAL_TIME",
+        "status": "PUBLISHED_REMOTE_VERIFIED_CAPTION_VARIANCE",
+        "evidence_basis": "META_API_READBACK_CONTROLLED_RECONCILE",
         "owner_evidence_recorded_date": "2026-11-12",
         "reported_published_at_local": "2026-11-11T19:30:00+08:00",
-        "permalink": "https://www.instagram.com/p/DfmYO-Sm5UY/?cplk=MWhscHJrMzZjbjZjOA==",
+        "permalink": "https://www.instagram.com/p/DfmYO-Sm5UY/",
         "shortcode": "DfmYO-Sm5UY",
-        "remote_media_id": null,
-        "remote_timestamp_verified": false,
-        "remote_caption_verified": false,
+        "remote_media_id": "18122249815986930",
+        "remote_timestamp_verified": true,
+        "remote_caption_verified": true,
         "final_media_hash_compared": false,
-        "runtime_reconciliation": "PENDING",
+        "runtime_reconciliation": "PENDING_OWNER_REVIEW_OF_EXACT_CAPTION_VARIANCE",
         "duplicate_publication_authorized": false,
-        "caution": "Owner report only. Do not set Linear runtime row to machine PUBLISHED or retry publishing until independent reconciliation."
+        "caution": "Meta publication verified. No republish. A separate owner-authorized exact-match caption exception and controlled reconciliation are required; do not mark runtime/Linear as PUBLISHED yet.",
+        "evidence_run": "https://github.com/BillyProject2505/content-os/actions/runs/43234618196",
+        "actual_published_at": "2026-11-11T11:31:01+0000",
+        "actual_published_at_local": "2026-11-11T19:31:01+08:00",
+        "caption_expected_sha256": "d096ffe21e99f7e2351b19cf5b506b055d85ea82d2abb52a9475a597d986ce20",
+        "caption_remote_sha256": "ac85c2f3f0f01a512d63c69313a402203384ab130b6ddff04f6431c6da165dad",
+        "caption_difference": "Trailing final newline only (657 approved vs 656 remote); equal_without_final_newlines=true; non_hashtag_text_equal=true; hashtag lines identical.",
+        "runtime_job_id": "IG-SDOH-BURGUNDY-CAR-0017-20261111T113000Z",
+        "runtime_state": "FAILED",
+        "runtime_last_error": "REMOTE_CAPTION_MISMATCH"
       }
     },
     {
