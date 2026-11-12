@@ -255,6 +255,21 @@
         "previous_caption_sha256": "be6a2d2828a88fefa4a600059b93e2938c6cc4c27b1cf055f10622e59ec21003",
         "hashtags": "#satudosisobathati #manado #mentalhealthmanado #transawarenessmonth #transgender",
         "scope": "Hashtag line only; narrative and media unchanged."
+      },
+      "publication_evidence": {
+        "status": "PUBLISHED_OWNER_REPORTED",
+        "evidence_basis": "OWNER_SUPPLIED_PERMALINK_AND_REPORTED_LOCAL_TIME",
+        "owner_evidence_recorded_date": "2026-11-12",
+        "reported_published_at_local": "2026-11-11T19:30:00+08:00",
+        "permalink": "https://www.instagram.com/p/DfmYO-Sm5UY/?cplk=MWhscHJrMzZjbjZjOA==",
+        "shortcode": "DfmYO-Sm5UY",
+        "remote_media_id": null,
+        "remote_timestamp_verified": false,
+        "remote_caption_verified": false,
+        "final_media_hash_compared": false,
+        "runtime_reconciliation": "PENDING",
+        "duplicate_publication_authorized": false,
+        "caution": "Owner report only. Do not set Linear runtime row to machine PUBLISHED or retry publishing until independent reconciliation."
       }
     },
     {
