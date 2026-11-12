@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { matchReviewedPublicationAmendment } from "../src/reviewed-publication-amendments.js";
 import {
   executeCarouselPublication,
   reconcileCarouselPublication,
@@ -355,3 +357,100 @@ for (const variant of ["exact", "remote-caption", "original-caption", "media", "
   }
 }
 console.log("Reviewed published-caption amendment PASS: exact identity/hash match only, immutable authority, no Meta writes, repeat-safe.");
+
+
+// Sage 0016: Owner approved only one omitted terminal LF after independent
+// Meta evidence read-back (run 43228783158). All other caption differences
+// must remain blocked; no publish writes may occur during reconciliation.
+{
+  const delivery = JSON.parse(readFileSync(new URL("../../seasonal-color/2026-11-delivery-preparation.json", import.meta.url), "utf8"));
+  const record = delivery.records.find(row => row.content_id === "SDOH-SAGE-CAR-0016");
+  assert.ok(record, "Sage 0016 frozen delivery record exists");
+  const caption = record.approved_caption;
+  assert.ok(caption.endsWith("\n"), "Approved caption ends in exactly one LF");
+  assert.ok(!caption.endsWith("\n\n"), "No double-LF exception");
+  assert.equal(caption.length, 665);
+  assert.equal(await sha256Hex(caption), "277efb064ae005695879fa6444b7de7c84dd4bc1ed19b88bc658247d0dce8e87");
+  const remoteCaption = caption.slice(0, -1);
+  assert.equal(remoteCaption.length, 664);
+  assert.equal(await sha256Hex(remoteCaption), "acd81caba82d1d6f5a022b652b8c29c3be288753bd72c14066683568677de963");
+
+  const job = {
+    id: "IG-SDOH-SAGE-CAR-0016-20261112T113000Z",
+    content_id: "SDOH-SAGE-CAR-0016",
+    account: "@satudosisobathati",
+    platform: "instagram",
+    format: "carousel",
+    scheduled_at: "2026-11-12T19:30:00+08:00",
+  };
+  const remote = {
+    id: "18101726075534459",
+    permalink: "https://www.instagram.com/p/DfpKqW1kfwE/",
+    timestamp: "2026-11-12T13:30:10+0000",
+    caption: remoteCaption,
+  };
+  const accepted = await matchReviewedPublicationAmendment({job, caption, remote});
+  assert.equal(accepted?.id, "SDOH-SAGE-CAR-0016-PUBLISHED-CAPTION-20261112");
+  assert.equal(accepted?.exact_change, "REMOVE_ONE_TRAILING_LF");
+
+  const invalid = [
+    [{id: job.id+"-other"}, {}],
+    [{content_id:"SDOH-SAGE-CAR-0017"}, {}],
+    [{account:"@other"}, {}],
+    [{platform:"facebook"}, {}],
+    [{format:"reel"}, {}],
+    [{scheduled_at:"2026-11-13T19:30:00+08:00"}, {}],
+    [{}, {id:remote.id+"1"}],
+    [{}, {permalink:remote.permalink+"wrong"}],
+    [{}, {timestamp:"2026-11-12T13:30:11+0000"}],
+    [{}, {caption:remoteCaption+" "}],
+    [{}, {caption:remoteCaption.slice(0,-1)}],
+    [{}, {caption:caption+"\n"}],
+  ];
+  for (const [jobChanges, remoteChanges] of invalid) {
+    const result = await matchReviewedPublicationAmendment({
+      job:{...job,...jobChanges},
+      caption,
+      remote:{...remote,...remoteChanges},
+    });
+    assert.equal(result, null, "Rejected mismatched identity, timestamp, caption, or non-exact LF omission");
+  }
+  assert.equal(await matchReviewedPublicationAmendment({job,caption:caption+" ",remote}),null,
+    "Even edited approved copy is rejected");
+
+  const state = makeState();
+  Object.assign(state.job, {...job, state:"FAILED", governance_ref:GOVERNANCE_REF,
+    caption_revision:"v1.1", remote_media_id:remote.id, last_error:"REMOTE_CAPTION_MISMATCH"});
+  Object.assign(state.authority, {
+    content_id:job.content_id, register_document_id:record.register_document_id,
+    scheduled_at:job.scheduled_at, caption_revision:"v1.1",
+    destination_account:job.account, approved_caption:caption,
+    caption_sha256:await sha256Hex(caption),
+  });
+  const authorityBefore = JSON.stringify(state.authority);
+  const requests = [];
+  const fetchImpl = async (url, options={}) => {
+    requests.push({url:String(url),method:options.method||"GET"});
+    assert.equal(options.method||"GET","GET","Reconciliation must be GET-only");
+    assert.ok(!String(url).includes("/media_publish"),"Never publish a second time");
+    return Response.json(remote);
+  };
+  const result = await reconcileCarouselPublication({
+    env:createEnv(state),jobId:job.id,fetchImpl,now:()=>Date.parse("2026-11-12T13:36:00Z"),
+  });
+  assert.equal(result.status,"PUBLISHED");
+  assert.equal(result.caption_verification,"REVIEWED_POST_PUBLICATION_AMENDMENT");
+  assert.equal(result.caption_amendment?.id,"SDOH-SAGE-CAR-0016-PUBLISHED-CAPTION-20261112");
+  assert.equal(state.job.state,"PUBLISHED");
+  assert.equal(state.job.remote_media_id,remote.id);
+  assert.equal(state.job.last_error,null);
+  assert.equal(state.credential,null);
+  assert.equal(JSON.stringify(state.authority),authorityBefore,"Immutable approved authority unchanged");
+  assert.equal(requests.length,1,"Exactly one Meta read");
+  const again = await reconcileCarouselPublication({
+    env:createEnv(state),jobId:job.id,fetchImpl,now:()=>Date.parse("2026-11-12T13:37:00Z"),
+  });
+  assert.equal(again.status,"PUBLISHED");
+  assert.equal(requests.length,2,"Second reconciliation only reads remote state");
+}
+console.log("Sage 0016 exact trailing-LF exception PASS: identity, SHA-256, 12 negative guards, no Meta writes, idempotent.");
