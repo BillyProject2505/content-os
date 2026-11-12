@@ -267,9 +267,9 @@
         "remote_timestamp_verified": true,
         "remote_caption_verified": true,
         "final_media_hash_compared": false,
-        "runtime_reconciliation": "COMPLETED_RUNTIME_ONLY_LINEAR_WRITEBACK_PENDING",
+        "runtime_reconciliation": "COMPLETED_RUNTIME_AND_LINEAR_REGISTER_SYNCED",
         "duplicate_publication_authorized": false,
-        "caution": "Meta publication and D1 runtime PUBLISHED verified. Linear operational publication register writeback remains pending; do not republish.",
+        "caution": "Publication, D1 runtime, and Linear register PUBLISHED verified. Exact final-LF-only caption difference remains recorded; no repost or general caption-normalization authority.",
         "evidence_run": "https://github.com/BillyProject2505/content-os/actions/runs/43234618196",
         "actual_published_at": "2026-11-11T11:31:01+0000",
         "actual_published_at_local": "2026-11-11T19:31:01+08:00",
@@ -282,7 +282,14 @@
         "runtime_reconciliation_run": "https://github.com/BillyProject2505/content-os/actions/runs/43234618196/attempts/2",
         "caption_verification": "REVIEWED_POST_PUBLICATION_AMENDMENT",
         "caption_amendment_id": "SDOH-BURGUNDY-CAR-0017-PUBLISHED-CAPTION-20261111",
-        "worker_deploy_provenance": "https://github.com/BillyProject2505/content-os/actions/runs/43236457385"
+        "worker_deploy_provenance": "https://github.com/BillyProject2505/content-os/actions/runs/43236457385",
+        "linear_register_state": "PUBLISHED",
+        "linear_writeback_decision": "WRITEBACK_APPLIED",
+        "linear_post_write_verification": "ALREADY_SYNCED",
+        "linear_writeback_run": "https://github.com/BillyProject2505/content-os/actions/runs/43240004887",
+        "linear_writeback_dry_run": "https://github.com/BillyProject2505/content-os/actions/runs/43238855063",
+        "linear_writeback_plan_sha256": "5317c6f3bfa53aeb56c05237be4bdf28b54bb47656378298faa226600b06e603",
+        "linear_register_verified_updated_at": "2026-11-12T14:42:45.091Z"
       }
     },
     {
