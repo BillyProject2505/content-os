@@ -326,6 +326,24 @@
         "previous_caption_sha256": "90329f6267758f7459190540467ef8ca277fdfa997ac1a677a88033e6ca68457",
         "hashtags": "#satudosisobathati #manado #mentalhealthmanado #transawarenessmonth #transgender",
         "scope": "Hashtag line only; narrative and media unchanged."
+      },
+      "publication_evidence": {
+        "status": "PUBLISHED_REMOTE_VERIFIED_CAPTION_VARIANCE",
+        "evidence_basis": "META_API_READBACK_CONTROLLED_RECONCILE",
+        "evidence_run": "https://github.com/BillyProject2505/content-os/actions/runs/43228783158",
+        "remote_media_id": "18101726075534459",
+        "permalink": "https://www.instagram.com/p/DfpKqW1kfwE/",
+        "shortcode": "DfpKqW1kfwE",
+        "actual_published_at": "2026-11-12T13:30:10+0000",
+        "actual_published_at_local": "2026-11-12T21:30:10+08:00",
+        "caption_expected_sha256": "277efb064ae005695879fa6444b7de7c84dd4bc1ed19b88bc658247d0dce8e87",
+        "caption_remote_sha256": "acd81caba82d1d6f5a022b652b8c29c3be288753bd72c14066683568677de963",
+        "caption_difference": "Trailing final newline only (665 expected vs 664 remote); equal_without_final_newlines=true; non_hashtag_text_equal=true; hashtag lines identical.",
+        "runtime_job_id": "IG-SDOH-SAGE-CAR-0016-20261112T113000Z",
+        "runtime_state": "FAILED",
+        "runtime_last_error": "REMOTE_CAPTION_MISMATCH",
+        "runtime_reconciliation": "PENDING_OWNER_REVIEW_OF_EXACT_CAPTION_VARIANCE",
+        "duplicate_publication_authorized": false
       }
     },
     {
