@@ -267,9 +267,9 @@
         "remote_timestamp_verified": true,
         "remote_caption_verified": true,
         "final_media_hash_compared": false,
-        "runtime_reconciliation": "PENDING_OWNER_REVIEW_OF_EXACT_CAPTION_VARIANCE",
+        "runtime_reconciliation": "COMPLETED_RUNTIME_ONLY_LINEAR_WRITEBACK_PENDING",
         "duplicate_publication_authorized": false,
-        "caution": "Meta publication verified. No republish. A separate owner-authorized exact-match caption exception and controlled reconciliation are required; do not mark runtime/Linear as PUBLISHED yet.",
+        "caution": "Meta publication and D1 runtime PUBLISHED verified. Linear operational publication register writeback remains pending; do not republish.",
         "evidence_run": "https://github.com/BillyProject2505/content-os/actions/runs/43234618196",
         "actual_published_at": "2026-11-11T11:31:01+0000",
         "actual_published_at_local": "2026-11-11T19:31:01+08:00",
@@ -277,8 +277,12 @@
         "caption_remote_sha256": "ac85c2f3f0f01a512d63c69313a402203384ab130b6ddff04f6431c6da165dad",
         "caption_difference": "Trailing final newline only (657 approved vs 656 remote); equal_without_final_newlines=true; non_hashtag_text_equal=true; hashtag lines identical.",
         "runtime_job_id": "IG-SDOH-BURGUNDY-CAR-0017-20261111T113000Z",
-        "runtime_state": "FAILED",
-        "runtime_last_error": "REMOTE_CAPTION_MISMATCH"
+        "runtime_state": "PUBLISHED",
+        "runtime_last_error": null,
+        "runtime_reconciliation_run": "https://github.com/BillyProject2505/content-os/actions/runs/43234618196/attempts/2",
+        "caption_verification": "REVIEWED_POST_PUBLICATION_AMENDMENT",
+        "caption_amendment_id": "SDOH-BURGUNDY-CAR-0017-PUBLISHED-CAPTION-20261111",
+        "worker_deploy_provenance": "https://github.com/BillyProject2505/content-os/actions/runs/43236457385"
       }
     },
     {
