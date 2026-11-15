@@ -47,11 +47,25 @@ const amendments = Object.freeze([
     exact_change: "REMOVE_ONE_TRAILING_LF",
     evidence_url: "https://github.com/BillyProject2505/content-os/actions/runs/43234618196",
   }),
+  Object.freeze({
+    id: "SDOH-BURGUNDY-CAR-0018-PUBLISHED-CAPTION-20261115",
+    job_id: "IG-SDOH-BURGUNDY-CAR-0018-20261115T113000Z",
+    content_id: "SDOH-BURGUNDY-CAR-0018",
+    account: "@satudosisobathati",
+    scheduled_at: "2026-11-15T19:30:00+08:00",
+    original_sha256: "eb0e17cf0af103089cefb1242798cd53de5310763f774bbe91afab27d3f584b8",
+    published_sha256: "a963ffe11d07064f84b7bbc29af5acf3caace442a58edc195006ec880e4bbfd3",
+    media_id: "17975249160190631",
+    permalink: "https://www.instagram.com/p/DfwrZVNlZdl/",
+    published_at: "2026-11-15T11:30:52+0000",
+    exact_change: "REMOVE_ONE_TRAILING_LF",
+    evidence_url: "https://github.com/BillyProject2505/content-os/actions/runs/43719715768",
+  }),
 ]);
 
 // Only called by reconciliation after immutable stored authority validation.
 // An exact ID/remote identity and both caption SHA-256 hashes are required.
-// The 0016 and 0017 exceptions accept ONLY one missing trailing LF for their exact posts.
+// The 0016, 0017, and 0018 exceptions accept ONLY one missing trailing LF for their exact posts.
 export async function matchReviewedPublicationAmendment({ job, caption, remote }) {
   if (!job || !remote || typeof caption !== "string" ||
       typeof remote.caption !== "string") return null;
