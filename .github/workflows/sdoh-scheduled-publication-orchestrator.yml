@@ -639,17 +639,7 @@ jobs:
           jq -e '.ok == true and .decision == "EVIDENCE_CANDIDATES_DISCOVERED" and .count == (.candidates | length)' "$candidate_file" > /dev/null
           echo "Evidence recovery candidates: $(jq -r '.count' "$candidate_file")"
 
-          while IFS=        if: ${{ always() && !cancelled() }}
-        env:
-          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
-        run: node projects/sdoh/runtime/seasonal-color/november-publication-monitor.mjs
-
-      - name: Cleanup temporary files
-        if: always()
-        shell: bash
-        run: |
-          rm -f "$RUNNER_TEMP"/recovery-candidates.json "$RUNNER_TEMP"/recovery-runtime-status.json "$RUNNER_TEMP"/authority-result.json                 "$RUNNER_TEMP"/authority-snapshot.json                 "$RUNNER_TEMP"/runtime-status-initial.json                 "$RUNNER_TEMP"/stage-response.json                 "$RUNNER_TEMP"/prepare-request.json                 "$RUNNER_TEMP"/prepare-response.json                 "$RUNNER_TEMP"/refresh-request.json                 "$RUNNER_TEMP"/refresh-response.json                 "$RUNNER_TEMP"/execute-response.json                 "$RUNNER_TEMP"/writeback-plan.json                 "$RUNNER_TEMP"/writeback-result.json                 "$RUNNER_TEMP"/final-writeback-check.json
-\t' read -r content_id job_id; do
+          while IFS=$'\t' read -r content_id job_id; do
             [ -n "$content_id" ] || continue
             echo "Checking terminal D1 evidence for $content_id"
             http_status="$(
@@ -718,4 +708,4 @@ jobs:
         if: always()
         shell: bash
         run: |
-          rm -f "$RUNNER_TEMP"/authority-result.json                 "$RUNNER_TEMP"/authority-snapshot.json                 "$RUNNER_TEMP"/runtime-status-initial.json                 "$RUNNER_TEMP"/stage-response.json                 "$RUNNER_TEMP"/prepare-request.json                 "$RUNNER_TEMP"/prepare-response.json                 "$RUNNER_TEMP"/refresh-request.json                 "$RUNNER_TEMP"/refresh-response.json                 "$RUNNER_TEMP"/execute-response.json                 "$RUNNER_TEMP"/writeback-plan.json                 "$RUNNER_TEMP"/writeback-result.json                 "$RUNNER_TEMP"/final-writeback-check.json
+          rm -f "$RUNNER_TEMP"/recovery-candidates.json "$RUNNER_TEMP"/recovery-runtime-status.json "$RUNNER_TEMP"/authority-result.json                 "$RUNNER_TEMP"/authority-snapshot.json                 "$RUNNER_TEMP"/runtime-status-initial.json                 "$RUNNER_TEMP"/stage-response.json                 "$RUNNER_TEMP"/prepare-request.json                 "$RUNNER_TEMP"/prepare-response.json                 "$RUNNER_TEMP"/refresh-request.json                 "$RUNNER_TEMP"/refresh-response.json                 "$RUNNER_TEMP"/execute-response.json                 "$RUNNER_TEMP"/writeback-plan.json                 "$RUNNER_TEMP"/writeback-result.json                 "$RUNNER_TEMP"/final-writeback-check.json
