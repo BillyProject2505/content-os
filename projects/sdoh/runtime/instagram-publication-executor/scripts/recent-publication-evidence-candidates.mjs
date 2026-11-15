@@ -53,11 +53,11 @@ export function discoverEvidenceCandidates({documents, now = new Date()}) {
       if (cells.length < 4) continue;
       const contentId = cells[0];
       if (!/^SDOH-(BURGUNDY|SAGE)-CAR-\d{4}$/.test(contentId)) continue;
+      if (cells[1] !== EXPECTED_DESTINATION || cells[3].toUpperCase() !== "SCHEDULED") continue;
       const exactRoute = requireCarouselRegister(contentId);
       if (exactRoute.register_document_id !== document.id) {
         throw new Error("RECOVERY_REGISTER_DOCUMENT_ROUTE_MISMATCH");
       }
-      if (cells[1] !== EXPECTED_DESTINATION || cells[3].toUpperCase() !== "SCHEDULED") continue;
       const scheduledAt = parseWita(cells[2]);
       const ageMs = nowMs - scheduledAt.getTime();
       if (ageMs < 0 || ageMs > LOOKBACK_MS) continue;
@@ -114,6 +114,8 @@ function runSelfTest() {
     assert.equal(discoverEvidenceCandidates({documents:[mk(burgundy,[[...row.slice(0,3),state]])],now}).count,0);
   }
   assert.equal(discoverEvidenceCandidates({documents:[mk(burgundy,[[row[0],"Instagram — @other",row[2],row[3]]])],now}).count,0);
+  // Historic/non-eligible lookalike rows must not block a current recovery.
+  assert.equal(discoverEvidenceCandidates({documents:[mk(sage,[[...row.slice(0,3),"PUBLISHED"]])],now}).count,0);
   assert.throws(()=>discoverEvidenceCandidates({documents:[mk(sage,[row])],now}),/ROUTE_MISMATCH/);
   assert.throws(()=>discoverEvidenceCandidates({documents:[mk(burgundy,[row,row])],now}),/DUPLICATE/);
   assert.equal(discoverEvidenceCandidates({documents:[
