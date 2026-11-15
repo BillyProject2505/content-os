@@ -101,7 +101,8 @@
     "Prepared delivery data only; not a live execution authority manifest.",
     "JPEGs extracted byte-identically from approved ZIPs; no rerender or re-encoding. SAGE-0015 delivery caption has a separately Owner-approved date amendment; original ZIP caption remains immutable.",
     "All records use campaign tracking issue BUS-175; individual issues are not fabricated.",
-    "Linear campaign publication rows activated from PLANNED to SCHEDULED after explicit Owner release approval on 2026-11-08; exact media/caption manifests unchanged."
+    "Linear campaign publication rows activated from PLANNED to SCHEDULED after explicit Owner release approval on 2026-11-08; exact media/caption manifests unchanged.",
+    "One-time operational recovery for SDOH-BURGUNDY-CAR-0018: Owner explicitly authorized publish 2026-11-15 19:30 WITA after Cloudflare→GitHub dispatch outage on the original 2026-11-14 19:30 WITA slot. This delivery runtime timestamp replaces the missed operational slot only; editorial baseline and historical calendar event remain recorded separately; source caption SHA and all five approved media SHA remain unchanged. No immediate publish/retry authorized by this metadata change."
   ],
   "records": [
     {
@@ -381,7 +382,7 @@
       "linear_issue": "BUS-175",
       "register_document_id": "346b4c0c-9aec-4454-a2b5-06210b2c88c6",
       "asset_folder_id": "16YkhMNge9D4qF4ID1yA_pZo2Sh2b56K6",
-      "planned_at": "2026-11-14T19:30:00+08:00",
+      "planned_at": "2026-11-15T19:30:00+08:00",
       "destination_account": "@satudosisobathati",
       "caption_revision": "v1.1",
       "approved_caption": "tanggal 13 sampai 19 november diperingati sebagai transgender awareness week. pekan ini mengajak kita mengenal dan menghormati hidup orang transgender dengan lebih baik.\n\nkesadaran tidak berhenti pada mengunggah slogan. ia terlihat saat kita berhenti menyebarkan prasangka, mendengarkan tanpa menghakimi, dan tidak menjadikan pengalaman pribadi orang lain sebagai tontonan.\n\nbelajar adalah langkah awal. menjaga rasa hormat dalam keseharian adalah bagian yang perlu terus dilanjutkan.\n\nsatu dosis obat hati\nTransgender Awareness Month November 2026\nTo Honor and To Hold: Their Lives, Their Legacies\n#satudosisobathati #manado #mentalhealthmanado #transawarenessmonth #transgender\n",
