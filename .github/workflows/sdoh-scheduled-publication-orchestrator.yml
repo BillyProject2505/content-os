@@ -620,6 +620,94 @@ jobs:
             echo "- Global manual publishing window: not opened by this workflow"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      # Evidence-only recovery. D1 PUBLISHED is a prerequisite: this block
+      # cannot stage media or trigger another Instagram media_publish.
+      # It also runs after a prior failure, allowing missed Linear writeback
+      # to converge on the next 5-minute Cloudflare cron wake-up.
+      - name: Recover verified terminal publication evidence (last 48h)
+        if: ${{ always() && !cancelled() }}
+        shell: bash
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          EXECUTOR_INGEST_SECRET: ${{ secrets.EXECUTOR_INGEST_SECRET }}
+          WORKER_BASE_URL: ${{ inputs.worker_base_url || 'https://sdoh-instagram-publication-executor.billyfernando2505.workers.dev' }}
+        run: |
+          set -euo pipefail
+          candidate_file="$RUNNER_TEMP/recovery-candidates.json"
+          status_file="$RUNNER_TEMP/recovery-runtime-status.json"
+          node projects/sdoh/runtime/instagram-publication-executor/scripts/recent-publication-evidence-candidates.mjs > "$candidate_file"
+          jq -e '.ok == true and .decision == "EVIDENCE_CANDIDATES_DISCOVERED" and .count == (.candidates | length)' "$candidate_file" > /dev/null
+          echo "Evidence recovery candidates: $(jq -r '.count' "$candidate_file")"
+
+          while IFS=        if: ${{ always() && !cancelled() }}
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: node projects/sdoh/runtime/seasonal-color/november-publication-monitor.mjs
+
+      - name: Cleanup temporary files
+        if: always()
+        shell: bash
+        run: |
+          rm -f "$RUNNER_TEMP"/recovery-candidates.json "$RUNNER_TEMP"/recovery-runtime-status.json "$RUNNER_TEMP"/authority-result.json                 "$RUNNER_TEMP"/authority-snapshot.json                 "$RUNNER_TEMP"/runtime-status-initial.json                 "$RUNNER_TEMP"/stage-response.json                 "$RUNNER_TEMP"/prepare-request.json                 "$RUNNER_TEMP"/prepare-response.json                 "$RUNNER_TEMP"/refresh-request.json                 "$RUNNER_TEMP"/refresh-response.json                 "$RUNNER_TEMP"/execute-response.json                 "$RUNNER_TEMP"/writeback-plan.json                 "$RUNNER_TEMP"/writeback-result.json                 "$RUNNER_TEMP"/final-writeback-check.json
+\t' read -r content_id job_id; do
+            [ -n "$content_id" ] || continue
+            echo "Checking terminal D1 evidence for $content_id"
+            http_status="$(
+              jq -n --arg job_id "$job_id" '{job_id:$job_id}' |
+              curl --silent --show-error --max-time 20 \
+                --output "$status_file" --write-out "%{http_code}" \
+                --request POST \
+                --header "Authorization: Bearer $EXECUTOR_INGEST_SECRET" \
+                --header "Content-Type: application/json" \
+                --data-binary @- \
+                "${WORKER_BASE_URL%/}/internal/status"
+            )"
+            if [ "$http_status" = "404" ]; then
+              jq -e '.error == "JOB_NOT_FOUND"' "$status_file" > /dev/null
+              echo "No D1 job for $content_id; no evidence to write back."
+              continue
+            fi
+            if [ "$http_status" != "200" ]; then
+              echo "::error::Evidence recovery D1 status failed with HTTP $http_status"
+              exit 1
+            fi
+            jq -e --arg content_id "$content_id" --arg job_id "$job_id" '
+              .ok == true and .job.content_id == $content_id and
+              .job.id == $job_id and .job.account == "@satudosisobathati" and
+              .job.platform == "instagram" and .job.format == "carousel" and .media_count == 5
+            ' "$status_file" > /dev/null
+            state="$(jq -r '.job.state' "$status_file")"
+            if [ "$state" != "PUBLISHED" ]; then
+              echo "D1 $content_id state=$state; no writeback and no publish retry."
+              continue
+            fi
+
+            plan="$(CONTENT_ID="$content_id" JOB_ID="$job_id" \
+              node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback.mjs)"
+            jq -e '.ok == true and .dry_run == true' <<< "$plan" > /dev/null
+            decision="$(jq -r '.decision' <<< "$plan")"
+            case "$decision" in
+              ALREADY_SYNCED)
+                echo "Linear already synced for $content_id"
+                ;;
+              DRY_RUN_UPDATE_READY)
+                plan_sha="$(jq -r '.plan_sha256' <<< "$plan")"
+                [[ "$plan_sha" =~ ^[a-f0-9]{64}$ ]]
+                applied="$(CONTENT_ID="$content_id" JOB_ID="$job_id" \
+                  EXPECTED_PLAN_SHA256="$plan_sha" WRITE_CONFIRMATION=APPLY_LINEAR_WRITEBACK \
+                  node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-evidence-writeback-controlled.mjs)"
+                jq -e '.ok == true and .decision == "WRITEBACK_APPLIED" and
+                  .linear_mutation_performed == true and .post_write_verification == "ALREADY_SYNCED"' \
+                  <<< "$applied" > /dev/null
+                echo "Automatic terminal-D1 Linear evidence recovery PASS for $content_id"
+                ;;
+              *)
+                echo "::error::Evidence recovery rejected unsafe plan ($decision) for $content_id"
+                exit 1
+                ;;
+            esac
+          done < <(jq -r '.candidates[] | [.content_id,.job_id] | @tsv' "$candidate_file")
+
       - name: Check November schedule and overdue publication evidence
         if: ${{ always() && !cancelled() }}
         env:
