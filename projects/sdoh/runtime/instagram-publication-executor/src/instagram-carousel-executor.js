@@ -643,10 +643,14 @@ async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, 
   }
 
   const captionMatches = normalizeLineEndings(remote.caption) === normalizeLineEndings(caption);
-  const reviewedAmendment = !captionMatches && reconciliationJob
+  // Prospective, exact single-terminal-LF omission observed in Meta readback.
+  // Never accepts narrative, hashtag, whitespace, multiple LF, or historic drift.
+  const platformFinalLf = !captionMatches &&
+    isProspectiveExactTerminalLfOmission(caption, remote.caption, remote.timestamp);
+  const reviewedAmendment = !captionMatches && !platformFinalLf && reconciliationJob
     ? await matchReviewedPublicationAmendment({ job: reconciliationJob, caption, remote })
     : null;
-  if (!captionMatches && !reviewedAmendment) {
+  if (!captionMatches && !platformFinalLf && !reviewedAmendment) {
     await markReconciliationRequired(env.DB, jobId, "REMOTE_CAPTION_MISMATCH");
     return result("REMOTE_CAPTION_MISMATCH", {
       ok: false,
@@ -689,7 +693,8 @@ async function finalizeKnownRemoteMedia({ env, jobId, mediaId, caption, client, 
     remote_media_id: mediaId,
     remote_permalink: remote.permalink,
     published_at: remote.timestamp,
-    caption_verification: reviewedAmendment ? "REVIEWED_POST_PUBLICATION_AMENDMENT" : "ORIGINAL_AUTHORITY",
+    caption_verification: platformFinalLf ? "PLATFORM_SINGLE_TERMINAL_LF" :
+      reviewedAmendment ? "REVIEWED_POST_PUBLICATION_AMENDMENT" : "ORIGINAL_AUTHORITY",
     caption_amendment: reviewedAmendment,
   });
 }
@@ -865,6 +870,18 @@ async function deleteCredential(db, jobId) {
 
 function normalizeLineEndings(value) {
   return String(value ?? "").replace(/\r\n/g, "\n");
+}
+
+// Allow only a proven platform omission of exactly one final LF for posts
+// published from 2026-11-16 WITA onward. Prior posts remain governed by
+// exact single-post reviewed amendments. No trailing trim or fuzzy compare.
+export function isProspectiveExactTerminalLfOmission(expected, actual, publishedAt) {
+  if (typeof expected !== "string" || typeof actual !== "string") return false;
+  if (!expected.endsWith("\n") || expected.endsWith("\n\n")) return false;
+  const publishedMs = Date.parse(String(publishedAt ?? ""));
+  const cutoff = Date.parse("2026-11-16T00:00:00+08:00");
+  return Number.isFinite(publishedMs) && publishedMs >= cutoff &&
+    actual === expected.slice(0, -1);
 }
 
 function requireRuntime(env) {
