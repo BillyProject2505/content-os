@@ -62,6 +62,8 @@ jobs:
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/scheduled-execution-self-test.mjs
       - name: Self-test scheduled publication discovery
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/scheduled-publication-discovery.mjs --self-test
+      - name: Self-test automatic published-evidence recovery discovery
+        run: node projects/sdoh/runtime/instagram-publication-executor/scripts/recent-publication-evidence-candidates.mjs --self-test
       - name: Self-test Cloudflare scheduled wake-up
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/scheduled-wakeup-self-test.mjs
       - name: Self-test SDOH model generation contract
