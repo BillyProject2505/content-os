@@ -5,7 +5,7 @@ import { deploymentInfo } from "./deployment-info.js";
 
 // GitHub-connected Cloudflare build source.
 
-async function handleExistingHealth(request, env) {
+export async function handleExistingHealth(request, env) {
   const url = new URL(request.url);
 
   if (url.pathname !== "/health") {
@@ -25,11 +25,20 @@ async function handleExistingHealth(request, env) {
     const data = await response.json();
 
     if (!response.ok) {
+      // Public health reports only allowlisted machine-readable diagnostics.
+      // Never return Meta's error message, token, username or user IDs.
       return Response.json(
         {
           ok: false,
           instagram: "unavailable",
           publishing_enabled: false,
+          upstream: {
+            http_status: response.status,
+            code: Number.isInteger(data?.error?.code) ? data.error.code : null,
+            subcode: Number.isInteger(data?.error?.error_subcode) ? data.error.error_subcode : null,
+            type: ["OAuthException", "GraphMethodException", "IGApiException"].includes(data?.error?.type)
+              ? data.error.type : null,
+          },
           deployment: deploymentInfo(env),
         },
         { status: 502 }
