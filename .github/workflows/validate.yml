@@ -32,6 +32,8 @@ jobs:
         run: node --test projects/sdoh/runtime/seasonal-color/november-publication-monitor.test.mjs
       - name: Self-test caption mismatch evidence
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/caption-evidence-self-test.mjs
+      - name: Self-test sanitized Meta health diagnostics
+        run: node --experimental-default-type=module projects/sdoh/runtime/instagram-publication-executor/scripts/health-meta-diagnostics-self-test.mjs
       - name: Self-test SDOH publication authority gate
         run: node projects/sdoh/runtime/instagram-publication-executor/scripts/publication-authority-gate.mjs --self-test
       - name: Self-test SDOH Instagram carousel executor
