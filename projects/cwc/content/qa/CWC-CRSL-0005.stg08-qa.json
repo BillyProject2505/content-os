@@ -1,0 +1,324 @@
+{
+  "schema": "cwc-qa-record-v1",
+  "content_item_id": "CWC-CRSL-0005",
+  "qa_pass_date": "2026-11-22",
+  "authority": "DIUA-DIC-000019 CWC-QA-001 v1.32 §§7–19, DIUA-DIC-000017 CWC Production Workflow v1.22 §STG-08, DIUA-DIC-000029 FORMAT-CAROUSEL v1.4",
+  "execution": {
+    "actor": "ChatGPT GPT-6 — stage-scoped AI reviewer using a fresh, distinct Python/Pillow metric inspection; not a human clinical reviewer",
+    "method": "AI"
+  },
+  "intake_lifecycle": "READY_FOR_QA",
+  "input_register": "DIUA-DIC-000027@1.44",
+  "final_artifact": {
+    "source_archive_name": "CWC_Nov24_HIV_review_v03.zip",
+    "source_archive_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "source_binary_available_in_conversation": true,
+    "canonical_drive_archive_verified": false,
+    "slide_count": 5,
+    "slide_dimensions_px": [
+      1080,
+      1350
+    ],
+    "slide_sha256": [
+      "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a",
+      "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4",
+      "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6",
+      "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e",
+      "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+    ],
+    "caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "source_manifest_historical": {
+      "content_id": "NOT_ALLOCATED",
+      "register": "1.38",
+      "status": "UNAPPROVED_REVIEW_CANDIDATE_V03_AFTER_TECHNICAL_FIX",
+      "interpretation": "Manifest was produced before later Owner approval and ID allocation; current state comes from versioned CWC register, no release claim."
+    }
+  },
+  "independent_measurement": {
+    "report_name": "CWC_CRSL_0005_STG08_independent_evidence.json",
+    "report_sha256": "0d5935b9ca15fab9928ec53b21569bcfa9a0d01b1df9f1e83ee5de8ff1abdd83",
+    "checks": "Archive/slide/caption fresh SHA; AS-002 source-alpha region measurements; 12 independent body text line widths from slides 02–05 against Montserrat Regular 36px.",
+    "font_comparison_lines": 12,
+    "body_font_size_px": 36,
+    "max_width_difference_px": 6.77,
+    "presenter_visible_bbox_exclusive": [
+      572,
+      467,
+      978,
+      1219
+    ],
+    "presenter_gesture_furthest_left_x": 572,
+    "arm_pixels_x595_604": 385
+  },
+  "applicable_criteria": [
+    {
+      "criterion_id": "CORE-QA-00",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-01",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-02",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-03",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-04",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-05",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-06",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-07",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-08",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "CORE-QA-09",
+      "source": "CORE"
+    },
+    {
+      "criterion_id": "ASSET-QA-01",
+      "source": "ASSET"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-slide1-copy",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-gutter",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-presenter-core",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-gesture",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-protected-copy",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-attention",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-framing",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-logo-footer",
+      "source": "FORMAT"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-type-hierarchy",
+      "source": "FORMAT"
+    }
+  ],
+  "checks": [
+    {
+      "criterion_id": "CORE-QA-00",
+      "what_was_checked": "QA Record completeness",
+      "expected_result": "Per-item verdict, 20 applicable checks with evidence and correct PASS aggregation; no findings on PASS",
+      "actual_result": "One serialized record has 20/20 criteria, exact matching checks, explicit AI execution provenance; all PASS, no findings.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000019_CWC-QA-Mechanism.md §§7.4,9,10,13,19; structural checks attached within this QA record",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-01",
+      "what_was_checked": "Intent and objective",
+      "expected_result": "Audience understands long/healthy life possible with effective HIV care and learns treatment/monitoring/support actions",
+      "actual_result": "Slide 1 supports hope after diagnosis; slides 2–4 explain ART and viral load; slide 5 routes to stigma-free support; no generic HIV facts drift.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000027_CWC-Content-Register.md native CWC-CRSL-0005 row; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.planning.json brief and slide sequence; direct PNG review",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-02",
+      "what_was_checked": "Audience and reading level",
+      "expected_result": "Indonesian, respectful and actionable for general HIV community, newly diagnosed people and supporters",
+      "actual_result": "Five images use accessible second-person Indonesian, concrete ARV/VL and DM navigation, with clinical decisions reserved for healthcare staff.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.planning.json target_audience; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json exact slide and caption transcript; PNGs in ZIP digest 779e4421…",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-03",
+      "what_was_checked": "Medical claim evidence",
+      "expected_result": "All seven medical claim groups C01–C07 have explicit supporting evidence with recoverable provenance and point-of-use reliability; no contradictions",
+      "actual_result": "All C01–C07 are EXPLICIT_EVIDENCE in STG-03; WHO and NIH source roles/limits recorded; no cure, guaranteed outcome, universal local schedule, dosage or specific clinic promise.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/research/CWC-CRSL-0005.research.json claims C01–C07, sources WHO_HIV_FACTS_2026 / WHO_HIV_TOPIC / NIH_ART_INIT_2025 / NIH_VL_MONITOR_2025; direct read-back of exact caption",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-04",
+      "what_was_checked": "Medical/educational overclaim",
+      "expected_result": "Simplification must not promise cure, fixed viral-load test schedule, treatment guarantee, or location-specific service availability",
+      "actual_result": "Copy says 'dapat menjalani', 'membantu', 'waktu ... bersama tenaga kesehatan', and 'pemeriksaan viral load membantu'; no unverified local protocol. Caption keeps medical boundary.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/research/CWC-CRSL-0005.research.json claim limits C01–C10; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json caption/slide text; exact ZIP read-back",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-05",
+      "what_was_checked": "Non-stigmatizing HIV framing",
+      "expected_result": "No moralizing, identity-based stigma or coercive health instructions",
+      "actual_result": "Slide 5 states status does not diminish worth; caption opposes stigma/discrimination; DM and follow/share invitations are voluntary.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json five slides/caption; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/research/CWC-CRSL-0005.research.json C08, C09",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-06",
+      "what_was_checked": "Brand identity consistency",
+      "expected_result": "Visuals use STG-06 validated AS-001/002/003/004 only, with no asset substitution or identity drift",
+      "actual_result": "AS-001/AS-004 exact source rendering evidenced; AS-002 approved BUS-94 derivative unchanged; AS-003 Blue #0B3D9E White #FFFFFF Yellow #FDCF00. No AS-005 or extra brand objects.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg06-assets.json validated_asset_set + SHA; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json precise output asset placements; fresh review of actual five PNGs",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-07",
+      "what_was_checked": "Accessibility and readable typography",
+      "expected_result": "Legible hierarchy, sufficient contrast and registered FORMAT-CAROUSEL role floors; no clipped reading copy",
+      "actual_result": "Independent pixel/font measurement of all 12 body lines on slides 02–05 matched Montserrat Regular 36px within 6.77px width; body floor 36px. White/Blue high contrast; cover hero visually >=80px; kicker26px per v0.3 correction, no truncation.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000029_CWC-FORMAT-CAROUSEL.md §§4–6; direct Python/Pillow measurements recorded in CWC_CRSL_0005_STG08_independent_evidence.json (SHA-256 0d5935b9ca15fab9928ec53b21569bcfa9a0d01b1df9f1e83ee5de8ff1abdd83); https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json typography observations",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-08",
+      "what_was_checked": "Upstream output contract closure",
+      "expected_result": "Each prior STG-02–07 contract completed, current lifecycle READY_FOR_QA; no stage silently skipped",
+      "actual_result": "STG-02 Content Register allocation and D2 review; STG-03 merged PR #234; STG-04 #235; STG-05 #236; STG-06 #237; STG-07 #238 with corresponding immutable stage records and CI success; main at register v1.44 / READY_FOR_QA.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000027_CWC-Content-Register.md v1.44; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/research/CWC-CRSL-0005.research.json; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.planning.json; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg06-assets.json; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "CORE-QA-09",
+      "what_was_checked": "Source, content and asset lineage",
+      "expected_result": "All substantive claims mapped to STG-03 and all used canonical assets traced to STG-06/CAR; reviewed media digest verifiable",
+      "actual_result": "11/11 claims classified with cited provenance; STG-05 has exact unchanged caption SHA; STG-06 4/4 assets and source input hashes; fresh independent ZIP SHA and 5/5 PNG SHA verified. Manifest pre-allocation status explicitly historical; not treated as current register.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/research/CWC-CRSL-0005.research.json; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg06-assets.json; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json; original ZIP 779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "ASSET-QA-01",
+      "what_was_checked": "Valid asset authority record",
+      "expected_result": "STG-06 asset identity, lifecycle eligibility and primary modes recorded for all required assets",
+      "actual_result": "STG-06 record 25/25 PASS with CAR IDs 001–004 and CAB modes EXACT_REUSE / GENERATIVE_REFERENCE / TOKEN_CONTROLLED / EXACT_REUSE. Presenter accepted reusable derivative under BUS-94; no need to recertify asset canonical status.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg06-assets.json; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000019_CWC-QA-Mechanism.md §7.3 ASSET-QA-01",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-slide1-copy",
+      "what_was_checked": "Slide 1 left copy extent",
+      "expected_result": "Copy anchored x72 and not beyond x≈551",
+      "actual_result": "Copy white glyph extent through x≈518 (STG-07); independent visual confirms no type occupies x551–605 as separate column.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000029_CWC-FORMAT-CAROUSEL.md §3.1; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json layout; direct slide-01 PNG review",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-gutter",
+      "what_was_checked": "Protected gutter",
+      "expected_result": "Gutter x≈551–605 not repurposed as a text column; only directed gesture exception permitted",
+      "actual_result": "Copy absent from gutter. Source alpha mask counts: x551–571=0; pointing arm visible x572–604, explicitly reviewed under gesture criterion; other copy/logo/footer not obscured.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000029_CWC-FORMAT-CAROUSEL.md §§3,3.1; independent alpha mask reread source AS-002; observation report 0d5935b9…",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-presenter-core",
+      "what_was_checked": "Presenter core position",
+      "expected_result": "Main body right anchored approximately x670–1015",
+      "actual_result": "AS-002 visible bbox [572,467,978,1219]; left reach is pointing hand, 112380 alpha≥24 pixels in x670–1015 core band; feet remain above footer.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000029_CWC-FORMAT-CAROUSEL.md §3.1; independent alpha24 asset mask; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-gesture",
+      "what_was_checked": "Gestural exception interpretation",
+      "expected_result": "Intentional gesture may enter approximately x572–594 toward left copy without obscuring copy or protected areas; no invented pixel tolerance",
+      "actual_result": "Leftmost alpha≥24 at x572, inside documented intentional-reach range. 256 source pixels lie x572–594. Additional 385 x595–604 are physically contiguous proximal arm toward right core (less leftward reach), NOT an additional further-left intrusion. BUS-124 defines APPROXIMATE 53–55% intentional entry and no occlusion; no rule requires severing the connected limb at x594. No copy collision. Documented explicit interpretation, not a hidden waiver.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000029_CWC-FORMAT-CAROUSEL.md §3.1 and https://linear.app/bussiness-content-os/issue/BUS-124/cwc-cross-format-reference-validated-copy-brand-presenter-layout Owner invariant; independent source-alpha measurements; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json prior flagged note",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-protected-copy",
+      "what_was_checked": "Essential copy and protected assets",
+      "expected_result": "Presenter may not obscure headline/support/CTA/logo/footer",
+      "actual_result": "Visual inspection of slide 1 shows unoccluded left-side title/support, top-left logo, bottom footer; source presenter alpha ends y1219, footer starts y1272 (53px gap).",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000029_CWC-FORMAT-CAROUSEL.md §3.1; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json bbox/collision; independent slide PNG view",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-attention",
+      "what_was_checked": "Presenter directs attention",
+      "expected_result": "Pose/gaze or gesture naturally leads toward left copy",
+      "actual_result": "BUS-94 White Jacket / Point Left existing accepted derivative points and gazes toward left-side headline.",
+      "evidence": "https://linear.app/bussiness-content-os/issue/BUS-94/as-002-reusable-presenter-production-derivatives; slide-01 direct inspection",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-framing",
+      "what_was_checked": "Permitted framing",
+      "expected_result": "Full body default or optional approved hip-head crop inside right-side placement; no anatomical distortion/clipping",
+      "actual_result": "Full-body unchanged derivative from BUS-94 fits visible extent to y1219; source canvas beyond x1080 is transparent padding only, visible subject x572–978.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000029_CWC-FORMAT-CAROUSEL.md §3.1; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg06-assets.json reuse authority; direct alpha mask inspection",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-logo-footer",
+      "what_was_checked": "Canonical logo/footer geometry",
+      "expected_result": "Exact source variants and protected regions unchanged and legible",
+      "actual_result": "Logo reused across all five slides; Footer-White identical across all slides with source pixel difference 0 reported by direct binary/raster validation at STG-07; separate QA image review finds no obstruction.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg06-assets.json current Drive SHA-256 results; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json exact source render comparison and identical protected regions",
+      "determination": "PASS"
+    },
+    {
+      "criterion_id": "FORMAT-CAROUSEL-v1.4-QA-type-hierarchy",
+      "what_was_checked": "Carousel typography hierarchy",
+      "expected_result": "Five-slide type-role hierarchy uses Montserrat registered floors and remains legible without clipping",
+      "actual_result": "Header/kicker/body hierarchy consistent; independent body font matching for 12 internal slide lines at 36px (all max width delta 6.77px); cover ≈80px hero, support ≈36px and kicker 26px from preflight; panel text fully visible; original editable typography layers not in ZIP, caveat retained.",
+      "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/DIUA-DIC-000029_CWC-FORMAT-CAROUSEL.md §§4–6; QA observation report SHA-256 0d5935b9…; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg07-visual.json stage inspection",
+      "determination": "PASS"
+    }
+  ],
+  "sensitive_claim_support_check": {
+    "criterion_id": "SENSITIVE-CLAIM-01",
+    "source": "CWC-QA-001 v1.32 §17.1; BUS-39",
+    "classification": "YES",
+    "determination": "PASS",
+    "evidence": "https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/research/CWC-CRSL-0005.research.json HIV ART initiation, VL, prognosis claims; https://github.com/BillyProject2505/content-os/blob/main/projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json copy/caption",
+    "carry_forward_to_stg09": true,
+    "human_signoff_obtained": false
+  },
+  "verdict": "PASS",
+  "findings": [],
+  "verdict_scope": "Formal stage-scoped AI content-item QA and format assessment. Does not mean physician clinical assessment, authorized Owner final release signoff, platform scheduling or publishing.",
+  "release_caveats": [
+    "Original immutable v0.3 ZIP has pre-allocation review manifest. Do NOT rewrite and pass off as new Approved Release Identity; prepare a separate release manifest in STG-10 after STG-09 approval.",
+    "Canonical permanent media storage for original ZIP/PNGs not verified. Secure exact same bytes and stable content-addressable archive before STG-10 execution.",
+    "No individual medical advice or current 2026 Manado local ART/viral-load clinic scheduling guarantee is asserted.",
+    "STG-09 requires explicit authorized human signoff for sensitive HIV treatment/prognosis claims (SENSITIVE_CLAIM=YES).",
+    "QA interpretation of ≈ gesture region grounded in BUS-124 intent and source alpha mask, not a newly authorized numeric tolerance; preserve measurement and rationale for potential Owner audit."
+  ],
+  "lifecycle_transition_recommended": "READY_FOR_QA → IN_QA → READY_FOR_APPROVAL once QA Record merged/verified on main",
+  "gates": {
+    "stg08_passed": true,
+    "stg09_owner_sensitive_claim_signoff": false,
+    "stg10_approved_release_identity": false,
+    "publication_authorized": false,
+    "published": false
+  }
+}
