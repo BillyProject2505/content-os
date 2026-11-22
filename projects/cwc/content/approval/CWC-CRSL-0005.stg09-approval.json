@@ -1,0 +1,108 @@
+{
+  "schema": "cwc-stg09-owner-approval-v1",
+  "approval_id": "CWC-CRSL-0005-STG09-20261122",
+  "content_item_id": "CWC-CRSL-0005",
+  "title": "HIV Positif Bukan Akhir dari Kehidupan",
+  "stage": "STG-09",
+  "decision": "APPROVED",
+  "decision_date": "2026-11-22",
+  "approver": {
+    "role": "CWC Domain Owner / authorized human STG-09 decision-maker",
+    "name": "Billy Fernando Mende",
+    "authority": "DIUA-DIC-000017 CWC Production Workflow v1.22 STG-09 / §18; DIUA-DIC-000019 CWC-QA-001 v1.32 §17.1"
+  },
+  "explicit_human_decision": {
+    "verbatim": "STG-09 Human Approval approve",
+    "decision_channel": "Current ChatGPT conversation, explicit user message dated 2026-11-22",
+    "linear_evidence_issue": "BUS-179",
+    "linear_decision_record_comment_id": "0ce17817-8878-41d4-8dfd-47ac9ce20430",
+    "prior_approved_creative_candidate": "v0.3 visual creative approval; caption v0.2 byte-identical; prior BUS-179 recorded Owner decision is distinct from this STG-09 decision"
+  },
+  "sensitive_claim_signoff": {
+    "classification": "YES",
+    "explicit_owner_signoff": "APPROVED",
+    "evidence_for_flag": "projects/cwc/content/qa/CWC-CRSL-0005.stg08-qa.json SENSITIVE-CLAIM-01=YES; prior independent AI QA 20/20 PASS",
+    "approval_scope": "The exact frozen five-slide v0.3/identical caption claims on HIV prognosis with effective ART, prompt clinician-guided ARV initiation, long-term ARV use and viral-load monitoring, stigma-free support and the outreach DM service-navigation CTA. The Owner STG-09 decision authorizes this bounded medical/editorial content; a changed medical claim, slide or caption invalidates the binding.",
+    "clinical_license_or_physician_signoff_claimed": false,
+    "does_not_certify": "Current Manado / Indonesia clinic-specific protocols, immediate medication availability, individual prognosis, physician review, U=U treatment outcome or clinical regimen choice."
+  },
+  "approved_package": {
+    "scope": "One Instagram five-slide 1080×1350 carousel, ordered 01–05, plus approved unchanged caption. No edits, substitutions, new claims, changed artworks, or new caption hashtags.",
+    "original_zip": "CWC_Nov24_HIV_review_v03.zip",
+    "original_zip_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "asset_availability": "Original ZIP is currently present in conversation-local file storage, not yet verified archived to the canonical Google Drive content folder.",
+    "slide_count": 5,
+    "slide_canvas_px": [
+      1080,
+      1350
+    ],
+    "slides": [
+      {
+        "sequence": 1,
+        "filename": "slide-01.png",
+        "sha256": "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a"
+      },
+      {
+        "sequence": 2,
+        "filename": "slide-02.png",
+        "sha256": "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4"
+      },
+      {
+        "sequence": 3,
+        "filename": "slide-03.png",
+        "sha256": "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6"
+      },
+      {
+        "sequence": 4,
+        "filename": "slide-04.png",
+        "sha256": "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e"
+      },
+      {
+        "sequence": 5,
+        "filename": "slide-05.png",
+        "sha256": "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+      }
+    ],
+    "caption_filename": "caption-review-v03.txt",
+    "caption_bytes": 970,
+    "caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "approved_copy_record": "projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json",
+    "original_review_manifest": {
+      "content_id": "NOT_ALLOCATED",
+      "register_version": "1.38",
+      "original_status": "UNAPPROVED_REVIEW_CANDIDATE_V03_AFTER_TECHNICAL_FIX",
+      "interpretation": "Historical pre-Owner-decision, pre-allocation artifact metadata. This STG-09 approval binds the exact approved binaries without changing archive bytes."
+    }
+  },
+  "prerequisites": {
+    "qa_record_path": "projects/cwc/content/qa/CWC-CRSL-0005.stg08-qa.json",
+    "qa_record_blob_sha": "4b84c306e5d246049eb5a5a3410cf3283ae5b3b0",
+    "qa_verdict": "PASS",
+    "qa_criteria_passed": 20,
+    "sensitive_claim_classification": "YES",
+    "preapproval_lifecycle": "READY_FOR_APPROVAL",
+    "preapproval_register_version": "1.45",
+    "duplication_disposition": "D2 / REVIEW RESOLVED → ALLOW (historical source uncertainty and reopen condition retained)",
+    "previous_owner_visual_review_accepted": true
+  },
+  "owner_approval_boundaries": {
+    "approved_content_and_sensitive_claims": true,
+    "stg09_owner_decision_recorded": true,
+    "approval_invalidated_if_any_bound_artifact_or_caption_changes": true,
+    "stg10_approved_release_identity_issued": false,
+    "stg10_release_readiness_verified": false,
+    "stable_media_archive_verified": false,
+    "separate_publication_authorization_obtained": false,
+    "publishing_executed": false,
+    "publishing_scheduled": false,
+    "publication_url": null,
+    "proposed_2026_11_24_1930_wita_slot_scheduled": false
+  },
+  "next_lifecycle_transition": "READY_FOR_APPROVAL → APPROVED (only after reviewed PR checks and main read-back)",
+  "next_stage": "STG-10 release identity and publication readiness, separate authorization; no inferred publish/schedule",
+  "traceability_notes": [
+    "The user's actual approval text is preserved exactly and not replaced by an invented expanded quotation.",
+    "The human Owner approval is scoped to recorded SENSITIVE_CLAIM=YES and exactly frozen creative/caption bytes.",
+    "Approval does not imply medical-licensure signoff or facility-specific HIV service verification."
+  ]
+}
