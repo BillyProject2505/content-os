@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import {
   CAROUSEL_REGISTER_ROUTES,
   requireCarouselRegister,
@@ -6,6 +7,20 @@ import {
 const LINEAR_API_URL = "https://api.linear.app/graphql";
 const DEFAULT_MAX_LATENESS_MS = 30 * 60 * 1000;
 const MAX_RECOVERY_LATENESS_MS = 24 * 60 * 60 * 1000;
+
+// Negative-only safety control: publication evidence cannot grant publishing
+// authority. Owner-reported manual posts must not re-enter due discovery,
+// even if their Linear publication row remains SCHEDULED or is rescheduled.
+const deliveryEvidence = JSON.parse(readFileSync(
+  new URL("../../seasonal-color/2026-11-delivery-preparation.json", import.meta.url),
+  "utf8"
+));
+const manualPublicationHolds = new Set(
+  deliveryEvidence.records.filter(
+    record => record.publication_evidence?.manual_republish_hold_requested === true &&
+      record.publication_evidence?.duplicate_publication_authorized === false
+  ).map(record => record.content_id)
+);
 
 function normalizeCell(value) {
   return String(value ?? "")
@@ -87,6 +102,14 @@ export function discoverDueRecordsFromDocuments({
   const requested = String(requestedContentId ?? "").trim();
   if (requested) {
     requireCarouselRegister(requested);
+    if (manualPublicationHolds.has(requested)) {
+      return {
+        ok: false,
+        decision: "OWNER_MANUAL_PUBLICATION_HOLD",
+        content_id: requested,
+        due_count: 0,
+      };
+    }
   }
 
   const candidates = [];
@@ -99,6 +122,7 @@ export function discoverDueRecordsFromDocuments({
       const contentId = normalizeCell(cells[0]);
       if (!/^SDOH-(?:BURGUNDY|SAGE)-CAR-\d{4}$/.test(contentId)) continue;
       if (requested && contentId !== requested) continue;
+      if (manualPublicationHolds.has(contentId)) continue;
 
       // Exact state match only: substrings such as RESCHEDULED or
       // NOT SCHEDULED must never be treated as an eligible SCHEDULED row.
@@ -225,6 +249,23 @@ function runSelfTest() {
     schedule: "2026-10-02, 20:00 WITA",
   });
 
+  const heldContent = fixture({
+    id: CAROUSEL_REGISTER_ROUTES.BURGUNDY.register_document_id,
+    contentId: "SDOH-BURGUNDY-CAR-0020",
+    schedule: "2026-11-22, 20:22 WITA",
+  });
+  const heldNow = new Date("2026-11-22T12:22:00Z");
+  const heldCron = discoverDueRecordsFromDocuments({ documents: [heldContent], now: heldNow });
+  if (heldCron.decision !== "NO_DUE_CONTENT") {
+    throw new Error("self-test failed: manual publication hold must block scheduled discovery");
+  }
+  const heldManual = discoverDueRecordsFromDocuments({
+    documents: [heldContent], now: heldNow, requestedContentId: "SDOH-BURGUNDY-CAR-0020"
+  });
+  if (heldManual.decision !== "OWNER_MANUAL_PUBLICATION_HOLD" || heldManual.ok !== false) {
+    throw new Error("self-test failed: manual publication hold must block requested recovery");
+  }
+
   const none = discoverDueRecordsFromDocuments({
     documents: [burgundy, sage],
     now: new Date("2026-10-02T11:29:00Z"),
@@ -316,6 +357,7 @@ function runSelfTest() {
   }
 
   console.log("scheduled publication discovery self-test PASS");
+  console.log("Owner-reported manual publication hold excludes cron and explicit retry PASS");
   console.log("look-alike states (RESCHEDULED / NOT SCHEDULED) excluded PASS");
   console.log("not-before-scheduled_at (one second early) PASS");
   console.log("19:30 WITA resolves to 2026-10-02T19:30:00+08:00 PASS");
