@@ -1,0 +1,132 @@
+{
+  "schema": "cwc-instagram-executor-readonly-preflight-v1",
+  "content_id": "CWC-CRSL-0005",
+  "issue": "BUS-179",
+  "record_date": "2026-11-23",
+  "status": "JPEG_CANDIDATE_VERIFIED__PUBLICATION_BLOCKED",
+  "stage": "STG-10 PRE-ENTRY / READ-ONLY DELIVERY PREPARATION",
+  "source_authorities": {
+    "workflow": "DIUA-DIC-000017@1.22",
+    "content_register": "DIUA-DIC-000027@1.46",
+    "current_lifecycle": "APPROVED",
+    "stg09": "projects/cwc/content/approval/CWC-CRSL-0005.stg09-approval.json",
+    "stg10_preentry": "projects/cwc/content/release/CWC-CRSL-0005.stg10-release-preparation.json"
+  },
+  "approved_identity": "sha256:8e807b83b8270817e70b98ce868a3725a41f4cb205b19d140d053b563b4c8b2e",
+  "original_source_zip_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+  "caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+  "jpeg_review": {
+    "status": "CANDIDATE_NOT_OWNER_APPROVED",
+    "conversion": "Pillow 12.3.0; JPEG quality 98; subsampling 0; optimize true; progressive false; input PNG bytes verified and never altered",
+    "ordered_files": [
+      {
+        "sequence": 1,
+        "name": "slide-01.jpg",
+        "sha256": "6f2d8396c3b396017a1ed547ea8e2e03016e27666c028823f127b407bb007701",
+        "bytes": 398063,
+        "psnr_db": 52.24,
+        "mean_absolute_error": 0.1846,
+        "source_png_sha256": "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a"
+      },
+      {
+        "sequence": 2,
+        "name": "slide-02.jpg",
+        "sha256": "981f6ffdaf9e2b20faee4e861a96a2c0dfb8f197930b39d74a31b8009967ad75",
+        "bytes": 342176,
+        "psnr_db": 54.03,
+        "mean_absolute_error": 0.1116,
+        "source_png_sha256": "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4"
+      },
+      {
+        "sequence": 3,
+        "name": "slide-03.jpg",
+        "sha256": "c54efec09dbdd608c3e96d44d5beb2404aa46228c33a7ae6ccc29d5e756464ce",
+        "bytes": 372196,
+        "psnr_db": 53.59,
+        "mean_absolute_error": 0.1232,
+        "source_png_sha256": "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6"
+      },
+      {
+        "sequence": 4,
+        "name": "slide-04.jpg",
+        "sha256": "f1d6317f8c7b5a503d4ebc81ced7fd74ca9ebf1099495f7ab3f02a90a306127c",
+        "bytes": 345774,
+        "psnr_db": 53.99,
+        "mean_absolute_error": 0.1125,
+        "source_png_sha256": "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e"
+      },
+      {
+        "sequence": 5,
+        "name": "slide-05.jpg",
+        "sha256": "555c03d5373d40c6fa13b64e334d2ba3af0629c6faf7c15095e54ff4638632cd",
+        "bytes": 355625,
+        "psnr_db": 53.85,
+        "mean_absolute_error": 0.1162,
+        "source_png_sha256": "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+      }
+    ],
+    "validation": {
+      "five_decodable_1080x1350_jpegs": true,
+      "source_hashes_5_of_5": true,
+      "min_psnr_db": 52.24,
+      "max_mean_absolute_error": 0.1846,
+      "percent_pixels_max_channel_delta_gt_10": 0
+    },
+    "zip_sha256": "376f72d9e16b5cd690a92802ee9ff30adf83bf7b8d51e3651fefaac4d34569e0",
+    "contact_sheet_sha256": "996c7493af801fb0568495169ca7f922a38a41f7e0a5f7b96e6a9fb496fc105c",
+    "manifest_sha256": "fbae87ace7f3904b55ed4909b20ebda6bffdf0b8375a1e14d902e94c38f916d3",
+    "drive_folder_id": "1tbTSJ_YCeRPe3G7owmgbRvQ-XcKNRt3M",
+    "drive_folder_url": "https://drive.google.com/drive/folders/1tbTSJ_YCeRPe3G7owmgbRvQ-XcKNRt3M",
+    "google_drive_file_ids": {
+      "zip": "1QFiL38joJFSlVAIKScU9Kh0Rp03kwV5h",
+      "sheet": "1e7MYGG9xw9QIN7GtmTYdsfmkFufL847b",
+      "manifest": "1hfaHFycWbn9e5zr9ZMJk8CkPzK5-EtbA"
+    },
+    "drive_raw_sha256_verified_count": 3,
+    "public_media_hosting": false,
+    "exact_jpeg_owner_approval": false
+  },
+  "executor_audit": {
+    "checked_files": [
+      ".github/workflows/cwc-instagram-publish-0004.yml",
+      ".github/workflows/cwc-instagram-stage-media-0004.yml",
+      "projects/cwc/runtime/instagram-publication/publish-once.mjs",
+      "projects/cwc/runtime/instagram-publication/prepare-jpeg.py"
+    ],
+    "findings": [
+      "Existing CWC publish script and its workflow are hard-coded for CWC-CRSL-0004 and the expired 2026-11-10 owner-authorized time, including specific content, media, Git tag, and account checks.",
+      "Existing 0004 stage-media workflow downloads a 0004-specific historic render artifact and uses the existing cwc-release-media public branch; it cannot validate 0005 source PNGs unchanged.",
+      "Five carousel image_url items must be accessible as stable JPEG media at publish time. Current candidate JPEG files are only privately archived for review, not publicly hosted.",
+      "Current CWC Meta token/IG user ID/permission state has NOT been read from secrets or verified; absent-or-valid claims are not justified.",
+      "Separate Owner approval of lossy JPEG delivery adaptation and separate explicit Owner STG-10 publication authorization are both missing."
+    ],
+    "stale_0004_workflow_invocation": false,
+    "publication_token_probed": false
+  },
+  "target": {
+    "local": "2026-11-24T19:30:00+08:00",
+    "utc": "2026-11-24T11:30:00Z",
+    "timezone": "Asia/Makassar",
+    "status": "EDITORIAL_TARGET_ONLY"
+  },
+  "unresolved_gates": [
+    "JPEG_OWNER_DELIVERY_APPROVAL",
+    "STG10_EXPLICIT_PUBLICATION_AUTHORIZATION",
+    "0005_SCOPED_FAIL_CLOSED_EXECUTOR_AND_TESTS",
+    "0005_APPROVED_JPEG_PUBLIC_HOSTING",
+    "READ_ONLY_META_ACCOUNT_AND_TOKEN_PROBE"
+  ],
+  "controls": {
+    "lifecycle_unchanged": "APPROVED",
+    "no_stg10_entry": true,
+    "no_new_owner_publication_authorization": true,
+    "no_publish_workflow_dispatch": true,
+    "no_cron_setup": true,
+    "no_Meta_container_creation": true,
+    "no_Meta_publication": true,
+    "no_provider_schedule": true,
+    "no_publication_log_entry": true,
+    "no_0004_workflow_modification": true,
+    "no_media_or_caption_mutation": true
+  }
+}
