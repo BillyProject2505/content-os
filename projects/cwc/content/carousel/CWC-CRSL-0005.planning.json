@@ -1,0 +1,267 @@
+{
+  "schema": "cwc-carousel-planning-output-v1",
+  "content_id": "CWC-CRSL-0005",
+  "related_issue": "BUS-179",
+  "stage": "STG-04",
+  "status": "STG04_PLANNING_OUTPUT_VALIDATED",
+  "lifecycle_on_completion": "PLANNED",
+  "created": "2026-11-22",
+  "brief": {
+    "topic": "Kehidupan setelah diagnosis HIV: terapi ARV, pemantauan viral load, dan dukungan tanpa stigma",
+    "content_pillar": "HIV Care / Treatment Education",
+    "target_audience": "Audiens Indonesia yang membutuhkan edukasi kesehatan HIV secara inklusif, termasuk orang yang baru menerima diagnosis dan pendampingnya",
+    "objective": "Membantu audiens memahami bahwa HIV dapat dikelola dan mengenali langkah perawatan serta dukungan yang tepat setelah diagnosis",
+    "learning_objective": "Audiens memahami bahwa ARV yang efektif, kontrol berkala, dan dukungan tanpa stigma memungkinkan orang dengan HIV menjalani kehidupan panjang dan sehat tanpa menjamin hasil individual",
+    "core_message": "HIV dapat dikelola dengan terapi ARV dan perawatan berkelanjutan; tenaga kesehatan menangani keputusan klinis, sedangkan petugas penjangkau membantu informasi/navigasi",
+    "editorial_angle": "Post-diagnosis reassurance plus actionable care pathway (not a generic three-facts HIV explainer)",
+    "duplicate_disposition": "D2 / REVIEW RESOLVED → ALLOW; reopen if historically unrecovered July 2026 '3 fakta HIV' item shows materially equivalent semantics",
+    "success_criteria": "Setelah meninjau kelima slide, audiens mampu menyebutkan fungsi ARV, alasan pemantauan viral load, dan cara mencari dukungan melalui layanan/petugas penjangkau tanpa salah menganggap HIV sembuh."
+  },
+  "research_source": {
+    "path": "projects/cwc/content/research/CWC-CRSL-0005.research.json",
+    "schema": "cwc-research-evidence-v1",
+    "status": "STG03_RESEARCH_EVIDENCE_RECORDED",
+    "research_claim_count": 11
+  },
+  "format": {
+    "id": "FORMAT-CAROUSEL",
+    "canonical_document": "DIUA-DIC-000029",
+    "version": "1.4",
+    "registered": true,
+    "platform": "Instagram @cozwecare.id",
+    "slides": 5,
+    "canvas": {
+      "width": 1080,
+      "height": 1350,
+      "aspect": "4:5"
+    },
+    "compositional_contract": {
+      "slide1_copy_x": 72,
+      "slide1_copy_right_max_approx": 551,
+      "protected_gutter_x_approx": [
+        551,
+        605
+      ],
+      "presenter_core_x_approx": [
+        670,
+        1015
+      ],
+      "gesture_x_approx": [
+        572,
+        594
+      ],
+      "presenter_required_on_slide1": true,
+      "official_logo_footer_protected": true
+    },
+    "typography": "Montserrat; use registered v1.4 typography role matrix and legibility floors; no custom override"
+  },
+  "slide_sequence": [
+    {
+      "number": 1,
+      "role": "HOOK / reassurance",
+      "headline": "HIV positif bukan akhir ceritamu.",
+      "essential_text": "Dengan terapi ARV yang efektif dan dukungan yang tepat, orang dengan HIV dapat menjalani hidup panjang dan sehat.",
+      "claim_ids": [
+        "C01"
+      ],
+      "presenter_required": true,
+      "composition": "Copy left, presenter right; unchanged official logo/footer"
+    },
+    {
+      "number": 2,
+      "role": "EDUCATION / treatability",
+      "headline": "HIV dapat dikendalikan.",
+      "essential_text": "ARV membantu menekan jumlah virus dan menjaga kesehatan serta kekebalan tubuh.",
+      "claim_ids": [
+        "C02",
+        "C03"
+      ],
+      "presenter_required": false,
+      "composition": "Headline and readable explanation in approved white information panel"
+    },
+    {
+      "number": 3,
+      "role": "ACTION / clinical linkage",
+      "headline": "Mulai terapi sedini mungkin.",
+      "essential_text": "Setelah diagnosis HIV, segera konsultasikan pengobatan ARV; waktu terapi diputuskan bersama tenaga kesehatan dengan mempertimbangkan kondisi klinis.",
+      "claim_ids": [
+        "C04",
+        "C05"
+      ],
+      "presenter_required": false,
+      "composition": "Clinical call to action with qualifying nuance"
+    },
+    {
+      "number": 4,
+      "role": "ONGOING CARE / monitoring",
+      "headline": "Perawatan berkelanjutan.",
+      "essential_text": "Gunakan ARV sesuai anjuran, lakukan kontrol berkala, dan gunakan viral load untuk menilai respons terapi.",
+      "claim_ids": [
+        "C06",
+        "C07"
+      ],
+      "presenter_required": false,
+      "composition": "Treatment follow-up, no universal testing interval"
+    },
+    {
+      "number": 5,
+      "role": "REASSURANCE / service navigation",
+      "headline": "Kamu tidak sendirian.",
+      "essential_text": "Status HIV tidak mengurangi nilai diri; butuh informasi atau bantuan mencari layanan, hubungi petugas penjangkau melalui DM. Follow dan bagikan.",
+      "claim_ids": [
+        "C08",
+        "C09",
+        "C11"
+      ],
+      "presenter_required": false,
+      "composition": "Non-stigmatizing closure and non-clinical outreach worker CTA"
+    }
+  ],
+  "caption": {
+    "source": "caption-review-v03.txt inside local candidate ZIP",
+    "claims": [
+      "C01",
+      "C02",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10",
+      "C11"
+    ],
+    "editorial_requirements": [
+      "Follow and share CTA",
+      "Outreach worker DM for information/navigation only",
+      "Clinical decisions reserved to healthcare professionals",
+      "Exactly five hashtags including #Manado"
+    ],
+    "changed": false
+  },
+  "preliminary_asset_requirements": [
+    {
+      "car_id": "CWC-OBJ-000001",
+      "cab_id": "CWC-CAB-AS-001",
+      "name": "Official Brand Logo",
+      "lifecycle": "CANONICAL LOCKED / ACTIVE",
+      "mode": "EXACT_REUSE",
+      "required_on": "All slides",
+      "selected_binary": "CWC_Master.svg",
+      "drive_file_id": "1If3wZTeAs-HrRHn982H1J6-qPwpt28bC",
+      "rationale": "Royal-blue surface; no recolor/redraw"
+    },
+    {
+      "car_id": "CWC-OBJ-000002",
+      "cab_id": "CWC-CAB-AS-002",
+      "name": "Official Brand Presenter",
+      "lifecycle": "CANONICAL LOCKED / ACTIVE",
+      "mode": "GENERATIVE_REFERENCE",
+      "required_on": "Slide 01 only",
+      "selected_reusable_derivative": "CWC_AS002_Kaz_White-Jacket_Point-Left_FullBody_REUSABLE_v1.0.png",
+      "drive_file_id": "1Vlh1cORMn5jMBQFmkXh5d9faYYuJaDjF",
+      "reuse_authority": "BUS-94",
+      "rationale": "Owner-accepted White Jacket, Point Left derivative; reuse without new generation"
+    },
+    {
+      "car_id": "CWC-OBJ-000003",
+      "cab_id": "CWC-CAB-AS-003",
+      "name": "Official Brand Color Asset",
+      "lifecycle": "CANONICAL LOCKED / ACTIVE",
+      "mode": "TOKEN_CONTROLLED",
+      "required_on": "All slides",
+      "tokens": {
+        "blue": "#0B3D9E",
+        "white": "#FFFFFF",
+        "yellow": "#FDCF00"
+      },
+      "rationale": "Use exact CAB tokens, not approximated colors"
+    },
+    {
+      "car_id": "CWC-OBJ-000004",
+      "cab_id": "CWC-CAB-AS-004",
+      "name": "Official Footer Platform",
+      "lifecycle": "CANONICAL / ACTIVE",
+      "mode": "EXACT_REUSE",
+      "required_on": "All slides",
+      "selected_binary": "CWC-CRS-AS-004_Footer-White_CANONICAL.svg",
+      "drive_file_id": "1KHhReT_dIUR0d33Lm7mfDr2Ct_2LDYPm",
+      "rationale": "White treatment for royal-blue surfaces; no geometry change"
+    }
+  ],
+  "excluded_assets": [
+    {
+      "car_id": "CWC-OBJ-000005",
+      "reason": "PrEP medicine bottle not relevant to post-diagnosis ART/care lesson; introducing it would mislead."
+    }
+  ],
+  "typography_runtime_dependencies": [
+    "Montserrat-Regular.ttf",
+    "Montserrat-Medium.ttf",
+    "Montserrat-SemiBold.ttf",
+    "Montserrat-Bold.ttf",
+    "Montserrat-ExtraBold.ttf"
+  ],
+  "reviewed_candidate": {
+    "filename": "CWC_Nov24_HIV_review_v03.zip",
+    "sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "slide_sha256": [
+      "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a",
+      "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4",
+      "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6",
+      "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e",
+      "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+    ],
+    "caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "visual_review_owner_approved": true,
+    "caption_review_owner_approved": true,
+    "archived_durably": false,
+    "note": "Review manifest inside ZIP predates Content ID allocation and must not be silently modified. The package was created before stage-ordered planning and does not prove STG-07 formal completion."
+  },
+  "production_next": {
+    "stg05": "Validate existing frozen copy against all 11 STG-03 classifications and finalize Asset Requirements, without changing approved bytes",
+    "stg06": "Verify CAR/CAB/CRS eligibility, selected Drive bytes and asset modes including AS-002 derivative authority",
+    "stg07": "Reconcile existing v0.3 composite with format, protected regions, canonical asset execution and immutable pixel/hash evidence before READY_FOR_QA",
+    "stg08": "Independent formal QA only after prior stage outputs are evidenced",
+    "stg09": "Owner explicit human sensitive-claim final release signoff after STG-08 PASS",
+    "stg10": "Separate Approved Release Identity and publication authorization; no schedule/publish without explicit instruction"
+  },
+  "timing": {
+    "editorial_target_date": "2026-11-24",
+    "editorial_target_time": "19:30",
+    "timezone": "Asia/Makassar",
+    "provider_scheduled": false,
+    "publication_authorized": false
+  },
+  "guards": {
+    "sensitive_claim": true,
+    "owner_creative_review_not_stg09": true,
+    "no_visual_or_caption_mutation": true,
+    "no_new_assets": true,
+    "no_claim_of_local_clinical_protocol": true,
+    "medical_clinical_signoff": false,
+    "stg08_qa_passed": false,
+    "stg09_release_approved": false,
+    "stg10_ready": false
+  },
+  "validation": {
+    "result": "PASS",
+    "check_count": 14,
+    "checks": {
+      "five_slides": true,
+      "ordered_slides": true,
+      "unique_roles": true,
+      "claim_coverage": true,
+      "format_governed": true,
+      "canvas_correct": true,
+      "presenter_only_cover": true,
+      "asset_modes": true,
+      "asset_identifiers": true,
+      "no_prep_bottle": true,
+      "caption_locked": true,
+      "identity_locked": true,
+      "stage_scope": true,
+      "time_not_authorized": true
+    }
+  }
+}
