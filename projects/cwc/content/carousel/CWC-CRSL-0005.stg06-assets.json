@@ -1,0 +1,232 @@
+{
+  "schema": "cwc-asset-preparation-evidence-v1",
+  "content_id": "CWC-CRSL-0005",
+  "issue": "BUS-179",
+  "date": "2026-11-22",
+  "stage": "STG-06 ASSET PREPARATION",
+  "status": "STG06_OUTPUT_CONTRACT_PASS",
+  "lifecycle_on_completion": "ASSETS_PREPARED",
+  "workflow": "DIUA-DIC-000017@1.22 CANONICAL LOCKED",
+  "precondition": {
+    "current_register": "DIUA-DIC-000027@1.42",
+    "current_state": "CONTENT_PRODUCED",
+    "stg05_record": "projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json",
+    "stg05_status": "STG05_OUTPUT_CONTRACT_PASS"
+  },
+  "authority_pins": {
+    "CAS": "DIUA-DIC-000013@1.17",
+    "CAR": "DIUA-DIC-000014@1.18",
+    "CAB": "DIUA-DIC-000015@1.36",
+    "CRS": "DIUA-DIC-000016@1.23",
+    "FORMAT_CAROUSEL": "DIUA-DIC-000029@1.4",
+    "BUS94": "APPROVED FOR REUSE / ACTIVE"
+  },
+  "asset_requirements_count": 4,
+  "validated_asset_set": [
+    {
+      "car_id": "CWC-OBJ-000001",
+      "cab_id": "CWC-CAB-AS-001",
+      "crs_id": "CWC-CRS-AS-001",
+      "name": "CWC Official Brand Logo",
+      "lifecycle": "CANONICAL LOCKED / ACTIVE",
+      "primary_mode": "EXACT_REUSE",
+      "scope": "all 5 slides",
+      "filename": "CWC_Master.svg",
+      "drive_file_id": "1If3wZTeAs-HrRHn982H1J6-qPwpt28bC",
+      "drive_mime": "image/svg+xml",
+      "drive_size_bytes": 11558,
+      "drive_modified_at": "2026-11-01T04:03:13.514Z",
+      "sha256": "04f7f7f46f6fc58c5e244b8c8f07e38d30b5f7faaf8179d5696aa55fd366da3a",
+      "verification": "2026-11-22 current Google Drive raw binary downloaded and SHA-256 matched existing production-local source; canonical CRS identity and CAB exact mode confirmed",
+      "mode_input_status": "RESOLVED",
+      "execution_rule": "Direct placement/uniform scaling only; do not rebuild or recolor"
+    },
+    {
+      "car_id": "CWC-OBJ-000002",
+      "cab_id": "CWC-CAB-AS-002",
+      "crs_id": "CWC-CRS-AS-002",
+      "name": "CWC Official Brand Presenter",
+      "lifecycle": "CANONICAL LOCKED / ACTIVE",
+      "primary_mode": "GENERATIVE_REFERENCE",
+      "scope": "slide-01 only",
+      "selected_file_type": "BUS-94 Owner-approved existing production derivative (not a new canonical CAR/CRS reference)",
+      "filename": "CWC_AS002_Kaz_White-Jacket_Point-Left_FullBody_REUSABLE_v1.0.png",
+      "drive_file_id": "1Vlh1cORMn5jMBQFmkXh5d9faYYuJaDjF",
+      "drive_mime": "image/png",
+      "drive_size_bytes": 751023,
+      "drive_modified_at": "2026-11-01T04:03:08.886Z",
+      "sha256": "e0fbb96e5261b7849420df7db8359d9b80d7f1184f32c1cbfce0ceaccc50cf80",
+      "reuse_approval": "https://linear.app/bussiness-content-os/issue/BUS-94/as-002-reusable-presenter-production-derivatives",
+      "generation_reference_set": [
+        {
+          "ref": "GENREF-01",
+          "type": "primary_identity_anchor",
+          "file_name": "CWC-CRS-AS-002_GENREF-01_Front_v0.4_CANONICAL.png",
+          "drive_id": "112pkwjGgcgPv6PcavOYhe7BWepS1mk-Z",
+          "bytes": 1185233,
+          "verified": "drive_metadata_only",
+          "mime": "image/png"
+        },
+        {
+          "ref": "GENREF-02",
+          "type": "supporting_three_quarter_right",
+          "file_name": "CWC-CRS-AS-002_GENREF-02_Three-Quarter-Right_v0.2_CANONICAL.png",
+          "drive_id": "177lpaZqFHA42F-iTxe0ji-GuhfY1EyU8",
+          "bytes": 1351851,
+          "verified": "drive_metadata_only",
+          "mime": "image/png"
+        },
+        {
+          "ref": "GENREF-03",
+          "type": "supporting_profile_right",
+          "file_name": "CWC-CRS-AS-002_GENREF-03_Profile-Right_v0.1_CANONICAL.png",
+          "drive_id": "14SXspR2jw035ahSQ_S9AQ8BHuU2sP4RQ",
+          "bytes": 2593010,
+          "verified": "drive_metadata_only",
+          "mime": "image/png"
+        }
+      ],
+      "verification": "2026-11-22 current Google Drive production derivative raw bytes downloaded: SHA-256 identical to BUS-94 approved hash and local render source. All three canonical GENREF locators returned correctly named image/png metadata; GENREF raw binary hashes were not remeasured because no new generation occurs.",
+      "mode_input_status": "RESOLVED_BY_APPROVED_REUSE_AND_REFERENCE_SET_METADATA",
+      "execution_rule": "Use BUS-94 accepted derivative unchanged with uniform scaling/position only; do not promote the derivative to a canonical identity or regenerate without new CAB process",
+      "stg08_target_surface_edge_and_collision_review": "REQUIRED"
+    },
+    {
+      "car_id": "CWC-OBJ-000003",
+      "cab_id": "CWC-CAB-AS-003",
+      "crs_id": "CWC-CRS-AS-003",
+      "name": "CWC Official Brand Color Asset",
+      "lifecycle": "CANONICAL LOCKED / ACTIVE",
+      "primary_mode": "TOKEN_CONTROLLED",
+      "scope": "all slides",
+      "tokens": {
+        "blue": "#0B3D9E",
+        "white": "#FFFFFF",
+        "yellow": "#FDCF00"
+      },
+      "source": "CAB v1.36 canonical token roles and CRS v1.23 source mapping; bitmap visual reference is NOT the token authority or direct placement source",
+      "mode_input_status": "RESOLVED",
+      "execution_rule": "Use exact canonical roles and values in output, no sampled approximations or unauthorized shades/gradients"
+    },
+    {
+      "car_id": "CWC-OBJ-000004",
+      "cab_id": "CWC-CAB-AS-004",
+      "crs_id": "CWC-CRS-AS-004",
+      "name": "CWC Official Footer Platform",
+      "lifecycle": "CANONICAL / ACTIVE",
+      "primary_mode": "EXACT_REUSE",
+      "scope": "all 5 slides",
+      "filename": "CWC-CRS-AS-004_Footer-White_CANONICAL.svg",
+      "drive_file_id": "1KHhReT_dIUR0d33Lm7mfDr2Ct_2LDYPm",
+      "drive_mime": "image/svg+xml",
+      "drive_size_bytes": 29134,
+      "drive_modified_at": "2026-11-01T04:03:18.686Z",
+      "sha256": "f38b7e4f07df5c13275fb01e08952db4d7fc45b783cf23f052d4ce8eb64ad4d0",
+      "verification": "2026-11-22 current Google Drive raw binary downloaded and SHA-256 matched existing production-local source; CRS-approved White treatment selected for Blue surface",
+      "mode_input_status": "RESOLVED",
+      "execution_rule": "Direct placement/uniform scaling only; no reconstructed footer content or unapproved recoloring"
+    }
+  ],
+  "excluded": {
+    "car_id": "CWC-OBJ-000005",
+    "reason": "PrEP bottle inappropriate for this HIV treatment/ART post-diagnosis topic"
+  },
+  "local_render_dependencies": {
+    "fonts": [
+      {
+        "name": "Montserrat-Regular.ttf",
+        "sha256": "ef9cf99f0175bef530b88934bd904fcf56f773cec6fd4dfb8ccaf7ce2bbd395e"
+      },
+      {
+        "name": "Montserrat-Medium.ttf",
+        "sha256": "cd161cba3a3cdcf68ad721920fcd164c87e7b7cc9e6bad510278c3fa378d91d2"
+      },
+      {
+        "name": "Montserrat-SemiBold.ttf",
+        "sha256": "9c4db3814875410e7d64fdc8e69676c3b84968bb15bf3ace8b3944c59fbc56b6"
+      },
+      {
+        "name": "Montserrat-Bold.ttf",
+        "sha256": "7fa93d7daa5c2f881a6727229c211782de6b76008fbd6346b3d7664e8fc83f43"
+      },
+      {
+        "name": "Montserrat-ExtraBold.ttf",
+        "sha256": "5cf0a23133ccce35f9e115b8dbbf90434201827bc2465d12f9d91bbf02cf9466"
+      }
+    ],
+    "scope": "Existing pinned typeface dependencies for the already-rendered candidate; SHA-256 measured from local files; not independent CAR assets nor re-downloaded from Drive in this STG-06 pass."
+  },
+  "candidate_lock": {
+    "source_zip": "CWC_Nov24_HIV_review_v03.zip",
+    "zip_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "slide_sha256": [
+      "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a",
+      "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4",
+      "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6",
+      "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e",
+      "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+    ],
+    "caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "source_archive_is_review_only": true,
+    "has_canonical_drive_archive": false,
+    "creative_approval_is_not_stg09_release_signoff": true
+  },
+  "verification_methods": {
+    "source_identity": "Live GitHub main CAR/CAB/CRS text read + BUS-94 reuse acceptance",
+    "drive_metadata": "Google Drive file metadata get_file_metadata for selected production assets and three GENREFs",
+    "drive_raw_bytes": "Google Drive fetch(download_raw_file=true) and SHA-256 from decoded provider bytes for selected AS-001, AS-002 derivative, AS-004",
+    "local_sha_crosscheck": "Local source sha256sum + source ZIP/manifest hash comparison",
+    "color": "Exact canonical token strings from CAB/CRS, not source PNG sampling"
+  },
+  "source_hashes_verified": 3,
+  "generation_references_metadata_resolvable": 3,
+  "token_count_verified": 3,
+  "unresolved_required_assets": 0,
+  "unresolved_fallback_regions": 0,
+  "remaining_gates": {
+    "stg07": "Final render/composition verification remains required: visual integrity, protection, tokens, typography, presenter fit; official stage output not yet closed",
+    "stg08": "Independent QA and asset conformance record check remains required",
+    "stg09": "Human sensitive-claim release signoff remains required",
+    "stg10": "Release identity/authorization and Instagram publication remain unauthorized"
+  },
+  "guards": {
+    "sensitive_claim": true,
+    "no_new_asset_ids": true,
+    "no_asset_redraw": true,
+    "no_render_change": true,
+    "no_caption_change": true,
+    "no_provider_schedule": true,
+    "no_publication": true
+  },
+  "validation": {
+    "verdict": "PASS",
+    "check_count": 25,
+    "checks": {
+      "expected_precondition": true,
+      "same_content_id": true,
+      "four_assets": true,
+      "ids_match": true,
+      "mode_consistency": true,
+      "asset_lifecycle_eligibility": true,
+      "cab_crs_ids_complete": true,
+      "all_required_modes_resolved": true,
+      "exact_files_ids_match": true,
+      "exact_files_hash_verified": true,
+      "drive_bytes_nonempty": true,
+      "presenter_derivative_reuse": true,
+      "genref_all_reachable": true,
+      "genref_roles_ordered": true,
+      "tokens_exact": true,
+      "no_bitmap_AS003": true,
+      "footer_variant_appropriate": true,
+      "no_prep_asset": true,
+      "fonts_present_and_hashed": true,
+      "frozen_candidate_verified": true,
+      "no_new_assets": true,
+      "no_invented_stage7": true,
+      "no_stg9_approval": true,
+      "no_publication": true,
+      "not_claiming_genref_hashes": true
+    }
+  }
+}
