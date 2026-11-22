@@ -1,0 +1,263 @@
+{
+  "schema": "cwc-stg05-content-production-v1",
+  "content_id": "CWC-CRSL-0005",
+  "project": "Coz We Care",
+  "issue": "BUS-179",
+  "created_at": "2026-11-22",
+  "stage": "STG-05 CONTENT PRODUCTION",
+  "status": "STG05_OUTPUT_CONTRACT_PASS",
+  "lifecycle_on_close": "CONTENT_PRODUCED",
+  "upstream": {
+    "content_register": "DIUA-DIC-000027@1.41",
+    "workflow": "DIUA-DIC-000017@1.22",
+    "format": "DIUA-DIC-000029@1.4",
+    "cpb": "DIUA-DIC-000012@2.23",
+    "qa": "DIUA-DIC-000019@1.32",
+    "stg03_record": "projects/cwc/content/research/CWC-CRSL-0005.research.json",
+    "stg04_plan": "projects/cwc/content/carousel/CWC-CRSL-0005.planning.json"
+  },
+  "copy_source": {
+    "exact_owner_reviewed_v03_archive": "CWC_Nov24_HIV_review_v03.zip",
+    "archive_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "approved_png_sha256_in_order": [
+      "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a",
+      "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4",
+      "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6",
+      "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e",
+      "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+    ],
+    "caption_filename": "caption-review-v03.txt",
+    "caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "caption_version": "v0.2; byte-identical in v0.3",
+    "origin": "Exact unchanged local ZIP image/caption read-back on 2026-11-22, with slide strings manually transcribed from approved rasters and cross-checked with manifest diagnostics; plain-text rendering descriptions do not replace approved PNG bytes.",
+    "warning": "ZIP review-manifest.json predates allocation (content_id=NOT_ALLOCATED, registry 1.38); preserve as original. Canonical Content ID and current version are established by separate register/research/plan/STG-05 records."
+  },
+  "content_draft": {
+    "format": "FORMAT-CAROUSEL",
+    "slide_count": 5,
+    "canvas_px": [
+      1080,
+      1350
+    ],
+    "slides": [
+      {
+        "number": 1,
+        "source_png": "slide-01.png",
+        "copy": {
+          "kicker": "EDUKASI HIV",
+          "headline": "HIV positif bukan akhir ceritamu.",
+          "supporting": "Dengan terapi ARV yang efektif dan dukungan yang tepat, orang dengan HIV dapat menjalani hidup panjang dan sehat."
+        },
+        "claim_ids": [
+          "C01"
+        ],
+        "source": "Visual read-back from exact Owner-reviewed v0.3 raster and matching review-manifest support_lines"
+      },
+      {
+        "number": 2,
+        "source_png": "slide-02.png",
+        "copy": {
+          "kicker": "KENALI HIV",
+          "headline": "HIV dapat dikendalikan.",
+          "inset_label": "TERAPI ARV",
+          "lead": "Terapi antiretroviral (ARV) membantu menekan jumlah virus.",
+          "body": "Pengobatan yang efektif membantu menjaga kesehatan dan sistem kekebalan tubuh."
+        },
+        "claim_ids": [
+          "C02",
+          "C03"
+        ],
+        "source": "Visual read-back from exact Owner-reviewed v0.3 raster; matching review-manifest lead_lines/body_lines"
+      },
+      {
+        "number": 3,
+        "source_png": "slide-03.png",
+        "copy": {
+          "kicker": "LANGKAH AWAL",
+          "headline": "Mulai terapi sedini mungkin.",
+          "inset_label": "MULAI ARV",
+          "lead": "Setelah diagnosis HIV, segera konsultasikan pengobatan ARV.",
+          "body": "Waktu memulai terapi ditentukan bersama tenaga kesehatan, termasuk bila ada pertimbangan klinis khusus."
+        },
+        "claim_ids": [
+          "C04",
+          "C05"
+        ],
+        "source": "Visual read-back from exact Owner-reviewed v0.3 raster; matching review-manifest lead_lines/body_lines"
+      },
+      {
+        "number": 4,
+        "source_png": "slide-04.png",
+        "copy": {
+          "kicker": "TETAP SEHAT",
+          "headline": "Perawatan berkelanjutan.",
+          "inset_label": "KONTROL RUTIN",
+          "lead": "Gunakan ARV sesuai anjuran dan lakukan kontrol berkala.",
+          "body": "Pemeriksaan viral load membantu memantau apakah pengobatan berhasil menekan HIV."
+        },
+        "claim_ids": [
+          "C06",
+          "C07"
+        ],
+        "source": "Visual read-back from exact Owner-reviewed v0.3 raster; matching review-manifest lead_lines/body_lines"
+      },
+      {
+        "number": 5,
+        "source_png": "slide-05.png",
+        "copy": {
+          "kicker": "DUKUNGAN",
+          "headline": "Kamu tidak sendirian.",
+          "inset_label": "KITA PEDULI",
+          "lead": "Hidup dengan HIV tidak mengurangi nilai dirimu.",
+          "body": "Butuh informasi atau bantuan mencari layanan HIV? Hubungi petugas penjangkau melalui DM. Follow dan bagikan konten ini."
+        },
+        "claim_ids": [
+          "C08",
+          "C09",
+          "C11"
+        ],
+        "source": "Visual read-back from exact Owner-reviewed v0.3 raster; matching review-manifest lead_lines/body_lines"
+      }
+    ],
+    "caption": "Diagnosis HIV bukan akhir dari perjalanan hidup seseorang. 💙\n\nDengan terapi ARV yang efektif dan perawatan berkelanjutan, orang dengan HIV dapat menjalani kehidupan yang panjang dan sehat.\n\nMemulai pengobatan sedini mungkin, menggunakan ARV sesuai anjuran, serta melakukan pemeriksaan viral load secara berkala adalah langkah penting untuk menjaga kesehatan. Waktu memulai terapi dapat disesuaikan oleh tenaga kesehatan berdasarkan kondisi klinis.\n\nStatus HIV tidak mengurangi nilai seseorang. Setiap orang berhak mendapatkan layanan kesehatan tanpa stigma dan diskriminasi.\n\n💬 Perlu informasi HIV atau bantuan menemukan layanan tes dan pengobatan? Hubungi petugas penjangkau yang mengelola akun ini melalui DM. Pemeriksaan, diagnosis, serta keputusan pengobatan tetap dilakukan oleh tenaga kesehatan.\n\nFollow @cozwecare.id dan bagikan postingan ini agar lebih banyak orang mendapatkan informasi yang benar.\n\n#CozWeCare #EdukasiHIV #TerapiARV #TanpaStigma #Manado\n"
+  },
+  "final_asset_requirements": {
+    "assets": [
+      {
+        "car_id": "CWC-OBJ-000001",
+        "cab_id": "CWC-CAB-AS-001",
+        "name": "Official Brand Logo",
+        "lifecycle_at_planning": "CANONICAL LOCKED / ACTIVE",
+        "primary_production_behavior": "EXACT_REUSE",
+        "required_on": "All slides",
+        "production_file": "CWC_Master.svg",
+        "drive_file_id": "1If3wZTeAs-HrRHn982H1J6-qPwpt28bC",
+        "token_values": null,
+        "reuse_record": null,
+        "selection_finalized_for_stg05": true,
+        "eligibility_and_binary_sha_verification": "STG-06 REQUIRED — this STG-05 entry does not confer CAS eligibility"
+      },
+      {
+        "car_id": "CWC-OBJ-000002",
+        "cab_id": "CWC-CAB-AS-002",
+        "name": "Official Brand Presenter",
+        "lifecycle_at_planning": "CANONICAL LOCKED / ACTIVE",
+        "primary_production_behavior": "GENERATIVE_REFERENCE",
+        "required_on": "Slide 01 only",
+        "production_file": "CWC_AS002_Kaz_White-Jacket_Point-Left_FullBody_REUSABLE_v1.0.png",
+        "drive_file_id": "1Vlh1cORMn5jMBQFmkXh5d9faYYuJaDjF",
+        "token_values": null,
+        "reuse_record": "BUS-94",
+        "selection_finalized_for_stg05": true,
+        "eligibility_and_binary_sha_verification": "STG-06 REQUIRED — this STG-05 entry does not confer CAS eligibility"
+      },
+      {
+        "car_id": "CWC-OBJ-000003",
+        "cab_id": "CWC-CAB-AS-003",
+        "name": "Official Brand Color Asset",
+        "lifecycle_at_planning": "CANONICAL LOCKED / ACTIVE",
+        "primary_production_behavior": "TOKEN_CONTROLLED",
+        "required_on": "All slides",
+        "production_file": null,
+        "drive_file_id": null,
+        "token_values": {
+          "blue": "#0B3D9E",
+          "white": "#FFFFFF",
+          "yellow": "#FDCF00"
+        },
+        "reuse_record": null,
+        "selection_finalized_for_stg05": true,
+        "eligibility_and_binary_sha_verification": "STG-06 REQUIRED — this STG-05 entry does not confer CAS eligibility"
+      },
+      {
+        "car_id": "CWC-OBJ-000004",
+        "cab_id": "CWC-CAB-AS-004",
+        "name": "Official Footer Platform",
+        "lifecycle_at_planning": "CANONICAL / ACTIVE",
+        "primary_production_behavior": "EXACT_REUSE",
+        "required_on": "All slides",
+        "production_file": "CWC-CRS-AS-004_Footer-White_CANONICAL.svg",
+        "drive_file_id": "1KHhReT_dIUR0d33Lm7mfDr2Ct_2LDYPm",
+        "token_values": null,
+        "reuse_record": null,
+        "selection_finalized_for_stg05": true,
+        "eligibility_and_binary_sha_verification": "STG-06 REQUIRED — this STG-05 entry does not confer CAS eligibility"
+      }
+    ],
+    "deliberately_excluded": [
+      {
+        "car_id": "CWC-OBJ-000005",
+        "reason": "AS-005 represents PrEP prophylaxis bottle, irrelevant to HIV ART treatment post-diagnosis."
+      }
+    ],
+    "runtime_font_dependencies": [
+      "Montserrat-Regular.ttf",
+      "Montserrat-Medium.ttf",
+      "Montserrat-SemiBold.ttf",
+      "Montserrat-Bold.ttf",
+      "Montserrat-ExtraBold.ttf"
+    ],
+    "technical_note": "Typography and ornament/live graphic layers are not registered as new canonical CAR assets; typography must obey CPB and FORMAT-CAROUSEL v1.4; no new presenter generation."
+  },
+  "editorial_validation": {
+    "standards": [
+      "CPB v2.23 §6.6.1 exactly five topical hashtags with one truthful locality",
+      "CPB v2.23 §6.6.2 voluntary follow/share invitation",
+      "CPB v2.23 §6.9.1 outreach worker navigation CTA and clinical boundary",
+      "CPB v2.23 §6.10 Editorial Validation Standard",
+      "FORMAT-CAROUSEL v1.4 content/role/readability constraints"
+    ],
+    "sensitive_claim": true,
+    "medical_claim_scope": "General education. ART is treatment, not cure; prognosis is not guaranteed; treat clinical exceptions as clinician decisions; no local ART/VL intervals or current clinic availability implied.",
+    "language": "Bahasa Indonesia; inclusive and non-stigmatizing",
+    "approval_scope": "Owner accepted candidate visual v0.3 and caption v0.2 for creative review; no STG-09 human sensitive-claim release approval"
+  },
+  "stages_not_advanced": {
+    "stg06": "NOT_STARTED",
+    "stg07": "NOT_CLOSED",
+    "stg08": "NOT_CLOSED",
+    "stg09": "NOT_CLOSED",
+    "stg10": "NOT_STARTED"
+  },
+  "flags": {
+    "no_content_mutation": true,
+    "no_image_regeneration": true,
+    "source_zip_unaltered": true,
+    "no_new_CAR_assets": true,
+    "human_clinical_signoff": false,
+    "final_owner_release_approval": false,
+    "publication_authorized": false,
+    "published": false
+  },
+  "validation": {
+    "type": "STG-05 source/contract check, not STG-08 independent QA",
+    "result": "PASS",
+    "checks_count": 24,
+    "checks": {
+      "upstream_same_item": true,
+      "research_complete": true,
+      "plan_approved_schema": true,
+      "output_5_slides": true,
+      "claim_coverage_11_of_11": true,
+      "claim_coverage_no_unknown": true,
+      "slide_mapping_matches_plan": true,
+      "caption_mapping_matches_plan": true,
+      "source_zip_identical": true,
+      "source_png_hashes_identical": true,
+      "approved_caption_sha_identical": true,
+      "exactly_5_hashtags": true,
+      "local_hashtag": true,
+      "follow_share_captions": true,
+      "outreach_navigation": true,
+      "clinical_boundary": true,
+      "non_stigmatizing": true,
+      "no_unsupported_service_promise": true,
+      "asset_set_exact": true,
+      "asset_modes_exact": true,
+      "reuse_selection_recorded": true,
+      "no_prep_bottle": true,
+      "no_lifecycle_leap": true,
+      "design_not_modified": true
+    }
+  }
+}
