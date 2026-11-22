@@ -1,0 +1,288 @@
+{
+  "schema": "cwc-research-evidence-v1",
+  "content_id": "CWC-CRSL-0005",
+  "project": "Coz We Care",
+  "issue": "BUS-179",
+  "status": "STG03_RESEARCH_EVIDENCE_RECORDED",
+  "review_date": "2026-11-22",
+  "research_stage": "STG-03 RESEARCH",
+  "workflow_authority": "DIUA-DIC-000017 CWC Production Workflow v1.22 CANONICAL LOCKED",
+  "register_authority": "DIUA-DIC-000027 CWC Content Register v1.39 CANONICAL / ACTIVE",
+  "copy_version": "Owner creative-review approved carousel v0.3 with caption v0.2 byte-identical",
+  "copy_evidence": {
+    "zip_name": "CWC_Nov24_HIV_review_v03.zip",
+    "zip_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "caption_filename": "caption-review-v03.txt",
+    "caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "slide_count": 5,
+    "slide_sha256_in_order": [
+      "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a",
+      "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4",
+      "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6",
+      "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e",
+      "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+    ],
+    "scope_note": "Original ZIP review-manifest.json was generated before Content ID allocation and still says NOT_ALLOCATED / register 1.38; this external annotation records the current v1.39 register identity without mutating approved ZIP bytes."
+  },
+  "source_review_record": "https://linear.app/bussiness-content-os/issue/BUS-179/cwc-carousel-cwc-crsl-0005-hiv-positif-bukan-akhir-dari-kehidupan",
+  "sources": [
+    {
+      "id": "WHO_HIV_FACTS_2026",
+      "type": "external_reference",
+      "authority": "World Health Organization",
+      "title": "HIV and AIDS — fact sheet",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/hiv-aids",
+      "sections": "Key facts; Treatment",
+      "access_verified": "2026-11-22",
+      "point_of_use_reliability": "HIGH for general HIV manageability, ART suppression, immune function, long healthy life; global general evidence, not a guarantee for every person or a local SOP"
+    },
+    {
+      "id": "WHO_HIV_TOPIC",
+      "type": "external_reference",
+      "authority": "World Health Organization",
+      "title": "HIV — health topic",
+      "url": "https://www.who.int/health-topics/hiv-aids",
+      "sections": "Overview; Treatment",
+      "access_verified": "2026-11-22",
+      "point_of_use_reliability": "HIGH for general prompt treatment linkage and periodic clinical/viral load monitoring; not an Indonesia facility operating schedule"
+    },
+    {
+      "id": "NIH_ART_INIT_2025",
+      "type": "external_reference",
+      "authority": "US DHHS/NIH ClinicalInfo",
+      "title": "Initiation of Antiretroviral Therapy",
+      "url": "https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/initiation-antiretroviral-therapy",
+      "updated": "2025-09-25",
+      "sections": "Panel recommendations; clinical exceptions with TB or cryptococcal meningitis",
+      "access_verified": "2026-11-22",
+      "point_of_use_reliability": "HIGH for evidence-based adult/adolescent ART initiation benefits and clinical deferral exceptions; US clinical recommendations cannot certify specific Indonesian protocols"
+    },
+    {
+      "id": "NIH_VL_MONITOR_2025",
+      "type": "external_reference",
+      "authority": "US DHHS/NIH ClinicalInfo",
+      "title": "Plasma HIV-1 RNA (Viral Load) and CD4 Count Monitoring",
+      "url": "https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/plasma-hiv-1-rna-cd4-monitoring",
+      "updated": "2025-09-25",
+      "sections": "Plasma HIV-1 RNA role and ART monitoring",
+      "access_verified": "2026-11-22",
+      "point_of_use_reliability": "HIGH for viral-load response monitoring; testing interval values in US guidance are not introduced into Indonesian audience copy"
+    },
+    {
+      "id": "UNAIDS_TERMINOLOGY_2024",
+      "type": "external_reference",
+      "authority": "UNAIDS",
+      "title": "UNAIDS Terminology Guidelines",
+      "url": "https://www.unaids.org/en/resources/documents/2024/terminology_guidelines",
+      "date": "2024-07-01",
+      "sections": "Non-stigmatizing, respectful language",
+      "access_verified": "2026-11-22",
+      "point_of_use_reliability": "HIGH for HIV language and stigma-reduction editorial framing; not a clinical treatment protocol"
+    },
+    {
+      "id": "ID_PERMENKES3_2026",
+      "type": "external_reference",
+      "authority": "Kementerian Kesehatan Republik Indonesia — JDIH",
+      "title": "Peraturan Menteri Kesehatan Nomor 3 Tahun 2026 tentang Penanggulangan Penyakit",
+      "url": "https://jdih.kemkes.go.id/documents/peraturan-menteri-kesehatan-nomor-3-tahun-2026",
+      "date": "2026-03-11",
+      "sections": "Status; repealed regulations list including Permenkes 23/2022 except Pasal 41 beserta Lampiran",
+      "access_verified": "2026-11-22",
+      "point_of_use_reliability": "HIGH for legal status metadata; no inference about current 2026 Manado clinic ART or VL schedule"
+    },
+    {
+      "id": "CWC_BUS116_OUTREACH",
+      "type": "canonical_internal_reference",
+      "authority": "CWC CPB §6.9.1, BUS-116 Owner Direction",
+      "title": "CWC Outreach Worker Service-Navigation Promotion Standard",
+      "url": "https://linear.app/bussiness-content-os/issue/BUS-116/cwc-outreach-worker-service-navigation-promotion-standard",
+      "sections": "Owner Direction; Intended Editorial Rule; Role Boundary",
+      "access_verified": "2026-11-22",
+      "point_of_use_reliability": "AUTHORITATIVE for the project's editorial CTA scope: DM navigation support, no claims of 24/7 availability/guaranteed services, decisions remain clinical; not medical evidence"
+    }
+  ],
+  "claims": [
+    {
+      "id": "C01",
+      "text": "An HIV diagnosis does not prevent a person from having a long and healthy life when treatment and care are effective; no individual outcome is guaranteed.",
+      "locations": [
+        "slide-01",
+        "caption"
+      ],
+      "coverage": "EXPLICIT_EVIDENCE",
+      "sources": [
+        "WHO_HIV_FACTS_2026",
+        "WHO_HIV_TOPIC"
+      ],
+      "limits": "Avoid absolute prognosis or equivalence for all individuals."
+    },
+    {
+      "id": "C02",
+      "text": "HIV is manageable with antiretroviral treatment; ART suppresses viral replication but does not cure HIV.",
+      "locations": [
+        "slide-02",
+        "caption"
+      ],
+      "coverage": "EXPLICIT_EVIDENCE",
+      "sources": [
+        "WHO_HIV_FACTS_2026",
+        "WHO_HIV_TOPIC"
+      ],
+      "limits": "The copy does not claim that HIV has been cured."
+    },
+    {
+      "id": "C03",
+      "text": "Effective ART supports the immune system and ongoing health.",
+      "locations": [
+        "slide-02"
+      ],
+      "coverage": "EXPLICIT_EVIDENCE",
+      "sources": [
+        "WHO_HIV_FACTS_2026",
+        "NIH_ART_INIT_2025"
+      ],
+      "limits": "May not imply every complication is eliminated."
+    },
+    {
+      "id": "C04",
+      "text": "Following HIV diagnosis, people should be offered prompt linkage to ART and clinical consultation.",
+      "locations": [
+        "slide-03",
+        "caption"
+      ],
+      "coverage": "EXPLICIT_EVIDENCE",
+      "sources": [
+        "WHO_HIV_TOPIC",
+        "NIH_ART_INIT_2025"
+      ],
+      "limits": "A positive test is followed by appropriate diagnostic confirmation and care, without universal guarantees about local treatment timing."
+    },
+    {
+      "id": "C05",
+      "text": "ART start time is clinician-guided, including specific exceptional clinical situations where short deferral may be needed.",
+      "locations": [
+        "slide-03",
+        "caption"
+      ],
+      "coverage": "EXPLICIT_EVIDENCE",
+      "sources": [
+        "NIH_ART_INIT_2025"
+      ],
+      "limits": "Exceptions such as TB/cryptococcal meningitis are not patient self-triage instructions; no blanket postponement message."
+    },
+    {
+      "id": "C06",
+      "text": "Using ART as clinically directed and remaining engaged in follow-up supports treatment response.",
+      "locations": [
+        "slide-04",
+        "caption"
+      ],
+      "coverage": "EXPLICIT_EVIDENCE",
+      "sources": [
+        "NIH_ART_INIT_2025",
+        "WHO_HIV_TOPIC"
+      ],
+      "limits": "No fixed frequency, regimen, dose or medication selection specified."
+    },
+    {
+      "id": "C07",
+      "text": "Viral-load testing measures response to ART and whether viral replication is being adequately suppressed.",
+      "locations": [
+        "slide-04",
+        "caption"
+      ],
+      "coverage": "EXPLICIT_EVIDENCE",
+      "sources": [
+        "NIH_VL_MONITOR_2025",
+        "WHO_HIV_TOPIC"
+      ],
+      "limits": "No local clinic VL interval, guarantee of undetectability, or patient-specific interpretation asserted."
+    },
+    {
+      "id": "C08",
+      "text": "HIV status does not diminish a person's worth, and stigmatizing language/discrimination should be avoided.",
+      "locations": [
+        "slide-05",
+        "caption"
+      ],
+      "coverage": "EDITORIAL_NORMATIVE_SUPPORTED",
+      "sources": [
+        "UNAIDS_TERMINOLOGY_2024"
+      ],
+      "limits": "Ethical/editorial statement; do not classify as a clinical outcome claim."
+    },
+    {
+      "id": "C09",
+      "text": "Audience may contact the CWC outreach worker managing the account by DM for HIV information and service navigation.",
+      "locations": [
+        "slide-05",
+        "caption"
+      ],
+      "coverage": "EDITORIAL_INTERNAL_AUTHORITY",
+      "sources": [
+        "CWC_BUS116_OUTREACH"
+      ],
+      "limits": "No verified hours, named clinic availability, pricing, guaranteed response, diagnosis, medical advice or referral outcome."
+    },
+    {
+      "id": "C10",
+      "text": "Only clinical health services/qualified healthcare staff should decide testing interpretation, diagnosis and treatment.",
+      "locations": [
+        "caption"
+      ],
+      "coverage": "EDITORIAL_INTERNAL_AUTHORITY",
+      "sources": [
+        "CWC_BUS116_OUTREACH",
+        "NIH_ART_INIT_2025"
+      ],
+      "limits": "Outreach worker provides education/navigation, not prescribing."
+    },
+    {
+      "id": "C11",
+      "text": "Follow/share CTA and five hashtags including #Manado are intentional editorial engagement elements.",
+      "locations": [
+        "slide-05",
+        "caption"
+      ],
+      "coverage": "EDITORIAL_NO_EXTERNAL_CLAIM",
+      "sources": [
+        "CWC_BUS116_OUTREACH"
+      ],
+      "limits": "No biomedical statement; CPB §6.6.1/§6.6.2 must be verified independently in STG-05 editorial gate."
+    }
+  ],
+  "claim_coverage_summary": {
+    "total": 11,
+    "explicit_evidence": 7,
+    "editorial": 4,
+    "unclassified": 0,
+    "contradictions": 0,
+    "insufficient_evidence": 0,
+    "unresolved_source_reliability": 0
+  },
+  "regulatory_context": "Indonesian Permenkes 3/2026 effective March 11, 2026 repeals most of Permenkes 23/2022, with specified exception; the content makes no claim about current 2026 Manado facility service protocol, viral-load interval or medicine availability. International references serve evidence, not local structural authority.",
+  "forbidden_overclaims": [
+    "No HIV cure claim",
+    "No guaranteed prognosis or treatment success",
+    "No local ART initiation clock or viral load testing interval",
+    "No regimen/dosage instructions",
+    "No guarantee of outreach response, availability, clinic stock or clinical outcome",
+    "No inference of U=U without context and no current text about U=U"
+  ],
+  "stages": {
+    "stg03_source_coverage": "COMPLETE",
+    "stg04": "NOT_CLOSED",
+    "stg05": "NOT_CLOSED",
+    "stg06": "NOT_CLOSED",
+    "stg07": "NOT_CLOSED",
+    "stg08": "NOT_CLOSED",
+    "stg09": "NOT_CLOSED",
+    "stg10": "NOT_STARTED"
+  },
+  "human_clinical_signoff": false,
+  "sensitive_claim": true,
+  "stg08_qa_passed": false,
+  "stg09_owner_release_approved": false,
+  "publication_authorized": false,
+  "published": false
+}
