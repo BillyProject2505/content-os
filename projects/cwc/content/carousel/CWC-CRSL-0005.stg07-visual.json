@@ -1,0 +1,192 @@
+{
+  "schema": "cwc-stg07-visual-output-evidence-v1",
+  "content_id": "CWC-CRSL-0005",
+  "issue": "BUS-179",
+  "stage": "STG-07 VISUAL PRODUCTION",
+  "status": "STG07_OUTPUT_CONTRACT_PASS__READY_FOR_QA",
+  "audit_date": "2026-11-22",
+  "lifecycle_to_enter": "READY_FOR_QA",
+  "authority": {
+    "workflow": "DIUA-DIC-000017@1.22 CANONICAL LOCKED",
+    "format": "DIUA-DIC-000029@1.4 OWNER-LOCKED",
+    "asset_system": {
+      "CAS": "DIUA-DIC-000013@1.17",
+      "CAR": "DIUA-DIC-000014@1.18",
+      "CAB": "DIUA-DIC-000015@1.36",
+      "CRS": "DIUA-DIC-000016@1.23"
+    },
+    "input_register": "DIUA-DIC-000027@1.43",
+    "stg05": "projects/cwc/content/carousel/CWC-CRSL-0005.stg05-content.json",
+    "stg06": "projects/cwc/content/carousel/CWC-CRSL-0005.stg06-assets.json"
+  },
+  "reviewed_source": {
+    "zip_filename": "CWC_Nov24_HIV_review_v03.zip",
+    "zip_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "slide_filenames": [
+      "slide-01.png",
+      "slide-02.png",
+      "slide-03.png",
+      "slide-04.png",
+      "slide-05.png"
+    ],
+    "slide_sha256_in_order": [
+      "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a",
+      "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4",
+      "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6",
+      "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e",
+      "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+    ],
+    "caption_filename": "caption-review-v03.txt",
+    "caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "dimensions_px": [
+      1080,
+      1350
+    ],
+    "slide_count": 5,
+    "archive_stored": "Conversation-local reviewed ZIP, not a verified canonical Google Drive media archive; actual binary handoff remains required for independent QA and STG-10 release archiving",
+    "original_manifest_status": "UNAPPROVED_REVIEW_CANDIDATE_V03_AFTER_TECHNICAL_FIX",
+    "original_manifest_content_id": "NOT_ALLOCATED",
+    "original_manifest_register": "1.38",
+    "manifest_scope": "Pre-allocation historical review manifest left byte-for-byte untouched. Owner subsequently approved exact v0.3 via BUS-179; current Content ID and lifecycle come from canonical register and dated stage records."
+  },
+  "source_assets": {
+    "AS001": {
+      "mode": "EXACT_REUSE",
+      "name": "CWC_Master.svg",
+      "sha256": "04f7f7f46f6fc58c5e244b8c8f07e38d30b5f7faaf8179d5696aa55fd366da3a",
+      "raster_place": {
+        "x": 72,
+        "y": 64,
+        "width": 260,
+        "height": 82
+      },
+      "fresh_canonical_svg_raster_match": "5/5 slides; max absolute per-channel deviation 0 at integer-rounded output"
+    },
+    "AS002": {
+      "mode": "GENERATIVE_REFERENCE",
+      "selected_existing_BUS94_derivative": "CWC_AS002_Kaz_White-Jacket_Point-Left_FullBody_REUSABLE_v1.0.png",
+      "sha256": "e0fbb96e5261b7849420df7db8359d9b80d7f1184f32c1cbfce0ceaccc50cf80",
+      "source_canvas_scaled": {
+        "x": 489,
+        "y": 457,
+        "width": 617,
+        "height": 771
+      },
+      "visible_alpha24_bbox_exclusive": [
+        572,
+        467,
+        978,
+        1219
+      ],
+      "fully_opaque_match": {
+        "min_alpha": 252,
+        "max_channel_deviation": 3
+      },
+      "face_outfit_proportions_unchanged": true,
+      "reuse_not_new_canonical_ref": true
+    },
+    "AS003": {
+      "mode": "TOKEN_CONTROLLED",
+      "blue": "#0B3D9E",
+      "white": "#FFFFFF",
+      "yellow": "#FDCF00",
+      "verified_color_points_on_all_slides": true
+    },
+    "AS004": {
+      "mode": "EXACT_REUSE",
+      "name": "CWC-CRS-AS-004_Footer-White_CANONICAL.svg",
+      "sha256": "f38b7e4f07df5c13275fb01e08952db4d7fc45b783cf23f052d4ce8eb64ad4d0",
+      "raster_place": {
+        "x": 5,
+        "y": 1272,
+        "width": 1070,
+        "height": 64
+      },
+      "fresh_canonical_svg_raster_match": "5/5 slides; max absolute per-channel deviation 0 at integer-rounded output",
+      "footer_region_pixel_identical_across_all_slides": true
+    }
+  },
+  "layout_observations": {
+    "cover_copy_left_anchor_x": 72,
+    "cover_copy_measured_max_white_pixel_x": 518,
+    "format_max_copy_x_approx": 551,
+    "protected_gutter_x_approx": [
+      551,
+      605
+    ],
+    "presenter_visible_leftmost_x": 572,
+    "presenter_visible_rightmost_x_exclusive": 978,
+    "presenter_visible_bottom_y_exclusive": 1219,
+    "presenter_footer_top_y": 1272,
+    "presenter_footer_clearance_px": 53,
+    "presenter_alpha24_pixels_in_gutter_x551_571": 0,
+    "presenter_alpha24_pixels_in_x572_594": 256,
+    "presenter_alpha24_pixels_in_x595_604": 385,
+    "presenter_alpha24_pixels_in_x605_669": 3093,
+    "presenter_alpha24_pixels_in_x670_1015": 112380,
+    "visual_interpretation": "Approved pointing arm is contiguous. Leftmost gesture x572 is in approximate allowed x572–594. Some arm continuation extends through x595–604 within the nominal protected gutter; disclosed to STG-08 without claiming the gutter is completely free of presenter pixels. Copy remains outside the gutter and unobscured. If reviewer interprets allowance as a hard per-pixel x594 cutoff, classify as a format-specific QA finding rather than silently shifting pixels."
+  },
+  "typography": {
+    "family": "Montserrat (five pinned font weights used in previously reviewed raster)",
+    "observed_cover_hero_approx_px": 80,
+    "source": "Font-metric/raster match for Montserrat ExtraBold; format floor80",
+    "observed_cover_support_approx_px": 36,
+    "source_support": "Font-metric/raster match for Montserrat Regular; format support floor32",
+    "category_kicker_px": 26,
+    "internal_tag_px": 28,
+    "source_label": "v0.3 technical preflight and archived change_scope",
+    "panels": "Visually inspected slides 02–05; text and chips fully visible, no collision with footer",
+    "limitation": "Original editable renderer/vector typography source not present inside review ZIP; remaining type-size checks are visual/self-check, not independent STG-08 measurement"
+  },
+  "validation": {
+    "type": "STG-07 self-check against final visual composition, NOT STG-08 independent QA",
+    "count": 26,
+    "passed": 26,
+    "failed": 0,
+    "checks": {
+      "archive_sha256_expected": true,
+      "five_slide_files": true,
+      "canvas_1080_1350_all": true,
+      "five_slide_sha_match": true,
+      "manifest_slide_sha_match": true,
+      "source_AS001_sha_expected": true,
+      "source_AS002_sha_expected": true,
+      "source_AS004_sha_expected": true,
+      "logo_svg_placement_pixels_close": true,
+      "footer_svg_placement_pixels_close": true,
+      "logo_region_identical_across_5": true,
+      "footer_region_identical_across_5": true,
+      "canonical_blue_background": true,
+      "logo_and_footer_above_footer_safe": true,
+      "visible_presenter_inside_canvas": true,
+      "presenter_core_zone_conformant": true,
+      "presenter_opaque_pixels_match_source": true,
+      "copy_left_max_x_conformant": true,
+      "presenter_does_not_overlap_copy": true,
+      "captions_unchanged": true,
+      "exactly_five_hashtags": true,
+      "local_hashtag_present": true,
+      "type_label_min_26_in_manifest": true,
+      "slide_count_pagination_visually_checked": true,
+      "inner_panels_copy_visually_checked_no_clipping": true,
+      "artist_source_is_unmodified": true
+    },
+    "local_detailed_audit_sha256": "64df7f7bd041985224ef720924307aac04f6c9911e9873af61ecbf926d97f202",
+    "local_detailed_audit_filename": "CWC_CRSL_0005_STG07_visual_evidence.json"
+  },
+  "gate_boundaries": {
+    "current": "READY_FOR_QA after controlled register write/readback and CI",
+    "stg08": "NOT_PERFORMED — independent checklist must evaluate all format/clinical criteria and presenter gutter exception interpretation",
+    "stg09": "NOT_AUTHORIZED — SENSITIVE_CLAIM=YES, explicit human release signoff still required",
+    "stg10": "NOT_STARTED — no Approved Release Identity, no schedule/publish/Instagram platform evidence",
+    "editorial_target": "2026-11-24 19:30 WITA (Asia/Makassar); not a provider scheduled slot"
+  },
+  "immutability": {
+    "slide_pixels_unchanged": true,
+    "caption_bytes_unchanged": true,
+    "canonical_assets_unchanged": true,
+    "review_zip_unchanged": true,
+    "new_asset_generation": false,
+    "revision_event": false
+  }
+}
