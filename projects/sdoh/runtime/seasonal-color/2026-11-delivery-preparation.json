@@ -655,6 +655,27 @@
         "previous_caption_sha256": "f3a498e76209cd8edf36d267e8389c1f66dda8a8ead094945eb03bfc932f3544",
         "hashtags": "#satudosisobathati #manado #mentalhealthmanado #transawarenessmonth #transgender",
         "scope": "Hashtag line only; narrative and media unchanged."
+      },
+      "publication_evidence": {
+        "status": "PUBLISHED_OWNER_REPORTED_REMOTE_UNVERIFIED",
+        "evidence_basis": "OWNER_MANUAL_INSTAGRAM_PUBLICATION_REPORT",
+        "platform": "INSTAGRAM",
+        "publication_method": "MANUAL",
+        "destination_account": "@satudosisobathati",
+        "permalink": "https://www.instagram.com/p/DgCy3QMPQLs/",
+        "shortcode": "DgCy3QMPQLs",
+        "owner_reported_published_at_local": "2026-11-22T20:22:00+08:00",
+        "owner_reported_published_at_utc": "2026-11-22T12:22:00Z",
+        "original_scheduled_at_local": "2026-11-20T19:30:00+08:00",
+        "remote_timestamp_verified": false,
+        "remote_caption_verified": false,
+        "final_media_hash_compared": false,
+        "remote_media_id": null,
+        "runtime_state": "NOT_VERIFIED",
+        "linear_register_state": "OWNER_REPORT_RECORDED_NOT_CANONICAL_PUBLISHED",
+        "duplicate_publication_authorized": false,
+        "manual_republish_hold_requested": true,
+        "caution": "Do not republish or automatically retry. Owner-reported manual publication does not prove Meta readback, caption or media equality. A definitive runtime exclusion requires updating the live Linear publication row or independently verified reconcile; this delivery index is evidence only and is not consumed by the publisher."
       }
     },
     {
