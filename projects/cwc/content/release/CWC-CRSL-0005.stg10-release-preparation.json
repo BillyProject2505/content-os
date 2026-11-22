@@ -1,0 +1,164 @@
+{
+  "schema": "cwc-stg10-preentry-release-preparation-v1",
+  "content_id": "CWC-CRSL-0005",
+  "prepared_date": "2026-11-22",
+  "stage_scope": "STG-10 PRE-ENTRY: internal media archiving, release identity computation and readiness evidence only",
+  "status": "PREPARED_PENDING_SEPARATE_OWNER_PUBLICATION_AUTHORIZATION",
+  "canonical_document": "DIUA-DIC-000027@1.46",
+  "current_lifecycle_state": "APPROVED",
+  "current_exception_status": "NONE",
+  "entry_authorization_present": false,
+  "stg10_entered": false,
+  "ready_for_publication_lifecycle_transition_performed": false,
+  "source_authorities": {
+    "workflow": "DIUA-DIC-000017@1.22 §6 STG-10, §18 human publication authorization at STG-10 entry",
+    "approval_record": "projects/cwc/content/approval/CWC-CRSL-0005.stg09-approval.json",
+    "approval_blob_sha": "d5c701d59a847198ecf66bdb004e8d039826eed8",
+    "qa_record": "projects/cwc/content/qa/CWC-CRSL-0005.stg08-qa.json",
+    "qa_blob_sha": "4b84c306e5d246049eb5a5a3410cf3283ae5b3b0",
+    "register_blob_sha": "1b1406dbb546bdbd72378ea1e0bcd42a3e562065"
+  },
+  "approval_crosscheck": {
+    "stg09": "APPROVED",
+    "sensitive_claim": "YES",
+    "explicit_human_sensitive_claim_signoff": "APPROVED",
+    "approval_id": "CWC-CRSL-0005-STG09-20261122",
+    "approved_source_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "approved_caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "approved_ordered_slide_sha256": [
+      "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a",
+      "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4",
+      "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6",
+      "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e",
+      "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+    ],
+    "no_media_change": true,
+    "no_caption_change": true,
+    "no_new_claim": true
+  },
+  "release_identity_candidate": {
+    "value": "sha256:8e807b83b8270817e70b98ce868a3725a41f4cb205b19d140d053b563b4c8b2e",
+    "algorithm": "SHA-256",
+    "canonical_input": {
+      "identity_schema": "cwc-approved-release-content-hashes-v1",
+      "content_id": "CWC-CRSL-0005",
+      "destination": "instagram-feed-carousel",
+      "canvas": [
+        1080,
+        1350
+      ],
+      "ordered_media": [
+        {
+          "sequence": 1,
+          "name": "slide-01.png",
+          "sha256": "a4fda734248e0ee3251329f660a62c10708887789ce4b999d54fb8bd7ff1b35a"
+        },
+        {
+          "sequence": 2,
+          "name": "slide-02.png",
+          "sha256": "a39cfdb6df50853dc248675964886f6919f9029143f885ad0664487e3f62edf4"
+        },
+        {
+          "sequence": 3,
+          "name": "slide-03.png",
+          "sha256": "84babe4b4529517ae3e950b9853b371135c67c58378d65b54491625d866ac6d6"
+        },
+        {
+          "sequence": 4,
+          "name": "slide-04.png",
+          "sha256": "05fe6491f11d86a0a87c1c71ad0561c5d6a39c9d5dff56d73bc3bf52bb41ab9e"
+        },
+        {
+          "sequence": 5,
+          "name": "slide-05.png",
+          "sha256": "1df784c337777a459625801d64bc083664230be33bf214a7bcd39fb242b63709"
+        }
+      ],
+      "caption": {
+        "name": "caption-review-v03.txt",
+        "sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8"
+      }
+    },
+    "serialization": "UTF-8 JSON, sort_keys=true, separators=(comma,colon), ensure_ascii=false, with a single trailing LF; sha256 of bytes",
+    "activation_boundary": "Identity candidate is content-addressed and ready for explicit STG-10 human publication authorization; not a remotely scheduled post and not a lifecycle transition."
+  },
+  "durable_archive": {
+    "provider": "Google Drive via connected project Library",
+    "folder": {
+      "id": "1LYFj4FmKK56oNZ_h2USiPp6tDkOJf6Sa",
+      "url": "https://drive.google.com/drive/folders/1LYFj4FmKK56oNZ_h2USiPp6tDkOJf6Sa"
+    },
+    "files": {
+      "approved_source_zip": {
+        "id": "1eDy5MXK9MPn-BWF9pwTc0K5fg_2z2p73",
+        "url": "https://drive.google.com/file/d/1eDy5MXK9MPn-BWF9pwTc0K5fg_2z2p73/view?usp=drivesdk",
+        "name": "CWC-CRSL-0005_APPROVED-SOURCE_v03_20261122.zip",
+        "size": 607764,
+        "sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9"
+      },
+      "release_bundle_zip": {
+        "id": "1x2JUx7BUDYs0lTdfRLQVBsT9Bs_6QfFU",
+        "url": "https://drive.google.com/file/d/1x2JUx7BUDYs0lTdfRLQVBsT9Bs_6QfFU/view?usp=drivesdk",
+        "name": "CWC-CRSL-0005_RELEASE-PACKAGE_v1_20261122.zip",
+        "size": 607875,
+        "sha256": "8038dc345e4c9d12f224d655851f2b7a09800c658d707e15cdb165beb8ec3f2a"
+      },
+      "publication_manifest_json": {
+        "id": "1MSslKrcgbAAzMF1qG8Np7NxKYvsf6BGr",
+        "url": "https://drive.google.com/file/d/1MSslKrcgbAAzMF1qG8Np7NxKYvsf6BGr/view?usp=drivesdk",
+        "name": "CWC-CRSL-0005_PUBLICATION-MANIFEST_v1_20261122.json",
+        "size": 4490,
+        "sha256": "6586796246ab1addf56bb0bc5f7501780ddf7224f432c858e41c7f16b55d8cde"
+      },
+      "exact_approved_caption_txt": {
+        "id": "12lvihtVcF2s-OU5aSk83z1runqZ_IZ5t",
+        "url": "https://drive.google.com/file/d/12lvihtVcF2s-OU5aSk83z1runqZ_IZ5t/view?usp=drivesdk",
+        "name": "CWC-CRSL-0005_APPROVED-CAPTION_20261122.txt",
+        "size": 970,
+        "sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8"
+      }
+    },
+    "verification": {
+      "method": "Drive metadata parent/name/MIME/size readback, followed by fresh provider raw-download, Base64 decoding and SHA-256 computation",
+      "result": "PASS",
+      "file_count": 4,
+      "sha256_verified_count": 4,
+      "all_digests_match_original_local_bytes": true,
+      "source_zip_still_has_historical_preallocation_manifest": true,
+      "release_bundle_files": [
+        "slide-01.png",
+        "slide-02.png",
+        "slide-03.png",
+        "slide-04.png",
+        "slide-05.png",
+        "caption-review-v03.txt",
+        "publication-manifest.json"
+      ],
+      "release_bundle_approved_media_bytes_unmodified": true,
+      "release_bundle_caption_bytes_unmodified": true
+    }
+  },
+  "editorial_slot": {
+    "target_local": "2026-11-24T19:30:00+08:00",
+    "timezone": "Asia/Makassar",
+    "origin": "Editorial planning slot only",
+    "owner_authorized_to_publish": false,
+    "platform_scheduled": false,
+    "scheduled_job_id": null
+  },
+  "outstanding_dependencies": [
+    "Separate explicit human STG-10 publication authorization is required by Workflow v1.22 §18 before entering PUBLICATION.",
+    "Confirm platform publisher/account connectivity and supported five-photo Instagram carousel delivery; no publish workflow or remote schedule is asserted by archive verification.",
+    "At authorized STG-10 entry, revalidate exact stored media/caption checksums and release_identity_candidate before transition to READY_FOR_PUBLICATION.",
+    "Record actual remote schedule/publish ID when attempted, and transition to PUBLISHED only after platform live confirmation with traceable identity."
+  ],
+  "not_done": {
+    "no_live_platform_action": true,
+    "no_schedule_created": true,
+    "no_publication": true,
+    "no_post_permalink": true,
+    "no_stg10_entry": true,
+    "no_ready_for_publication_state": true,
+    "no_publication_log_entry": true
+  }
+}
