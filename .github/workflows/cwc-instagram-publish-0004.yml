@@ -4,8 +4,8 @@ on:
   pull_request:
     paths:
       - ".github/workflows/cwc-instagram-publish-0004.yml"
-      - "projects/cwc/runtime/instagram-publication/**"
-      - "projects/cwc/content/instagram-media/**"
+      - "projects/cwc/runtime/instagram-publication/publish-once.mjs"
+      - "projects/cwc/content/instagram-media/CWC-CRSL-0004.media-adaptation.json"
   push:
     branches:
       - main
@@ -27,12 +27,8 @@ on:
         type: string
         required: false
         default: ""
-  schedule:
-    # New explicit Owner authorization: Tue 2026-11-10 19:00 WITA = 11:00 UTC.
-    # GitHub cron is best-effort and may be delayed or dropped.
-    # Runtime verifies exact year/date, immutable release and a +20 minute deadline.
-    # Multiple wake-ups are guarded by one-shot Git tag and platform duplicate check.
-    - cron: "0,5,10,15 11 10 11 *"
+  # The one-shot 2026-11-10 slot has expired. Never retry it on future years.
+  # Manual dispatch remains guarded by the immutable 0004 release checks.
 
 permissions:
   contents: read
