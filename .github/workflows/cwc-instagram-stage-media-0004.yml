@@ -22,8 +22,18 @@ permissions:
   actions: read
 
 jobs:
+  static_contract:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify historical media adapter syntax without fetching expired artifacts
+        run: python -m py_compile projects/cwc/runtime/instagram-publication/prepare-jpeg.py
   media:
-    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    # Never download or stage historic 0004 release media during a PR.
+    # Explicit manual dispatch on main remains fail-closed.
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
