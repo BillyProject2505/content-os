@@ -2,6 +2,15 @@
 
 This is a **non-authoritative operational prototype** implementing the first reusable SDOH pattern: integrity-locked approved copy. It includes preflight and a review-only renderer; it has **no production-writeback, scheduling or publication authorization**. It does not amend the canonical CWC lifecycle or allocate a Content ID.
 
+## BUS-180 replay equivalence — eliminate redundant Owner/QA work
+
+An editable one-run candidate may reproduce a previously **STG-08 PASS / STG-09 APPROVED** output exactly. After image-byte integrity QA and the ordinary reviewer intake, the read-only `reconcile-approved-replay.mjs` checks the exact five PNG SHA-256 values, caption SHA-256, approved-copy fingerprint, linked immutable formal QA record and Owner approval Git blob, and release identity against the **existing records for the same Content ID**. It emits `approved-render-equivalence.json` into the same artifact.
+
+- Exact identity: `IDENTICAL_TO_EXISTING_STG08_STG09_APPROVED_BYTES`. **Do not request a duplicate STG-08 or STG-09 merely because the same pixels were rendered again**; preserve the pre-existing evidence. This creates **no new** formal QA or Owner decision.
+- No/partial approval records, or any mismatch: **no previous approval inferred**; the standard STG-08 reviewer intake remains pending for any genuinely new/changed outputs.
+- Never treat historical STG-10 publication dates as reusable, infer CURRENT Content Register state, or schedule/publish from equivalence alone.
+- Example smoke: `CWC-CRSL-0004` 2026-11-23 [one-run #45121173900](https://github.com/BillyProject2505/content-os/actions/runs/45121173900) produced 5/5 PNG SHA-256 + caption SHA-256 exactly equal to STG-09-approved bytes from 2026-11-01. The prior 2026-11-10 publication slot is expired and publication evidence remains separate.
+
 ## BUS-180 independent STG-08 intake (no new gate) — 2026-11-23
 
 After an editable-source candidate has actually rendered and passed standalone image-byte verification, `stg08-intake.mjs` gathers the existing approved-copy record, STG-03 research/source-coverage record, exact render media digests and current CWC-QA-001 / FORMAT-CAROUSEL references into one `stg08-review-intake.json` and `.md` within the **same Actions artifact**. The QA checklist is sourced from the active canonical QA and Format Carousel documents and fails closed if authority version/shape drifts. It does not copy criteria blindly from a prior content item or create new format Criterion IDs.
