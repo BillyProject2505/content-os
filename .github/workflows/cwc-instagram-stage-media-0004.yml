@@ -4,8 +4,8 @@ on:
   pull_request:
     paths:
       - ".github/workflows/cwc-instagram-stage-media-0004.yml"
-      - "projects/cwc/runtime/instagram-publication/**"
-      - "projects/cwc/content/instagram-media/**"
+      - "projects/cwc/runtime/instagram-publication/prepare-jpeg.py"
+      - "projects/cwc/content/instagram-media/CWC-CRSL-0004.media-adaptation.json"
   workflow_dispatch:
     inputs:
       mode:
