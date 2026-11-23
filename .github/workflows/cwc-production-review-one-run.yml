@@ -1,5 +1,6 @@
 name: CWC one-run production review checkpoint (BUS-180)
-# No asset fetch, render, Owner approval, scheduling, Meta call or writeback.
+# One candidate render+limited byte QA for editable inputs; immutable approved media never re-rendered.
+# NO STG-08 formal approval, STG-09, STG-10, scheduling, publishing or canonical writeback.
 on:
   pull_request:
     paths:
@@ -8,15 +9,15 @@ on:
   workflow_dispatch:
     inputs:
       content_id:
-        description: Existing CWC-CRSL-NNNN content ID
+        description: Existing CWC-CRSL-NNNN Content ID
         required: true
         type: string
       expected_copy_fingerprint:
-        description: Independent copy SHA-256 for editable source; blank for existing approved raster
+        description: Independent copy SHA-256 for editable mode (blank for approved raster)
         required: false
         type: string
       expected_layout_fingerprint:
-        description: Independent layout SHA-256 for editable source; blank for existing approved raster
+        description: Independent layout SHA-256 for editable mode (blank for approved raster)
         required: false
         type: string
 
@@ -26,26 +27,37 @@ permissions:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 7
+    timeout-minutes: 9
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Existing contract and BUS-180 regression tests
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.15"
+      - name: Install pinned render QA dependencies
+        run: python -m pip install --disable-pip-version-check Pillow==12.3.0 CairoSVG==2.8.2
+      - name: Existing source, stage, safety and BUS-180 tests
         run: node --test projects/cwc/runtime/approved-copy/*.test.mjs
+      - name: Renderer and independent output-byte QA regression
+        run: python -m unittest discover -s projects/cwc/runtime/approved-copy -p 'test_*.py' -v
 
   review:
     needs: tests
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 7
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      # Drive readonly WIF only in editable-candidate branch; never SDOH service identity.
+      id-token: write
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Produce one read-only checkpoint and 11-stage evidence table
+      - name: Prepare source-scoped checkpoint without mutation
         env:
           CONTENT_ID: ${{ inputs.content_id }}
           COPY_FP: ${{ inputs.expected_copy_fingerprint }}
@@ -53,24 +65,128 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          [[ "$GITHUB_REF" == "refs/heads/main" ]] || exit 1
           [[ "$CONTENT_ID" =~ ^CWC-CRSL-[0-9]{4}$ ]] || { echo "::error::Invalid Content ID"; exit 1; }
           ARGS=(--content-id "$CONTENT_ID" --out "$RUNNER_TEMP/cwc-review")
           if [[ -n "$COPY_FP" ]]; then ARGS+=(--copy-fingerprint "$COPY_FP"); fi
           if [[ -n "$LAYOUT_FP" ]]; then ARGS+=(--layout-fingerprint "$LAYOUT_FP"); fi
           node projects/cwc/runtime/approved-copy/review-checkpoint.mjs "${ARGS[@]}"
+      - name: Route supported source mode
+        id: route
+        shell: bash
+        run: |
+          set -euo pipefail
+          mode="$(jq -er '.source_mode' "$RUNNER_TEMP/cwc-review/review-checkpoint.json")"
+          [[ "$mode" == "EDITABLE_RENDER_CANDIDATE" || "$mode" == "IMMUTABLE_APPROVED_RASTER" ]] || exit 1
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+      - name: Set up official CWC review renderer Python
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.15"
+      - name: Bind renderer plan from independently verified source
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FP: ${{ inputs.expected_copy_fingerprint }}
+          LAYOUT_FP: ${{ inputs.expected_layout_fingerprint }}
+        run: |
+          set -euo pipefail
+          node projects/cwc/runtime/approved-copy/resolve-production-input.mjs \
+            --content-id "$CONTENT_ID" --copy-fingerprint "$COPY_FP" \
+            --layout-fingerprint "$LAYOUT_FP" > "$RUNNER_TEMP/cwc-review/production-input.json"
+          jq -e '.source_mode=="EDITABLE_RENDER_CANDIDATE" and
+            .renderer_input.status=="RENDER_PLAN_CANDIDATE" and
+            .renderer_input.gates.publication_authorized==false' \
+            "$RUNNER_TEMP/cwc-review/production-input.json" >/dev/null
+          jq '.renderer_input' "$RUNNER_TEMP/cwc-review/production-input.json" \
+            > "$RUNNER_TEMP/cwc-review/render-plan-typed.json"
+      - name: Enforce dedicated CWC-only Drive identity
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        env:
+          CWC_SERVICE_ACCOUNT: ${{ vars.CWC_GCP_SERVICE_ACCOUNT }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$CWC_SERVICE_ACCOUNT" =~ ^cwc-[a-z0-9-]+@[a-z0-9-]+[.]iam[.]gserviceaccount[.]com$ ]] || {
+            echo "::error::Dedicated CWC Drive service identity unavailable; never use SDOH."
+            exit 1
+          }
+      - name: Drive read-only authentication (editable mode only)
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        id: auth
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.CWC_GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          access_token_lifetime: 3600s
+      - name: Download checksum-pinned canonical assets (no upload)
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          CWC_ASSET_DIR: ${{ runner.temp }}/cwc-assets
+        run: bash projects/cwc/runtime/approved-copy/check-drive-assets.sh
+      - name: Install pinned renderer dependencies
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        run: python -m pip install --disable-pip-version-check Pillow==12.3.0 CairoSVG==2.8.2
+      - name: Render official CWC carousel review candidate
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python projects/cwc/runtime/approved-copy/render-carousel.py \
+            --plan "$RUNNER_TEMP/cwc-review/render-plan-typed.json" \
+            --pins projects/cwc/runtime/approved-copy/blue-dark-asset-pins.json \
+            --assets "$RUNNER_TEMP/cwc-assets" \
+            --out "$RUNNER_TEMP/cwc-review/rendered"
+      - name: Independently verify all rendered media bytes
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python projects/cwc/runtime/approved-copy/check-render-artifact.py \
+            --report "$RUNNER_TEMP/cwc-review/rendered/render-report.json" \
+            --content-id "$CONTENT_ID" \
+            --out "$RUNNER_TEMP/cwc-review/technical-artifact-qa.json"
+          jq -e '.verdict=="ARTIFACT_INTEGRITY_PASS" and
+            .formal_stg08_qa_passed==false and
+            .stg10_publication_authorized==false and .publication_performed==false' \
+            "$RUNNER_TEMP/cwc-review/technical-artifact-qa.json" >/dev/null
+      - name: Attach bounded render evidence to same checkpoint
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FP: ${{ inputs.expected_copy_fingerprint }}
+          LAYOUT_FP: ${{ inputs.expected_layout_fingerprint }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node projects/cwc/runtime/approved-copy/review-checkpoint.mjs \
+            --content-id "$CONTENT_ID" --copy-fingerprint "$COPY_FP" \
+            --layout-fingerprint "$LAYOUT_FP" --out "$RUNNER_TEMP/cwc-review" \
+            --render-evidence "$RUNNER_TEMP/cwc-review/technical-artifact-qa.json"
+      - name: Final fail-closed gate and single review summary
+        shell: bash
+        run: |
+          set -euo pipefail
           jq -e '.scope.read_only == true and
             .scope.stg09_decision_created == false and
             .scope.stg10_publication_authorization_created == false and
             .scope.canonical_register_writeback == false and
             .scope.instagram_publication_verified == false and
             .usable_as_final_visual_review_package == false and
-            (.stage_evidence | length) == 11' "$RUNNER_TEMP/cwc-review/review-checkpoint.json" > /dev/null
+            (.stage_evidence|length) == 11' \
+            "$RUNNER_TEMP/cwc-review/review-checkpoint.json" >/dev/null
           cat "$RUNNER_TEMP/cwc-review/review-summary.md" >> "$GITHUB_STEP_SUMMARY"
-      - name: Upload single non-publishable evidence package
+          echo "Formal STG-08 remains pending for newly rendered candidates; NO publication." >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload exactly one non-publishable review package
         uses: actions/upload-artifact@v4
         with:
           name: cwc-review-checkpoint-${{ inputs.content_id }}
-          path: ${{ runner.temp }}/cwc-review/*
+          path: ${{ runner.temp }}/cwc-review/
           if-no-files-found: error
           retention-days: 14
