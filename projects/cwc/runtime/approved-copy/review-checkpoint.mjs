@@ -64,6 +64,43 @@ export function makeReviewCheckpoint(contentId,{expectedCopyFingerprint,expected
     usable_as_final_visual_review_package:false
   };
 }
+export function attachRenderedEvidence(packet, evidence) {
+  const fail = m => { throw new Error("CWC_RENDER_EVIDENCE_REJECTED: " + m); };
+  if(packet.source_mode !== "EDITABLE_RENDER_CANDIDATE" ||
+     packet.scope.rendered_media !== false) fail("fresh editable candidate required");
+  if(evidence?.schema !== "cwc-render-artifact-integrity-v1" ||
+     evidence.content_id !== packet.content_id ||
+     evidence.verdict !== "ARTIFACT_INTEGRITY_PASS" ||
+     evidence.actual_rendered_candidate !== true ||
+     evidence.independent_clinical_qa_passed !== false ||
+     evidence.formal_stg08_qa_passed !== false ||
+     evidence.owner_stg09_approved_by_this_run !== false ||
+     evidence.stg10_publication_authorized !== false ||
+     evidence.publication_performed !== false) fail("invalid or elevated QA evidence");
+  if(!Array.isArray(evidence.slides) || evidence.slides.length !== packet.slides.length ||
+     !evidence.slides.every((x,i)=>
+       x.order===i+1 && x.name==="slide-"+String(i+1).padStart(2,"0")+".png" &&
+       /^[0-9a-f]{64}$/.test(x.sha256) && Array.isArray(x.dimensions) &&
+       x.dimensions[0]===1080 && x.dimensions[1]===1350))
+    fail("slides do not match source scope");
+  return {
+    ...packet,
+    checkpoint_status:"CANDIDATE_RENDERED_ARTIFACT_INTEGRITY_PASS",
+    summary:"Candidate PNG bytes, image encoding, ordered dimensions and hashes independently checked. Formal STG-08 medical/editorial/visual QA, Owner approval and publication remain unverified.",
+    stage_evidence:packet.stage_evidence.map(s=>s.stage==="STG-07"
+      ? {...s,checkpoint_verdict:"CANDIDATE_RENDERED_BYTES_CHECKED_STG08_PENDING"}:s),
+    scope:{...packet.scope,rendered_media:true,media_bytes_rechecked:true},
+    render_artifact_integrity:{
+      schema:evidence.schema,verdict:evidence.verdict,
+      source_copy_sha256:evidence.source_copy_sha256,
+      slides:evidence.slides,contact_sheet_sha256:evidence.contact_sheet_sha256
+    },
+    next_internal_action:"Complete independent STG-08 medical/editorial/visual QA on actual rendered images; then request one STG-09 final-package Owner decision.",
+    owner_action_required_now:false,
+    usable_as_final_visual_review_package:false
+  };
+}
+
 export function reviewMarkdown(p){
   const lines=[
     "# CWC checkpoint: "+p.content_id,"",
@@ -82,11 +119,11 @@ export function reviewMarkdown(p){
   lines.push("","## Caption","",p.caption,"","## Internal next action","",
     p.next_internal_action,"",
     "**No Owner approval required from this checkpoint.**","",
-    "**No visual render, publication, schedule, or canonical writeback performed.**");
+    p.scope.rendered_media ? "**Candidate rendered and artifact QA passed; NO formal STG-08, approval, schedule, publication or canonical writeback.**" : "**No visual render, publication, schedule, or canonical writeback performed.**");
   return lines.join("\n")+"\n";
 }
 function main(argv){
-  const allowed=new Set(["--content-id","--copy-fingerprint","--layout-fingerprint","--out"]);
+  const allowed=new Set(["--content-id","--copy-fingerprint","--layout-fingerprint","--out","--render-evidence"]);
   requireThat(argv.length>0&&argv.length%2===0,"arguments must be pairs");
   const opts={};
   for(let i=0;i<argv.length;i+=2){
@@ -94,10 +131,17 @@ function main(argv){
     opts[argv[i]]=argv[i+1];
   }
   requireThat(opts["--content-id"]&&opts["--out"],"Content ID and output directory required");
-  const p=makeReviewCheckpoint(opts["--content-id"],{
+  let p=makeReviewCheckpoint(opts["--content-id"],{
     expectedCopyFingerprint:opts["--copy-fingerprint"],
     expectedLayoutFingerprint:opts["--layout-fingerprint"]
   });
+  if(opts["--render-evidence"]) {
+    const qa=JSON.parse(fs.readFileSync(opts["--render-evidence"],"utf8"));
+    if(p.source_mode!=="EDITABLE_RENDER_CANDIDATE" ||
+       qa.source_copy_sha256 !== opts["--copy-fingerprint"])
+      throw new Error("RENDER_EVIDENCE_MISMATCH: source mode or independently pinned SHA mismatch");
+    p=attachRenderedEvidence(p,qa);
+  }
   fs.mkdirSync(opts["--out"],{recursive:true});
   fs.writeFileSync(path.join(opts["--out"],"review-checkpoint.json"),JSON.stringify(p,null,2)+"\n");
   fs.writeFileSync(path.join(opts["--out"],"review-summary.md"),reviewMarkdown(p));
