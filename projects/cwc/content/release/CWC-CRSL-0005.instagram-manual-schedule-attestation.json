@@ -1,0 +1,67 @@
+{
+  "schema": "cwc-instagram-native-schedule-owner-attestation-v1",
+  "content_id": "CWC-CRSL-0005",
+  "record_date": "2026-11-23",
+  "issue": "BUS-179",
+  "evidence_class": "OWNER_SELF_REPORT",
+  "status": "OWNER_REPORTED_SCHEDULED__PLATFORM_UNVERIFIED",
+  "statement": {
+    "verbatim": "saya sudah publish manual dengan publish terjadwal instagram 24 november 2026 19.30 wita",
+    "source": "Current user message in ChatGPT conversation",
+    "evidence_issue_comment_id": "0d206427-4581-4d81-8d32-686466de85a3",
+    "speaker": "CWC Owner",
+    "interpreted_operation": "Instagram-native scheduling performed manually by the Owner, not a platform-confirmed live publication"
+  },
+  "reported_schedule": {
+    "platform": "Instagram",
+    "method": "INSTAGRAM_NATIVE_MANUAL_SCHEDULE",
+    "local_datetime": "2026-11-24T19:30:00+08:00",
+    "utc_datetime": "2026-11-24T11:30:00Z",
+    "timezone": "Asia/Makassar",
+    "platform_schedule_confirmed": false,
+    "platform_schedule_id": null,
+    "scheduler_ui_screenshot_available": false,
+    "platform_destination_account_verified": false,
+    "destination_account_project_intended": "@cozwecare.id",
+    "live_url": null,
+    "live_platform_confirmation": false,
+    "post_live": false
+  },
+  "release_binding": {
+    "approved_original_release_identity": "sha256:8e807b83b8270817e70b98ce868a3725a41f4cb205b19d140d053b563b4c8b2e",
+    "approved_source_zip_sha256": "779e4421a58807632356f1362b4b7acc60c0e688322d4149ed548951203330c9",
+    "approved_caption_sha256": "c8e9bfd75f37409447f86e43b95fc1835007a9f38a324404abcd692e8a45e1e8",
+    "jpeg_delivery_approval_record": "projects/cwc/content/approval/CWC-CRSL-0005.jpeg-delivery-approval.json",
+    "original_release_record": "projects/cwc/content/release/CWC-CRSL-0005.stg10-release-preparation.json",
+    "live_scheduler_exact_media_and_caption_verified": false,
+    "schedule_media_count_reported": null,
+    "scheduled_media_hashes": null,
+    "note": "Master and JPEG versions were approved, but no direct provider evidence has yet tied the Instagram scheduler's actual queued media/caption to these hashes."
+  },
+  "workflow": {
+    "authority": "DIUA-DIC-000017 CWC Production Workflow v1.22",
+    "current_canonical_register": "DIUA-DIC-000027@1.46",
+    "current_canonical_lifecycle": "APPROVED",
+    "approval_and_reporting_separation": "Owner has attested they scheduled the post in Instagram. The statement is evidence of their action, not a new ChatGPT/GitHub executor authorization. Do not invent a schedule ID or claim earlier GitHub automated publisher readiness.",
+    "lifecycle_transition_performed": false,
+    "ready_for_publication_transition_performed": false,
+    "published_transition_performed": false,
+    "recorded_transition_performed": false,
+    "publication_log_appended": false,
+    "duplicate_post_created": false
+  },
+  "verification_required": [
+    "Read Instagram Scheduled Content in the intended account to verify the queued media, caption, date and timezone. A screen capture or actual provider-supplied scheduler ID can substantiate the schedule without exposing credentials.",
+    "After 2026-11-24 19:30 WITA verify platform-live media from an actual Instagram permalink and check slide/caption equivalence to approved release (or record any mismatch).",
+    "Only after platform confirmation perform the governed PUBLISHED transition and subsequent RECORD/Publication Log writeback; document any missing intermediate readiness evidence rather than inventing retrospective states."
+  ],
+  "guards": {
+    "no_github_actions_dispatch": true,
+    "no_remote_schedule_action": true,
+    "no_meta_api_action": true,
+    "no_second_publication": true,
+    "no_platform_confirmation_claimed": true,
+    "no_provider_id_invented": true,
+    "no_stg10_executor_credentials_access": true
+  }
+}
