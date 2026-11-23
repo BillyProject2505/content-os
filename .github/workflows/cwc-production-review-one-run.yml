@@ -169,6 +169,25 @@ jobs:
             --content-id "$CONTENT_ID" --copy-fingerprint "$COPY_FP" \
             --layout-fingerprint "$LAYOUT_FP" --out "$RUNNER_TEMP/cwc-review" \
             --render-evidence "$RUNNER_TEMP/cwc-review/technical-artifact-qa.json"
+      - name: Prepare STG-08 independent review intake (never QA approval)
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        shell: bash
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+        run: |
+          set -euo pipefail
+          node projects/cwc/runtime/approved-copy/stg08-intake.mjs \
+            --content-id "$CONTENT_ID" \
+            --checkpoint "$RUNNER_TEMP/cwc-review/review-checkpoint.json" \
+            --technical-qa "$RUNNER_TEMP/cwc-review/technical-artifact-qa.json" \
+            --out "$RUNNER_TEMP/cwc-review"
+          jq -e '.status=="STG08_EVIDENCE_PREPARED_AWAITING_INDEPENDENT_REVIEW" and
+            .pending_review_count==20 and .formal_stg08_verdict==null and
+            .formal_stg08_qa_record_created==false and
+            .owner_stg09_approval_granted==false and
+            .stg10_publication_authorized==false and
+            .content_register_writeback_performed==false' \
+            "$RUNNER_TEMP/cwc-review/stg08-review-intake.json" >/dev/null
       - name: Final fail-closed gate and single review summary
         shell: bash
         run: |
@@ -182,6 +201,9 @@ jobs:
             (.stage_evidence|length) == 11' \
             "$RUNNER_TEMP/cwc-review/review-checkpoint.json" >/dev/null
           cat "$RUNNER_TEMP/cwc-review/review-summary.md" >> "$GITHUB_STEP_SUMMARY"
+          if [[ -f "$RUNNER_TEMP/cwc-review/stg08-review-intake.md" ]]; then
+            cat "$RUNNER_TEMP/cwc-review/stg08-review-intake.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
           echo "Formal STG-08 remains pending for newly rendered candidates; NO publication." >> "$GITHUB_STEP_SUMMARY"
       - name: Upload exactly one non-publishable review package
         uses: actions/upload-artifact@v4

@@ -2,6 +2,14 @@
 
 This is a **non-authoritative operational prototype** implementing the first reusable SDOH pattern: integrity-locked approved copy. It includes preflight and a review-only renderer; it has **no production-writeback, scheduling or publication authorization**. It does not amend the canonical CWC lifecycle or allocate a Content ID.
 
+## BUS-180 independent STG-08 intake (no new gate) — 2026-11-23
+
+After an editable-source candidate has actually rendered and passed standalone image-byte verification, `stg08-intake.mjs` gathers the existing approved-copy record, STG-03 research/source-coverage record, exact render media digests and current CWC-QA-001 / FORMAT-CAROUSEL references into one `stg08-review-intake.json` and `.md` within the **same Actions artifact**. The QA checklist is sourced from the active canonical QA and Format Carousel documents and fails closed if authority version/shape drifts. It does not copy criteria blindly from a prior content item or create new format Criterion IDs.
+
+**Boundary:** `STG08_EVIDENCE_PREPARED_AWAITING_INDEPENDENT_REVIEW` is an *intake*, **not** a formal `cwc-qa-record-v1`, PASS, an STG-09 Owner approval request, or STG-10 authorization. All 20 candidate criteria remain pending independent evidence/Expected/Actual adjudication, including clinical truth, stigmatizing language and exact rendered visual inspection. The independently rendered image bytes are measured, not clinically or editorially approved. Already-approved immutable rasters (such as `CWC-CRSL-0005`) do **not** reenter this QA intake.
+
+One-run manual smoke and a real fresh-content pilot are still needed; CI success proves regression contracts, not end-to-end Google Drive, render, or live publication.
+
 ## BUS-180 one-run candidate render + bounded technical QA — 2026-11-23
 
 `.github/workflows/cwc-production-review-one-run.yml` is the single manual entrypoint for evidence and review-candidate artifacts; PR events run tests only. It retains separate `STG-08` independent formal QA, `STG-09` human approval, and `STG-10` explicit publication authorization.
