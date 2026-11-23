@@ -40,12 +40,7 @@ function evidence(status,id,detail={},paths=null) {
       : "No exact historical approval established. Keep newly rendered candidate in independent STG-08 review intake; do not infer prior approval."
   };
 }
-function validOrder(slides,key) {
-  return Array.isArray(slides)&&slides.length>0&&slides.every((x,i)=>
-    x[key]===i+1&&x.sha256&&HASH.test(x.sha256)&&
-    x.filename==="slide-"+String(i+1).padStart(2,"0")+".png");
-}
-export function compareApprovedReplay(packet,{qa,approval,release,approvalRaw}={},paths=null) {
+export function compareApprovedReplay(packet,{qa,qaRaw,approval,release,approvalRaw}={},paths=null) {
   const id=packet?.content_id;
   if(!ID.test(id??""))throw new Error("REPLAY_REJECTED: invalid Content ID");
   if(packet?.source_mode!=="EDITABLE_RENDER_CANDIDATE"||
@@ -71,14 +66,19 @@ export function compareApprovedReplay(packet,{qa,approval,release,approvalRaw}={
     "rendered image references invalid");
   need(qa.schema==="cwc-qa-record-v1" && qa.content_item_id===id &&
     qa.verdict==="PASS"&&qa.gates?.stg08_passed===true &&
-    qa.approved_copy_fingerprint===fp,
+    qa.approved_copy_fingerprint===fp &&
+    qa.artifact?.all_png_sha256_verified===true &&
+    qa.artifact?.zip_sha256===release.publishable_artifacts?.source_storage?.sha256 &&
+    qa.artifact?.id===release.publishable_artifacts?.historical_source?.github_artifact_id,
     "existing formal QA authority missing or does not match copy");
   need(approval.schema==="cwc-stg09-owner-approval-v1"&&approval.content_item_id===id &&
     approval.stage==="STG-09" && approval.decision==="APPROVED" &&
     approval.owner_approval_boundaries?.approved_content_and_sensitive_claims===true &&
     approval.approved_package?.approved_copy_fingerprint===fp &&
     approval.prerequisites?.qa_verdict==="PASS" &&
-    approval.prerequisites?.qa_record_path===paths?.qa,
+    approval.prerequisites?.qa_record_path===paths?.qa &&
+    typeof qaRaw==="string" &&
+    approval.prerequisites?.qa_record_blob_sha===blobSha(qaRaw),
     "Owner approval does not bind valid QA or copy");
   need(release.schema==="cwc-stg10-release-preparation-v1" &&
     release.content_item_id===id &&
@@ -128,6 +128,7 @@ export function reconcileFromDisk(packet,{root=process.cwd()}={}){
   const raw=fs.readFileSync(path.join(root,p.approval),"utf8");
   return compareApprovedReplay(packet,{
     qa:JSON.parse(fs.readFileSync(path.join(root,p.qa),"utf8")),
+    qaRaw:fs.readFileSync(path.join(root,p.qa),"utf8"),
     approval:JSON.parse(raw),
     release:JSON.parse(fs.readFileSync(path.join(root,p.release),"utf8")),
     approvalRaw:raw
