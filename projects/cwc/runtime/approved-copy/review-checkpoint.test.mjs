@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import {spawnSync} from "node:child_process";
-import {makeReviewCheckpoint,reviewMarkdown} from "./review-checkpoint.mjs";
+import {makeReviewCheckpoint,reviewMarkdown,attachRenderedEvidence} from "./review-checkpoint.mjs";
 
 const id4="CWC-CRSL-0004",id5="CWC-CRSL-0005";
 const hashes={
@@ -60,6 +60,36 @@ test("Actions entrypoint never needs secret or redundant confirmation",()=>{
   assert.match(y,/contents: read/);
   assert.match(y,/review-checkpoint\.mjs/);
   assert.match(y,/upload-artifact@v4/);
-  assert.doesNotMatch(y,/id-token: write|contents: write|secrets\.|graph\.facebook|schedule:/);
+  assert.doesNotMatch(y,/contents: write|secrets\.|graph\.facebook|schedule:/);
+  assert.match(y,/id-token: write/);
+  assert.match(y,/google-github-actions\/auth@v3/);
+  assert.match(y,/service_account: \$\{\{ vars\.CWC_GCP_SERVICE_ACCOUNT \}\}/);
+  assert.match(y,/https:\/\/www\.googleapis\.com\/auth\/drive\.readonly/);
+  assert.match(y,/check-render-artifact\.py/);
   assert.doesNotMatch(y,/confirmation:/);
+});
+
+test("limited byte evidence does not auto grant Owner approval or publish",()=>{
+  const packet=makeReviewCheckpoint(id4,hashes);
+  const e={
+    schema:"cwc-render-artifact-integrity-v1",content_id:id4,
+    verdict:"ARTIFACT_INTEGRITY_PASS",actual_rendered_candidate:true,
+    independent_clinical_qa_passed:false,formal_stg08_qa_passed:false,
+    owner_stg09_approved_by_this_run:false,stg10_publication_authorized:false,
+    publication_performed:false,source_copy_sha256:hashes.expectedCopyFingerprint,
+    slides:packet.slides.map((x,i)=>({
+      order:i+1,name:"slide-"+String(i+1).padStart(2,"0")+".png",
+      sha256:"a".repeat(64),dimensions:[1080,1350]
+    })),contact_sheet_sha256:"b".repeat(64)
+  };
+  const result=attachRenderedEvidence(packet,e);
+  assert.equal(result.scope.rendered_media,true);
+  assert.equal(result.stage_evidence[7].checkpoint_verdict,"NOT_VERIFIED_BY_THIS_RUN");
+  assert.equal(result.scope.stg09_decision_created,false);
+  assert.equal(result.usable_as_final_visual_review_package,false);
+  assert.match(reviewMarkdown(result),/NO formal STG-08/);
+  assert.throws(()=>attachRenderedEvidence(makeReviewCheckpoint(id5),e),/fresh editable/);
+  assert.throws(()=>attachRenderedEvidence(packet,{...e,stg10_publication_authorized:true}),/invalid or elevated/);
+  assert.throws(()=>attachRenderedEvidence(packet,{...e,formal_stg08_qa_passed:true}),/invalid or elevated/);
+  assert.throws(()=>attachRenderedEvidence(packet,{...e,slides:e.slides.slice(1)}),/slides do not match/);
 });

@@ -2,6 +2,15 @@
 
 This is a **non-authoritative operational prototype** implementing the first reusable SDOH pattern: integrity-locked approved copy. It includes preflight and a review-only renderer; it has **no production-writeback, scheduling or publication authorization**. It does not amend the canonical CWC lifecycle or allocate a Content ID.
 
+## BUS-180 one-run candidate render + bounded technical QA — 2026-11-23
+
+`.github/workflows/cwc-production-review-one-run.yml` is the single manual entrypoint for evidence and review-candidate artifacts; PR events run tests only. It retains separate `STG-08` independent formal QA, `STG-09` human approval, and `STG-10` explicit publication authorization.
+
+- Editable input mode: validates exact copy, research coverage and typed layout via `resolve-production-input.mjs`, obtains the existing **dedicated CWC** Google Drive read-only identity, checksum-locks the seven existing approved assets, runs the existing B2 renderer and then a separate `check-render-artifact.py` check on PNG bytes, geometry, order and contact-sheet digest. The same artifact contains one `review-summary.md`, `review-checkpoint.json`, `render-plan-typed.json`, output PNGs and bounded `technical-artifact-qa.json`. These artifacts are **UNAPPROVED CANDIDATES**, not STG-08 PASS or ready-to-publish content.
+- Immutable approved-raster mode (e.g., `CWC-CRSL-0005`): only verifies existing metadata/hash references; never requests Drive credentials, rerenders, changes approval, schedules, or publishes.
+- The current renderer still supports only `BLUE_DARK/WHITE_POINT_LEFT` pilot assets; a different registered format/wardrobe must fail closed, not be silently substituted. Clinical claim truth, exact artwork review, Content Register state and future publishing require their existing authorities.
+- One run means **one dispatch + one artifact**, not collapsing the eleven canonical stages or automatically promoting state. Before claiming production-ready, execute a new-content pilot, independently complete STG-08 and count Owner interactions.
+
 ## Operational source routing — 2026-11-23 (PR scope)
 
 `resolve-production-input.mjs` is a **read-only source router**, not a replacement for the renderer or for STG-08/09/10. Two mutually exclusive repository source modes:
