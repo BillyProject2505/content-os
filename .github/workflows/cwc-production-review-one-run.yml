@@ -1,0 +1,76 @@
+name: CWC one-run production review checkpoint (BUS-180)
+# No asset fetch, render, Owner approval, scheduling, Meta call or writeback.
+on:
+  pull_request:
+    paths:
+      - "projects/cwc/runtime/approved-copy/**"
+      - ".github/workflows/cwc-production-review-one-run.yml"
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: Existing CWC-CRSL-NNNN content ID
+        required: true
+        type: string
+      expected_copy_fingerprint:
+        description: Independent copy SHA-256 for editable source; blank for existing approved raster
+        required: false
+        type: string
+      expected_layout_fingerprint:
+        description: Independent layout SHA-256 for editable source; blank for existing approved raster
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Existing contract and BUS-180 regression tests
+        run: node --test projects/cwc/runtime/approved-copy/*.test.mjs
+
+  review:
+    needs: tests
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Produce one read-only checkpoint and 11-stage evidence table
+        env:
+          CONTENT_ID: ${{ inputs.content_id }}
+          COPY_FP: ${{ inputs.expected_copy_fingerprint }}
+          LAYOUT_FP: ${{ inputs.expected_layout_fingerprint }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || exit 1
+          [[ "$CONTENT_ID" =~ ^CWC-CRSL-[0-9]{4}$ ]] || { echo "::error::Invalid Content ID"; exit 1; }
+          ARGS=(--content-id "$CONTENT_ID" --out "$RUNNER_TEMP/cwc-review")
+          if [[ -n "$COPY_FP" ]]; then ARGS+=(--copy-fingerprint "$COPY_FP"); fi
+          if [[ -n "$LAYOUT_FP" ]]; then ARGS+=(--layout-fingerprint "$LAYOUT_FP"); fi
+          node projects/cwc/runtime/approved-copy/review-checkpoint.mjs "${ARGS[@]}"
+          jq -e '.scope.read_only == true and
+            .scope.stg09_decision_created == false and
+            .scope.stg10_publication_authorization_created == false and
+            .scope.canonical_register_writeback == false and
+            .scope.instagram_publication_verified == false and
+            .usable_as_final_visual_review_package == false and
+            (.stage_evidence | length) == 11' "$RUNNER_TEMP/cwc-review/review-checkpoint.json" > /dev/null
+          cat "$RUNNER_TEMP/cwc-review/review-summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload single non-publishable evidence package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cwc-review-checkpoint-${{ inputs.content_id }}
+          path: ${{ runner.temp }}/cwc-review/*
+          if-no-files-found: error
+          retention-days: 14
