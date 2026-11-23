@@ -188,6 +188,20 @@ jobs:
             .stg10_publication_authorized==false and
             .content_register_writeback_performed==false' \
             "$RUNNER_TEMP/cwc-review/stg08-review-intake.json" >/dev/null
+      - name: Reconcile identical prior Owner-approved media (no new approval)
+        if: steps.route.outputs.mode == 'EDITABLE_RENDER_CANDIDATE'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node projects/cwc/runtime/approved-copy/reconcile-approved-replay.mjs \
+            --checkpoint "$RUNNER_TEMP/cwc-review/review-checkpoint.json" \
+            --out "$RUNNER_TEMP/cwc-review/approved-render-equivalence.json"
+          jq -e '.publication_authorized_by_this_check==false and
+            .new_stg08_qa_performed==false and
+            .new_stg09_owner_approval_created==false and
+            .can_reuse_old_publication_time==false and
+            .current_register_state_verified==false' \
+            "$RUNNER_TEMP/cwc-review/approved-render-equivalence.json" >/dev/null
       - name: Final fail-closed gate and single review summary
         shell: bash
         run: |
@@ -204,7 +218,21 @@ jobs:
           if [[ -f "$RUNNER_TEMP/cwc-review/stg08-review-intake.md" ]]; then
             cat "$RUNNER_TEMP/cwc-review/stg08-review-intake.md" >> "$GITHUB_STEP_SUMMARY"
           fi
-          echo "Formal STG-08 remains pending for newly rendered candidates; NO publication." >> "$GITHUB_STEP_SUMMARY"
+          if [[ -f "$RUNNER_TEMP/cwc-review/approved-render-equivalence.json" ]]; then
+            replay="$(jq -r '.status' "$RUNNER_TEMP/cwc-review/approved-render-equivalence.json")"
+            {
+              echo ""
+              echo "## Existing approval (read-only reconciliation)"
+              echo "Status: $replay"
+              if [[ "$replay" == "IDENTICAL_TO_EXISTING_STG08_STG09_APPROVED_BYTES" ]]; then
+                echo "Exact PNG and caption bytes equal the existing QA-PASS and Owner-approved package."
+                echo "No repeated Owner STG-09 action or new QA record is created; a separate STG-10 current authorization is still mandatory for any publication."
+              else
+                echo "No exact previous approval established. Keep the independent STG-08 review intake pending."
+              fi
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "No STG-08 or STG-09 verdict created in this run. No publication." >> "$GITHUB_STEP_SUMMARY"
       - name: Upload exactly one non-publishable review package
         uses: actions/upload-artifact@v4
         with:
