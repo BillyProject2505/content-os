@@ -14,6 +14,7 @@ const approvalPath="projects/cwc/content/approval/"+id+".stg09-approval.json";
 const releasePath="projects/cwc/content/release/"+id+".stg10-release-preparation.json";
 const files={
   qa:JSON.parse(fs.readFileSync(qaPath,"utf8")),
+  qaRaw:fs.readFileSync(qaPath,"utf8"),
   approval:JSON.parse(fs.readFileSync(approvalPath,"utf8")),
   release:JSON.parse(fs.readFileSync(releasePath,"utf8")),
   approvalRaw:fs.readFileSync(approvalPath,"utf8")
