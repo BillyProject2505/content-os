@@ -2,6 +2,25 @@
 
 This is a **non-authoritative operational prototype** implementing the first reusable SDOH pattern: integrity-locked approved copy. It includes preflight and a review-only renderer; it has **no production-writeback, scheduling or publication authorization**. It does not amend the canonical CWC lifecycle or allocate a Content ID.
 
+## Operational source routing — 2026-11-23 (PR scope)
+
+`resolve-production-input.mjs` is a **read-only source router**, not a replacement for the renderer or for STG-08/09/10. Two mutually exclusive repository source modes:
+
+- `EDITABLE_RENDER_CANDIDATE`: an existing `<Content ID>.json` plus independently reviewed `<Content ID>.layout.json`, with two externally pinned fingerprints. Uses existing Phase 1 copy/research/layout validation and returns the typed, **unapproved** render-plan object. Existing source example: `CWC-CRSL-0004`.
+- `IMMUTABLE_APPROVED_RASTER`: STG-05/STG-07 structured records plus STG-08 QA, STG-09 human approval, and release/JPEG metadata. It verifies the exact approved PNG/JPEG/caption SHA references via the existing stage-handoff verifier, and **returns `renderer_input: null`**. This is correct for pre-rendered `CWC-CRSL-0005`: its editable typography/layout source was not retained, so rerendering it from text would alter the approved artwork.
+
+Run from repository root (stdout JSON only; no GitHub/Drive/Meta changes):
+
+```sh
+node projects/cwc/runtime/approved-copy/resolve-production-input.mjs \
+  --content-id CWC-CRSL-0004 \
+  --copy-fingerprint 27d17fda54a1d16c282d31626a6342464e102974e504ac6174f712b7b0215b60 \
+  --layout-fingerprint a159704d5880edf2952d906b612c268e8d2190471caa671b5ae8ceac5e4e1124
+node projects/cwc/runtime/approved-copy/resolve-production-input.mjs --content-id CWC-CRSL-0005
+```
+
+Fail-closed: unrecognized/missing Content ID, partial or mixed source sets, bad independently supplied hashes, inconsistent QA/approval/binary hashes, and attempts to treat approved rasters as editable render input. This adapter checks record-integrity only; **it does not fetch or hash remote media bytes, review medical accuracy, prove Instagram scheduling, authorize STG-10, or publish**. Keep prior approvals/media immutable; no backfill of editable geometry by approximation. Future content can enter the render-candidate mode only with genuinely authored editable layout and independent fingerprints.
+
 ## Current execution snapshot — 2026-11-01
 
 WIF Drive readonly succeeded in run 41273452129; official review render succeeded in run 41273768672 on an earlier commit. WIF integration is no longer the remaining blocker. The research-enabled contract now uses five JSON inputs; research validation checks structure/coverage, not clinical approval. Latest inspected B2 run 41292969183 failed; comments identify a Phase 1 confirmation value supplied to B2. B2 requires `RENDER_UNAPPROVED_CWC_REVIEW_PACKAGE`. Earlier success does not establish end-to-end success of the updated research-enabled path. Creative/clinical approval and publication authorization remain separate.
