@@ -732,6 +732,27 @@
         "previous_caption_sha256": "524ba19c7fdf43fb6423460d7a6daceb77d0912a0b1c7d60d7dc248a84705d99",
         "hashtags": "#satudosisobathati #manado #mentalhealthmanado #transawarenessmonth #transgender",
         "scope": "Hashtag line only; narrative and media unchanged."
+      },
+      "publication_evidence": {
+        "status": "PUBLISHED_OWNER_REPORTED_REMOTE_UNVERIFIED",
+        "evidence_basis": "OWNER_MANUAL_INSTAGRAM_PUBLICATION_REPORT",
+        "platform": "INSTAGRAM",
+        "publication_method": "MANUAL",
+        "destination_account": "@satudosisobathati",
+        "permalink": "https://www.instagram.com/p/DgH2f5Ij0lD/",
+        "shortcode": "DgH2f5Ij0lD",
+        "owner_reported_published_at_local": "2026-11-24T19:30:00+08:00",
+        "owner_reported_published_at_utc": "2026-11-24T11:30:00Z",
+        "original_scheduled_at_local": "2026-11-23T19:30:00+08:00",
+        "remote_timestamp_verified": false,
+        "remote_caption_verified": false,
+        "final_media_hash_compared": false,
+        "remote_media_id": null,
+        "runtime_state": "NOT_VERIFIED",
+        "linear_register_state": "OWNER_REPORT_RECORDED_NOT_CANONICAL_PUBLISHED",
+        "duplicate_publication_authorized": false,
+        "manual_republish_hold_requested": true,
+        "caution": "Do not republish or automatically retry. Owner-reported manual publication does not prove Meta readback, caption or media equality. Live Linear lifecycle and D1 reconciliation remain separately gated; this delivery record is a negative-only source for scheduled discovery hold."
       }
     },
     {
